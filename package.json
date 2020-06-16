@@ -1,0 +1,53 @@
+{
+  "name": "gene-expression-plots",
+  "version": "0.1.0",
+  "description": "Plot gene expression for selectable variables for data extracted from standard transcript count tables.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usadellab/GeneExpressionPlots.git"
+  },
+  "keywords": [
+    "plotly",
+    "transcriptome",
+    "RNA-Seq",
+    "gene-expression",
+    "interactive"
+  ],
+  "author": "Dr. Asis Hallab",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/usadellab/GeneExpressionPlots/issues"
+  },
+  "homepage": "https://github.com/usadellab/GeneExpressionPlots#readme",
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "plotly.js": "^1.54.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-plotly.js": "^2.4.0",
+    "react-scripts": "3.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
