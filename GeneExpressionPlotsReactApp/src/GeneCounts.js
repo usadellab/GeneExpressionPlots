@@ -1,5 +1,5 @@
 class GeneCounts {
-  constructor(geneCounts, condition, replicateNo, countUnit){
+  constructor(geneCounts, {condition, replicateNo, countUnit}){
     this.geneCounts = geneCounts;
     this.condition = condition;
     this.replicateNo = replicateNo;
@@ -8,3 +8,5 @@ class GeneCounts {
 
 
 }
+
+export default GeneCounts

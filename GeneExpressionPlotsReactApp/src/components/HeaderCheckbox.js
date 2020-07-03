@@ -1,7 +1,7 @@
 import React from 'react'
 import { Checkbox } from '@material-ui/core';
 
-function HeadCheckbox(props) {
+function HeaderCheckbox(props) {
   return (
     <div>
     header
@@ -14,4 +14,4 @@ function HeadCheckbox(props) {
   )
 }
 
-export default HeadCheckbox
+export default HeaderCheckbox

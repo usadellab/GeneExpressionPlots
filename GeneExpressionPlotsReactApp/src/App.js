@@ -16,7 +16,6 @@ function App() {
         </div>
         <div>
           <FileReader />
-          <InputArguments />
         </div>
       </header>
     </div>

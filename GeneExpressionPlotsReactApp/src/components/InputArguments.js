@@ -1,5 +1,5 @@
 import React from 'react';
-import HeadCheckbox from './HeadCheckbox'
+import HeaderCheckbox from './HeaderCheckbox'
 import DelimiterTextField from './DelimiterTextField'
 
 class InputArguments extends React.Component {
@@ -33,7 +33,7 @@ class InputArguments extends React.Component {
   render(){
     return (
       <div>
-        <HeadCheckbox handleHeader = {this.handleHeader} />
+        <HeaderCheckbox handleHeader = {this.handleHeader} />
         <DelimiterTextField handleDelimiter = {this.handleDelimiter} />
       </div>
     )

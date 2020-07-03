@@ -22,7 +22,7 @@ const delimiters = [
 ]; 
 
 function DelimiterTextField(props) {
-  const [delimiter, setDelimiter] = React.useState('comma');
+  const [delimiter, setDelimiter] = React.useState('auto');
 
   const handleChange = (event) => {
     setDelimiter(event.target.value);
@@ -36,8 +36,9 @@ function DelimiterTextField(props) {
           select
           label="Select Delimiter"
           value={delimiter}
-          onChange={(e) => {handleChange(e); props.handleDelimiter(e)}}
+          onChange={(e) => {handleChange(e); props.handleTextField(e)}}
           helperText="Please select your delimiter"
+          variant="outlined"
         >
           {delimiters.map((option) => (
             <MenuItem key={option.value} value={option.label}>

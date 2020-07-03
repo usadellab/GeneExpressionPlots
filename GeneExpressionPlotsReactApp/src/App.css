@@ -16,3 +16,5 @@
 .App-link {
   color: #61dafb;
 }
+
+.rc{display:flex; flex-direction:row; }
