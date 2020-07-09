@@ -6,22 +6,23 @@ import SelectColumn from './SelectColumn'
 import FreeTextField from './FreeTextField';
 import GeneCounts from '../GeneCounts'
 import { makeStyles } from '@material-ui/core/styles';
+import { Grid } from '@material-ui/core';
 
 
 class FileReader extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       csvfile: undefined,
       header: false,
       accessionCol: undefined,
       countCol: undefined,
       condition: undefined,
-      replicatNo: undefined,
+      replicateNo: undefined,
       countUnit: undefined,
       delimiter: "auto"
     };
-    this.updateData = this.updateData.bind(this);
+    // this.updateData = this.updateData.bind(this);
   }
 
   handleInputFile = event => {
@@ -35,7 +36,13 @@ class FileReader extends React.Component {
     const { csvfile } = this.state;
     let geneCounts = new GeneCounts({},this.state)
     PapaParse.parse(csvfile, {
-      complete: () => {console.log("finished!: " + JSON.stringify(geneCounts))},
+      complete: () => {
+        console.log("finished!: " + JSON.stringify(geneCounts));
+        // alert(`upload finished`);
+        // this.props.geneCountsDb.add(geneCounts);
+        console.log("geneCounstDb: " + JSON.stringify(this.props.geneCountsDb));
+        // this.props.callback()
+      },
       header: this.state.header,
       skipEmptyLines: true,
       step: (row) => {
@@ -50,14 +57,15 @@ class FileReader extends React.Component {
     
   };
 
-  updateData(result) {
-    var data = result.data;
-    console.log(data);
-  }
+  // updateData(result) {
+  //   var data = result.data;
+  //   console.log(data);
+  // }
 
   handleHeader = event => {
     console.log(event.target.checked)
     this.setState( {header : event.target.checked})
+    this.props.callback(event.target.checked)
   }
 
   handleTextField = (event, stateAttr) => {
@@ -80,23 +88,30 @@ class FileReader extends React.Component {
           onChange={this.handleInputFile}
         />
         <HeaderCheckbox handleHeader = {this.handleHeader} />
-        <p />
-        <div className="rc">
-        <DelimiterTextField handleTextField = { (e) => {this.handleTextField(e, "delimiter")}} />
-        <SelectColumn label = "Gene Accession Column" handleTextField = { (e) => {this.handleTextField(e, "accessionCol")}}/>
+        <div className="inputFields">
+        <Grid container spacing={5}>
+          <Grid item xs={6}>
+          <p />
+             <DelimiterTextField handleTextField = { (e) => {this.handleTextField(e, "delimiter")}} />
+             <p />
+             <SelectColumn label = "Gene Accession Column" handleTextField = { (e) => {this.handleTextField(e, "accessionCol")}}/>
+             <p />
+             <SelectColumn label = "Gene Count Column" handleTextField = { (e) => {this.handleTextField(e, "countCol")}}/>
+          </Grid>
+
+          <Grid item xs={6}>
+            <p />
+            <FreeTextField label = "Condition" handleTextField = { (e) => {this.handleTextField(e, "condition")}}/>
+            <p />
+            <SelectColumn label = "Replicate Number" handleTextField = { (e) => {this.handleTextField(e, "replicateNo")}}/>
+            <p />
+            <FreeTextField label = "Count Unit" handleTextField = { (e) => {this.handleTextField(e, "countUnit")}}/>
+          </Grid>
+
+        </Grid>
         </div>
-        {/* <DelimiterTextField handleTextField = { (e) => {this.handleTextField(e, "delimiter")}} />
         <p />
-        <SelectColumn label = "Gene Accession Column" handleTextField = { (e) => {this.handleTextField(e, "accessionCol")}}/>
-        <p /> */}
-        <SelectColumn label = "Gene Count Column" handleTextField = { (e) => {this.handleTextField(e, "countCol")}}/>
-        <p />
-        <FreeTextField label = "Condition" handleTextField = { (e) => {this.handleTextField(e, "condition")}}/>
-        <p />
-        <SelectColumn label = "Replicate Number" handleTextField = { (e) => {this.handleTextField(e, "replicatNo")}}/>
-        <p />
-        <FreeTextField label = "Count Unit" handleTextField = { (e) => {this.handleTextField(e, "countUnit")}}/>
-        <p />        
+                
         <button onClick={this.importCSV}> Upload now!</button>
       </div>
     );

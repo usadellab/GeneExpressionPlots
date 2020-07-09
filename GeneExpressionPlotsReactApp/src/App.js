@@ -1,10 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Plotly from './components/Plotly'
 import FileReader from './components/FileReader'
-import InputArguments from './components/InputArguments'
+import FileList from './components/FileList'
+import GeneCountsDb from "./GeneCountsDb"
 
 function App() {
+
+  const [data, setData] = useState(true)
+
+  const callback = (header) => {
+    console.log("HEADER: " + header)
+    setData(header)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -15,7 +24,8 @@ function App() {
           <Plotly />
         </div>
         <div>
-          <FileReader />
+          <FileReader callback={callback}/>
+          {/* <FileList /> */}
         </div>
       </header>
     </div>
