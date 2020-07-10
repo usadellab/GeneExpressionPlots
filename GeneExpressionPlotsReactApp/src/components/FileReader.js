@@ -5,6 +5,7 @@ import DelimiterTextField from './DelimiterTextField'
 import SelectColumn from './SelectColumn'
 import FreeTextField from './FreeTextField';
 import GeneCounts from '../GeneCounts'
+import GeneCountsDb from '../GeneCountsDb'
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
@@ -20,7 +21,9 @@ class FileReader extends React.Component {
       condition: undefined,
       replicateNo: undefined,
       countUnit: undefined,
-      delimiter: "auto"
+      delimiter: "auto",
+      // geneCounts: {},
+      geneCountsDb: new GeneCountsDb()
     };
     // this.updateData = this.updateData.bind(this);
   }
@@ -32,15 +35,19 @@ class FileReader extends React.Component {
   };
 
   importCSV = () => {
-    console.log(this.state)
     const { csvfile } = this.state;
     let geneCounts = new GeneCounts({},this.state)
     PapaParse.parse(csvfile, {
       complete: () => {
         console.log("finished!: " + JSON.stringify(geneCounts));
+        // this.setState(state => {
+        //   return state.geneCountsDb.add(geneCounts);
+        // })
+        this.state.geneCountsDb.add(geneCounts);
+        this.props.callback(this.state.geneCountsDb);
         // alert(`upload finished`);
         // this.props.geneCountsDb.add(geneCounts);
-        console.log("geneCounstDb: " + JSON.stringify(this.props.geneCountsDb));
+        // console.log("geneCounstDb: " + JSON.stringify(this.state.geneCountsDb));
         // this.props.callback()
       },
       header: this.state.header,
@@ -65,12 +72,16 @@ class FileReader extends React.Component {
   handleHeader = event => {
     console.log(event.target.checked)
     this.setState( {header : event.target.checked})
-    this.props.callback(event.target.checked)
+    // this.props.callback(event.target.checked)
   }
 
   handleTextField = (event, stateAttr) => {
     console.log(event.target.value)
     this.setState({[stateAttr] : event.target.value})
+  }
+
+  resetGenecounts = event => {
+    this.setState({geneCountsDb : new GeneCountsDb()})
   }
 
   render() {
@@ -113,6 +124,7 @@ class FileReader extends React.Component {
         <p />
                 
         <button onClick={this.importCSV}> Upload now!</button>
+        <button onClick={this.resetGenecounts}>nuke my files</button>
       </div>
     );
   }

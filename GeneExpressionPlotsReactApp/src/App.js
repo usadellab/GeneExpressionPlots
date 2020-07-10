@@ -9,10 +9,15 @@ function App() {
 
   const [data, setData] = useState(true)
 
-  const callback = (header) => {
-    console.log("HEADER: " + header)
-    setData(header)
+  const callback = (geneCountsDb) => {
+    console.log("GENECOUNTSDB: " + JSON.stringify(geneCountsDb))
+    setData(geneCountsDb)
   }
+  
+  const getData = () => {
+    return data;
+  }
+
 
   return (
     <div className="App">
@@ -21,11 +26,12 @@ function App() {
           A very cool Plotly Plot
         </p>
         <div>
-          <Plotly />
-        </div>
-        <div>
           <FileReader callback={callback}/>
           {/* <FileList /> */}
+        </div>
+        <p />
+        <div>
+          <Plotly getData={getData}/>
         </div>
       </header>
     </div>
