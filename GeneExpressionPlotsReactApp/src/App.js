@@ -4,13 +4,18 @@ import Plotly from './components/Plotly'
 import FileReader from './components/FileReader'
 import FileList from './components/FileList'
 import GeneCountsDb from "./GeneCountsDb"
+import { Button } from '@material-ui/core';
+// import PlotlyEditor, {DefaultEditor, Panel} from 'react-chart-editor'
 
 function App() {
 
-  const [data, setData] = useState(true)
+  const [data, setData] = useState({})
 
   const callback = (geneCountsDb) => {
     console.log("GENECOUNTSDB: " + JSON.stringify(geneCountsDb))
+    // React.useEffect((geneCountsDb) => { setData(geneCountsDb) }, {})
+    // setData(geneCountsDb)
+    // console.log("APP data: " + JSON.stringify(data))
     setData(geneCountsDb)
   }
   
@@ -27,11 +32,12 @@ function App() {
         </p>
         <div>
           <FileReader callback={callback}/>
-          {/* <FileList /> */}
         </div>
         <p />
         <div>
           <Plotly getData={getData}/>
+        </div>
+        <div>
         </div>
       </header>
     </div>
