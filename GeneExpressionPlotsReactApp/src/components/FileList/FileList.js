@@ -9,6 +9,10 @@ import IconButton from '@material-ui/core/IconButton';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+// Component styles
+import './FileList.css';
+
+
 class FileList extends Component {
 
   generate(element) {

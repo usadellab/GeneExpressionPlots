@@ -6,9 +6,15 @@ import SelectColumn from './SelectColumn'
 import FreeTextField from './FreeTextField';
 import GeneCounts from '../GeneCounts'
 import GeneCountsDb from '../GeneCountsDb'
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 
+
+const styles = theme => ({
+  paper: {
+    margin: theme.spacing(2),
+  },
+})
 
 class FileReader extends React.Component {
   constructor(props) {
@@ -85,43 +91,73 @@ class FileReader extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div className="App">
+      <div>
         <h2>Import CSV File!</h2>
         <input
           className="csv-input"
           type="file"
-          ref={input => {
-            this.filesInput = input;
-          }}
+          ref={ input => this.filesInput = input }
           name="file"
           placeholder={null}
           onChange={this.handleInputFile}
         />
         <HeaderCheckbox handleHeader = {this.handleHeader} />
-        <div className="inputFields">
-        <Grid container spacing={5}>
-          <Grid item xs={6}>
-          <p />
-             <DelimiterTextField handleTextField = { (e) => {this.handleTextField(e, "delimiter")}} />
-             <p />
-             <SelectColumn label = "Gene Accession Column" handleTextField = { (e) => {this.handleTextField(e, "accessionCol")}}/>
-             <p />
-             <SelectColumn label = "Gene Count Column" handleTextField = { (e) => {this.handleTextField(e, "countCol")}}/>
+        
+        {/* <Grid justify="center" direction="row" container> */}
+          
+          <Grid justify="center" alignItems="center" direction="column" maxWidth="sm" container spacing={3}>
+
+            <Grid item xs={5}>
+              <DelimiterTextField
+                handleTextField = { (e) => this.handleTextField(e, "delimiter") }
+              />
+            </Grid>
+
+            <Grid item xs={5}>
+              <SelectColumn
+                label = "Gene Accession Column"
+                handleTextField = { (e) => this.handleTextField(e, "accessionCol") }
+              />
+            </Grid>
+
+            <Grid item xs={5}>
+              <SelectColumn
+                label = "Gene Count Column"
+                handleTextField = { (e) => this.handleTextField(e, "countCol") }
+              />
+            </Grid>
+
           </Grid>
 
-          <Grid item xs={6}>
-            <p />
-            <FreeTextField label = "Condition" handleTextField = { (e) => {this.handleTextField(e, "condition")}}/>
-            <p />
-            <SelectColumn label = "Replicate Number" handleTextField = { (e) => {this.handleTextField(e, "replicateNo")}}/>
-            <p />
-            <FreeTextField label = "Count Unit" handleTextField = { (e) => {this.handleTextField(e, "countUnit")}}/>
+          <Grid justify="center" alignItems="center" direction="column" maxWidth="sm" container spacing={3}>
+
+            <Grid item xs={5}>
+
+              <FreeTextField
+                label = "Condition"
+                handleTextField = { (e) => this.handleTextField(e, "condition") }
+              />
+            </Grid>
+
+            <Grid item xs={5}>
+              <SelectColumn
+                label = "Replicate Number"
+                handleTextField = { (e) => this.handleTextField(e, "replicateNo") }
+              />
+            </Grid>
+
+            <Grid item xs={5}>
+              <FreeTextField
+                label = "Count Unit"
+                handleTextField = { (e) => this.handleTextField(e, "countUnit") }
+              />
+            </Grid>
+
           </Grid>
 
-        </Grid>
-        </div>
-        <p />
+        {/* </Grid> */}
                 
         <button onClick={this.importCSV}> Upload now!</button>
         <button onClick={this.resetGenecounts}>nuke my files</button>

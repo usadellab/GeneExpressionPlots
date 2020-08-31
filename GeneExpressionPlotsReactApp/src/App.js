@@ -2,10 +2,6 @@ import React, {useState} from 'react';
 import './App.css';
 import Plotly from './components/Plotly'
 import FileReader from './components/FileReader'
-import FileList from './components/FileList'
-import GeneCountsDb from "./GeneCountsDb"
-import { Button } from '@material-ui/core';
-// import PlotlyEditor, {DefaultEditor, Panel} from 'react-chart-editor'
 
 function App() {
 
@@ -25,22 +21,17 @@ function App() {
 
 
   return (
+
     <div className="App">
-      <header className="App-header">
-        <p>
-          A very cool Plotly Plot
-        </p>
-        <div>
-          <FileReader callback={callback}/>
-        </div>
-        <p />
-        <div>
-          <Plotly getData={getData}/>
-        </div>
-        <div>
-        </div>
-      </header>
+
+      <header> A very cool Plotly Plot </header>
+
+      <FileReader callback={callback} />
+
+      <Plotly getData={data} />
+
     </div>
+
   );
 }
 

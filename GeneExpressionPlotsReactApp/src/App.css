@@ -1,4 +1,7 @@
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
   text-align: center;
 }
 
@@ -16,7 +19,3 @@
 .App-link {
   color: #61dafb;
 }
-
-/* .inputFields{display: flex; flex-wrap: wrap; max-width: 100px;} */
-
-/* .rc{display:flex; flex-direction:row; } */

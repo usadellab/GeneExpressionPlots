@@ -30,23 +30,21 @@ function DelimiterTextField(props) {
 
   return (
     
-    <div>
-      <TextField
-          id="select-delimiter"
-          select
-          label="Select Delimiter"
-          value={delimiter}
-          onChange={(e) => {handleChange(e); props.handleTextField(e)}}
-          helperText="Please select your delimiter"
-          variant="outlined"
-        >
-          {delimiters.map((option) => (
-            <MenuItem key={option.value} value={option.label}>
-              {option.label}
-            </MenuItem>
-          ))}
-      </TextField>
-    </div>
+    <TextField
+        id="select-delimiter"
+        select
+        label="Select Delimiter"
+        value={delimiter}
+        onChange={(e) => {handleChange(e); props.handleTextField(e)}}
+        helperText="Please select your delimiter"
+        variant="outlined"
+      >
+        {delimiters.map((option) => (
+          <MenuItem key={option.value} value={option.label}>
+            {option.label}
+          </MenuItem>
+        ))}
+    </TextField>
   )
 }
 
