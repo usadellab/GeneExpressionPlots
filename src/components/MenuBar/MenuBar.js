@@ -2,8 +2,8 @@ import React from 'react';
 
 // MUI Components
 import {
-  IconButton,
   AppBar,
+  IconButton,
   Toolbar,
   Typography,
 } from '@material-ui/core';
