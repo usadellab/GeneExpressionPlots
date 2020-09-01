@@ -14,20 +14,24 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+const submitHandler = (event) => {
+  event.preventDefault();
+};
 
-export default function AppTextField ({ id, label, variant, bind }) {
+export default function AppTextField (props) {
 
   const classes = useStyles();
 
   return (
-    <form noValidate autoComplete="off">
+    <form
+      noValidate
+      autoComplete="off"
+      onSubmit={ submitHandler }
+    >
 
       <TextField
         className={ classes.root }
-        id={ id }
-        label={ label }
-        variant={ variant }
-        onChange={ bind }
+        { ...props }
       />
 
     </form>
