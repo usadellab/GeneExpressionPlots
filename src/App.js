@@ -1,16 +1,19 @@
 import React from 'react';
 
+// Components
+import MenuBar from './components/MenuBar/MenuBar';
+
 // Styles
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 
   root: {
-    display: 'flex',
+    // display: 'flex',
     justifyContent: 'center',
   },
 
-}))
+}));
 
 
 export default function App() {
@@ -21,7 +24,7 @@ export default function App() {
 
     <div className={classes.root}>
 
-      { /* Components */ }
+      <MenuBar />
 
     </div>
 
