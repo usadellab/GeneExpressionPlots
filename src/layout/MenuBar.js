@@ -31,7 +31,6 @@ export default function MenuBar (props) {
   const classes = useStyles();
 
   return (
-
     <AppBar position="static">
       <Toolbar>
 
@@ -56,6 +55,5 @@ export default function MenuBar (props) {
 
       </Toolbar>
     </AppBar>
-
   );
 }
