@@ -1,20 +1,18 @@
 import React from 'react';
-
-// MUI Components
+import { Link } from 'react-router-dom';
+//
 import {
   AppBar,
   IconButton,
   Toolbar,
   Typography,
 } from '@material-ui/core';
-
+//
 import {
-  Menu     as MenuIcon,
+  Home     as HomeIcon,
   Settings as SettingsIcon,
 } from '@material-ui/icons';
-
-
-// Styles
+//
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -39,14 +37,16 @@ export default function MenuBar (props) {
 
         <IconButton
           edge="start"
-          className={classes.menuButton}
+          className={ classes.menuButton }
           color="inherit"
           aria-label="menu"
+          component={ Link }
+          to="/"
         >
-          <MenuIcon />
+          <HomeIcon />
         </IconButton>
 
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h6" className={ classes.title }>
             Gene Expression Plots
         </Typography>
 

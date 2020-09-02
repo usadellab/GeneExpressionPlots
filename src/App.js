@@ -1,32 +1,20 @@
 import React from 'react';
-
-// Components
-import MenuBar from './components/MenuBar/MenuBar';
-
-// Styles
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(theme => ({
-
-  root: {
-    // display: 'flex',
-    justifyContent: 'center',
-  },
-
-}));
+//
+import { BrowserRouter as Router } from "react-router-dom";
+//
+import AppRoutes from './AppRoutes';
+import MenuBar   from './components/MenuBar';
 
 
 export default function App() {
 
-  const classes = useStyles();
-
   return (
-
-    <div className={classes.root}>
+    <Router>
 
       <MenuBar />
 
-    </div>
+      <AppRoutes />
 
+    </Router>
   );
 }
