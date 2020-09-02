@@ -4,17 +4,21 @@ import { BrowserRouter as Router } from "react-router-dom";
 //
 import AppRoutes from './AppRoutes';
 import MenuBar   from './components/MenuBar';
+//
+import { DataProvider } from './store/DataContext';
 
 
 export default function App() {
 
   return (
-    <Router>
+    <DataProvider>
+      <Router>
 
-      <MenuBar />
+        <MenuBar />
 
-      <AppRoutes />
+        <AppRoutes />
 
-    </Router>
+      </Router>
+    </DataProvider>
   );
 }
