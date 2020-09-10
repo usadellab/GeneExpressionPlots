@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useState }  from 'react';
 
 // MUI Components
 import {
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
   },
 
-}))
+}));
 
 
 export default function AppSelect({ label, select, variant, bind }) {
@@ -31,7 +31,7 @@ export default function AppSelect({ label, select, variant, bind }) {
     bind(event);
     setOption(event.target.value);
 
-  }
+  };
 
   return (
     <FormControl variant={variant} className={classes.root}>
@@ -54,5 +54,5 @@ export default function AppSelect({ label, select, variant, bind }) {
         }
       </Select>
     </FormControl>
-  )
+  );
 }
