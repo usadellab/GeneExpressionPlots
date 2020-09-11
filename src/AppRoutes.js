@@ -2,8 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Switch }         from "react-router-dom";
 
 
-const GroupList   = lazy(() => import('./pages/GroupList'));
-const GroupWizard = lazy(() => import('./pages/GroupWizard'));
+const DataModule = lazy(() => import('./modules/data/Home'));
 
 export default function AppRoutes () {
 
@@ -11,8 +10,7 @@ export default function AppRoutes () {
     <Suspense fallback={ <div>Loading...</div> }>
 
       <Switch>
-        <Route exact path="/" component={ GroupList } />
-        <Route path="/wizard" component={ GroupWizard } />
+        <Route exact path="/" component={ DataModule } />
       </Switch>
 
     </Suspense>
