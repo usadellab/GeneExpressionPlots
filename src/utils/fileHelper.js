@@ -26,7 +26,7 @@ const papa = require('papaparse');
  * @returns {object} group of the format:
  * 
  * {
-  "[group]": {
+  "[groupName]": {
     "countUnit": "string"     // raw, tpm, rmpk, etc.
     "samples":
     [
@@ -51,14 +51,14 @@ module.exports.processSampleList = async function(groupName, countUnit, sampleLi
       "countUnit": countUnit,
       "samples": []
     }
-  }
+  };
 
-  for (sample of sampleList){
+  for (let sample of sampleList){
     group[groupName].samples.push(await module.exports.processSample(sample));
   }
   
   return group;
-}
+};
 
 /**
  * processSample - process one sample by parsing
@@ -78,11 +78,15 @@ module.exports.processSampleList = async function(groupName, countUnit, sampleLi
  */
 module.exports.processSample = async function(sample) {
   module.exports.validateSample(sample);
-  let replicates = Promise.all([...sample.replicates].map((replicate) => {
-    return module.exports.parseCsv(replicate.file, replicate);
-  }));
-  return replicates;
-}
+  try {
+    let replicates = await Promise.all([...sample.replicates].map((replicate) => {
+      return module.exports.parseCsv(replicate.file, replicate);
+    }));
+    return replicates;
+  } catch (error) {
+    throw error;
+  }
+};
 
 /**
  * validateSample - validates the orrect attributes are present in the given sample
@@ -95,24 +99,24 @@ module.exports.validateSample = function(sample){
   let replicateProps = ["separator","accessionColumn","countColumn","header","file"];
 
   if(sample.replicates === undefined || sample.replicates === null || !Array.isArray(sample.replicates) || (Array.isArray(sample.replicates) && sample.replicates.length < 1)){
-    throw new Error('provided sample has no replicates assigned!')
+    throw new Error('provided sample has no replicates assigned!');
   }
 
   if (!sampleProps.every(prop => {
     return prop in sample;
   })) {
-    throw new Error('provided sample is missing properties!')
+    throw new Error('provided sample is missing properties!');
   }
 
   sample.replicates.forEach(replicate => {
     if (!replicateProps.every(prop => {
       return prop in replicate;
     })) {
-      throw new Error('provided replicates are missing properties!')
+      throw new Error('provided replicates are missing properties!');
     }
   });
   return true;
-}
+};
 /**
  * parseCsv - parse the csv file with papaparse and the given parameters
  * @param {object} file FileObject to be parsed
@@ -134,6 +138,5 @@ module.exports.parseCsv = function(file, config){
       header: config.header,
       skipEmptyLines: true
     });
-  })
-  
-}
+  });
+};
