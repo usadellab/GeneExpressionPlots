@@ -1,16 +1,13 @@
-import React from 'react';
+import React             from 'react';
 import { BrowserRouter } from 'react-router-dom';
-//
-import AppRoutes from './App.routes';
-import { DataProvider } from './store/DataContext';
+import AppRoutes         from './App.routes';
+
 
 function App() {
   return (
-    <DataProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </DataProvider>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
