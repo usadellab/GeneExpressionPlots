@@ -25,7 +25,7 @@ function dataReducer(state, action) {
  * Create a Context.Provider to subscribe in children components.
  * @param {object} DOM a DOM-like object with children elements
  */
-export function DataProvider({ children }) {
+export function DataStoreProvider({ children }) {
 
   const [state, dispatch] = useReducer(dataReducer, {});
 
@@ -41,7 +41,7 @@ export function DataProvider({ children }) {
 /**
  * Subscriber hook to retrieve and mutate data state.
  */
-export function useDataState() {
+export function useDataStore() {
 
   const state = useContext(DataStateContext);
   const setState = useContext(DataDispatchContext);
@@ -50,30 +50,4 @@ export function useDataState() {
     throw new Error('useDataState must be used within a DataProvider');
 
   return [state, setState];
-}
-
-/**
- * Subscriber hook to retrieve data state.
- */
-export function useGetState() {
-
-  const context = useContext(DataStateContext);
-
-  if (!context)
-    throw new Error('useDataState must be used within a DataProvider');
-
-  return context;
-}
-
-/**
- * Action hook to mutate data state.
- */
-export function useSetState() {
-
-  const context = useContext(DataDispatchContext);
-
-  if (!context)
-    throw new Error('useDataDispatch must be used within a DataProvider');
-
-  return context;
 }
