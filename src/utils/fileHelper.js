@@ -1,4 +1,4 @@
-const papa = require('papaparse');
+import papa from 'papaparse';
 
 /**
  * processSampleList - process a List of samples, given a group and a countUnit into a group of samples and their replicates.
@@ -44,7 +44,7 @@ const papa = require('papaparse');
   ...
 }
  */
-module.exports.processSampleList = async function(groupName, countUnit, sampleList){
+export const processSampleList = async function(groupName, countUnit, sampleList){
   
   let group = {
     [groupName]: {
@@ -54,7 +54,7 @@ module.exports.processSampleList = async function(groupName, countUnit, sampleLi
   };
 
   for (let sample of sampleList){
-    group[groupName].samples.push(await module.exports.processSample(sample));
+    group[groupName].samples.push(await processSample(sample));
   }
   
   return group;
@@ -76,13 +76,18 @@ module.exports.processSampleList = async function(groupName, countUnit, sampleLi
   ...
 ]
  */
-module.exports.processSample = async function(sample) {
-  module.exports.validateSample(sample);
+export const processSample = async function(sample) {
+  validateSample(sample);
   try {
+    let processedSample = {
+      "name": sample.name,
+      "xTickValue": sample.xTickValue
+    };
     let replicates = await Promise.all([...sample.replicates].map((replicate) => {
-      return module.exports.parseCsv(replicate.file, replicate);
+      return parseCsv(replicate.file, replicate);
     }));
-    return replicates;
+    processedSample.replicates = replicates;
+    return processedSample;
   } catch (error) {
     throw error;
   }
@@ -94,7 +99,7 @@ module.exports.processSample = async function(sample) {
  * 
  * @returns true if no Error, otherwise throws appropriate Error
  */
-module.exports.validateSample = function(sample){
+export const validateSample = function(sample){
   let sampleProps = ["name", "xTickValue","replicates"];
   let replicateProps = ["separator","accessionColumn","countColumn","header","file"];
 
@@ -117,6 +122,7 @@ module.exports.validateSample = function(sample){
   });
   return true;
 };
+
 /**
  * parseCsv - parse the csv file with papaparse and the given parameters
  * @param {object} file FileObject to be parsed
@@ -124,7 +130,7 @@ module.exports.validateSample = function(sample){
  * 
  * @returns {Promise} returns a Promise for the file to be parsed.
  */
-module.exports.parseCsv = function(file, config){
+export const parseCsv = function(file, config){
   return new Promise((resolve, reject) => {
     let geneCounts = {};
     papa.parse(file, {
