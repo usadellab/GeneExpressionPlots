@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 import './typedefs';
 
+import { mockStore } from './mocks/store';
 
 const DataStateContext = createContext();
 const DataDispatchContext = createContext();
@@ -34,7 +35,7 @@ function dataReducer(state, action) {
  */
 export function DataStoreProvider({ children }) {
 
-  const [state, dispatch] = useReducer(dataReducer, {});
+  const [state, dispatch] = useReducer(dataReducer, mockStore);
 
   return (
     <DataStateContext.Provider value={ state }>
