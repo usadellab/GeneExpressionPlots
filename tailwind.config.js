@@ -8,8 +8,10 @@ module.exports = {
     './src/**/*.jsx',
   ],
   theme: {
-    extend: {},
+    extend: { },
   },
-  variants: {},
+  variants: {
+    textColor: ['responsive', 'hover', 'focus', 'group-hover'],
+  },
   plugins: [],
 };
