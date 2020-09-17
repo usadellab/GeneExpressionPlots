@@ -76,7 +76,7 @@ export default function GroupList (props) {
     <section className="font-abeeze text-gray-700 body-font overflow-hidden container px-5 py-24 mx-auto">
 
       {
-        Object.entries(groups).map(([key, entry],index) => (
+        groups && Object.entries(groups).map(([key, entry],index) => (
 
           <Group
             key={ `${key}-${index}` }
@@ -87,7 +87,7 @@ export default function GroupList (props) {
 
       }
 
-      <AppButton className="group flex justify-center w-full border-t-2">
+      <AppButton className={`group flex justify-center w-full ${ groups ? 'border-t-2' : '' }`}>
         <IconAdd className="w-24 text-gray-500 group-hover:text-blue-500"/>
       </AppButton>
 

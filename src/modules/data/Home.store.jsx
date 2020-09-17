@@ -1,20 +1,27 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+import './typedefs';
+
+
 const DataStateContext = createContext();
 const DataDispatchContext = createContext();
 
 /**
  * Reducer function to update data state.
- * @param {object} state reactive object holding the state
- * @param {object} action action object with type and payload properties
+ * @param   {DataStore}   state  reactive object holding the state
+ * @param   {StoreAction} action action and payload dispatch
+ * @returns {DataStore}   the data store object
  */
 function dataReducer(state, action) {
 
   const { type, payload } = action;
 
   switch (type) {
-    case 'ADD_GROUP':
+    case 'UPDATE':
       return Object.assign({}, state, payload);
+
+    case 'DELETE':
+      return state;
 
     default:
       throw new Error(`Unhandled action type: ${type}`);
@@ -23,16 +30,16 @@ function dataReducer(state, action) {
 
 /**
  * Create a Context.Provider to subscribe in children components.
- * @param {object} DOM a DOM-like object with children elements
+ * @param {Object<string,JSX.Element[]>} DOM a DOM-like object with children elements
  */
 export function DataStoreProvider({ children }) {
 
   const [state, dispatch] = useReducer(dataReducer, {});
 
   return (
-    <DataStateContext.Provider value={state}>
-      <DataDispatchContext.Provider value={dispatch}>
-        {children}
+    <DataStateContext.Provider value={ state }>
+      <DataDispatchContext.Provider value={ dispatch }>
+        { children }
       </DataDispatchContext.Provider>
     </DataStateContext.Provider>
   );
@@ -40,6 +47,7 @@ export function DataStoreProvider({ children }) {
 
 /**
  * Subscriber hook to retrieve and mutate data state.
+ * @return {[DataStore,React.Dispatch<StoreAction>]}
  */
 export function useDataStore() {
 
