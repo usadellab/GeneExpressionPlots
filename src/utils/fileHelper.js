@@ -48,8 +48,8 @@ export const processSampleList = async function(groupName, countUnit, sampleList
   
   let group = {
     [groupName]: {
-      "countUnit": countUnit,
-      "samples": []
+      'countUnit': countUnit,
+      'samples': []
     }
   };
 
@@ -78,19 +78,16 @@ export const processSampleList = async function(groupName, countUnit, sampleList
  */
 export const processSample = async function(sample) {
   validateSample(sample);
-  try {
-    let processedSample = {
-      "name": sample.name,
-      "xTickValue": sample.xTickValue
-    };
-    let replicates = await Promise.all([...sample.replicates].map((replicate) => {
-      return parseCsv(replicate.file, replicate);
-    }));
-    processedSample.replicates = replicates;
-    return processedSample;
-  } catch (error) {
-    throw error;
-  }
+  let processedSample = {
+    'name': sample.name,
+    'xTickValue': sample.xTickValue
+  };
+  let replicates = await Promise.all([...sample.replicates].map((replicate) => {
+    return parseCsv(replicate.file, replicate);
+  }));
+  processedSample.replicates = replicates;
+  return processedSample;
+
 };
 
 /**
@@ -100,8 +97,8 @@ export const processSample = async function(sample) {
  * @returns true if no Error, otherwise throws appropriate Error
  */
 export const validateSample = function(sample){
-  let sampleProps = ["name", "xTickValue","replicates"];
-  let replicateProps = ["separator","accessionColumn","countColumn","header","file"];
+  let sampleProps = ['name', 'xTickValue','replicates'];
+  let replicateProps = ['separator','accessionColumn','countColumn','header','file'];
 
   if(sample.replicates === undefined || sample.replicates === null || !Array.isArray(sample.replicates) || (Array.isArray(sample.replicates) && sample.replicates.length < 1)){
     throw new Error('provided sample has no replicates assigned!');
