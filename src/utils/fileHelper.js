@@ -136,9 +136,10 @@ export const parseCsv = function(file, config){
       },
       error: reject,
       step: (row) => {
-        geneCounts[row.data[Object.keys(row.data)[config.accessionColumn - 1]]] = row.data[Object.keys(row.data)[config.countColumn - 1]];
+        geneCounts[row.data[Object.keys(row.data)[config.accessionColumn - 1]]] = parseFloat(row.data[Object.keys(row.data)[config.countColumn - 1]]);
       },
       header: config.header,
+      delimiter: config.separator,
       skipEmptyLines: true
     });
   });
