@@ -9,7 +9,7 @@ export default function AppRoutes() {
     <BrowserRouter>
       <Suspense fallback={<div>Loading...</div>}>
         <Switch>
-          <Route exact path="/" component={DataHome} />
+          <Route path="/data" component={DataHome} />
         </Switch>
       </Suspense>
     </BrowserRouter>
