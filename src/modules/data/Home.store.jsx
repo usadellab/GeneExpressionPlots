@@ -1,33 +1,14 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+import { dataStoreReducer } from './reducers/store-reducer';
+
 import './typedefs';
 
 import { mockStore } from './mocks/store';
 
+
 const DataStateContext = createContext();
 const DataDispatchContext = createContext();
-
-/**
- * Reducer function to update data state.
- * @param   {DataStore}   state  reactive object holding the state
- * @param   {StoreAction} action action and payload dispatch
- * @returns {DataStore}   the data store object
- */
-function dataReducer(state, action) {
-
-  const { type, payload } = action;
-
-  switch (type) {
-    case 'UPDATE':
-      return Object.assign({}, state, payload);
-
-    case 'DELETE':
-      return state;
-
-    default:
-      throw new Error(`Unhandled action type: ${type}`);
-  }
-}
 
 /**
  * Create a Context.Provider to subscribe in children components.
@@ -35,7 +16,7 @@ function dataReducer(state, action) {
  */
 export function DataStoreProvider({ children }) {
 
-  const [state, dispatch] = useReducer(dataReducer, mockStore);
+  const [state, dispatch] = useReducer(dataStoreReducer, mockStore);
 
   return (
     <DataStateContext.Provider value={ state }>
