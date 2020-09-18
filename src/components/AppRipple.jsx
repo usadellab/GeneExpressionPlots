@@ -1,6 +1,4 @@
 import React, { useState, useLayoutEffect } from 'react';
-//
-import '../css/app-ripple.css';
 
 
 /**
