@@ -1,12 +1,87 @@
-import React         from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams }       from 'react-router-dom';
+
+import AppSelect   from '@components/AppSelect';
+import AppText     from '@components/AppText';
+import AppTextArea from '@components/AppTextArea';
+
+import { useDataStore } from '../Home.store';
 
 
+/**
+ * Render a Group as an HTML element.
+ * @param {GroupViewProps} props properties object for the GroupView component
+ */
 export default function GroupView (props) {
 
-  const { group } = useParams();
+  const { groupKey } = useParams();
+
+  // Store
+  const [ data, setData ] = useDataStore();
+
+  const handleSubmit = (event) => {
+
+    setData({
+      type: 'UPDATE',
+      payload: {
+        key: groupKey,
+        value: group,
+      }
+    });
+  };
+
+  // Group form state
+  const currentGroup = groupKey
+    // ? { key: groupKey, describe: data[groupKey].describe, countUnit: data[groupKey].countUnit }
+    ? data[groupKey]
+    : { describe: '', countUnit: '' };
+
+  const [ group, setGroup ] = useState(currentGroup);
+
+  const handleGroup = ({ key, value }) => setGroup( Object.assign({}, group, { [key]: value }) );
 
   return (
-    <div>GroupView works! We are in { group }</div>
+    <form
+      onSubmit={ handleSubmit }
+      className={ `flex flex-wrap mt-10 px-2 ${props.className}` }
+    >
+
+      {/* GROUP LAYER */}
+
+      <div className="flex w-full">
+
+        <AppText
+          className="w-1/2"
+          label="Group name"
+          value={ groupKey || '' }
+          onChange={ (event) => handleGroup({
+            key: 'key', value: event.target.value
+          }) }
+        />
+
+        <AppSelect
+          className="w-1/2 ml-2"
+          label="Count unit"
+          value={ group.countUnit }
+          options={ [ 'Raw', 'RPKM', 'TPM' ] }
+          onChange={ (event) => handleGroup({
+            key: 'countUnit', value: event.target.value
+          }) }
+        />
+
+      </div>
+
+      <AppTextArea
+        className="w-full"
+        label="Group description"
+        rows="5"
+        value={ group.describe }
+        onChange={ (event) => handleGroup({
+          key: 'describe', value: event.target.value
+        }) }
+      />
+
+      {/* <input type="submit" value="Submit" /> */}
+    </form>
   );
 }
