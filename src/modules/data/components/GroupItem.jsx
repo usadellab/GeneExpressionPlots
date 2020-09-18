@@ -30,20 +30,20 @@ const GroupItemStat = (props) => {
  */
 export default function GroupItem (props) {
 
-  const { groupKey, groupValue } = props;
+  const { group, groupIndex } = props;
   const { path } = useRouteMatch();
-  const [ _data, setData ] = useDataStore();
+  const [ _, setData ] = useDataStore();
 
   return (
     <div className="px-2 py-8 flex flex-wrap md:flex-no-wrap border-t-2 hover:bg-gray-100" >
 
       <header className="flex flex-col flex-shrink-0 mb-6 md:w-64 md:mb-0" >
 
-        <h2 className="text-xl text-gray-800">{ groupKey }</h2>
+        <h2 className="text-xl text-gray-800">{ group.name }</h2>
 
         <div className="mt-2" >
-          <GroupItemStat label="Units:" value={ groupValue.countUnit } />
-          <GroupItemStat label="Samples:" value={ groupValue.samples.length } />
+          <GroupItemStat label="Units:" value={ group.countUnit } />
+          <GroupItemStat label="Samples:" value={ group.samples.length } />
         </div>
 
       </header>
@@ -55,14 +55,14 @@ export default function GroupItem (props) {
         </h2> */}
 
         <p className="mt-1 h-6 overflow-hidden leading-relaxed text-gray-700" >
-          { groupValue.describe }
+          { group.describe }
         </p>
 
         <div
           className="inline-flex items-center mt-4 text-gray-500"
         >
 
-          <Link to={ `${path}/group/${groupKey}`} >
+          <Link to={ `${path}/group/${groupIndex}`} >
             <AppButton className="group rounded-full" >
               <IconPencil
                 className="w-6 group-hover:text-blue-500"
@@ -74,7 +74,7 @@ export default function GroupItem (props) {
             className="group p-1 rounded-full"
             onClick={ () => setData({
               type: 'DELETE',
-              payload: { key: groupKey, value: groupValue }
+              payload: { key: groupIndex, value: group }
             })}
           >
             <IconTrash

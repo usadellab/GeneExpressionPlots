@@ -9,28 +9,31 @@ import { useDataStore } from '../Home.store';
 
 
 
+/**
+ * Render a view of existing data and the controls needed to manipulate it.
+ * @param {DataViewProps} props properties object for the DataView component
+ */
 export default function DataView (props) {
 
   const [ data ] = useDataStore();
   const { path } = useRouteMatch();
 
   return (
-    <div className={ `container font-abeeze ${props.className || ''}` }>
+    <div className={ `container p-4 font-abeeze ${props.className || ''}` }>
 
       {
-        Object.entries(data).map(([groupKey, groupValue ], index) => (
+        data.map((group, index) => (
 
           <GroupItem
-            key={ `${groupKey}-${index}`}
-            groupKey={ groupKey }
-            groupValue={ groupValue }
+            key={ `${group.name}-${index}`}
+            group={ group }
           />
 
         ))
       }
 
       <AppLink
-        className={`group flex justify-center w-full ${ data ? 'border-t-2' : '' }`}
+        className={`group flex justify-center w-full ${ data.length > 0 ? 'border-t-2' : '' }`}
         to={ `${path}/group/`}
       >
         <IconAdd className="w-24 text-gray-500 group-hover:text-blue-500"/>

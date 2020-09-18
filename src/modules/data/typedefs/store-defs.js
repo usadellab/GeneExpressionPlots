@@ -1,5 +1,5 @@
 /**
- * @typedef  {Object<string,Group>} DataStore Store object for the data module.
+ * @typedef  {Group[]} DataStore Store object for the data module.
 **/
 
 /**
