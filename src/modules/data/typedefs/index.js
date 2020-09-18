@@ -1,2 +1,2 @@
-import './data';
-import './store';
+import './data-defs';
+import './store-defs';

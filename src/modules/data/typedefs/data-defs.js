@@ -1,8 +1,4 @@
 /**
- * @typedef  {Object<string,Group>} SampleGroups Groups of sample data.
-**/
-
-/**
  * @typedef  {Object} Group Group of sample data.
  * @property {string}   describe  group description
  * @property {string}   countUnit sample count units _(e.g. tpm)_
