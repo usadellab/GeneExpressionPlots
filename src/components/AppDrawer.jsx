@@ -37,8 +37,8 @@ export default function AppDrawer (props) {
       <div
         ref={ (x) => x && x.focus() }
         className={
-          `fixed top-0 right-0 w-1/2 h-full z-50 bg-gray-400 focus:outline-none
-           transform duration-300 ease-out
+          `fixed top-0 right-0 w-1/2 h-full z-50 focus:outline-none bg-white
+           transform duration-300 ease-out ${props.className}
            ${ show ? 'translate-x-0' : 'translate-x-full' }`
         }
         tabIndex="-1"
