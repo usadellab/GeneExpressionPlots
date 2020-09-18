@@ -1,7 +1,7 @@
-import React from 'react';
+import React    from 'react';
+import { Link } from 'react-router-dom';
 
-import GroupList from './components/GroupList';
-
+import Routes                from './Home.routes';
 import { DataStoreProvider } from './Home.store';
 
 
@@ -9,11 +9,21 @@ export default function DataHome () {
 
   return (
     <DataStoreProvider>
-      <div className="flex justify-center" >
 
-        <GroupList className="w-1/2" />
+      <header className="flex items-center p-4 w-full bg-blue-500" >
 
-      </div>
+        <Link to="/data" className="ml-4 font-medium text-xl text-white" >
+          Gene Expression Data
+        </Link>
+
+      </header>
+
+      <main className="flex justify-center" >
+
+        <Routes />
+
+      </main>
+
     </DataStoreProvider>
   );
 }
