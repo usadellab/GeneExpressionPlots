@@ -31,8 +31,9 @@ const GroupItemStat = (props) => {
 export default function GroupItem (props) {
 
   const { group, groupIndex } = props;
-  const { path } = useRouteMatch();
-  const [ _, setData ] = useDataStore();
+
+  const { dispatch } = useDataStore();
+  const { path }     = useRouteMatch();
 
   return (
     <div className="px-2 py-8 flex flex-wrap md:flex-no-wrap border-t-2 hover:bg-gray-100" >
@@ -72,7 +73,7 @@ export default function GroupItem (props) {
 
           <AppButton
             className="group p-1 rounded-full"
-            onClick={ () => setData({
+            onClick={ () => dispatch({
               type: 'DELETE',
               payload: { key: groupIndex, value: group }
             })}

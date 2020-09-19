@@ -2,10 +2,23 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 import { dataStoreReducer } from './reducers/store-reducer';
 
-import './typedefs';
+
+/* TYPES */
+
+export class Group {
+  name = '';
+  describe = '';
+  countUnit = '';
+  samples = [];
+}
 
 
+/* CONTEXT */
+
+/** @type {React.Context<Group[]>} */
 const DataStateContext = createContext();
+
+/** @type {React.Context<React.Dispatch<StoreAction>} */
 const DataDispatchContext = createContext();
 
 /**
@@ -14,7 +27,7 @@ const DataDispatchContext = createContext();
  */
 export function DataStoreProvider({ children }) {
 
-  const [state, dispatch] = useReducer(dataStoreReducer, []);
+  const [ state, dispatch ] = useReducer(dataStoreReducer, []);
 
   return (
     <DataStateContext.Provider value={ state }>
@@ -27,15 +40,17 @@ export function DataStoreProvider({ children }) {
 
 /**
  * Subscriber hook to retrieve and mutate data state.
- * @return {[DataStore,React.Dispatch<StoreAction>]}
  */
 export function useDataStore() {
 
-  const state = useContext(DataStateContext);
-  const setState = useContext(DataDispatchContext);
+  const state    = useContext(DataStateContext);
+  const dispatch = useContext(DataDispatchContext);
 
-  if (!state || !setState)
-    throw new Error('useDataState must be used within a DataProvider');
+  if (!state || !dispatch)
+    throw new Error('useDataStore must be used within a DataProvider');
 
-  return [state, setState];
+  return {
+    state,
+    dispatch
+  };
 }

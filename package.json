@@ -13,6 +13,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@snowpack/app-scripts-react": "^1.10.0",
     "@snowpack/plugin-postcss": "^1.0.3",
     "@testing-library/jest-dom": "^5.5.0",

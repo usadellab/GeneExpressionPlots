@@ -13,8 +13,8 @@ export default function AppRoutes() {
   return (
     <Switch>
       <Route exact path={ path } component={ DataView } />
-      <Route path={ `${path}/group/:groupKey/sample/:sampleIndex?` } component={ SampleView } />
-      <Route path={ `${path}/group/:groupKey?` } component={ GroupView } />
+      <Route path={ `${path}/group/:groupIndex/sample/:sampleIndex?` } component={ SampleView } />
+      <Route path={ `${path}/group/:groupIndex?` } component={ GroupView } />
     </Switch>
   );
 }

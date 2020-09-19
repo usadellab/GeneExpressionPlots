@@ -5,7 +5,7 @@ import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
 import AppTextArea from '@components/AppTextArea';
 
-import { useDataStore } from '../Home.store';
+import { useDataStore, Group } from '../Home.store';
 
 
 /**
@@ -14,27 +14,25 @@ import { useDataStore } from '../Home.store';
  */
 export default function GroupView (props) {
 
-  const { groupKey } = useParams();
+  /** @type {RouteParams} */
+  const { groupIndex } = useParams();
 
   // Store
-  const [ data, setData ] = useDataStore();
+  const { state, dispatch } = useDataStore();
 
   const handleSubmit = (event) => {
 
-    setData({
+    dispatch({
       type: 'UPDATE',
       payload: {
-        key: groupKey,
+        key: groupIndex,
         value: group,
       }
     });
   };
 
   // Group form state
-  const currentGroup = groupKey
-    // ? { key: groupKey, describe: data[groupKey].describe, countUnit: data[groupKey].countUnit }
-    ? data[groupKey]
-    : { describe: '', countUnit: '' };
+  const currentGroup = state[groupIndex] || new Group();
 
   const [ group, setGroup ] = useState(currentGroup);
 
@@ -53,9 +51,9 @@ export default function GroupView (props) {
         <AppText
           className="w-1/2"
           label="Group name"
-          value={ groupKey || '' }
+          value={ group.name }
           onChange={ (event) => handleGroup({
-            key: 'key', value: event.target.value
+            key: 'name', value: event.target.value
           }) }
         />
 

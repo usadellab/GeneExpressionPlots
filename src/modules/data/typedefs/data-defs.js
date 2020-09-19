@@ -1,10 +1,10 @@
-/**
- * @typedef  {Object} Group Group of sample data.
- * @property {string}   name      group name
- * @property {string}   describe  group description
- * @property {string}   countUnit sample count units _(e.g. tpm)_
- * @property {Sample[]} samples   array of sample data
-**/
+// /**
+//  * @typedef  {Object} Group Group of sample data.
+//  * @property {string}   name      group name
+//  * @property {string}   describe  group description
+//  * @property {string}   countUnit sample count units _(e.g. tpm)_
+//  * @property {Sample[]} samples   array of sample data
+// **/
 
 /**
  * @typedef  {Object} Sample Sample data.
