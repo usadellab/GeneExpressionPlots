@@ -5,7 +5,7 @@ import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
 import AppTextArea from '@components/AppTextArea';
 
-import { useDataStore, Group } from '../Home.store';
+import { useDataStore, Group } from '../store';
 
 
 /**

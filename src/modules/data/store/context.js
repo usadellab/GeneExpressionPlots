@@ -1,19 +1,11 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
-import { dataStoreReducer } from './reducers/store-reducer';
+import { dataStoreReducer } from './reducer';
 
 
-/* TYPES */
-
-export class Group {
-  name = '';
-  describe = '';
-  countUnit = '';
-  samples = [];
-}
-
-
-/* CONTEXT */
+/**
+ * @typedef {import('./types').Group} Group
+**/
 
 /** @type {React.Context<Group[]>} */
 const DataStateContext = createContext();

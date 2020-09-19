@@ -1,5 +1,5 @@
 /**
- * @typedef  {import('../Home.store.jsx').Group} Group
+ * @typedef  {import('../store').Group} Group
 **/
 
 /**

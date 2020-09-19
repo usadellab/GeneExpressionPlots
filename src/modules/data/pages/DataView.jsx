@@ -5,7 +5,7 @@ import AppLink   from '@components/AppLink';
 import IconAdd   from '../assets/svg/hi-plus.svg';
 import GroupItem from '../components/GroupItem';
 
-import { useDataStore } from '../Home.store';
+import { useDataStore } from '../store';
 
 
 /**

@@ -5,7 +5,7 @@ import AppButton  from '@components/AppButton';
 import IconTrash  from '../assets/svg/hi-trash.svg';
 import IconPencil from '../assets/svg/hi-pencil.svg';
 
-import { useDataStore } from '../Home.store';
+import { useDataStore } from '../store/context';
 
 
 /**

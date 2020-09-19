@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link }            from 'react-router-dom';
 
 import Routes                from './Home.routes';
-import { DataStoreProvider } from './Home.store';
+import { DataStoreProvider } from './store';
 
 import AppButton from '@components/AppButton';
 import AppDrawer from '@components/AppDrawer';
