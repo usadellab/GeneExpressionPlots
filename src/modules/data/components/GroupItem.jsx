@@ -71,9 +71,7 @@ export default function GroupItem (props) {
 
           <Link to={ `${path}/group/${groupIndex}`} >
             <AppButton className="group rounded-full" >
-              <IconPencil
-                className="w-6 group-hover:text-blue-500"
-              />
+              <IconPencil className="w-6 group-hover:text-blue-700" />
             </AppButton>
           </Link>
 
@@ -84,9 +82,7 @@ export default function GroupItem (props) {
               payload: { key: groupIndex, value: group }
             })}
           >
-            <IconTrash
-              className="w-6 h-6 group-hover:text-red-600"
-            />
+            <IconTrash className="w-6 h-6 group-hover:text-pink-700" />
           </AppButton>
 
         </div>
