@@ -20,8 +20,10 @@ export default function AppSelect (props) {
     >
 
       <select
-        className="py-3 px-4 w-full shadow-inner rounded bg-gray-100 text-gray-700 text-sm
-                   focus:outline-none focus:bg-white group-hover:bg-white"
+        className="py-3 px-4 w-full
+                   shadow-inner focus:shadow-none rounded focus:outline-none
+                   bg-gray-100 focus:bg-white
+                   text-sm text-gray-700"
         onFocus={ () => setFocus(true) }
         onBlur={ () => setFocus(false) }
         { ...selectProps }

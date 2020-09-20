@@ -12,7 +12,7 @@ export default function AppText (props) {
     <label
       className={
         `relative group mb-10
-         rounded border-2 border-white hover:border-gray-400 focus-within:border-blue-500
+         rounded border-2 border-transparent hover:border-gray-400 focus-within:border-blue-500
          bg-gray-100 hover:bg-white
          ${className}`
       }
@@ -22,7 +22,7 @@ export default function AppText (props) {
 
       <input
         className="py-3 px-4 w-full
-                   shadow-inner rounded bg-gray-100 text-gray-700 text-sm
+                   shadow-inner focus:shadow-none rounded bg-gray-100 text-gray-700 text-sm
                    focus:outline-none focus:bg-white group-hover:bg-white"
         onFocus={ () => setFocus(true) }
         onBlur={ () => setFocus(false) }
