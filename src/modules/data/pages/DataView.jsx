@@ -33,10 +33,10 @@ export default function DataView (props) {
       }
 
       <AppLink
-        className={`group flex justify-center w-full ${ state.length > 0 ? 'border-t-2' : '' }`}
+        className="group flex justify-center w-full"
         to={ `${path}/group/`}
       >
-        <IconAdd className="w-24 text-gray-500 group-hover:text-blue-500"/>
+        <IconAdd className="w-24 text-gray-500 group-hover:text-blue-700"/>
       </AppLink>
 
     </div>

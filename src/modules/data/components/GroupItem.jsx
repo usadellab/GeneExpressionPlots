@@ -30,15 +30,21 @@ const GroupItemStat = (props) => {
  */
 export default function GroupItem (props) {
 
-  const { group, groupIndex } = props;
+  const { className, group, groupIndex } = props;
 
   const { dispatch } = useDataStore();
   const { path }     = useRouteMatch();
 
   return (
-    <div className="px-2 py-8 flex flex-wrap md:flex-no-wrap border-t-2 hover:bg-gray-100" >
+    <div className={
+      `mb-6 px-6 py-8 flex flex-col items-center
+       shadow-lg border border-white
+       hover:border hover:border-gray-300
+       hover:bg-blue-200
+       ${className}`
+    }>
 
-      <header className="flex flex-col flex-shrink-0 mb-6 md:w-64 md:mb-0" >
+      <header className="flex flex-col w-full mb-6" >
 
         <h2 className="text-xl text-gray-800">{ group.name }</h2>
 
@@ -49,13 +55,13 @@ export default function GroupItem (props) {
 
       </header>
 
-      <section className="md:flex-grow">
+      <section className="w-full">
 
         {/* <h2 className="text-2xl font-medium text-gray-900 mb-2" >
           { groupKey }
         </h2> */}
 
-        <p className="mt-1 h-6 overflow-hidden leading-relaxed text-gray-700" >
+        <p className="mt-1 overflow-hidden leading-relaxed text-gray-700" >
           { group.describe }
         </p>
 
