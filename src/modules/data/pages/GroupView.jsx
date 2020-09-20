@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useParams }       from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
+import AppButton   from '@components/AppButton';
 import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
 import AppTextArea from '@components/AppTextArea';
@@ -16,20 +17,33 @@ export default function GroupView (props) {
 
   /** @type {RouteParams} */
   const { groupIndex } = useParams();
+  const history = useHistory();
 
   // Store
   const { state, dispatch } = useDataStore();
 
+  /**
+   * Submit new or updated group to the store. Navigate to DataView page.
+   * @param {React.FormEvent<HTMLInputElement>} event
+   */
   const handleSubmit = (event) => {
 
+    event.preventDefault();
     dispatch({
-      type: 'UPDATE',
+      type: groupIndex ? 'UPDATE' : 'CREATE',
       payload: {
         key: groupIndex,
         value: group,
       }
     });
+    history.push('/data');
   };
+
+  /**
+   * Return to DataView page.
+   * @param {React.MouseEvent<HTMLButtonElement>} event
+   */
+  const handleCancel = (event) => history.push('/data');
 
   // Group form state
   const currentGroup = state[groupIndex] || new Group();
@@ -79,7 +93,16 @@ export default function GroupView (props) {
         }) }
       />
 
-      {/* <input type="submit" value="Submit" /> */}
+      <AppButton className="primary-blue" type="Submit">Save</AppButton>
+      <AppButton
+        className="secondary-pink ml-3"
+        type="Button"
+        value="Cancel"
+        onClick={ handleCancel }
+      >
+        Cancel
+      </AppButton>
+
     </form>
   );
 }
