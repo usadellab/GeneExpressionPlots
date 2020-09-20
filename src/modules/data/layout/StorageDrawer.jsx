@@ -1,8 +1,11 @@
 import React from 'react';
 
+import AppButton from '@components/AppButton';
 import AppDrawer from '@components/AppDrawer';
 import AppFile   from '@components/AppFile';
-import IconFile  from '../assets/svg/hi-document.svg';
+
+import IconFile     from '../assets/svg/hi-document.svg';
+import IconDownload from '../assets/svg/hi-download.svg';
 
 import { useDataStore } from '../store';
 
@@ -68,8 +71,14 @@ export default function DataStorage (props) {
         onChange={ handleLoadFile }
       >
         <IconFile className="w-6 h-6 mr-3"/>
-        Load File
+        Import Data
       </AppFile>
+      <AppButton
+        className="flex justify-center m-2 primary-blue"
+      >
+        <IconDownload className="w-6 h-6 mr-3" />
+        Export Data
+      </AppButton>
     </AppDrawer>
   );
 }
