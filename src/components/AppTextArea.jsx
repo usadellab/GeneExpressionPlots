@@ -45,8 +45,9 @@ export default function AppTextArea (props) {
   return (
     <label
       className={
-        `relative group mb-10 border rounded bg-gray-100 hover:bg-white
-         hover:border-gray-400 focus-within:border-blue-500 focus-within:border-2
+        `relative group mb-10
+         rounded border-2 border-white hover:border-gray-400 focus-within:border-blue-500
+         bg-gray-100 hover:bg-white
        ${className}`
       }
       onMouseEnter={ () => setHover(true) }
@@ -54,7 +55,8 @@ export default function AppTextArea (props) {
     >
 
       <textarea
-        className="py-3 px-4 w-full rounded bg-gray-100 text-gray-700 text-sm
+        className="py-3 px-4 w-full
+                   shadow-inner rounded bg-gray-100 text-gray-700 text-sm
                    focus:outline-none focus:bg-white group-hover:bg-white"
         { ...textAreaProps }
         onFocus={ () => setFocus(true) }
