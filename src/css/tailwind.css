@@ -12,6 +12,57 @@ body {
 }
 
 
+/* BUTTONS */
+
+.primary-blue {
+  @apply shadow-outer bg-blue-700 text-white;
+}
+
+.primary-blue:hover {
+  @apply bg-blue-800;
+}
+
+.primary-pink {
+  @apply shadow-outer bg-pink-700 text-white;
+}
+
+.primary-pink:hover {
+  @apply bg-pink-800;
+}
+
+.secondary-blue {
+  @apply shadow-outer bg-white text-blue-700;
+}
+
+.secondary-blue:hover {
+  @apply bg-gray-200;
+}
+
+.secondary-pink {
+  @apply shadow-outer bg-white text-pink-700;
+}
+
+.secondary-pink:hover {
+  @apply bg-gray-200;
+}
+
+.secondary-gray {
+  @apply shadow-outer bg-white text-gray-700;
+}
+
+.secondary-gray:hover {
+  @apply bg-gray-200;
+}
+
+.tertiary-gray {
+  @apply bg-white text-gray-700;
+}
+
+.tertiary-gray:hover {
+  @apply bg-gray-200;
+}
+
+
 /* ANIMATIONS */
 
 .ripple-anim {
