@@ -2,6 +2,7 @@ import React from 'react';
 
 import AppDrawer from '@components/AppDrawer';
 import AppFile   from '@components/AppFile';
+import IconFile  from '../assets/svg/hi-document.svg';
 
 import { useDataStore } from '../store';
 
@@ -57,7 +58,8 @@ export default function DataStorage (props) {
         className="flex justify-center m-2 primary-blue"
         onChange={ handleLoadFile }
       >
-      Load File
+        <IconFile className="w-6 h-6 mr-3"/>
+        Load File
       </AppFile>
     </AppDrawer>
   );
