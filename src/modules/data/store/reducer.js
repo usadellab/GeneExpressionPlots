@@ -1,7 +1,13 @@
-function createGroup (store, key) {
+/**
+ *
+ * @param {DataStore}     store   current store state
+ * @param {Group|Group[]} payload group key in the data store
+ */
+function createGroup (store, payload) {
 
-  store.push(key);
-  return store;
+  return Array.isArray(payload)
+    ? [ ...store, ...payload ]
+    : [ ...store, payload ];
 
 }
 
