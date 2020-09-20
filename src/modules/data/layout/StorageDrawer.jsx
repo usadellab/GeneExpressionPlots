@@ -25,32 +25,41 @@ export default function DataStorage (props) {
    */
   const handleLoadFile = (event) => {
 
+    // Get the file ref
     const file = event.target.files.item(0);
 
+    // Reset file input (allow consecutive uploads of the same file)
+    event.target.value = null;
+
+    // Accept JSON mime-type only
     if (!file || file.type !== 'application/json') return;
 
+    // Use FileReader API to parse the input file
     const fr = new FileReader();
 
     fr.readAsText(file, 'utf-8');
 
     fr.onload = () => {
 
-      const value = JSON.parse(fr.result);
-
+      // Update store
       dispatch({
         type: 'CREATE',
         payload: {
-          value,
+          value: JSON.parse(fr.result),
         },
       });
 
+      // Close drawer
       setShow(false);
     };
+
+    fr.onerror = err => console.log(err);
+
   };
 
   return (
     <AppDrawer
-      className="w-1/2"
+      className="w-1/2 md:w-1/3 lg:w-1/4"
       show={ show }
       setShow={ setShow }
     >
