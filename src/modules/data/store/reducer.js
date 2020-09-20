@@ -1,3 +1,10 @@
+function createGroup (store, key) {
+
+  store.push(key);
+  return store;
+
+}
+
 /**
  * Remove a key from the data store object.
  * @param {DataStore} store current store state
@@ -5,12 +12,7 @@
  */
 function removeGroup (store, key) {
 
-  const { [key]: _, ...rest } = store;
-
-  console.log(key);
-  console.log(rest);
-
-  return Object.assign({}, rest);
+  return store.filter((group, i) => i !== key);
 
 }
 
@@ -20,14 +22,16 @@ function removeGroup (store, key) {
  * @param {string}    key   key to update in the store
  * @param {Group}     group group object value
  */
-function updateGroup (store, key, group) {
+function updateGroup (store, key, newGroup) {
 
-  return Object.assign({}, store, { [key]: group });
+  const group = store[key];
+  Object.assign(group,  newGroup);
+  return store;
 
 }
 
 /**
- * Perform CRUD operations on the data store.
+ * Perform operations on the data store.
  * @param {DataStore}   state  current store state
  * @param {StoreAction} action store dispatch object
  * @returns {DataStore} the new data store object
@@ -37,6 +41,9 @@ export function dataStoreReducer (state, action) {
   const { type, payload } = action;
 
   switch (type) {
+
+    case 'CREATE':
+      return createGroup(state, payload.value);
 
     case 'UPDATE':
       return updateGroup(state, payload.key, payload.value);
