@@ -17,7 +17,7 @@ export default function DataHome () {
   return (
     <DataStoreProvider>
 
-      <header className="flex justify-between items-center p-2 w-full bg-blue-500" >
+      <header className="flex justify-between items-center p-2 w-full shadow-lg bg-blue-700" >
 
         <Link to="/data" className="flex items-center ml-4 font-medium text-xl text-white" >
           <IconHome className="w-6 h-6" />
