@@ -8,9 +8,15 @@ import IconPencil from '../assets/svg/hi-pencil.svg';
 import { useDataStore } from '../store/context';
 
 
+
 /**
  * Render group stats HTML element.
- * @param {GroupItemStatProps} props group stat property object
+ *
+ * @typedef  {Object} GroupItemStatProps Properties object for the GroupStat component
+ * @property {string} label item label
+ * @property {string} value item value
+ *
+ * @param {GroupItemStatProps} props component properties
  */
 const GroupItemStat = (props) => {
 
@@ -24,8 +30,15 @@ const GroupItemStat = (props) => {
   );
 };
 
+
 /**
- * Render a Group item as a HTML element.
+ * Render a Group item summary.
+ *
+ * @typedef  {Object} GroupItemProps Properties object for the GroupItem component.
+ * @property {string} className  css classest to apply in the root element
+ * @property {number} groupIndex group index in the store
+ * @property {Group}  group      group object in the store
+ *
  * @param {GroupItemProps} props properties object
  */
 export default function GroupItem (props) {
@@ -69,7 +82,7 @@ export default function GroupItem (props) {
           className="inline-flex items-center mt-4 text-gray-500"
         >
 
-          <Link to={ `${path}/group/${groupIndex}`} >
+          <Link to={{ pathname: `${path}/group/${groupIndex}`, state: { group, groupIndex } }} >
             <AppButton className="group rounded-full" >
               <IconPencil className="w-6 group-hover:text-blue-700" />
             </AppButton>

@@ -1,6 +1,10 @@
 /**
+ * @typedef {import('./types').Group} Group
+**/
+
+/**
  *
- * @param {DataStore}     store   current store state
+ * @param {Group[]}       store   current store state
  * @param {Group|Group[]} payload group key in the data store
  */
 function createGroup (store, payload) {
@@ -13,7 +17,7 @@ function createGroup (store, payload) {
 
 /**
  * Remove a key from the data store object.
- * @param {DataStore} store current store state
+ * @param {Group[]} store current store state
  * @param {string}    key   group key in the data store
  */
 function removeGroup (store, key) {
@@ -24,9 +28,9 @@ function removeGroup (store, key) {
 
 /**
  * Update a key in the data store object.
- * @param {DataStore} store current store state
- * @param {string}    key   key to update in the store
- * @param {Group}     group group object value
+ * @param {Group[]} store current store state
+ * @param {string}  key   key to update in the store
+ * @param {Group[]} group group object value
  */
 function updateGroup (store, key, newGroup) {
 
@@ -38,9 +42,18 @@ function updateGroup (store, key, newGroup) {
 
 /**
  * Perform operations on the data store.
- * @param {DataStore}   state  current store state
+ *
+ * @typedef  {Object} StoreAction Dispatch object for the data store.
+ * @property {string}        type    action type
+ * @property {ActionPayload} payload action payload
+ *
+ * @typedef  {Object} ActionPayload Dispatch object payload
+ * @property {string} key   group key in the store
+ * @property {Group?} value corresponding group object
+ *
+ * @param {Group[]}     state  current store state
  * @param {StoreAction} action store dispatch object
- * @returns {DataStore} the new data store object
+ * @returns {Group[]} the new data store object
  */
 export function dataStoreReducer (state, action) {
 

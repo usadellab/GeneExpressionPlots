@@ -8,8 +8,13 @@ import GroupItem from '../components/GroupItem';
 import { useDataStore } from '../store';
 
 
+
 /**
  * Render a view of existing data and the controls needed to manipulate it.
+ *
+ * @typedef  {Object} DataViewProps Properties object for the DataView component.
+ * @property {string} className css classes to apply in the root element
+ *
  * @param {DataViewProps} props properties object for the DataView component
  */
 export default function DataView (props) {
