@@ -54,6 +54,14 @@ body {
   @apply bg-gray-200;
 }
 
+.tertiary-pink {
+  @apply text-pink-700;
+}
+
+.tertiary-pink:hover {
+  @apply bg-pink-200;
+}
+
 .tertiary-gray {
   @apply bg-white text-gray-700;
 }

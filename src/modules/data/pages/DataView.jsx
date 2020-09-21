@@ -18,7 +18,7 @@ export default function DataView (props) {
   const { path }  = useRouteMatch();
 
   return (
-    <div className={ `container p-4 font-abeeze ${props.className || ''}` }>
+    <div className={ `container font-abeeze ${props.className || ''}` }>
 
       {
         state.map((group, index) => (
@@ -33,8 +33,8 @@ export default function DataView (props) {
       }
 
       <AppLink
-        className="group flex justify-center w-full"
-        to={ `${path}/group/`}
+        className="group flex justify-center"
+        to={ `${path}/group/` }
       >
         <IconAdd className="w-24 text-gray-500 group-hover:text-blue-700"/>
       </AppLink>

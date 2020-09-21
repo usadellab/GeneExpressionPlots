@@ -12,7 +12,7 @@ export default function HomeLayout (props) {
   const [ showStorage, setShowStorage ] = useState(false);
 
   return (
-    <div className="h-screen">
+    <div className="flex flex-col items-center h-screen">
 
       {/* TOP-SIDE BAR: NAVIGATION */}
 
@@ -29,7 +29,7 @@ export default function HomeLayout (props) {
 
       {/* MAIN CONTENT: ROUTES */}
 
-      <main className="flex justify-center" >
+      <main className="flex justify-center mt-10 px-6 md:px-12 w-full max-w-screen-md" >
 
         { props.children }
 

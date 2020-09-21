@@ -11,8 +11,8 @@ export default function AppText (props) {
   return (
     <label
       className={
-        `relative group mb-10
-         rounded border-2 border-transparent hover:border-gray-400 focus-within:border-blue-500
+        `relative group ${props.label ? 'mb-10' : ''}
+         rounded border-2 border-transparent hover:border-blue-400 focus-within:border-blue-600
          bg-gray-100 hover:bg-white
          ${className}`
       }
@@ -22,7 +22,7 @@ export default function AppText (props) {
 
       <input
         className="py-3 px-4 w-full
-                   shadow-inner focus:shadow-none rounded bg-gray-100 text-gray-700 text-sm
+                   shadow-xs rounded bg-gray-100 text-gray-800 text-sm
                    focus:outline-none focus:bg-white group-hover:bg-white"
         onFocus={ () => setFocus(true) }
         onBlur={ () => setFocus(false) }
@@ -30,13 +30,14 @@ export default function AppText (props) {
         { ...inputProps }
       />
 
-      <p className={
-        `absolute px-2 py-1 text-sm font-light
-         ${ focus ? 'text-blue-500' : hover ? 'text-gray-600' : 'text-gray-500' }`
-      } >
-        { props.label }
-      </p>
-
+      {
+        props.label && <p className={
+          `absolute px-2 py-1 text-sm
+          ${ focus ? 'text-blue-600' : hover ? 'text-gray-800' : 'text-gray-700' }`
+        } >
+          { props.label }
+        </p>
+      }
     </label>
   );
 }

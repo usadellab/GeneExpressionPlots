@@ -11,7 +11,7 @@ export default function MenuBar (props) {
 
       <Link to="/data" className="flex items-center ml-4 font-medium text-xl text-white" >
         <IconHome className="w-6 h-6" />
-        <span className="pl-3">Gene Expression Data</span>
+        <span className="pl-3">Expression Data</span>
       </Link>
 
       { props.children }
