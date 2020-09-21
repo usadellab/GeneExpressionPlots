@@ -2,14 +2,16 @@ import React, { lazy, Suspense }        from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 
-const DataHome = lazy(() => import('./modules/data/Home'));
+const DataHome  = lazy(() => import('./modules/data/Home'));
+const PlotsHome = lazy(() => import('./modules/plotly/Plotly'));
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Suspense fallback={<div>Loading...</div>}>
         <Switch>
-          <Route path="/data" component={DataHome} />
+          <Route exact path="/" component={PlotsHome} />
+          <Route path="/data"   component={DataHome} />
         </Switch>
       </Suspense>
     </BrowserRouter>
