@@ -1,74 +1,174 @@
-import React, {
-  Fragment
-} from 'react';
+import React from 'react';
 import createPlotlyComponent from 'react-plotly.js/factory';
 // import Plot from 'react-plotly.js';
 // import Plotly from 'plotly.js';
-import mock from '../../test_data/mock-DB.json';
 
-// eslint-disable-next-line
+import mockData from '../../test_data/mock-DB.json';
+
+
+/**
+ * @typedef {import('../data/store').Group} Group
+ * @typedef {import('../data/store').Sample} Sample
+ * @typedef {import('../data/store').Replicate[]} Replicate
+ */
+
+
+const Plotly = window.Plotly;
 const Plot = createPlotlyComponent(Plotly);
 
 
 /* DATA PROCESSING */
 
-const mergeData = (data) => {
-  const result = {}; 
+/**
+ * Compute the count average for each accession in sample replicates.
+ * @param {Replicate[]} replicates array of replicates
+ * @returns {Object<string,number>} count averages per accession id
+ */
+const computeAverage = (replicates) => {
 
-  data.forEach(replicate => { 
-    for (let [key, value] of Object.entries(replicate)) { 
-      if (result[key]) {
-        result[key] += value/data.length;
-      } else { 
-        result[key] = value/data.length;
-      }
+  const averages = {};
+
+  replicates.forEach(replicate => {
+
+    for (const [key, value] of Object.entries(replicate)) {
+
+      const meanValue = value / replicates.length;
+
+      if (averages[key])
+        averages[key] += meanValue;
+
+      else
+        averages[key] = meanValue;
+
     }
   });
-  return result;
+  return averages;
 };
 
-const calculateVariance = (data, averages) =>{
-  const result = {}; 
+/**
+ * Compute the count variance for each accession in sample replicates.
+ * @param {Replicate[]}           replicates array of replicates
+ * @param {Object<string,number>} averages   accession-average key-value pairs
+ * @returns {Object<string,number>} count variances per accession id
+ */
+const computeVariance = (replicates, averages) =>{
 
-  data.forEach(replicate => { 
-    for (let [key, value] of Object.entries(replicate)) { 
-      if (result[key]) {
-        result[key] += ((averages[key] - value)**2)/data.length;
-      } else { 
-        result[key] = ((averages[key] - value)**2)/data.length;
-      }
+  const variances = {};
+
+  replicates.forEach(replicate => {
+
+    for (const [key, value] of Object.entries(replicate)) {
+
+      const squareMeanDiff = ((averages[key] - value)**2)/replicates.length;
+
+      if (variances[key])
+        variances[key] += squareMeanDiff;
+
+      else
+        variances[key] = squareMeanDiff;
     }
+
   });
-  return result;
+
+  return variances;
 };
 
 
+/**
+ * Compute average and variance of each replicate in the sample.
+ *
+ * @typedef {Object} SampleMeanVars
+ * @property {Object<string,number} averages
+ * @property {Object<string,number} variances
+ *
+ * @param {{}}     result collection of sample averages and variances per accession id
+ * @param {Sample} sample a group sample
+ */
+const sampleAveragesAndVariancesReducer = (result, sample) => {
 
-const h = {};
-mock.forEach(group => {
+  const averages  = computeAverage(sample.replicates);
+  const variances = computeVariance(sample.replicates, averages);
 
-  h[group.name] = {};
-
-  group.samples.forEach(sample => {
-    const averages = mergeData(sample.replicates);
-    const variances = calculateVariance(sample.replicates, averages);
-    h[group.name][sample.name] = { averages, variances };
+  return Object.assign(result, {
+    [sample.name]: { averages, variances }
   });
 
-
-});
-
-
-/* PLOT ATTEMPT 1 */
-
-const barCnt = function(h){
-  return Object.keys(h).reduce((a,c)=> {a += Object.keys(h[c]).length; return a;},0);
 };
 
-const colors = ['#f3cec9', '#e7a4b6', '#cd7eaf', '#a262a9', '#6f4d96', '#3d3b72', '#182844'];
+
+/**
+ * Compute average and variance of each replicate accession in the group samples.
+ * @param {SampleMeanVars} result average and variance of each accession id
+ * @param {Group}          group  group data
+ */
+const groupAveragesAndVariancesReducer = (result, group) => {
+
+  return Object.assign(result, {
+    [group.name]: group.samples.reduce( sampleAveragesAndVariancesReducer, {} )
+  });
+
+};
+
+const h = mockData.reduce( groupAveragesAndVariancesReducer, {} );
 
 
-const createPlot = function(h, accession){
+const colors = [
+  '#f3cec9',
+  '#e7a4b6',
+  '#cd7eaf',
+  '#a262a9',
+  '#6f4d96',
+  '#3d3b72',
+  '#182844',
+];
+
+
+/* PLOT CANDIDATE 1 */
+
+function createPlot1 (h, group, accession, colorIndex) {
+  let groupArr = [];
+  let sampleArr = [];
+  let y = [];
+  let errs = [];
+  let color = [];
+
+  Object.keys(h[group]).forEach(sampleName =>{
+
+    const sample = h[group][sampleName];
+
+    groupArr.push(group);
+    sampleArr.push(sampleName);
+    y.push(sample.averages[accession]);
+    errs.push(sample.variances[accession]);
+    color.push(colors[colorIndex]);
+
+  });
+
+  const x = [groupArr, sampleArr];
+
+  return {
+    x,
+    y,
+    error_y:{
+      type: 'data',
+      array: errs,
+      visible: true,
+    },
+    // marker:{
+    //   color
+    // },
+    type:'bar',
+    name: group
+  };
+}
+
+const MERISTEM = createPlot1(h,'Heat-Shock Arabidopsis : Meristem', 'PGSC0003DMT400039136', 0);
+const APICAL = createPlot1(h,'Heat-Shock Arabidopsis : Apical', 'PGSC0003DMT400039136', 1);
+
+
+/* PLOT CANDIDATE 2 */
+
+const createPlot2 = function(h, accession){
   let groupArr = [];
   let sampleArr = [];
   let y = [];
@@ -87,7 +187,7 @@ const createPlot = function(h, accession){
     });
   });
   const x = [groupArr, sampleArr];
-  
+
   return {
     x,
     y,
@@ -104,11 +204,12 @@ const createPlot = function(h, accession){
   };
 };
 
-const GENE_1 = createPlot(h, 'PGSC0003DMT400039136');
+const GENE_1 = createPlot2(h, 'PGSC0003DMT400039136');
 
-/* PLOT ATTEMPT 2 */
 
-function createSamplePlot (sampleName, accessionId) {
+/* PLOT CANDIDATE 3 */
+
+function createPlot3 (sampleName, accessionId) {
 
   const x = Object.keys(h);
   const y = Object.keys(h).map(k => h[k][sampleName].averages[accessionId]);
@@ -135,137 +236,56 @@ function createSamplePlot (sampleName, accessionId) {
   };
 }
 
-
-const DAS_1 = createSamplePlot('DAS-1', 'PGSC0003DMT400039136');
-const DAS_2 = createSamplePlot('DAS-2', 'PGSC0003DMT400039136');
-const DAS_5 = createSamplePlot('DAS-5', 'PGSC0003DMT400039136');
-
-/* PLOT ATTEMPT 3 */
-
-function createFirstPlot (h, group, accession, colorIndex) {
-  let groupArr = [];
-  let sampleArr = [];
-  let y = [];
-  let errs = [];
-  let color = [];
-
-  Object.keys(h[group]).forEach(sampleName =>{
-
-    const sample = h[group][sampleName];
-
-    groupArr.push(group);
-    sampleArr.push(sampleName);
-    y.push(sample.averages[accession]);
-    errs.push(sample.variances[accession]);
-    color.push(colors[colorIndex]);
-
-  });
-
-  const x = [groupArr, sampleArr];
-  
-  return {
-    x,
-    y,
-    error_y:{
-      type: 'data',
-      array: errs,
-      visible: true,
-    },
-    // marker:{
-    //   color
-    // },
-    type:'bar',
-    name: group
-  };
-}
+const DAS_1 = createPlot3('DAS-1', 'PGSC0003DMT400039136');
+const DAS_2 = createPlot3('DAS-2', 'PGSC0003DMT400039136');
+const DAS_5 = createPlot3('DAS-5', 'PGSC0003DMT400039136');
 
 
-const MERISTEM = createFirstPlot(h,'Heat-Shock Arabidopsis : Meristem', 'PGSC0003DMT400039136', 0);
-const APICAL = createFirstPlot(h,'Heat-Shock Arabidopsis : Apical', 'PGSC0003DMT400039136', 1);
+/* RENDER PLOTS */
 
 export default function PlotlyComponent() {
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '50%',
-    }}>
-      <div className="text-blue-500">This works</div>
-      <Plot data = {
-        [
+    <div className="flex flex-wrap justify-center">
+
+      <Plot
+        data={[
           APICAL,
           MERISTEM,
-        ]
-      }
-
-
-      layout = {
-        {
-          grid: {
-
-          },
+        ]}
+        config={{
+          responsive: true
+        }}
+        layout={{
           bargap: 0.1,
-          // bargroupgap: 1,
           showlegend: true,
           legend: {
-            orientation:'v',
-            yanchor:'top',
+            // orientation:'v',
+            // yanchor:'top',
             xanchor:'right'
           }
-          // grid: {
-          //   xgap: .1,
-          //   ygap: .1
-          // }
-        }
-      }
+        }}
       />
+
       <Plot
-        data = { [ GENE_1, ] }
-        layout = {
-          {
-            bargap: 0.1,
-          }
-        }
+        data={[ GENE_1 ]}
+        layout={{
+          bargap: 0.1,
+        }}
       />
-      <Plot data = {
-        [
+
+      <Plot
+        data={[
           DAS_1,
           DAS_2,
           DAS_5,
-        ]
-      }
-
-
-      layout = {
-        {
-          // bargap:.01,
-          // bargroupgap:.1,
+        ]}
+        layout={{
           barmode:'group',
-          xaxis: {
-            tickformatstops: [
-              {
-                value: 1,
-              },
-              {
-                value: 2,
-              },
-              {
-                value: 3,
-              },
-              {
-                value: 4,
-              },
-              {
-                value: 5,
-              },
-              {
-                value: 6,
-              },
-            ]
+          legend: {
+            xanchor:'right'
           }
-        }
-      }
+        }}
       />
     </div>
   );
