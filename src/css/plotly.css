@@ -1,17 +1,12 @@
-.modebar {
-    position: absolute;
-    width: 100%;
-    top: 2px;
-    right: 2px;
+.js-plotly-plot .plotly .modebar {
+  @apply flex justify-center;
+  @apply pt-10 w-full;
 }
 
-.modebar-group {
-  /* float: left; */
-    width: 100%;
-    display: inline-block;
-    box-sizing: border-box;
-    padding-left: 8px;
-    position: relative;
-    vertical-align: middle;
-    white-space: nowrap;
+/* .js-plotly-plot .plotly .modebar--hover > :not(.watermark) {
+  @apply opacity-100;
+} */
+
+.js-plotly-plot .plotly .modebar-group {
+  @apply flex;
 }
