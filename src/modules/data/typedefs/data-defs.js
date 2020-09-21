@@ -9,7 +9,7 @@
 /**
  * @typedef  {Object} Sample Sample data.
  * @property {string}      name       name of the sample
- * @property {xTickValue}  number     value in the x-axis
+ * @property {number}      xTickValue     value in the x-axis
  * @property {Replicate[]} replicates array of replicates
 **/
 
