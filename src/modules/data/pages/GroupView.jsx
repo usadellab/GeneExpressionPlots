@@ -1,26 +1,34 @@
 import React, { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import AppButton   from '@components/AppButton';
-import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
-import AppTextArea from '@components/AppTextArea';
 
-import { useDataStore, Group } from '../store';
+import GroupForm from '../components/GroupForm';
+
+import { useDataStore } from '../store/context';
+import { Group }        from '../store/types';
 
 
 /**
- * Render a Group as an HTML element.
- * @param {GroupViewProps} props properties object for the GroupView component
+ * Render a single group as a JSX.Element
+ *
+ * @typedef  {Object} GroupViewProps Properties object for the GroupVIew component.
+ * @property {string} className css classes to apply in the root element
+ *
+ * @param {GroupViewProps} props component props
  */
 export default function GroupView (props) {
 
+  /** @type {GroupLocation} */
+  const { state } = useLocation();
+
   /** @type {RouteParams} */
-  const { groupIndex } = useParams();
   const history = useHistory();
 
-  // Store
-  const { state, dispatch } = useDataStore();
+  const [ group, setGroup ] = useState(state ? state.group : new Group());
+
+  const { dispatch } = useDataStore();
 
   /**
    * Submit new or updated group to the store. Navigate to DataView page.
@@ -29,10 +37,11 @@ export default function GroupView (props) {
   const handleSubmit = (event) => {
 
     event.preventDefault();
+
     dispatch({
-      type: groupIndex ? 'UPDATE' : 'CREATE',
+      type: state?.groupIndex >= 0 ? 'UPDATE' : 'CREATE',
       payload: {
-        key: groupIndex,
+        key: state?.groupIndex,
         value: group,
       }
     });
@@ -45,64 +54,54 @@ export default function GroupView (props) {
    */
   const handleCancel = (event) => history.push('/data');
 
-  // Group form state
-  const currentGroup = state[groupIndex] || new Group();
 
-  const [ group, setGroup ] = useState(currentGroup);
-
-  const handleGroup = ({ key, value }) => setGroup( Object.assign({}, group, { [key]: value }) );
+  /**
+   * Update the local group-layer state with the appropriate input value.
+   * @param {Object<string,string>} param0 group key-value pair
+   */
+  const updateGroupInput = ({ key, value }) => setGroup(
+    Object.assign({}, group, { [key]: value })
+  );
 
   return (
     <form
+      className={
+        `w-full ${props.className || ''}`
+      }
       onSubmit={ handleSubmit }
-      className={ `flex flex-wrap mt-10 px-2 ${props.className}` }
     >
 
       {/* GROUP LAYER */}
 
-      <div className="flex w-full">
-
-        <AppText
-          className="w-1/2"
-          label="Group name"
-          value={ group.name }
-          onChange={ (event) => handleGroup({
-            key: 'name', value: event.target.value
-          }) }
-        />
-
-        <AppSelect
-          className="w-1/2 ml-2"
-          label="Count unit"
-          value={ group.countUnit }
-          options={ [ 'Raw', 'RPKM', 'TPM' ] }
-          onChange={ (event) => handleGroup({
-            key: 'countUnit', value: event.target.value
-          }) }
-        />
-
-      </div>
-
-      <AppTextArea
-        className="w-full"
-        label="Group description"
-        rows="5"
-        value={ group.describe }
-        onChange={ (event) => handleGroup({
-          key: 'describe', value: event.target.value
-        }) }
+      <GroupForm
+        name={ group.name }
+        countUnit={ group.countUnit }
+        describe={ group.describe }
+        onChange={ updateGroupInput }
       />
 
-      <AppButton className="primary-blue" type="Submit">Save</AppButton>
-      <AppButton
-        className="secondary-pink ml-3"
-        type="Button"
-        value="Cancel"
-        onClick={ handleCancel }
-      >
-        Cancel
-      </AppButton>
 
+      {/* STATE CONTROLS */}
+
+      <div className="flex mt-6 mx-1">
+
+        <AppButton
+          className="primary-blue"
+          type="Submit"
+        >
+          Save
+        </AppButton>
+
+        <AppButton
+          className="tertiary-pink ml-3"
+          type="Button"
+          value="Cancel"
+          onClick={ handleCancel }
+        >
+          Cancel
+        </AppButton>
+
+      </div>
     </form>
   );
 }
