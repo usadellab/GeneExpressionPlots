@@ -16,12 +16,12 @@
           {
             "PGSC0003DMT400039136": 2,
             "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 0
+            "PGSC0003DMT400039133": 6
           },
           {
-            "PGSC0003DMT400039136": 6,
+            "PGSC0003DMT400039136": 3,
             "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 2
+            "PGSC0003DMT400039133": 7
           }
         ]
       },
@@ -32,17 +32,17 @@
           {
             "PGSC0003DMT400039136": 5,
             "PGSC0003DMT400039134": 17,
-            "PGSC0003DMT400039133": 3
+            "PGSC0003DMT400039133": 7
           },
           {
             "PGSC0003DMT400039136": 7,
-            "PGSC0003DMT400039134": 45,
-            "PGSC0003DMT400039133": 1
+            "PGSC0003DMT400039134": 19,
+            "PGSC0003DMT400039133": 8
           },
           {
             "PGSC0003DMT400039136": 6,
-            "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 5
+            "PGSC0003DMT400039134": 18,
+            "PGSC0003DMT400039133": 9
           }
         ]
       },
@@ -52,18 +52,18 @@
         "replicates": [
           {
             "PGSC0003DMT400039136": 8,
-            "PGSC0003DMT400039134": 28,
-            "PGSC0003DMT400039133": 5
+            "PGSC0003DMT400039134": 14,
+            "PGSC0003DMT400039133": 6
           },
           {
-            "PGSC0003DMT400039136": 22,
-            "PGSC0003DMT400039134": 25,
-            "PGSC0003DMT400039133": 2
+            "PGSC0003DMT400039136": 10,
+            "PGSC0003DMT400039134": 15,
+            "PGSC0003DMT400039133": 7
           },
           {
-            "PGSC0003DMT400039136": 15,
-            "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 1
+            "PGSC0003DMT400039136": 11,
+            "PGSC0003DMT400039134": 16,
+            "PGSC0003DMT400039133": 6
           }
         ]
       }
@@ -79,19 +79,19 @@
         "xTickValue": 1,
         "replicates": [
           {
-            "PGSC0003DMT400039136": 3,
-            "PGSC0003DMT400039134": 22,
-            "PGSC0003DMT400039133": 8
+            "PGSC0003DMT400039136": 20,
+            "PGSC0003DMT400039134": 10,
+            "PGSC0003DMT400039133": 1
           },
           {
-            "PGSC0003DMT400039136": 4,
-            "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 0
-          },
-          {
-            "PGSC0003DMT400039136": 7,
-            "PGSC0003DMT400039134": 24,
+            "PGSC0003DMT400039136": 18,
+            "PGSC0003DMT400039134": 13,
             "PGSC0003DMT400039133": 2
+          },
+          {
+            "PGSC0003DMT400039136": 17,
+            "PGSC0003DMT400039134": 12,
+            "PGSC0003DMT400039133": 3
           }
         ]
       },
@@ -100,19 +100,19 @@
         "xTickValue": 2,
         "replicates": [
           {
-            "PGSC0003DMT400039136": 5,
+            "PGSC0003DMT400039136": 21,
             "PGSC0003DMT400039134": 17,
-            "PGSC0003DMT400039133": 3
+            "PGSC0003DMT400039133": 10
           },
           {
-            "PGSC0003DMT400039136": 7,
-            "PGSC0003DMT400039134": 45,
-            "PGSC0003DMT400039133": 1
+            "PGSC0003DMT400039136": 22,
+            "PGSC0003DMT400039134": 16,
+            "PGSC0003DMT400039133": 11
           },
           {
-            "PGSC0003DMT400039136": 6,
-            "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 5
+            "PGSC0003DMT400039136": 18,
+            "PGSC0003DMT400039134": 14,
+            "PGSC0003DMT400039133": 13
           }
         ]
       },
@@ -121,19 +121,89 @@
         "xTickValue": 3,
         "replicates": [
           {
-            "PGSC0003DMT400039136": 8,
-            "PGSC0003DMT400039134": 28,
-            "PGSC0003DMT400039133": 5
+            "PGSC0003DMT400039136": 15,
+            "PGSC0003DMT400039134": 26,
+            "PGSC0003DMT400039133": 23
           },
           {
-            "PGSC0003DMT400039136": 22,
+            "PGSC0003DMT400039136": 14,
             "PGSC0003DMT400039134": 25,
+            "PGSC0003DMT400039133": 21
+          },
+          {
+            "PGSC0003DMT400039136": 13,
+            "PGSC0003DMT400039134": 24,
+            "PGSC0003DMT400039133": 18
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Heat-Shock Arabidopsis : Stolon",
+    "describe": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec mauris efficitur, luctus nunc at, mattis felis. Ut ullamcorper fringilla.",
+    "countUnit": "tpm",
+    "samples": [
+      {
+        "name": "DAS-1",
+        "xTickValue": 1,
+        "replicates": [
+          {
+            "PGSC0003DMT400039136": 6,
+            "PGSC0003DMT400039134": 15,
+            "PGSC0003DMT400039133": 1
+          },
+          {
+            "PGSC0003DMT400039136": 7,
+            "PGSC0003DMT400039134": 16,
             "PGSC0003DMT400039133": 2
           },
           {
-            "PGSC0003DMT400039136": 15,
-            "PGSC0003DMT400039134": 24,
-            "PGSC0003DMT400039133": 1
+            "PGSC0003DMT400039136": 4,
+            "PGSC0003DMT400039134": 14,
+            "PGSC0003DMT400039133": 3
+          }
+        ]
+      },
+      {
+        "name": "DAS-2",
+        "xTickValue": 2,
+        "replicates": [
+          {
+            "PGSC0003DMT400039136": 6,
+            "PGSC0003DMT400039134": 17,
+            "PGSC0003DMT400039133": 10
+          },
+          {
+            "PGSC0003DMT400039136": 6,
+            "PGSC0003DMT400039134": 16,
+            "PGSC0003DMT400039133": 11
+          },
+          {
+            "PGSC0003DMT400039136": 5,
+            "PGSC0003DMT400039134": 14,
+            "PGSC0003DMT400039133": 13
+          }
+        ]
+      },
+      {
+        "name": "DAS-5",
+        "xTickValue": 3,
+        "replicates": [
+          {
+            "PGSC0003DMT400039136": 6,
+            "PGSC0003DMT400039134": 11,
+            "PGSC0003DMT400039133": 23
+          },
+          {
+            "PGSC0003DMT400039136": 7,
+            "PGSC0003DMT400039134": 12,
+            "PGSC0003DMT400039133": 21
+          },
+          {
+            "PGSC0003DMT400039136": 6,
+            "PGSC0003DMT400039134": 11,
+            "PGSC0003DMT400039133": 22
           }
         ]
       }
