@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 
 const DataHome  = lazy(() => import('./modules/data/Home'));
-const PlotsHome = lazy(() => import('./modules/plotly/Plotly'));
+const PlotsHome = lazy(() => import('./modules/plotly/PlotsHome'));
 
 export default function AppRoutes() {
   return (
