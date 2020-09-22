@@ -32,7 +32,7 @@ export default function AppSelect (props) {
           options.map(opt =>
             <option
               key={ opt }
-              value={ opt.toLowerCase() }
+              value={ opt }
             >
               { opt }
             </option>
