@@ -1,6 +1,6 @@
 .js-plotly-plot .plotly .modebar {
   @apply flex justify-center;
-  @apply pt-10 w-full;
+  @apply w-full;
 }
 
 /* .js-plotly-plot .plotly .modebar--hover > :not(.watermark) {
