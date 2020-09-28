@@ -3,6 +3,7 @@
     "target": "es6",
     "module": "commonJS",
     "allowSyntheticDefaultImports": true,
-    "jsx": "react"
+    "jsx": "react",
+    "experimentalDecorators": true
   }
 }

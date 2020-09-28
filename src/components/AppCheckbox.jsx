@@ -6,22 +6,25 @@ export default function AppText (props) {
   const { className, label, ...inputProps } = props;
 
   return (
-    <label
+    <div
       className={
-        `relative flex items-center group ${props.label ? 'mb-10' : ''}
-         hover:bg-white
+        `relative flex items-center
          ${className}`
       }
     >
 
       <input
-        className="ml-2 py-3 px-4"
+        id={ props.label }
         type="checkbox"
         { ...inputProps }
       />
 
-      <span className="ml-2 select-none text-gray-800">{ label }</span>
-
-    </label>
+      <label
+        className="ml-2"
+        htmlFor={ props.label }
+      >
+        { label }
+      </label>
+    </div>
   );
 }

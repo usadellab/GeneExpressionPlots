@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 
+/**
+ * @typedef  {Object}   AppSelectProps
+ * @property {string}   className css classes to apply in root
+ * @property {string[]} options   select options
+ *
+ * @param {AppSelectProps} props component properties
+ */
 export default function AppSelect (props) {
 
   const { className, options, ...selectProps } = props;
@@ -8,47 +15,45 @@ export default function AppSelect (props) {
   const [ hover, setHover ] = useState(false);
 
   return (
-    <label
-      className={
-        `relative group mb-10
-         rounded border-2 border-white hover:border-gray-400 focus-within:border-blue-500
-         bg-gray-100 hover:bg-white
-       ${className}`
-      }
+    <div
+      className={ `group ${className}` }
       onMouseEnter={ () => setHover(true) }
       onMouseLeave={ () => setHover(false) }
     >
 
       <select
         className="py-3 px-4 w-full
-                   shadow-inner focus:shadow-none rounded focus:outline-none
-                   bg-gray-100 focus:bg-white
-                   text-sm text-gray-700"
+                   rounded border-2 border-transparent
+                   hover:border-blue-400 focus:border-blue-600
+                   shadow-xs bg-gray-100 text-gray-800 text-sm
+                   focus:outline-none focus:bg-white group-hover:bg-white"
         onFocus={ () => setFocus(true) }
         onBlur={ () => setFocus(false) }
         { ...selectProps }
       >
         {
-          options.map(opt =>
+          options?.map((opt,index) =>
             <option
-              key={ opt }
-              value={ opt }
+              key={ `${opt.value}-${index}`}
+              value={ opt.value }
             >
-              { opt }
+              { opt.label }
             </option>
           )
         }
       </select>
 
-      <p
+      <label
+        htmlFor={ props.label }
         className={
-          `absolute px-2 py-1 text-sm font-light
-           ${ focus ? 'text-blue-500' : hover ? 'text-gray-600' : 'text-gray-500' }`
+          `px-1 py-1 text-sm
+           ${ focus ? 'text-blue-500' : hover ? 'text-gray-800' : 'text-gray-600' }`
         }
       >
         { props.label }
-      </p>
+      </label>
 
-    </label>
+
+    </div>
   );
 }

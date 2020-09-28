@@ -17,7 +17,7 @@ export default function AppDrawer (props) {
 
   const handleDrawerClick = (event) => {
 
-    if (show) setShow(false);
+    if (show) setShow();
   };
 
   return (

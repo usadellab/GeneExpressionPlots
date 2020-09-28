@@ -26,18 +26,59 @@ function removeGroup (store, key) {
 
 }
 
+// /**
+//  * Update a key in the data store object.
+//  * @param {Group[]} store current store state
+//  * @param {string}  key   key to update in the store
+//  * @param {Group[]} group group object value
+//  */
+// function updateGroup (store, key, newGroup) {
+
+//   const group = store[key];
+//   Object.assign(group,  newGroup);
+//   return store;
+
+// }
 /**
- * Update a key in the data store object.
+ * Update a group in the data store object (either create new or add to existing group/sample)
  * @param {Group[]} store current store state
- * @param {string}  key   key to update in the store
- * @param {Group[]} group group object value
+ * @param {object} replicateInput input for one replicate of the form
+ * {
+  "groupName": "string",
+  "countUnit": "string",
+  "sampleName": "string",
+  "xTickValue": "number",
+  "replicates": "[<replicate_obj>,<replicate_obj2>,...]"
+}
  */
-function updateGroup (store, key, newGroup) {
+function updateGroup (store, replicateInput){
+  let groupIndex = store.findIndex(group => group.name === replicateInput.groupName);
 
-  const group = store[key];
-  Object.assign(group,  newGroup);
-  return store;
-
+  if (groupIndex !== -1) {
+    let sampleIndex = store[groupIndex].samples.findIndex(sample => sample.name === replicateInput.sampleName);
+    if (sampleIndex !== -1) {
+      store[groupIndex].samples[sampleIndex].replicates.push(...replicateInput.replicates);
+    } else {
+      let newSample = {
+        name: replicateInput.sampleName,
+        xTickValue: replicateInput.xTickValue,
+        replicates: replicateInput.replicates
+      };
+      store[groupIndex].samples.push(newSample);
+    }
+  } else {
+    let newGroup = {
+      name: replicateInput.groupName,
+      countUnit: replicateInput.countUnit,
+      samples: [{
+        name: replicateInput.sampleName,
+        xTickValue: replicateInput.xTickValue,
+        replicates: replicateInput.replicates
+      }]
+    };
+    store.push(newGroup);
+  }
+  return [ ...store ];
 }
 
 /**
@@ -65,7 +106,7 @@ export function dataStoreReducer (state, action) {
       return createGroup(state, payload.value);
 
     case 'UPDATE':
-      return updateGroup(state, payload.key, payload.value);
+      return updateGroup(state, payload);
 
     case 'DELETE':
       return removeGroup(state, payload.key);

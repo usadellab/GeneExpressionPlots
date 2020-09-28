@@ -1,49 +1,40 @@
-import React             from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import React         from 'react';
+import { observer }  from 'mobx-react';
 
 import AppLink   from '@components/AppLink';
 import IconAdd   from '../assets/svg/hi-plus.svg';
 import GroupItem from '../components/GroupItem';
 
-import { useDataStore } from '../store';
+import { store } from '../store/store';
 
 
+@observer
+export default class DataView extends React.Component {
 
-/**
- * Render a view of existing data and the controls needed to manipulate it.
- *
- * @typedef  {Object} DataViewProps Properties object for the DataView component.
- * @property {string} className css classes to apply in the root element
- *
- * @param {DataViewProps} props properties object for the DataView component
- */
-export default function DataView (props) {
+  render () {
+    return (
+      <div className={ `container font-abeeze ${this.props.className || ''}` }>
 
-  const { state } = useDataStore();
-  const { path }  = useRouteMatch();
+        {
+          store.groups.map((group, index) => (
 
-  return (
-    <div className={ `container font-abeeze ${props.className || ''}` }>
+            <GroupItem
+              key={ `${group.name}-${index}`}
+              group={ group }
+              groupIndex={ index }
+            />
 
-      {
-        state.map((group, index) => (
+          ))
+        }
 
-          <GroupItem
-            key={ `${group.name}-${index}`}
-            group={ group }
-            groupIndex={ index }
-          />
+        <AppLink
+          className="group flex justify-center"
+          to={ `${this.props.location.pathname}/group/` }
+        >
+          <IconAdd className="w-24 text-gray-500 group-hover:text-blue-700"/>
+        </AppLink>
 
-        ))
-      }
-
-      <AppLink
-        className="group flex justify-center"
-        to={ `${path}/group/` }
-      >
-        <IconAdd className="w-24 text-gray-500 group-hover:text-blue-700"/>
-      </AppLink>
-
-    </div>
-  );
+      </div>
+    );
+  }
 }

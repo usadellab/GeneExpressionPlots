@@ -1,7 +1,16 @@
 import React             from 'react';
-import AppRoutes         from './App.routes';
+import { BrowserRouter } from 'react-router-dom';
+
+import AppRoutes from './App.routes';
+import AppLayout from './layout/AppLayout';
 
 
 export default function App() {
-  return <AppRoutes />;
+  return (
+    <BrowserRouter>
+      <AppLayout>
+        <AppRoutes />
+      </AppLayout>
+    </BrowserRouter>
+  );
 }

@@ -1,21 +1,18 @@
 import React from 'react';
 
-import Routes                from './Plots.routes';
-import { DataStoreProvider } from '../data/store';
+import Routes                from './PlotsRoutes';
 import { PlotStoreProvider } from './store/context';
 
-import HomeLayout from './layout/HomeLayout';
+import HomeLayout from './layout/PlotsLayout';
 
 
 export default function DataHome () {
 
   return (
-    <DataStoreProvider>
-      <PlotStoreProvider>
-        <HomeLayout>
-          <Routes />
-        </HomeLayout>
-      </PlotStoreProvider>
-    </DataStoreProvider>
+    <PlotStoreProvider>
+      <HomeLayout>
+        <Routes />
+      </HomeLayout>
+    </PlotStoreProvider>
   );
 }

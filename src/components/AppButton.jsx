@@ -10,7 +10,7 @@ export default function AppButton (props) {
     <button
       className={
         `relative overflow-hidden
-         flex items-center py-2 px-5 cursor-pointer
+         flex items-center cursor-pointer
          rounded focus:outline-none
          font-medium uppercase
          ${className}`

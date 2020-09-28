@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React from 'react';
+
+import IconFile     from '@assets/svg/hi-document.svg';
 
 import AppButton   from '@components/AppButton';
+import AppCheckbox from '@components/AppCheckbox';
+import AppFile     from '@components/AppFile';
+import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
 
-import GroupForm from '../components/GroupForm';
 
-import { useDataStore } from '../store/context';
-import { Group }        from '../store/types';
+import { store } from '../store/store';
+
+import { parseCsv } from '../../../utils/fileHelper';
 
 
 /**
@@ -18,90 +22,212 @@ import { Group }        from '../store/types';
  *
  * @param {GroupViewProps} props component props
  */
-export default function GroupView (props) {
+export default class GroupView extends React.Component {
 
-  /** @type {GroupLocation} */
-  const { state } = useLocation();
+  constructor () {
 
-  /** @type {RouteParams} */
-  const history = useHistory();
+    super();
 
-  const [ group, setGroup ] = useState(state ? state.group : new Group());
+    this.state = {
+      groupName: '',
+      countUnit: 'raw',
+      // Sample
+      sampleName: '',
+      xTickValue: 0,
+      // Replicate
+      replicates: [],
+      accessionColumn: 0,
+      countColumn: 0,
+      header: false,
+      separator: ''
+    };
 
-  const { dispatch } = useDataStore();
+  }
+
+  handleCancel = () => {
+    this.props.history.push('/data');
+  }
 
   /**
    * Submit new or updated group to the store. Navigate to DataView page.
    * @param {React.FormEvent<HTMLInputElement>} event
    */
-  const handleSubmit = (event) => {
+  handleSubmit = async (event) => {
 
     event.preventDefault();
 
-    dispatch({
-      type: state?.groupIndex >= 0 ? 'UPDATE' : 'CREATE',
-      payload: {
-        key: state?.groupIndex,
-        value: group,
-      }
-    });
-    history.push('/data');
-  };
+    const { separator, header, accessionColumn, countColumn } = this.state;
 
-  /**
-   * Return to DataView page.
-   * @param {React.MouseEvent<HTMLButtonElement>} event
-   */
-  const handleCancel = (event) => history.push('/data');
+    let replicates = await Promise.all(
+
+      this.state.replicates.map((replicate) => parseCsv(replicate, {
+        separator,
+        header,
+        accessionColumn,
+        countColumn,
+      }))
+
+    );
+
+    store.checkAndAddReplicates(this.state, replicates);
+
+    this.props.history.push('/data');
+    // store.groups.push(new Group({
+    //   name: this.state.groupName,
+    //   countUnit: this.state.countUnit,
+    //   samples: [
+    //     {
+    //       name: this.state.sampleName,
+    //       xTickValue: this.state.xTickValue,
+    //       replicates,
+    //     }
+    //   ]
+    // }));
+
+  }
+
+  render () {
+
+    return (
+      <form
+        className={
+          `w-full ${this.props.className || ''}`
+        }
+        onSubmit={ this.handleSubmit }
+      >
+
+        {/* GROUP */}
+        <div className="flex">
+
+          {/* GROUP NAME */}
+          <AppText
+            className="w-1/2"
+            label="Group name"
+            value={ this.state.groupName }
+            onChange={ (event) => this.setState({ groupName: event.target.value }) }
+          />
+
+          {/* COUNT UNIT */}
+          <AppSelect
+            className="w-1/2 ml-2"
+            label="Count unit"
+            value={ this.state.countUnit }
+            options={[
+              { label: 'Raw',  value: 'raw' },
+              { label: 'RPKM', value: 'rpkm' },
+              { label: 'TPM',  value: 'tmp' }
+            ]}
+            onChange={ (event) => this.setState({ countUnit: event.target.value }) }
+          />
+
+        </div>
 
 
-  /**
-   * Update the local group-layer state with the appropriate input value.
-   * @param {Object<string,string>} param0 group key-value pair
-   */
-  const updateGroupInput = ({ key, value }) => setGroup(
-    Object.assign({}, group, { [key]: value })
-  );
+        {/* SAMPLE */}
+        <div className="flex mt-4">
 
-  return (
-    <form
-      className={
-        `w-full ${props.className || ''}`
-      }
-      onSubmit={ handleSubmit }
-    >
+          {/* NAME */}
+          <AppText
+            className="w-1/2"
+            placeholder="e.g. DAS-1"
+            label="Sample name"
+            value={ this.state.sampleName }
+            onChange={ (event) => this.setState({ sampleName: event.target.value }) }
+          />
 
-      {/* GROUP LAYER */}
+          {/* X-VALUE */}
+          <AppText
+            className="ml-2 w-1/2"
+            placeholder="1..N"
+            label="Sample X-value"
+            value={ this.state.xTickValue }
+            onChange={ (event) => this.setState({ xTickValue: event.target.value }) }
+          />
 
-      <GroupForm
-        name={ group.name }
-        countUnit={ group.countUnit }
-        describe={ group.describe }
-        onChange={ updateGroupInput }
-      />
+        </div>
 
 
-      {/* STATE CONTROLS */}
+        {/* REPLICATES */}
+        <div className="flex mt-4" >
 
-      <div className="flex mt-6 mx-1">
+          {/* COLUMN separator */}
+          <AppSelect
+            className="w-1/3"
+            placeholder="1..N"
+            label="separator"
+            value={ this.state.separator }
+            options={[
+              { label: 'Auto', value: ''   },
+              { label: 'TAB',  value: '\t' },
+              { label: 'CSV',  value: ','  }
+            ]} onChange={ (event) => this.setState({ separator: event.target.value }) }
+          />
 
-        <AppButton
-          className="primary-blue"
-          type="Submit"
+          {/* GENE ID COLUMN */}
+          <AppText
+            className="ml-2 w-1/3"
+            placeholder="1..N"
+            label="ID column"
+            value={ this.state.accessionColumn }
+            onChange={ (event) => this.setState({ accessionColumn: event.target.value }) }
+          />
+
+          {/* COUNT COLUMN */}
+          <AppText
+            className="ml-2 w-1/3"
+            placeholder="1..N"
+            label="Count column"
+            value={ this.state.countColumn }
+            onChange={ (event) => this.setState({ countColumn: event.target.value }) }
+          />
+
+        </div>
+
+        <div
+          className="flex items-center mt-4"
         >
-          Save
-        </AppButton>
 
-        <AppButton
-          className="tertiary-pink ml-3"
-          type="Button"
-          value="Cancel"
-          onClick={ handleCancel }
-        >
-          Cancel
-        </AppButton>
+          <AppCheckbox
+            className="w-1/3"
+            label="Header"
+            onChange={ (event) => this.setState({ header: event.target.checked })}
+          />
 
-      </div>
-    </form>
-  );
+          <AppFile
+            className="flex justify-center ml-3 py-2 px-5 w-2/3 secondary-blue"
+            multiple
+            onChange={  (event) => this.setState({ replicates: [ ...event.target.files ] }) }
+          >
+            <IconFile className="w-6 h-6 mr-3"/>
+            Upload Replicant
+          </AppFile>
+
+        </div>
+
+        {/* STATE CONTROLS */}
+
+        <div className="flex mt-6 mx-1">
+
+          <AppButton
+            className="py-2 px-5 primary-blue"
+            type="Submit"
+            onClick={ this.handleSubmit }
+          >
+            Save
+          </AppButton>
+
+          <AppButton
+            className="ml-3 py-2 px-5 tertiary-pink"
+            type="Button"
+            value="Cancel"
+            onClick={ this.handleCancel }
+          >
+            Cancel
+          </AppButton>
+
+        </div>
+      </form>
+    );
+  }
+
 }
