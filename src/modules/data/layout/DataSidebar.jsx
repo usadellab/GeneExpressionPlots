@@ -22,7 +22,8 @@ export default class DataStorage extends React.Component {
   constructor () {
     super();
     this.state = {
-      show: false
+      show: false,
+      exportUrl: null,
     };
   }
 
@@ -59,6 +60,15 @@ export default class DataStorage extends React.Component {
 
   };
 
+  handleExport = () => {
+
+    const blob = new Blob([ JSON.stringify(store.groups, null, 2) ], {
+      type: 'application/json'
+    });
+
+    this.setState({ exportUrl: URL.createObjectURL(blob) });
+  }
+
   render () {
     return (
       <Fragment>
@@ -80,19 +90,26 @@ export default class DataStorage extends React.Component {
           show={ this.state.show }
           setShow={ () => this.setState({ show: false }) }
         >
+
           <AppFile
             className="flex justify-center m-2 py-2 px-5 primary-blue"
             onChange={ this.handleLoadFile }
           >
             <IconFile className="w-6 h-6 mr-3"/>
-          Import Data
+            Import Data
           </AppFile>
-          <AppButton
-            className="flex justify-center m-2 py-2 px-5 primary-blue"
+
+          <a
+            className="flex justify-center m-2 py-2 px-5 primary-blue font-medium uppercase"
+            target="_blank" rel="noreferrer"
+            href={ this.state.exportUrl }
+            download="data.json"
+            onClick={ this.handleExport }
           >
             <IconDownload className="w-6 h-6 mr-3" />
-          Export Data
-          </AppButton>
+            Export Data
+          </a>
+
         </AppDrawer>
       </Fragment>
     );
