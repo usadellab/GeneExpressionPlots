@@ -1,12 +1,14 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 
 import IconLeft    from '@assets/svg/hi-chevron-left.svg';
 import AppButton   from '@components/AppButton';
 import AppCheckbox from '@components/AppCheckbox';
 import AppDrawer   from '@components/AppDrawer';
-import AppSelect   from '@components/AppSelect';
+import AppDatalist from '@components/AppDatalist';
 
-import { usePlotStore } from '../store/context';
+
+import { store } from '@/store';
+
 
 /**
  * @typedef {Object} DataStorageProps Properties object for the DataStorage component.
@@ -14,113 +16,136 @@ import { usePlotStore } from '../store/context';
  *
  * @param {DataStorageProps} props component properties
  */
-export default function DataStorage (props) {
+export default class PlotMenuDrawer extends React.Component {
 
-  const [ show, setShow ] = useState(false);
+  constructor () {
 
-  const ACC = [ 'PGSC0003DMT400039136', 'PGSC0003DMT400039134', 'PGSC0003DMT400039133' ];
+    super();
 
-  const { dispatch } = usePlotStore();
+    this.state = {
+      accessionIds: store.accessionIds,
+      accessionIdsView: store.accessionIds.slice(0, 10),
+      showDrawer: false,
+      showlegend: false,
+      accession: store.accessionIds[0] ?? '',
+    };
 
-  const [ accession, setAccession ] = useState(ACC[0]);
-  const [ showlegend, setShowlegend ] = useState(false);
+  }
 
-  // console.log(state[0]);
+  searchAccessionIds = (accession) => {
+
+    let accessionIdsView = [];
+    for (let i = 0; i < store.accessionIds.length; i++) {
+
+      if (store.accessionIds[i].includes(accession))
+        accessionIdsView.push(store.accessionIds[i]);
+
+      if (accessionIdsView.length >= 10)
+        break;
+    }
+
+    this.setState({
+      accessionIdsView,
+    });
+  }
+
+  selectAccession = (accession) => {
+
+    this.setState({ accession });
+    this.searchAccessionIds(accession);
+  }
 
   /**
    * Submit a new plot to the store.
    * @param {React.FormEvent<HTMLInputElement>} event
    */
-  const handleSubmit = (event) => {
-
-    // Update the plots store
-    dispatch({
-      type: 'CREATE_PLOT',
-      payload: {
-        accession,
-        showlegend,
-      }
-    });
-
-    // Close the drawer
-    setShow(false);
+  handleSubmit = (event) => {
 
     // Prevent default form submit event
     event.preventDefault();
+
+    // Add plot
+    store.addBarPlot(this.state.accession, this.state.showlegend);
+
+    // Close the drawer
+    this.setState({ showDrawer: false });
   };
 
-  const handleReset = (event) => {
+  handleReset = (event) => {
 
-    dispatch({
-      type: 'RESET_PLOTS',
-    });
-
-    setShow(false);
+    // Close the drawer
+    this.setState({ showDrawer: false });
 
   };
 
-  return (
-    <Fragment>
-      <nav
-        className="fixed right-0 py-4
+  render () {
+    return (
+      <Fragment>
+        <nav
+          className="fixed right-0 py-4
                  flex flex-col items-center justify-center
                  h-full bg-gray-400"
-      >
-        <AppButton
-          className="rounded-full h-full"
-          onClick={ () => setShow(true) }
         >
-          <IconLeft className="w-6 h-6 text-white" />
-        </AppButton>
+          <AppButton
+            className="rounded-full h-full"
+            onClick={ () => this.setState({ showDrawer: true }) }
+          >
+            <IconLeft className="w-6 h-6 text-white" />
+          </AppButton>
 
-      </nav>
-      <AppDrawer
-        className="z-50 p-3 w-1/2 md:w-1/3 lg:w-1/4"
-        show={ show }
-        setShow={ setShow }
-      >
-        <form className="flex flex-col w-full">
+        </nav>
 
-          <AppSelect
+        <AppDrawer
+          className="z-50 p-3 w-1/2 md:w-1/3 lg:w-1/4"
+          show={ this.state.showDrawer }
+          setShow={ () => this.setState({ showDrawer: false }) }
+        >
+          <form className="flex flex-col w-full">
+
+            <AppDatalist
+              value={ this.state.accession }
+              options={ this.state.accessionIdsView }
+              onChange={ this.selectAccession }
+              onSelect={ this.selectAccession }
+            />
+
+            {/* <AppSelect
             className="w-full"
             label="Accession ID"
             value={ accession }
-            options={[
-              { label: 'PGSC0003DMT400039136', value: 'PGSC0003DMT400039136'},
-              { label: 'PGSC0003DMT400039134', value: 'PGSC0003DMT400039134'},
-              { label: 'PGSC0003DMT400039133', value: 'PGSC0003DMT400039133'}
-            ] }
+            options={ store.accessionIds.map(name => ({ label: name, value: name })) }
             onChange={ (event) => setAccession(event.target.value) }
-          />
+          /> */}
 
-          <AppCheckbox
-            onChange={ (event) => setShowlegend(event.target.checked) }
-            label="Show legend"
-          />
+            <AppCheckbox
+              onChange={ (event) => this.setState({ showlegend: event.target.checked }) }
+              label="Show legend"
+            />
 
-          <div className="flex w-full">
+            <div className="mt-8 flex justify-end w-full">
 
-            <AppButton
-              className="primary-blue"
-              type="Submit"
-              onClick={ handleSubmit }
-            >
-            Save
-            </AppButton>
+              <AppButton
+                className="px-5 py-2 primary-blue"
+                type="Submit"
+                onClick={ this.handleSubmit }
+              >
+              Save
+              </AppButton>
 
-            <AppButton
-              className="primary-pink ml-3"
-              type="Button"
-              value="Reset"
-              onClick={ handleReset }
-            >
-            Reset
-            </AppButton>
+              <AppButton
+                className="px-5 py-2 primary-pink ml-3"
+                type="Button"
+                value="Reset"
+                onClick={ this.handleReset }
+              >
+              Reset
+              </AppButton>
 
-          </div>
+            </div>
 
-        </form>
-      </AppDrawer>
-    </Fragment>
-  );
+          </form>
+        </AppDrawer>
+      </Fragment>
+    );
+  }
 }

@@ -1,4 +1,6 @@
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable }    from 'mobx';
+import { computeAverage, computeVariance, createBarPlot } from '../utils/plotsHelper';
+
 
 class DataStore {
 
@@ -6,8 +8,22 @@ class DataStore {
   @observable groups = []
   @observable plots = []
 
-  @computed get groupNames() {
-    return this.groups.map(group => group.name);
+  @computed({ keepAlive: true })
+  get accessionIds() {
+    console.log('I am running!');
+    if (this.groups.length) {
+
+      if (this.groups[0].samples.length) {
+
+        if (this.groups[0].samples[0].replicates.length) {
+
+          return Object.keys(this.groups[0].samples[0].replicates[0]);
+
+        }
+      }
+    }
+    return [];
+
   }
 
   /**
@@ -73,6 +89,43 @@ class DataStore {
     }
   }
 
+  @action addBarPlot(accessionId, showlegend){
+    /**
+     * {
+     *   [groupName]: {
+     *      [sampleName]: {
+     *        average:,
+     *        variance:,
+     *      }
+     *   }
+     * }
+     */
+    let plotData = {};
+    this.groups.forEach(group => {
+
+      plotData[group.name] = {};
+
+      group.samples.forEach(sample => {
+
+        plotData[group.name][sample.name] = {
+          average: computeAverage(sample.replicates, accessionId),
+        };
+
+        plotData[group.name][sample.name].variance = computeVariance(
+          sample.replicates, accessionId, plotData[group.name][sample.name].average
+        );
+
+      });
+      // console.log(plotData);
+
+    });
+
+    console.log(plotData);
+    this.plots.push(createBarPlot(plotData, accessionId, showlegend, this.groups[0].countUnit));
+
+
+  }
+
   // @computed get hasGroup(groupName) {
   //   return this.groups.find(group => group.name === groupName);
   // }
@@ -106,15 +159,8 @@ export class Sample {
   name;
   xTickValue;
 
-  /** @type {Replicate[]} */
+  /** @type {Object<string,number>[]} */
   replicates;
-}
-
-export class Replicate {
-  separator;
-  accessionColumn;
-  countColumn;
-  header;
 }
 
 export const store = new DataStore();
