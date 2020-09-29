@@ -35,7 +35,6 @@ export default function AppDrawer (props) {
 
       {/* DRAWER CONTAINER */}
       <div
-        ref={ (x) => x && x.focus() }
         className={
           `fixed flex flex-col top-0 right-0 w-1/2 h-full focus:outline-none bg-white
            transform duration-300 ease-out ${props.className}
