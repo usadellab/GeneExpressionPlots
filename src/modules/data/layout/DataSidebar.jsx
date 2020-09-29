@@ -4,11 +4,11 @@ import AppButton from '@components/AppButton';
 import AppDrawer from '@components/AppDrawer';
 import AppFile   from '@components/AppFile';
 
-import IconLeft    from '@assets/svg/hi-chevron-left.svg';
-import IconFile     from '../assets/svg/hi-document.svg';
-import IconDownload from '../assets/svg/hi-download.svg';
+import IconLeft     from '@assets/svg/hi-chevron-left.svg';
+import IconFile     from '@assets/svg/hi-document.svg';
+import IconDownload from '@assets/svg/hi-download.svg';
 
-import { store } from '../store/store';
+import { store } from '@/store';
 
 
 /**

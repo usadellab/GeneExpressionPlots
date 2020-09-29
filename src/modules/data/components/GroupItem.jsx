@@ -2,8 +2,8 @@ import React                   from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import AppButton  from '@components/AppButton';
-import IconTrash  from '../assets/svg/hi-trash.svg';
-import IconPencil from '../assets/svg/hi-pencil.svg';
+import IconTrash  from '@assets/svg/hi-trash.svg';
+import IconPencil from '@assets/svg/hi-pencil.svg';
 
 
 

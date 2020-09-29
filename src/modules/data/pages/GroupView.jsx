@@ -9,7 +9,7 @@ import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
 
 
-import { store } from '../store/store';
+import { store } from '@/store';
 
 import { parseCsv } from '../../../utils/fileHelper';
 

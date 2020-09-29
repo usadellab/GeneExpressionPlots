@@ -2,10 +2,10 @@ import React         from 'react';
 import { observer }  from 'mobx-react';
 
 import AppLink   from '@components/AppLink';
-import IconAdd   from '../assets/svg/hi-plus.svg';
+import IconAdd   from '@assets/svg/hi-plus.svg';
 import GroupItem from '../components/GroupItem';
 
-import { store } from '../store/store';
+import { store } from '@/store';
 
 
 @observer
