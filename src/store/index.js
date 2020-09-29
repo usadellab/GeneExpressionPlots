@@ -3,7 +3,8 @@ import { action, computed, observable } from 'mobx';
 class DataStore {
 
   /** @type {Group[]} */
-  @observable groups = [ ]
+  @observable groups = []
+  @observable plots = []
 
   @computed get groupNames() {
     return this.groups.map(group => group.name);
