@@ -3,24 +3,26 @@ import React from 'react';
 import MenuDrawer from './PlotsDrawer';
 
 
-export default function HomeLayout (props) {
+export default class PlotsLayout extends React.Component {
 
-  return (
-    <div className="flex max-w-screen min-h-full">
+  render () {
+    return (
+      <div className="flex max-w-screen min-h-full">
 
 
-      {/* MAIN CONTENT: ROUTES */}
+        {/* MAIN CONTENT: ROUTES */}
 
-      <main className="flex flex-wrap p-6 mt-10 w-11/12 h-full" >
+        <main className="flex flex-wrap p-6 mt-10 w-11/12 h-full" >
 
-        { props.children }
+          { this.props.children }
 
-      </main>
+        </main>
 
-      {/* RIGHT-SIDE DRAWER: DATA STORAGE */}
+        {/* RIGHT-SIDE DRAWER: DATA STORAGE */}
 
-      <MenuDrawer />
+        <MenuDrawer />
 
-    </div>
-  );
+      </div>
+    );
+  }
 }
