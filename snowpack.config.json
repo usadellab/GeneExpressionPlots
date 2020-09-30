@@ -1,0 +1,24 @@
+{
+  "extends": "@snowpack/app-scripts-react",
+  "plugins": [
+
+    [ "@snowpack/plugin-postcss", {
+
+    }],
+
+    ["@snowpack/plugin-run-script", {
+      "cmd": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
+    }],
+
+    [ "snowpack-plugin-svgr", {
+
+    }]
+
+  ],
+  "alias": {
+    "@": "./src",
+    "@assets": "./src/assets",
+    "@components": "./src/components",
+    "@store": "./src/store"
+  }
+}
