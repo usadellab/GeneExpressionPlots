@@ -8,23 +8,35 @@
     "test": "jest"
   },
   "dependencies": {
+    "@tailwindui/react": "^0.1.1",
+    "mobx": "^5.15.7",
+    "mobx-react": "^6.3.0",
+    "papaparse": "5.3.0",
+    "plotly.js": "^1.55.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-plotly.js": "^2.5.0",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/eslint-parser": "^7.11.5",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@snowpack/app-scripts-react": "^1.10.0",
     "@snowpack/plugin-postcss": "^1.0.3",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.9.0",
     "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-react": "^7.20.6",
     "jest": "^26.2.2",
     "postcss": "^7.0.32",
     "postcss-cli": "^7.1.2",
     "snowpack": "^2.10.3",
+    "snowpack-plugin-import-map": "^1.0.0",
     "snowpack-plugin-svgr": "^0.1.2",
     "tailwindcss": "^1.8.8"
   }

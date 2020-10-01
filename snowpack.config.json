@@ -14,5 +14,11 @@
 
     }]
 
-  ]
+  ],
+  "alias": {
+    "@": "./src",
+    "@assets": "./src/assets",
+    "@components": "./src/components",
+    "@store": "./src/store"
+  }
 }

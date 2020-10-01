@@ -5,7 +5,7 @@
     "es6": true,
     "jest": true
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": [
     "eslint:recommended",
     "plugin:jest/recommended",
@@ -17,7 +17,10 @@
 
     "linebreak-style": [ "error", "unix" ],
 
-    "no-unused-vars": [ "warn", { "args": "none" }],
+    "no-unused-vars": [ "warn", {
+      "args": "none",
+      "varsIgnorePattern": "_"
+     }],
 
     "quotes": [ "warn", "single" ],
 

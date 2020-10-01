@@ -1,9 +1,10 @@
-import React from 'react';
+import React    from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-//
-import './css/index.css';
+import App      from './App';
+
 import './css/tailwind.css';
+import './css/plotly.css';
+
 
 ReactDOM.render(
   <React.StrictMode>
