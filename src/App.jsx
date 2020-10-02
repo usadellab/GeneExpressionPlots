@@ -7,7 +7,7 @@ import AppLayout from './layout/AppLayout';
 
 export default function App() {
   return (
-    <HashRouter basename={ `${process.env.BASE_URL}` } >
+    <HashRouter >
       <AppLayout>
         <AppRoutes />
       </AppLayout>
