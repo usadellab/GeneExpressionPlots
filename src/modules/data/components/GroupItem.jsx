@@ -1,11 +1,9 @@
-import React                   from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import React      from 'react';
 
 import AppButton  from '@components/AppButton';
 import IconTrash  from '@assets/svg/hi-trash.svg';
-import IconPencil from '@assets/svg/hi-pencil.svg';
 
-
+import { store } from '@/store';
 
 
 /**
@@ -46,12 +44,12 @@ export default function GroupItem (props) {
 
   const { className, group, groupIndex } = props;
 
-  // const { path }     = useRouteMatch();
-
   const groupReplicates = group.samples.reduce(
     (acc, sample) => acc += sample.replicates.length,
     0
   );
+
+  const handleGroupDelete = (groupIndex) => store.deleteGroup(groupIndex);
 
   return (
     <div className={
@@ -77,21 +75,12 @@ export default function GroupItem (props) {
         className="inline-flex items-center text-gray-500"
       >
 
-        {/* <Link to={{ pathname: `${path}/group/${groupIndex}`, state: { group, groupIndex } }} >
-          <AppButton className="group rounded-full" >
-            <IconPencil className="w-6 group-hover:text-blue-700" />
-          </AppButton>
-        </Link> */}
-
-        {/* <AppButton
+        <AppButton
           className="group p-1 rounded-full"
-          onClick={ () => dispatch({
-            type: 'DELETE',
-            payload: { key: groupIndex, value: group }
-          })}
+          onClick={ () => handleGroupDelete(groupIndex)}
         >
           <IconTrash className="w-6 h-6 group-hover:text-pink-700" />
-        </AppButton> */}
+        </AppButton>
 
       </div>
 

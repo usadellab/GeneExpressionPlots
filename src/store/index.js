@@ -10,7 +10,6 @@ class DataStore {
 
   @computed({ keepAlive: true })
   get accessionIds() {
-    console.log('I am running!');
     if (this.groups.length) {
 
       if (this.groups[0].samples.length) {
@@ -32,6 +31,10 @@ class DataStore {
    */
   @action addGroup(group) {
     this.groups.push(group);
+  }
+
+  @action deleteGroup(index){
+    this.groups.splice(index,1);
   }
 
   /**
@@ -116,24 +119,18 @@ class DataStore {
         );
 
       });
-      // console.log(plotData);
 
     });
 
-    console.log(plotData);
     this.plots.push(createBarPlot(plotData, accessionId, showlegend, this.groups[0].countUnit));
 
 
   }
 
-  // @computed get hasGroup(groupName) {
-  //   return this.groups.find(group => group.name === groupName);
-  // }
+  @action clearPlots () {
+    this.plots = [];
+  }
 
-
-  // @computed get hasSample(groupName, sampleName) {
-  //   return this.groups[groupName].samples.find(sample => sample.name === sampleName);
-  // }
 }
 
 export class Group {
