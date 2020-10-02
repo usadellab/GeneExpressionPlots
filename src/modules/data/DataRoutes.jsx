@@ -1,10 +1,9 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-
-const DataView = lazy(() => import('./pages/DataView'));
-const GroupView = lazy(() => import('./pages/GroupView'));
-const SampleView = lazy(() => import('./pages/SampleView'));
+import DataView   from './pages/DataView';
+import GroupView  from './pages/GroupView';
+import SampleView from './pages/SampleView';
 
 export default function AppRoutes() {
 

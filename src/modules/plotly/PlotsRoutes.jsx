@@ -1,8 +1,8 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
+import PlotsView from './pages/PlotsView';
 
-const PlotsView = lazy(() => import('./pages/PlotsView'));
 
 export default function AppRoutes() {
 
