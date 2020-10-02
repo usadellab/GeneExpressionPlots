@@ -72,18 +72,6 @@ export default class GroupView extends React.Component {
     store.checkAndAddReplicates(this.state, replicates);
 
     this.props.history.push('/data');
-    // store.groups.push(new Group({
-    //   name: this.state.groupName,
-    //   countUnit: this.state.countUnit,
-    //   samples: [
-    //     {
-    //       name: this.state.sampleName,
-    //       xTickValue: this.state.xTickValue,
-    //       replicates,
-    //     }
-    //   ]
-    // }));
-
   }
 
   render () {
@@ -167,7 +155,7 @@ export default class GroupView extends React.Component {
           <AppText
             className="ml-2 w-1/3"
             placeholder="1..N"
-            label="ID column"
+            label="Gene ID column"
             value={ this.state.accessionColumn }
             onChange={ (event) => this.setState({ accessionColumn: event.target.value }) }
           />
@@ -176,7 +164,7 @@ export default class GroupView extends React.Component {
           <AppText
             className="ml-2 w-1/3"
             placeholder="1..N"
-            label="Count column"
+            label="Expression count column"
             value={ this.state.countColumn }
             onChange={ (event) => this.setState({ countColumn: event.target.value }) }
           />

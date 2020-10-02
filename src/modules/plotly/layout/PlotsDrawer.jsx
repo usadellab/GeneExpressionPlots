@@ -74,6 +74,7 @@ export default class PlotMenuDrawer extends React.Component {
   handleReset = (event) => {
 
     // Close the drawer
+    store.clearPlots();
     this.setState({ showDrawer: false });
 
   };
@@ -109,14 +110,6 @@ export default class PlotMenuDrawer extends React.Component {
               onSelect={ this.selectAccession }
             />
 
-            {/* <AppSelect
-            className="w-full"
-            label="Accession ID"
-            value={ accession }
-            options={ store.accessionIds.map(name => ({ label: name, value: name })) }
-            onChange={ (event) => setAccession(event.target.value) }
-          /> */}
-
             <AppCheckbox
               onChange={ (event) => this.setState({ showlegend: event.target.checked }) }
               label="Show legend"
@@ -129,7 +122,7 @@ export default class PlotMenuDrawer extends React.Component {
                 type="Submit"
                 onClick={ this.handleSubmit }
               >
-              Save
+              Plot it
               </AppButton>
 
               <AppButton
