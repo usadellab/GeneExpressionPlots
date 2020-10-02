@@ -31,7 +31,7 @@ module.exports = {
   output:
   {
     path: path.resolve(__dirname, './dist'),
-    publicPath: process.env.BASE_URL ?? '/',
+    publicPath: process.env.BASE_URL || '/',
 
     filename: prod
       ? '[name].[contenthash].js'
