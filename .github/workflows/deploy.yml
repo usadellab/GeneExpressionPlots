@@ -12,12 +12,16 @@ jobs:
       - name: Checkout workspace repository
         uses: actions/checkout@v2
 
-      - name: Build application
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - run: npm install
-      - run: npm run build
+
+      - name: Install node_modules
+        run: npm install
+
+      - name: Build application
+        run: npm run build
 
       - name: Init new repo in dist folder and commit generated files
         run: |
