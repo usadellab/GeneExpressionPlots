@@ -92,7 +92,7 @@ module.exports = {
     new HTMLWebpackPlugin({
       favicon: 'public/favicon.ico',
       template: path.join(__dirname, 'public/index.html'),
-      title: process.env.APP_NAME ?? 'webpack',
+      title: process.env.APP_NAME || 'webpack',
     }),
 
     // Bundle styles in separate *.css files
