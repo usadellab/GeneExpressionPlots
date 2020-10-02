@@ -1,12 +1,8 @@
-// import React, { lazy, Suspense } from 'react';
 import React, { Suspense }         from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
 import DataHome  from './modules/data/DataHome';
 import PlotsHome from './modules/plotly/PlotsHome';
-
-// const DataHome  = lazy(() => import('./modules/data/DataHome'));
-// const PlotsHome = lazy(() => import('./modules/plotly/PlotsHome'));
 
 export default function AppRoutes() {
   return (
