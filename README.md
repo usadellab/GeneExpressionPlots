@@ -71,6 +71,7 @@ See above terminology for details on 'replicate tables'.
 - When uploading several replicates at once, make sure the table parameters match.
 - When uploading replicates for an existing group and sample, make sure the group and sample names match, otherwise a new group or sample will be created.
 - Each uploaded Group will appear on the main _Data_ page. Further replicate uploads to an existing group will update its _sample_ and _replicates_ count.
+- Delete a group by clicking on the _trashbin_ icon.
 
 _Note: it is recommended to export the uploaded data, so that it can be reimported more easily in the future._
 
@@ -95,8 +96,6 @@ This basically is picking up plotting after having saved a previous 'project'. L
 #### Add another plot
 
 You can compare gene expression by putting side by side expression bar-plots. Just repeat the process for creating a plot this time selecting the other gene identifier.
-
-_Note: The **RESET** button has no functionality yet. Make sure to export your data for quick reimporting and replotting._
 
 ### Current Issues
 
