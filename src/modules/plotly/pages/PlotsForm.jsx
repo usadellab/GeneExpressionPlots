@@ -16,9 +16,9 @@ class PlotsForm extends Component {
     this.state = {
       accessionIds: store.accessionIds,
       accessionIdsView: store.accessionIds.slice(0, 10),
-      showlegend: false,
+      showlegend: true,
       accession: store.accessionIds[0] ?? '',
-      plotType: 'bar'
+      plotType: 'bars'
     };
   }
 
@@ -53,7 +53,7 @@ class PlotsForm extends Component {
     // Prevent default form submit event
     event.preventDefault();
     // Add plot
-    store.addBarPlot(this.state.accession, this.state.showlegend, this.state.plotType);
+    store.addPlot(this.state.accession, this.state.showlegend, this.state.plotType);
     // Close the drawer
     this.props.onCancel();
     // change Route to plots
@@ -61,7 +61,6 @@ class PlotsForm extends Component {
   };
 
   selectPlotType = (event) => {
-    console.log(event.target.value);
     this.setState({ plotType: event.target.value });
   }
 
@@ -84,8 +83,10 @@ class PlotsForm extends Component {
             label="Count unit"
             value={ this.state.plotType }
             options={[
-              { label: 'Bars',  value: 'bar' },
-              { label: 'Individual Curves', value: 'scatter' },
+              { label: 'Bars',  value: 'bars' },
+              { label: 'Individual Curves', value: 'individualCurves' },
+              { label: 'Stacked Curves', value: 'stackedCurves' },
+
             ]}
             onChange={ this.selectPlotType }
           />
@@ -94,6 +95,7 @@ class PlotsForm extends Component {
 
         <AppCheckbox
           onChange={ (event) => this.setState({ showlegend: event.target.checked }) }
+          checked={ this.state.showlegend }
           label="Show legend"
         />
 
