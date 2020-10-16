@@ -1,18 +1,31 @@
-import { action, computed, observable }    from 'mobx';
-import { computeAverage, computeVariance, createBarPlot } from '../utils/plotsHelper';
+import {
+  action,
+  computed,
+  observable,
+} from 'mobx';
+
+import {
+  computeAverage,
+  computeVariance,
+  createBarPlot,
+} from '../utils/plotsHelper';
+
+import preload from '../../data/preload.json';
 
 
 class DataStore {
 
-  @observable showModal = false;
-
-  @action setShowModal(show) {
-    this.setShowModal = show;
-  }
-
   /** @type {Group[]} */
   @observable groups = []
   @observable plots = []
+  @observable preloaded = false;
+
+  constructor (data) {
+    if (Array.isArray(data) && data.length !== 0) {
+      this.preloaded = true;
+      this.groups = data;
+    }
+  }
 
   @computed({ keepAlive: true })
   get accessionIds() {
@@ -39,10 +52,6 @@ class DataStore {
     this.groups.push(group);
   }
 
-  @action deleteGroup(index){
-    this.groups.splice(index,1);
-  }
-
   /**
    * Add a new sample to an existing group.
    * @param {string} groupName name of the group
@@ -54,15 +63,11 @@ class DataStore {
   }
 
   /**
-   * Add replicates to an existing sample within a group.
-   * @param {string}      groupName  name of the group
-   * @param {string}      sampleName name of the sample
-   * @param {Replicate[]} replicates array of replicates
+   * Delete a group from the store
+   * @param {number} index group index in the store
    */
-  @action addReplicates(groupName, sampleName, replicates){
-    let foundGroup = this.groups.find(group => group.name === groupName);
-    let foundSample = foundGroup.samples.find(sample => sample.name === sampleName);
-    foundSample.replicates.push(...replicates);
+  @action deleteGroup(index){
+    this.groups.splice(index,1);
   }
 
   /**
@@ -98,6 +103,8 @@ class DataStore {
       this.groups.push(newGroup);
     }
   }
+
+  /* PLOTS */
 
   @action addBarPlot(accessionId, showlegend, plotType){
     /**
@@ -169,4 +176,4 @@ export class Sample {
   replicates;
 }
 
-export const store = new DataStore();
+export const store = new DataStore(preload);

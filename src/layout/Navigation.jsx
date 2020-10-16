@@ -119,19 +119,25 @@ export default class Sidebar extends React.Component {
 
         <NavSection className="mt-0" title="Data" to="/data" >
 
-          <NavMenu
-            component="button"
-            icon="hi-document"
-            name="Upload Table"
-            onClick={ this.props.showGroupModal }
-          />
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="button"
+              icon="hi-document"
+              name="Upload Table"
+              onClick={ this.props.showGroupModal }
+            />
+          }
 
-          <NavMenu
-            component="file"
-            icon="hi-upload"
-            name="Import Data"
-            onChange={ this.handleLoadFile }
-          />
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="hi-upload"
+              name="Import Data"
+              onChange={ this.handleLoadFile }
+            />
+          }
 
           <NavMenu
             component="anchor"
