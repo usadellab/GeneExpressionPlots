@@ -5,9 +5,9 @@ import {
 } from 'mobx';
 
 import {
-  computeAverage,
-  computeVariance,
-  createBarPlot,
+  computeAveragesAndVariances,
+  createGroupPlot,
+  createStackedLinePlot
 } from '../utils/plotsHelper';
 
 import preload from '../../data/preload.json';
@@ -108,45 +108,54 @@ class DataStore {
     }
   }
 
-  /* PLOTS */
-
-  @action addBarPlot(accessionId, showlegend, plotType){
-    /**
-     * {
-     *   [groupName]: {
-     *      [sampleName]: {
-     *        average:,
-     *        variance:,
-     *      }
-     *   }
-     * }
-     */
-    let plotData = {};
-    this.groups.forEach(group => {
-
-      plotData[group.name] = {};
-
-      group.samples.forEach(sample => {
-
-        plotData[group.name][sample.name] = {
-          average: computeAverage(sample.replicates, accessionId),
-        };
-
-        plotData[group.name][sample.name].variance = computeVariance(
-          sample.replicates, accessionId, plotData[group.name][sample.name].average
-        );
-
-      });
-
-    });
-
+  /**
+   * 
+   * @param {*} accessionId 
+   * @param {*} showlegend 
+   * @param {*} plotType 
+   */
+  @action addBarPlot(accessionId, showlegend) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createBarPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, plotType)
+      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'bar')
     );
-
 
   }
 
+  @action addIndivualCurvesPlot(accessionId, showlegend) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+    this.plots.push(
+      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'scatter')
+    );
+  }
+
+  @action addStackedCurvePlot(accessionId, showlegend) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+    this.plots.push(
+      createStackedLinePlot(plotData, accessionId, showlegend, this.groups[0].countUnit)
+    );
+  }
+
+  @action addPlot(accessionId, showlegend, plotType){
+    console.log(plotType);
+    switch (plotType) {
+      case 'bars':
+        this.addBarPlot(accessionId, showlegend);
+        break;
+      case 'individualCurves':
+        this.addIndivualCurvesPlot(accessionId, showlegend);
+        break;
+      case 'stackedCurves':
+        this.addStackedCurvePlot(accessionId, showlegend);
+        break;
+      default:
+        break;
+    }
+  } 
+
+  /**
+   * clear the plots array in the store
+   */
   @action clearPlots () {
     this.plots = [];
   }
