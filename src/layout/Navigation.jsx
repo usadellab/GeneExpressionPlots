@@ -1,5 +1,6 @@
 import React    from 'react';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import AppAnchor from '@components/AppAnchor';
 import AppButton from '@components/AppButton';
@@ -8,6 +9,7 @@ import AppFile   from '@components/AppFile';
 
 import { store } from '@/store';
 import { observer } from 'mobx-react';
+
 
 
 const NavMenu = (props) => {
@@ -58,7 +60,7 @@ const NavSection = (props) => (
 );
 
 @observer
-export default class Sidebar extends React.Component {
+class AppNavigation extends React.Component {
 
   constructor() {
     super();
@@ -66,6 +68,8 @@ export default class Sidebar extends React.Component {
       exportUrl: null,
     };
   }
+
+  
 
   handleLoadFile = (event) => {
 
@@ -92,6 +96,9 @@ export default class Sidebar extends React.Component {
 
     fr.onerror = err => console.log(err);
 
+    // change route
+    this.props.changeRoute('data');
+
   };
 
   handleExport = () => {
@@ -101,10 +108,21 @@ export default class Sidebar extends React.Component {
     });
 
     this.setState({ exportUrl: URL.createObjectURL(blob) });
+
+    // change route
+    this.props.changeRoute('data');
   }
 
-  handleClearPlots = () => store.clearPlots();
-  handleClearData = () => store.clearData();
+  handleClearPlots = () => {
+    store.clearPlots();
+    // change route
+    this.props.changeRoute('plots');
+  };
+  handleClearData = () => {
+    store.clearData();
+    //change route
+    this.props.changeRoute('data');
+  };
 
   get storeHasData() {
     return store.groups.length === 0 ? true : false;
@@ -209,3 +227,5 @@ export default class Sidebar extends React.Component {
     );
   }
 }
+
+export default withRouter(AppNavigation);

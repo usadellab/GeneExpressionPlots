@@ -7,9 +7,7 @@ import AppSelect   from '@components/AppSelect';
 
 import { store } from '@/store';
 
-import { withRouter } from 'react-router';
-
-class PlotsForm extends Component {
+export default class PlotsForm extends Component {
 
   constructor() {
     super();
@@ -56,8 +54,6 @@ class PlotsForm extends Component {
     store.addPlot(this.state.accession, this.state.showlegend, this.state.plotType);
     // Close the drawer
     this.props.onCancel();
-    // change Route to plots
-    this.props.history.push('/plots');
   };
 
   selectPlotType = (event) => {
@@ -124,5 +120,3 @@ class PlotsForm extends Component {
     );
   }
 }
-
-export default withRouter(PlotsForm);

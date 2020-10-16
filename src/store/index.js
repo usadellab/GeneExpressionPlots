@@ -137,7 +137,6 @@ class DataStore {
   }
 
   @action addPlot(accessionId, showlegend, plotType){
-    console.log(plotType);
     switch (plotType) {
       case 'bars':
         this.addBarPlot(accessionId, showlegend);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 
 import GroupView  from '@/modules/data/pages/GroupView';
 import PlotsForm  from '@/modules/plotly/pages/PlotsForm';
@@ -7,7 +8,7 @@ import TopBar     from './TopBar';
 import Navigation from './Navigation';
 
 
-export default class AppLayout extends React.Component {
+class AppLayout extends React.Component {
 
   constructor () {
     super();
@@ -18,8 +19,20 @@ export default class AppLayout extends React.Component {
     };
   }
 
-  showGroupModal = () => this.setState({ showGroupModal: true })
-  showPlotsModal = () => this.setState({ showPlotsModal: true })
+  changeRoute = (route) => {
+    this.props.history.push(`/${route}`);
+  }
+
+  showGroupModal = () => {
+    this.setState({ showGroupModal: true });
+    //change route
+    this.changeRoute('data');
+  }
+  showPlotsModal = () => {
+    this.setState({ showPlotsModal: true });
+    //change route
+    this.changeRoute('plots');
+  }
 
   hideGroupModal = () => this.setState({ showGroupModal: false })
   hidePlotsModal = () => this.setState({ showPlotsModal: false })
@@ -49,6 +62,7 @@ export default class AppLayout extends React.Component {
             showGroupModal={ this.showGroupModal }
             showPlotsModal={ this.showPlotsModal }
             onClick={ this.hideNav }
+            changeRoute = { this.changeRoute }
           />
 
         </div>
@@ -93,3 +107,5 @@ export default class AppLayout extends React.Component {
     );
   }
 }
+
+export default withRouter(AppLayout);
