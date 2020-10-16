@@ -98,9 +98,8 @@ export default class Sidebar extends React.Component {
     this.setState({ exportUrl: URL.createObjectURL(blob) });
   }
 
-  handleResetPlots = () => {
-    store.clearPlots();
-  };
+  handleClearPlots = () => store.clearPlots();
+  handleClearData = () => store.clearData();
 
   render () {
     return (
@@ -148,6 +147,16 @@ export default class Sidebar extends React.Component {
             download="data.json"
           />
 
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="button"
+              icon="hi-trash"
+              name="Clear Data"
+              onClick={ this.handleClearData }
+            />
+          }
+
         </NavSection>
 
 
@@ -163,8 +172,8 @@ export default class Sidebar extends React.Component {
           <NavMenu
             component="button"
             icon="hi-trash"
-            name="Reset Plots"
-            onClick={ this.handleResetPlots }
+            name="Clear Plots"
+            onClick={ this.handleClearPlots }
           />
 
         </NavSection>

@@ -62,6 +62,10 @@ class DataStore {
     foundGroup.samples.push(sample);
   }
 
+  @action clearData() {
+    this.groups = [];
+  }
+
   /**
    * Delete a group from the store
    * @param {number} index group index in the store
