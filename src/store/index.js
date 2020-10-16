@@ -4,6 +4,12 @@ import { computeAverage, computeVariance, createBarPlot } from '../utils/plotsHe
 
 class DataStore {
 
+  @observable showModal = false;
+
+  @action setShowModal(show) {
+    this.setShowModal = show;
+  }
+
   /** @type {Group[]} */
   @observable groups = []
   @observable plots = []
@@ -60,6 +66,7 @@ class DataStore {
   }
 
   /**
+   * Add replicates to an existing sample within a group. Adds a new sample/group if it doesn't exist yet
    * @param {object} groupView
    * @param {array} replicates
    */
@@ -92,7 +99,7 @@ class DataStore {
     }
   }
 
-  @action addBarPlot(accessionId, showlegend){
+  @action addBarPlot(accessionId, showlegend, plotType){
     /**
      * {
      *   [groupName]: {
@@ -122,7 +129,9 @@ class DataStore {
 
     });
 
-    this.plots.push(createBarPlot(plotData, accessionId, showlegend, this.groups[0].countUnit));
+    this.plots.push(
+      createBarPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, plotType)
+    );
 
 
   }

@@ -6,10 +6,10 @@ export const computeVariance = (replicates, accessionId, average) => {
   return replicates.reduce((variance, current) => variance += ((average - current[accessionId])**2)/replicates.length, 0);
 };
 
-export function createBarPlot (plotData, accessionId, showlegend, countUnit) {
+export function createBarPlot (plotData, accessionId, showlegend, countUnit, plotType) {
   let data = [];
   Object.keys(plotData).forEach(group => {
-    data.push(createBarGroup(plotData, group));
+    data.push(createBarGroup(plotData, group, plotType));
   });
 
   let config = {
@@ -44,7 +44,7 @@ export function createBarPlot (plotData, accessionId, showlegend, countUnit) {
   return {data, config, layout};
 }
 
-function createBarGroup (plotData, group){
+function createBarGroup (plotData, group, plotType){
   let groupArr = [];
   let sampleArr = [];
   let y = [];
@@ -70,7 +70,7 @@ function createBarGroup (plotData, group){
       array: errs,
       visible: true,
     },
-    type:'bar',
+    type: plotType,
     name: group
   };
 }

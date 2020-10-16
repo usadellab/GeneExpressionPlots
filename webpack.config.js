@@ -3,6 +3,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HTMLWebpackPlugin      = require('html-webpack-plugin');
 const MiniCssExtractPlugin   = require('mini-css-extract-plugin');
+const SpriteLoaderPlugin     = require('svg-sprite-loader/plugin');
 const { EnvironmentPlugin }  = require('webpack');
 
 
@@ -101,6 +102,11 @@ module.exports = {
       chunkFilename: '[id].css',
     }),
 
+    // Bundle SVG sprites in separate module files
+    new SpriteLoaderPlugin({
+      plainSprite: true,
+    }),
+
   ],
 
   /* RULES */
@@ -145,12 +151,18 @@ module.exports = {
         },
       },
 
-      // *.svg
       {
         test: /\.svg$/,
-        use: {
-          loader: '@svgr/webpack',
-        },
+        use: [
+          {
+            loader: 'svg-sprite-loader',
+            options: {
+              extract: true,
+              symbolId: '[name]',
+              spriteFilename: (svgPath) => `${path.basename(svgPath)}`
+            }
+          },
+        ],
       },
 
       // *.jsx?

@@ -1,13 +1,11 @@
 import React from 'react';
 
-import IconFile     from '@assets/svg/hi-document.svg';
-
 import AppButton   from '@components/AppButton';
 import AppCheckbox from '@components/AppCheckbox';
 import AppFile     from '@components/AppFile';
+import AppIcon     from '@components/AppIcon';
 import AppSelect   from '@components/AppSelect';
 import AppText     from '@components/AppText';
-
 
 import { store } from '@/store';
 
@@ -44,10 +42,6 @@ export default class GroupView extends React.Component {
 
   }
 
-  handleCancel = () => {
-    this.props.history.push('/data');
-  }
-
   /**
    * Submit new or updated group to the store. Navigate to DataView page.
    * @param {React.FormEvent<HTMLInputElement>} event
@@ -70,8 +64,7 @@ export default class GroupView extends React.Component {
     );
 
     store.checkAndAddReplicates(this.state, replicates);
-
-    this.props.history.push('/data');
+    this.props.onSave();
   }
 
   render () {
@@ -85,11 +78,11 @@ export default class GroupView extends React.Component {
       >
 
         {/* GROUP */}
-        <div className="flex">
+        <div className="flex flex-col md:flex-row" >
 
           {/* GROUP NAME */}
           <AppText
-            className="w-1/2"
+            className="w-full md:w-1/2"
             label="Group name"
             value={ this.state.groupName }
             onChange={ (event) => this.setState({ groupName: event.target.value }) }
@@ -97,7 +90,7 @@ export default class GroupView extends React.Component {
 
           {/* COUNT UNIT */}
           <AppSelect
-            className="w-1/2 ml-2"
+            className="w-full md:w-1/2 md:ml-2"
             label="Count unit"
             value={ this.state.countUnit }
             options={[
@@ -112,11 +105,11 @@ export default class GroupView extends React.Component {
 
 
         {/* SAMPLE */}
-        <div className="flex mt-4">
+        <div className="flex flex-col md:flex-row mt-4">
 
           {/* NAME */}
           <AppText
-            className="w-1/2"
+            className="w-full md:w-1/2"
             placeholder="e.g. DAS-1"
             label="Sample name"
             value={ this.state.sampleName }
@@ -125,7 +118,7 @@ export default class GroupView extends React.Component {
 
           {/* X-VALUE */}
           <AppText
-            className="ml-2 w-1/2"
+            className="w-full md:w-1/2 md:ml-2"
             placeholder="1..N"
             label="Sample X-value"
             value={ this.state.xTickValue }
@@ -136,11 +129,11 @@ export default class GroupView extends React.Component {
 
 
         {/* REPLICATES */}
-        <div className="flex mt-4" >
+        <div className="flex flex-col md:flex-row mt-4" >
 
           {/* COLUMN separator */}
           <AppSelect
-            className="w-1/3"
+            className="w-full md:w-1/3"
             placeholder="1..N"
             label="separator"
             value={ this.state.separator }
@@ -153,7 +146,7 @@ export default class GroupView extends React.Component {
 
           {/* GENE ID COLUMN */}
           <AppText
-            className="ml-2 w-1/3"
+            className="w-full md:w-1/3 md:ml-2"
             placeholder="1..N"
             label="Gene ID column"
             value={ this.state.accessionColumn }
@@ -162,7 +155,7 @@ export default class GroupView extends React.Component {
 
           {/* COUNT COLUMN */}
           <AppText
-            className="ml-2 w-1/3"
+            className="w-full md:w-1/3 md:ml-2"
             placeholder="1..N"
             label="Expression count column"
             value={ this.state.countColumn }
@@ -172,22 +165,23 @@ export default class GroupView extends React.Component {
         </div>
 
         <div
-          className="flex items-center mt-4"
+          className="flex flex-col justfify-center items-center mt-4 md:flex-row"
         >
 
           <AppCheckbox
-            className="w-1/3"
+            className="w-full md:w-1/3"
             label="Header"
             onChange={ (event) => this.setState({ header: event.target.checked })}
           />
 
           <AppFile
-            className="flex justify-center ml-3 py-2 px-5 w-2/3 secondary-blue"
+            className="flex justify-center items-center ml-3 py-2 px-5
+                       w-full md:w-2/3 secondary-blue"
             multiple
             onChange={  (event) => this.setState({ replicates: [ ...event.target.files ] }) }
           >
-            <IconFile className="w-6 h-6 mr-3"/>
-            Upload Replicant
+            <AppIcon file="base" id="hi-document" className="w-6 h-6 mr-3"/>
+              Upload Tables
           </AppFile>
 
         </div>
@@ -199,18 +193,18 @@ export default class GroupView extends React.Component {
           <AppButton
             className="py-2 px-5 primary-blue"
             type="Submit"
-            onClick={ this.handleSubmit }
+            // onClick={ this.props.onSave }
           >
-            Save
+              Save
           </AppButton>
 
           <AppButton
             className="ml-3 py-2 px-5 tertiary-pink"
             type="Button"
             value="Cancel"
-            onClick={ this.handleCancel }
+            onClick={ this.props.onCancel }
           >
-            Cancel
+              Cancel
           </AppButton>
 
         </div>

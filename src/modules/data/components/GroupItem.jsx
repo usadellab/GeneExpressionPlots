@@ -1,9 +1,10 @@
-import React      from 'react';
+import React from 'react';
 
-import AppButton  from '@components/AppButton';
-import IconTrash  from '@assets/svg/hi-trash.svg';
+import AppButton from '@components/AppButton';
+import AppIcon   from '@components/AppIcon';
 
 import { store } from '@/store';
+import { observer } from 'mobx-react';
 
 
 /**
@@ -40,51 +41,58 @@ const GroupItemStat = (props) => {
  *
  * @param {GroupItemProps} props properties object
  */
-export default function GroupItem (props) {
+@observer
+export default class GroupItem extends React.Component {
 
-  const { className, group, groupIndex } = props;
+  constructor () {
+    super();
+  }
 
-  const groupReplicates = group.samples.reduce(
-    (acc, sample) => acc += sample.replicates.length,
-    0
-  );
+  handleGroupDelete = (groupIndex) => store.deleteGroup(groupIndex);
 
-  const handleGroupDelete = (groupIndex) => store.deleteGroup(groupIndex);
+  get groupReplicates () {
+    return this.props.group.samples.reduce(
+      (acc, sample) => acc += sample.replicates.length,
+      0
+    );
+  }
 
-  return (
-    <div className={
-      `flex items-center mb-6 p-6
+  render () {
+    return (
+      <div className={
+        `flex items-center mb-6 p-6
        shadow-lg
        bg-blue-200 hover:bg-blue-300
-       ${className}`
-    }>
+       ${this.props.className}`
+      }>
 
-      <div className="w-full" >
+        <div className="w-full" >
 
-        <h2 className="text-lg text-gray-800">{ group.name }</h2>
+          <h2 className="text-lg text-gray-800">{ this.props.group.name }</h2>
 
-        <div className="flex mt-2" >
-          <GroupItemStat label="Units:" value={ group.countUnit } />
-          <GroupItemStat className="ml-4" label="Samples:" value={ group.samples.length } />
-          <GroupItemStat className="ml-4" label="Replicates:" value={ groupReplicates } />
+          <div className="flex mt-2" >
+            <GroupItemStat label="Units:" value={ this.props.group.countUnit } />
+            <GroupItemStat className="ml-4" label="Samples:" value={ this.props.group.samples.length } />
+            <GroupItemStat className="ml-4" label="Replicates:" value={ this.groupReplicates } />
+          </div>
+
         </div>
 
-      </div>
-
-      <div
-        className="inline-flex items-center text-gray-500"
-      >
-
-        <AppButton
-          className="group p-1 rounded-full"
-          onClick={ () => handleGroupDelete(groupIndex)}
+        <div
+          className="inline-flex items-center text-gray-500"
         >
-          <IconTrash className="w-6 h-6 group-hover:text-pink-700" />
-        </AppButton>
+
+          <AppButton
+            className="group p-1 rounded-full"
+            onClick={ () => this.handleGroupDelete(this.props.groupIndex)}
+          >
+            <AppIcon file="base" id="hi-trash" className="w-6 h-6 group-hover:text-pink-700" />
+          </AppButton>
+
+        </div>
+
 
       </div>
-
-
-    </div>
-  );
+    );
+  }
 }

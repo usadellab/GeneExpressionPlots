@@ -1,0 +1,63 @@
+.markdown {
+  @apply py-6 px-10 max-w-6xl;
+}
+
+.markdown h1 {
+  @apply text-5xl text-center;
+}
+
+.markdown h2 {
+  @apply text-3xl font-semibold py-4;
+}
+
+.markdown h3 {
+  @apply text-2xl font-semibold py-3;
+}
+
+.markdown h4 {
+  @apply text-xl font-semibold py-3;
+}
+
+.markdown ul {
+  @apply list-disc px-8 py-1
+}
+
+.markdown li {
+  @apply py-1
+}
+
+.markdown table {
+  margin-bottom: 13px;
+}
+
+.markdown table td,
+.markdown table th {
+  padding: 6px 13px;
+  text-align: left;
+}
+
+.markdown table th {
+  background: #d0dae5;
+}
+
+.markdown table tr {
+  border-top: 1px solid #dfe2e5;
+}
+
+.markdown table tr:nth-child(even) {
+  background: #f6f8fa;
+}
+
+.markdown pre {
+  margin-bottom: -7px;
+}
+
+.markdown pre code {
+  padding: 0;
+}
+
+.markdown code {
+  background: #ededed;
+  font-size: 13px;
+  padding: 1px 2px;
+}
