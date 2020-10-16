@@ -18,6 +18,7 @@ const NavMenu = (props) => {
     anchor: AppAnchor,
     button: AppButton,
     file: AppFile,
+    link: Link
   };
 
   const MenuComponent = menuType[props.component];
@@ -209,17 +210,23 @@ class AppNavigation extends React.Component {
 
         <NavSection className="mt-6" title="Documentation" to="/" >
 
-          <NavMenu
-            component="button"
-            icon="hi-book"
-            name="Guide"
-          />
+          <Link
+            className="flex items-center py-2 cursor-pointer
+                   text-gray-800 hover:text-blue-600 text-base capitalize font-bold"
+            to='/'
+          >
+            <AppIcon file="base" id='hi-book' className="w-6 h-6 mr-2" />
+            Guide
+          </Link>
 
-          <NavMenu
-            component="button"
-            icon="hi-code"
-            name="API"
-          />
+          <Link
+            className="flex items-center py-2 cursor-pointer
+                   text-gray-800 hover:text-blue-600 text-base capitalize font-bold"
+            to='/api'
+          >
+            <AppIcon file="base" id='hi-code' className="w-6 h-6 mr-2" />
+            API
+          </Link>
 
         </NavSection>
 

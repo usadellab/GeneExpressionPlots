@@ -19,11 +19,15 @@
 }
 
 .markdown ul {
-  @apply list-disc px-8 py-1
+  @apply list-disc px-8 py-1;
 }
 
 .markdown li {
-  @apply py-1
+  @apply py-1;
+}
+
+.markdown p {
+  @apply my-2;
 }
 
 .markdown table {

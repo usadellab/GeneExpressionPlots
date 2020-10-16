@@ -76,7 +76,7 @@ export default class PlotsForm extends Component {
 
           <AppSelect
             className="w-full md:w-1/2 md:ml-2"
-            label="Count unit"
+            label="Plot type"
             value={ this.state.plotType }
             options={[
               { label: 'Bars',  value: 'bars' },
