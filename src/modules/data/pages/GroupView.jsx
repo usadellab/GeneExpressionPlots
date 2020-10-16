@@ -1,11 +1,11 @@
 import React from 'react';
 
-import AppButton   from '@components/AppButton';
-import AppCheckbox from '@components/AppCheckbox';
-import AppFile     from '@components/AppFile';
-import AppIcon     from '@components/AppIcon';
-import AppSelect   from '@components/AppSelect';
-import AppText     from '@components/AppText';
+import AppButton from '@components/AppButton';
+import AppFile   from '@components/AppFile';
+import AppIcon   from '@components/AppIcon';
+import AppSwitch from '@components/AppSwitch';
+import AppSelect from '@components/AppSelect';
+import AppText   from '@components/AppText';
 
 import { store } from '@/store';
 
@@ -33,10 +33,9 @@ export default class GroupView extends React.Component {
       sampleName: '',
       xTickValue: 0,
       // Replicate
-      replicates: [],
       accessionColumn: 0,
       countColumn: 0,
-      header: false,
+      header: true,
       separator: ''
     };
 
@@ -54,7 +53,7 @@ export default class GroupView extends React.Component {
 
     let replicates = await Promise.all(
 
-      this.state.replicates.map((replicate) => parseCsv(replicate, {
+      [ ...event.target.files ].map((replicate) => parseCsv(replicate, {
         separator,
         header,
         accessionColumn,
@@ -66,6 +65,12 @@ export default class GroupView extends React.Component {
     store.checkAndAddReplicates(this.state, replicates);
     this.props.onSave();
   }
+
+  /**
+   * Updates the state with the header property value.
+   * @param {boolean} value switch on/off state
+   */
+  handleHeader = (value) => this.setState({ header: value });
 
   render () {
 
@@ -96,7 +101,7 @@ export default class GroupView extends React.Component {
             options={[
               { label: 'Raw',  value: 'raw' },
               { label: 'RPKM', value: 'rpkm' },
-              { label: 'TPM',  value: 'tmp' }
+              { label: 'TPM',  value: 'tpm' }
             ]}
             onChange={ (event) => this.setState({ countUnit: event.target.value }) }
           />
@@ -129,7 +134,7 @@ export default class GroupView extends React.Component {
 
 
         {/* REPLICATES */}
-        <div className="flex flex-col md:flex-row mt-4" >
+        <div className="flex flex-col justify-center md:flex-row mt-4" >
 
           {/* COLUMN separator */}
           <AppSelect
@@ -164,39 +169,32 @@ export default class GroupView extends React.Component {
 
         </div>
 
-        <div
-          className="flex flex-col justfify-center items-center mt-4 md:flex-row"
-        >
+        <div className="flex flex-col justfify-center items-center mt-4 md:flex-row" >
 
-          <AppCheckbox
-            className="w-full md:w-1/3"
-            label="Header"
-            onChange={ (event) => this.setState({ header: event.target.checked })}
+          {/* HEADER TOGGLE */}
+          <AppSwitch
+            className="w-full md:w-1/4 md:ml-2"
+            label="Header Row"
+            checked={ this.state.header }
+            onChange={ this.handleHeader }
           />
 
+        </div>
+
+
+        {/* FORM ACTIONS */}
+
+        <div className="flex mt-6 mx-1">
+
           <AppFile
-            className="flex justify-center items-center ml-3 py-2 px-5
-                       w-full md:w-2/3 secondary-blue"
+            className="flex justify-center items-center py-2 px-5 primary-blue"
             multiple
-            onChange={  (event) => this.setState({ replicates: [ ...event.target.files ] }) }
+            // onClick={ this.props.onSave }
+            onChange={ this.handleSubmit }
           >
             <AppIcon file="base" id="hi-document" className="w-6 h-6 mr-3"/>
               Upload Tables
           </AppFile>
-
-        </div>
-
-        {/* STATE CONTROLS */}
-
-        <div className="flex mt-6 mx-1">
-
-          <AppButton
-            className="py-2 px-5 primary-blue"
-            type="Submit"
-            // onClick={ this.props.onSave }
-          >
-              Save
-          </AppButton>
 
           <AppButton
             className="ml-3 py-2 px-5 tertiary-pink"
