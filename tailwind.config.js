@@ -36,15 +36,15 @@ module.exports = {
           '900': '#272727',
         },
         olive: {
-          "100": "#fdfdf9",
-          "200": "#f7f7e8",
-          "300": "#edecc8",
-          "400": "#dcda95",
-          "500": "#c5c14d",
-          "600": "#a39f35",
-          "700": "#7c7928",
-          "800": "#54521b",
-          "900": "#29280d"
+          '100': '#fdfdf9',
+          '200': '#f7f7e8',
+          '300': '#edecc8',
+          '400': '#dcda95',
+          '500': '#c5c14d',
+          '600': '#a39f35',
+          '700': '#7c7928',
+          '800': '#54521b',
+          '900': '#29280d'
         },
         pink: {
           '100': '#fffcfd',
@@ -59,14 +59,15 @@ module.exports = {
         }
       },
       fontFamily: {
-        abeeze: [
-          'ABeeZee', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI",
-          'Roboto', "Helvetica Neue", 'Arial', "Noto Sans", 'sans-serif', "Apple Color Emoji",
-          "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
-        ]
+        abeeze: [ 'ABeeZee', 'Roboto', 'sans-serif' ],
       }
     },
   },
-  variants: [ 'responsive', 'hover', 'focus', 'focus-within', 'group-hover', 'group-focus' ],
+  variants: [
+    'responsive',
+    'first',
+    'hover', 'group-hover',
+    'focus', 'focus-within', 'group-focus'
+  ],
   plugins: [],
 };
