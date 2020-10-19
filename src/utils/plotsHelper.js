@@ -1,9 +1,28 @@
+// import Plotly from 'plotly.js/lib/core';
+import {store} from '@/store';
 /**
  * constant config object for plotly
  */
-const config = {
-  responsive: true
-};
+const config = (index) => ({
+  responsive: true,
+  toImageButtonOptions: {
+    format: 'svg'
+  },
+  displaylogo: false,
+  modeBarButtonsToAdd: [
+    {
+      name: 'Delete plot',
+      icon: {
+        'width': 21,
+        'height': 21,
+        'path': 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'
+      },
+      click: function() {
+        store.deletePlot(index);
+      }
+    }
+  ]
+});
 
 /**
  * 
@@ -64,7 +83,7 @@ export const computeVariance = (replicates, accessionId, average) => {
  * @param {string} countUnit unit used for the y-label
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-export function createGroupPlot (plotData, accessionId, showlegend, countUnit, plotType) {
+export function createGroupPlot (plotData, accessionId, showlegend, countUnit, plotType, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
     data.push(createPlotGroup(plotData, group, plotType));
@@ -72,7 +91,7 @@ export function createGroupPlot (plotData, accessionId, showlegend, countUnit, p
 
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
 
-  return {data, config, layout};
+  return {data, layout, config: config(index)};
 }
 
 /**
@@ -125,7 +144,7 @@ export function createStackedLinePlot(plotData, accessionId, showlegend, countUn
     data.push(createLinePlotTrace(plotData, group));
   });
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
-  return {data, config, layout};
+  return {data, layout,  config};
 }
 
 /**

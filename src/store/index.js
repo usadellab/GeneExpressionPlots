@@ -75,6 +75,14 @@ class DataStore {
   }
 
   /**
+   * Delete a plot from the store
+   * @param {number} index plot index in the store
+   */
+  @action deletePlot(index){
+    this.plots.splice(index,1);
+  }
+
+  /**
    * Add replicates to an existing sample within a group. Adds a new sample/group if it doesn't exist yet
    * @param {object} groupView
    * @param {array} replicates
@@ -117,22 +125,21 @@ class DataStore {
   @action addBarPlot(accessionId, showlegend) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'bar')
+      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'bar', this.plots.length)
     );
-
   }
 
   @action addIndivualCurvesPlot(accessionId, showlegend) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'scatter')
+      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'scatter', this.plots.length)
     );
   }
 
   @action addStackedCurvePlot(accessionId, showlegend) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createStackedLinePlot(plotData, accessionId, showlegend, this.groups[0].countUnit)
+      createStackedLinePlot(plotData, accessionId, showlegend, this.groups[0].countUnit, this.plots.length)
     );
   }
 
