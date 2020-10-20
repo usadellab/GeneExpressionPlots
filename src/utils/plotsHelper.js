@@ -138,13 +138,13 @@ function createPlotGroup (plotData, group, plotType){
  * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
  */
-export function createStackedLinePlot(plotData, accessionId, showlegend, countUnit) {
+export function createStackedLinePlot(plotData, accessionId, showlegend, countUnit, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
     data.push(createLinePlotTrace(plotData, group));
   });
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
-  return {data, layout,  config};
+  return {data, layout, config: config(index)};
 }
 
 /**
