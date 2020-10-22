@@ -117,10 +117,10 @@ class DataStore {
   }
 
   /**
-   * 
-   * @param {*} accessionId 
-   * @param {*} showlegend 
-   * @param {*} plotType 
+   *
+   * @param {*} accessionId
+   * @param {*} showlegend
+   * @param {*} plotType
    */
   @action addBarPlot(accessionId, showlegend) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
@@ -157,7 +157,7 @@ class DataStore {
       default:
         break;
     }
-  } 
+  }
 
   /**
    * clear the plots array in the store
