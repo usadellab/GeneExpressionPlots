@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import DataView   from './pages/DataView';
-import GroupView  from './pages/GroupView';
-import SampleView from './pages/SampleView';
+// import GroupView  from './pages/GroupView';
+// import SampleView from './pages/SampleView';
 
 export default function AppRoutes() {
 
@@ -12,8 +12,9 @@ export default function AppRoutes() {
   return (
     <Switch>
       <Route exact path={ path } component={ DataView } />
-      <Route path={ `${path}/group/:groupIndex/sample/:sampleIndex?` } component={ SampleView } />
-      <Route path={ `${path}/group/:groupIndex?` } component={ GroupView } />
+      {/* We might need this when providing group, sample, and replicate editing functionality */}
+      {/* <Route path={ `${path}/group/:groupIndex/sample/:sampleIndex?` } component={ SampleView } />
+      <Route path={ `${path}/group/:groupIndex?` } component={ GroupView } /> */}
     </Switch>
   );
 }
