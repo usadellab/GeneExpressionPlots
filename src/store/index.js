@@ -52,10 +52,6 @@ class DataStore {
     this.groups.push(group);
   }
 
-  @action deleteGroup(index){
-    this.groups.splice(index,1);
-  }
-
   /**
    * Add a new sample to an existing group.
    * @param {string} groupName name of the group
@@ -121,10 +117,10 @@ class DataStore {
   }
 
   /**
-   * 
-   * @param {*} accessionId 
-   * @param {*} showlegend 
-   * @param {*} plotType 
+   *
+   * @param {*} accessionId
+   * @param {*} showlegend
+   * @param {*} plotType
    */
   @action addBarPlot(accessionId, showlegend) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
@@ -161,7 +157,7 @@ class DataStore {
       default:
         break;
     }
-  } 
+  }
 
   /**
    * clear the plots array in the store
