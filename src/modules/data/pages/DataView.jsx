@@ -1,8 +1,6 @@
 import React         from 'react';
 import { observer }  from 'mobx-react';
 
-import AppLink   from '@components/AppLink';
-import IconAdd   from '@assets/svg/hi-plus.svg';
 import GroupItem from '../components/GroupItem';
 
 import { store } from '@/store';
@@ -11,9 +9,24 @@ import { store } from '@/store';
 @observer
 export default class DataView extends React.Component {
 
+  constructor () {
+    super();
+    this.state = {
+      showGroup: false,
+    };
+  }
+
+  showGroupView = () => {
+    this.setState({ showGroup: true });
+  }
+
+  hideGroupView = () => {
+    this.setState({ showGroup: false });
+  }
+
   render () {
     return (
-      <div className={ `container font-abeeze ${this.props.className || ''}` }>
+      <div className={ `relative w-full ${this.props.className || ''}` }>
 
         {
           store.groups.map((group, index) => (
@@ -26,13 +39,6 @@ export default class DataView extends React.Component {
 
           ))
         }
-
-        <AppLink
-          className="group flex justify-center"
-          to={ `${this.props.location.pathname}/group/` }
-        >
-          <IconAdd className="w-24 text-gray-500 group-hover:text-blue-700"/>
-        </AppLink>
 
       </div>
     );

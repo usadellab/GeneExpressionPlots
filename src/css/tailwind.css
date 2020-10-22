@@ -8,7 +8,7 @@
 /* GLOBAL STYLES */
 
 body {
-  @apply antialiased;
+  @apply font-abeeze antialiased;
 }
 
 

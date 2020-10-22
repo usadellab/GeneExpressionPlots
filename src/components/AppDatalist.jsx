@@ -29,10 +29,9 @@ export default class AppDatalist extends React.Component {
 
     return (
       <div
-        className="relative group"
+        className={ `relative group ${this.props.className}`}
       >
         <AppText
-          className="group:"
           label="Accession ID"
           value={ this.props.value }
           onFocus={ () => this.setState({ focus: true }) }
@@ -42,7 +41,7 @@ export default class AppDatalist extends React.Component {
 
         <ul
           className={
-            `absolute py-4 z-40 w-full
+            `absolute py-2 z-40 w-full
              shadow-outer bg-white
              ${ this.state.focus ? 'visible' : 'hidden' }`
           }

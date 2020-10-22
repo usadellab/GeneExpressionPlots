@@ -1,5 +1,16 @@
-import { action, computed, observable }    from 'mobx';
-import { computeAverage, computeVariance, createBarPlot } from '../utils/plotsHelper';
+import {
+  action,
+  computed,
+  observable,
+} from 'mobx';
+
+import {
+  computeAveragesAndVariances,
+  createGroupPlot,
+  createStackedLinePlot
+} from '../utils/plotsHelper';
+
+import preload from '../../data/preload.json';
 
 
 class DataStore {
@@ -7,6 +18,14 @@ class DataStore {
   /** @type {Group[]} */
   @observable groups = []
   @observable plots = []
+  @observable preloaded = false;
+
+  constructor (data) {
+    if (Array.isArray(data) && data.length !== 0) {
+      this.preloaded = true;
+      this.groups = data;
+    }
+  }
 
   @computed({ keepAlive: true })
   get accessionIds() {
@@ -47,19 +66,28 @@ class DataStore {
     foundGroup.samples.push(sample);
   }
 
-  /**
-   * Add replicates to an existing sample within a group.
-   * @param {string}      groupName  name of the group
-   * @param {string}      sampleName name of the sample
-   * @param {Replicate[]} replicates array of replicates
-   */
-  @action addReplicates(groupName, sampleName, replicates){
-    let foundGroup = this.groups.find(group => group.name === groupName);
-    let foundSample = foundGroup.samples.find(sample => sample.name === sampleName);
-    foundSample.replicates.push(...replicates);
+  @action clearData() {
+    this.groups = [];
   }
 
   /**
+   * Delete a group from the store
+   * @param {number} index group index in the store
+   */
+  @action deleteGroup(index){
+    this.groups.splice(index,1);
+  }
+
+  /**
+   * Delete a plot from the store
+   * @param {number} index plot index in the store
+   */
+  @action deletePlot(index){
+    this.plots.splice(index,1);
+  }
+
+  /**
+   * Add replicates to an existing sample within a group. Adds a new sample/group if it doesn't exist yet
    * @param {object} groupView
    * @param {array} replicates
    */
@@ -92,41 +120,52 @@ class DataStore {
     }
   }
 
-  @action addBarPlot(accessionId, showlegend){
-    /**
-     * {
-     *   [groupName]: {
-     *      [sampleName]: {
-     *        average:,
-     *        variance:,
-     *      }
-     *   }
-     * }
-     */
-    let plotData = {};
-    this.groups.forEach(group => {
-
-      plotData[group.name] = {};
-
-      group.samples.forEach(sample => {
-
-        plotData[group.name][sample.name] = {
-          average: computeAverage(sample.replicates, accessionId),
-        };
-
-        plotData[group.name][sample.name].variance = computeVariance(
-          sample.replicates, accessionId, plotData[group.name][sample.name].average
-        );
-
-      });
-
-    });
-
-    this.plots.push(createBarPlot(plotData, accessionId, showlegend, this.groups[0].countUnit));
-
-
+  /**
+   * 
+   * @param {*} accessionId 
+   * @param {*} showlegend 
+   * @param {*} plotType 
+   */
+  @action addBarPlot(accessionId, showlegend) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+    this.plots.push(
+      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'bar', this.plots.length)
+    );
   }
 
+  @action addIndivualCurvesPlot(accessionId, showlegend) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+    this.plots.push(
+      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'scatter', this.plots.length)
+    );
+  }
+
+  @action addStackedCurvePlot(accessionId, showlegend) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+    this.plots.push(
+      createStackedLinePlot(plotData, accessionId, showlegend, this.groups[0].countUnit, this.plots.length)
+    );
+  }
+
+  @action addPlot(accessionId, showlegend, plotType){
+    switch (plotType) {
+      case 'bars':
+        this.addBarPlot(accessionId, showlegend);
+        break;
+      case 'individualCurves':
+        this.addIndivualCurvesPlot(accessionId, showlegend);
+        break;
+      case 'stackedCurves':
+        this.addStackedCurvePlot(accessionId, showlegend);
+        break;
+      default:
+        break;
+    }
+  } 
+
+  /**
+   * clear the plots array in the store
+   */
   @action clearPlots () {
     this.plots = [];
   }
@@ -160,4 +199,4 @@ export class Sample {
   replicates;
 }
 
-export const store = new DataStore();
+export const store = new DataStore(preload);

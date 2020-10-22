@@ -1,7 +1,5 @@
 import React from 'react';
 
-import MenuDrawer from './PlotsDrawer';
-
 
 export default class PlotsLayout extends React.Component {
 
@@ -17,10 +15,6 @@ export default class PlotsLayout extends React.Component {
           { this.props.children }
 
         </main>
-
-        {/* RIGHT-SIDE DRAWER: DATA STORAGE */}
-
-        <MenuDrawer />
 
       </div>
     );
