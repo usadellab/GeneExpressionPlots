@@ -5,7 +5,7 @@ export default class PlotsLayout extends React.Component {
 
   render () {
     return (
-      <div className="flex max-w-screen min-h-full">
+      <div className="flex max-w-screen h-screen">
 
 
         {/* MAIN CONTENT: ROUTES */}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import AppButton   from '@components/AppButton';
-import AppCheckbox from '@components/AppCheckbox';
+import AppSwitch from '@components/AppSwitch';
 import AppDatalist from '@components/AppDatalist';
 import AppSelect   from '@components/AppSelect';
 
@@ -15,6 +15,7 @@ export default class PlotsForm extends Component {
       accessionIds: store.accessionIds,
       accessionIdsView: store.accessionIds.slice(0, 10),
       showlegend: true,
+      showCaption: true,
       accession: store.accessionIds[0] ?? '',
       plotType: 'bars'
     };
@@ -51,7 +52,7 @@ export default class PlotsForm extends Component {
     // Prevent default form submit event
     event.preventDefault();
     // Add plot
-    store.addPlot(this.state.accession, this.state.showlegend, this.state.plotType);
+    store.addPlot(this.state.accession, this.state.showlegend, this.state.showCaption, this.state.plotType);
     // Close the drawer
     this.props.onCancel();
   };
@@ -89,11 +90,23 @@ export default class PlotsForm extends Component {
 
         </div>
 
-        <AppCheckbox
-          onChange={ (event) => this.setState({ showlegend: event.target.checked }) }
-          checked={ this.state.showlegend }
-          label="Show legend"
-        />
+        <div className="mt-4 w-full md:flex">
+
+          <AppSwitch
+            className="w-full md:w-1/4 md:ml-2"
+            onChange={ (value) => this.setState({ showlegend: value }) }
+            checked={ this.state.showlegend }
+            label="Show legend"
+          />
+
+          <AppSwitch
+            className="w-full md:w-1/4 md:ml-2"
+            onChange={ (value) => this.setState({ showCaption: value }) }
+            checked={ this.state.showCaption }
+            label="Show description"
+          />
+
+        </div>
 
         <div className="mt-8 flex justify-start w-full">
 
