@@ -29,7 +29,7 @@ export default class PlotsLayout extends React.Component {
 
   render () {
     return (
-      <div className="flex max-w-screen">
+      <div className="flex flex-col xl:flex-row max-w-screen">
 
         {/* MAIN CONTENT: ROUTES */}
 
@@ -49,7 +49,7 @@ export default class PlotsLayout extends React.Component {
             positioning of the <Plot/> element as produced by Plotly.js.
 
           */}
-          <div className="flex justify-center items-center w-1/2">
+          <div className="flex justify-center items-center w-full xl:w-1/2">
             {
               this.state.img &&
               <img className="p-24" src={ this.state.img } />
