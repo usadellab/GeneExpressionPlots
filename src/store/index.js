@@ -10,21 +10,21 @@ import {
   createStackedLinePlot
 } from '../utils/plotsHelper';
 
-import preload from '../../data/preload.json';
+import { PRELOAD_DATA, PRELOAD_CAPTIONS } from '../config/globals';
 
 
 class DataStore {
 
   /** @type {Group[]} */
-  @observable groups = []
-  @observable plots = []
+  @observable groups = [];
+  @observable plots = [];
+  @observable descriptions = {};
   @observable preloaded = false;
+  @observable preloadedDesc = false;
 
-  constructor (data) {
-    if (Array.isArray(data) && data.length !== 0) {
-      this.preloaded = true;
-      this.groups = data;
-    }
+  constructor () {
+    if (PRELOAD_DATA) this.preloaded = true;
+    if (PRELOAD_CAPTIONS) this.preloadedDesc = true;
   }
 
   @computed({ keepAlive: true })
@@ -42,6 +42,18 @@ class DataStore {
     }
     return [];
 
+  }
+
+  /**
+   * Reassigns the internal group data to a new object.
+   * @param {Group} groups Group object
+   */
+  @action assignData (groups) {
+    this.groups = groups;
+  }
+
+  @action assignCaptions (captions) {
+    this.descriptions = captions;
   }
 
   /**
@@ -117,47 +129,47 @@ class DataStore {
   }
 
   /**
-   * 
-   * @param {*} accessionId 
-   * @param {*} showlegend 
-   * @param {*} plotType 
+   *
+   * @param {*} accessionId
+   * @param {*} showlegend
+   * @param {*} plotType
    */
-  @action addBarPlot(accessionId, showlegend) {
+  @action addBarPlot(accessionId, showlegend, showCaption) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'bar', this.plots.length)
+      createGroupPlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, 'bar', this.plots.length)
     );
   }
 
-  @action addIndivualCurvesPlot(accessionId, showlegend) {
+  @action addIndivualCurvesPlot(accessionId, showlegend, showCaption) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, this.groups[0].countUnit, 'scatter', this.plots.length)
+      createGroupPlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, 'scatter', this.plots.length)
     );
   }
 
-  @action addStackedCurvePlot(accessionId, showlegend) {
+  @action addStackedCurvePlot(accessionId, showlegend, showCaption) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
     this.plots.push(
-      createStackedLinePlot(plotData, accessionId, showlegend, this.groups[0].countUnit, this.plots.length)
+      createStackedLinePlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, this.plots.length)
     );
   }
 
-  @action addPlot(accessionId, showlegend, plotType){
+  @action addPlot(accessionId, showlegend, showCaption, plotType){
     switch (plotType) {
       case 'bars':
-        this.addBarPlot(accessionId, showlegend);
+        this.addBarPlot(accessionId, showlegend, showCaption);
         break;
       case 'individualCurves':
-        this.addIndivualCurvesPlot(accessionId, showlegend);
+        this.addIndivualCurvesPlot(accessionId, showlegend, showCaption);
         break;
       case 'stackedCurves':
-        this.addStackedCurvePlot(accessionId, showlegend);
+        this.addStackedCurvePlot(accessionId, showlegend, showCaption);
         break;
       default:
         break;
     }
-  } 
+  }
 
   /**
    * clear the plots array in the store
@@ -195,4 +207,4 @@ export class Sample {
   replicates;
 }
 
-export const store = new DataStore(preload);
+export const store = new DataStore();

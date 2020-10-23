@@ -1,12 +1,14 @@
-const path = require('path');
+const { basename, join, resolve } = require('path');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin      = require('copy-webpack-plugin');
 const HTMLWebpackPlugin      = require('html-webpack-plugin');
 const MiniCssExtractPlugin   = require('mini-css-extract-plugin');
 const SpriteLoaderPlugin     = require('svg-sprite-loader/plugin');
 const { EnvironmentPlugin }  = require('webpack');
 
 
+// Declare whether we are in a production environment
 const prod = process.env.NODE_ENV === 'production';
 
 module.exports = {
@@ -27,11 +29,11 @@ module.exports = {
     ? 'source-map'
     : 'cheap-module-eval-source-map',
 
-  entry: path.resolve(__dirname, './src/index.jsx'),
+  entry: resolve(__dirname, './src/index.jsx'),
 
   output:
   {
-    path: path.resolve(__dirname, './dist'),
+    path: resolve(__dirname, './dist'),
     publicPath: process.env.BASE_URL || '/',
 
     filename: prod
@@ -42,10 +44,10 @@ module.exports = {
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src/'),
-      '@assets': path.resolve(__dirname, './src/assets/'),
-      '@components': path.resolve(__dirname, './src/components/'),
-      '@store': path.resolve(__dirname, './src/store/'),
+      '@': resolve(__dirname, 'src/'),
+      '@assets': resolve(__dirname, './src/assets/'),
+      '@components': resolve(__dirname, './src/components/'),
+      '@store': resolve(__dirname, './src/store/'),
     },
     extensions: ['.js', '.json', '.jsx' ],
   },
@@ -59,7 +61,7 @@ module.exports = {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
-        },
+        }
       },
     },
   },
@@ -83,16 +85,26 @@ module.exports = {
     // Clean dist/ folder
     new CleanWebpackPlugin(),
 
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'static', to: 'static' },
+      ],
+    }),
+
     // Safe environment variables
     new EnvironmentPlugin({
       'NODE_ENV': 'development',
       'BASE_URL': '/',
+      'PRELOAD_CAPTIONS': process.env.PRELOAD_CAPTIONS ?? null,
+      'PRELOAD_DATA': process.env.PRELOAD_DATA         ?? null,
+      'PRELOAD_IMAGE': process.env.PRELOAD_IMAGE       ?? null,
+      'PRELOAD_PLOTS': process.env.PRELOAD_PLOTS       ?? null,
     }),
 
     // Generate dist/index.html
     new HTMLWebpackPlugin({
       favicon: 'public/favicon.ico',
-      template: path.join(__dirname, 'public/index.html'),
+      template: join(__dirname, 'public/index.html'),
       title: process.env.APP_NAME || 'webpack',
     }),
 
@@ -159,7 +171,7 @@ module.exports = {
             options: {
               extract: true,
               symbolId: '[name]',
-              spriteFilename: (svgPath) => `${path.basename(svgPath)}`
+              spriteFilename: (svgPath) => `${basename(svgPath)}`
             }
           },
         ],

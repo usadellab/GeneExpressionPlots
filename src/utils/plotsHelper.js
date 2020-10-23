@@ -83,7 +83,7 @@ export const computeVariance = (replicates, accessionId, average) => {
  * @param {string} countUnit unit used for the y-label
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-export function createGroupPlot (plotData, accessionId, showlegend, countUnit, plotType, index) {
+export function createGroupPlot (plotData, accessionId, showlegend, showCaption, countUnit, plotType, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
     data.push(createPlotGroup(plotData, group, plotType));
@@ -91,7 +91,7 @@ export function createGroupPlot (plotData, accessionId, showlegend, countUnit, p
 
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
 
-  return {data, layout, config: config(index)};
+  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
 }
 
 /**
@@ -138,13 +138,13 @@ function createPlotGroup (plotData, group, plotType){
  * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
  */
-export function createStackedLinePlot(plotData, accessionId, showlegend, countUnit, index) {
+export function createStackedLinePlot(plotData, accessionId, showlegend, showCaption, countUnit, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
     data.push(createLinePlotTrace(plotData, group));
   });
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
-  return {data, layout, config: config(index)};
+  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
 }
 
 /**
