@@ -192,15 +192,6 @@ class AppNavigation extends React.Component {
             />
           }
           
-          {
-            !store.preloaded &&
-            <NavMenu
-              component="file"
-              icon="hi-upload"
-              name="Import Captions"
-              onChange={ this.handleLoadDescriptions }
-            />
-          }
 
           <NavMenu
             component="anchor"
@@ -211,6 +202,16 @@ class AppNavigation extends React.Component {
             download="data.json"
           />
 
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="hi-upload"
+              name="Import Captions"
+              onChange={ this.handleLoadDescriptions }
+            />
+          }
+          
           {
             !store.preloaded &&
             <NavMenu
