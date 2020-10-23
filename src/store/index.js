@@ -10,8 +10,8 @@ import {
   createStackedLinePlot
 } from '../utils/plotsHelper';
 
-import preload from '../../data/preload.json';
-import preloadDesc from '../../data/descriptions.json';
+import { PRELOAD_DATA, PRELOAD_CAPTIONS } from '../config/globals';
+
 
 class DataStore {
 
@@ -22,16 +22,9 @@ class DataStore {
   @observable preloaded = false;
   @observable preloadedDesc = false;
 
-  constructor (data, descriptions) {
-    if (Array.isArray(data) && data.length !== 0) {
-      this.preloaded = true;
-      this.groups = data;
-    }
-    
-    if (Object.prototype.toString.call(descriptions) && Object.keys(descriptions).length !== 0) {
-      this.preloadedDesc = true;
-      this.descriptions = descriptions;
-    }
+  constructor () {
+    if (PRELOAD_DATA) this.preloaded = true;
+    if (PRELOAD_CAPTIONS) this.preloadedDesc = true;
   }
 
   @computed({ keepAlive: true })
@@ -49,6 +42,14 @@ class DataStore {
     }
     return [];
 
+  }
+
+  /**
+   * Reassigns the internal group data to a new object.
+   * @param {Group} groups Group object
+   */
+  @action assignData (groups) {
+    this.groups = groups;
   }
 
   /**
@@ -124,10 +125,10 @@ class DataStore {
   }
 
   /**
-   * 
-   * @param {*} accessionId 
-   * @param {*} showlegend 
-   * @param {*} plotType 
+   *
+   * @param {*} accessionId
+   * @param {*} showlegend
+   * @param {*} plotType
    */
   @action addBarPlot(accessionId, showlegend, showCaption) {
     let plotData = computeAveragesAndVariances(this.groups, accessionId);
@@ -164,7 +165,7 @@ class DataStore {
       default:
         break;
     }
-  } 
+  }
 
   /**
    * clear the plots array in the store
@@ -202,4 +203,4 @@ export class Sample {
   replicates;
 }
 
-export const store = new DataStore(preload, preloadDesc);
+export const store = new DataStore();
