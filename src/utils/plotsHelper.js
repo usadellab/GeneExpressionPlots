@@ -25,8 +25,8 @@ const config = (index) => ({
 });
 
 /**
- *
- * @param {boolean} showlegend show the legend of the plot
+ * 
+ * @param {boolean} showlegend show the legend of the plot 
  * @param {string} accessionId accessionId to plot the data for
  * @param {string} countUnit unit used for the y-label
  */
@@ -37,7 +37,7 @@ function getDefaultLayout(showlegend, accessionId, countUnit) {
       orientation:'h',
       x: 0,
       y: 1.14,
-
+  
     },
     title: {
       text: `${accessionId}`,
@@ -79,11 +79,11 @@ export const computeVariance = (replicates, accessionId, average) => {
  * creat a Grouped Plot. That is either a bar or a scatter plot. The groups are seperated
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
  * @param {string} accessionId accessionId to plot the data for
- * @param {boolean} showlegend show the legend of the plot
+ * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-export function createGroupPlot (plotData, accessionId, showlegend, countUnit, plotType, index) {
+export function createGroupPlot (plotData, accessionId, showlegend, showCaption, countUnit, plotType, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
     data.push(createPlotGroup(plotData, group, plotType));
@@ -91,7 +91,7 @@ export function createGroupPlot (plotData, accessionId, showlegend, countUnit, p
 
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
 
-  return {data, layout, config: config(index)};
+  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
 }
 
 /**
@@ -135,16 +135,16 @@ function createPlotGroup (plotData, group, plotType){
  * create a stacked Line plot, that is a Plot with multiple traces; one for each group
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
  * @param {string} accessionId accessionId to plot the data for
- * @param {boolean} showlegend show the legend of the plot
+ * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
  */
-export function createStackedLinePlot(plotData, accessionId, showlegend, countUnit, index) {
+export function createStackedLinePlot(plotData, accessionId, showlegend, showCaption, countUnit, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
     data.push(createLinePlotTrace(plotData, group));
   });
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
-  return {data, layout, config: config(index)};
+  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
 }
 
 /**
@@ -167,9 +167,9 @@ function createLinePlotTrace(plotData, group) {
   };
 
   Object.keys(plotData[group]).forEach(sampleName => {
-
+    
     const sample = plotData[group][sampleName];
-
+    
     trace.x.push(sampleName);
     trace.y.push(sample.average);
     trace.error_y.array.push(sample.variance);

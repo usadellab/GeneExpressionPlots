@@ -1,11 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import createPlotlyComponent from 'react-plotly.js/factory';
+import AppPlot from '@components/AppPlot';
 
 import { store } from '@/store';
-
-const Plotly = window.Plotly;
-const Plot = createPlotlyComponent(Plotly);
 
 
 @observer
@@ -14,10 +11,13 @@ export default class PlotlyComponent extends React.Component {
   render () {
     return (
       store.plots.length > 0 && store.plots.map((plot, index) => (
-        <Plot
+        <AppPlot
           key={ `${plot?.layout?.title?.text}-${index}` }
-          className="w-1/2 h-1/2 mt-10"
-          { ...plot }
+          className="relative w-full xl:w-1/2 xl:h-1/2 mt-10 flex flex-col"
+          plot={{...plot}}
+          showCaption={plot.showCaption}
+          accession={plot.accession}
+          caption={store.descriptions[plot.accession]}
         />
       ))
     );
