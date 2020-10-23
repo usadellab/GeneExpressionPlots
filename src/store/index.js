@@ -52,6 +52,10 @@ class DataStore {
     this.groups = groups;
   }
 
+  @action assignCaptions (captions) {
+    this.descriptions = captions;
+  }
+
   /**
    * Add a new group to the store.
    * @param {Group} group

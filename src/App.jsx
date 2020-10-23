@@ -4,8 +4,11 @@ import { HashRouter } from 'react-router-dom';
 import AppRoutes from './App.routes';
 import AppLayout from './layout/AppLayout';
 
-import { store }        from '@/store';
-import { PRELOAD_DATA } from './config/globals.js';
+import { store } from '@/store';
+import {
+  PRELOAD_CAPTIONS,
+  PRELOAD_DATA
+} from './config/globals.js';
 
 import '@/assets/svg/base.svg';
 
@@ -19,6 +22,19 @@ export default class App extends React.Component {
           store.assignData( await response.json() );
         else
           console.error('Loading preloaded data caused an error');
+      }
+      catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    if (PRELOAD_CAPTIONS) {
+      try {
+        const response = await fetch(PRELOAD_CAPTIONS);
+        if (response.ok)
+          store.assignCaptions( await response.json() );
+        else
+          console.error('Loading preloaded captions caused an error');
       }
       catch (error) {
         console.error(error.message);
