@@ -49,12 +49,12 @@ export default class PlotsLayout extends React.Component {
             positioning of the <Plot/> element as produced by Plotly.js.
 
           */}
-          <div className="flex justify-center items-center w-full xl:w-1/2">
-            {
-              this.state.img &&
+          {
+            this.state.img &&
+            <div className="flex justify-center items-center w-full xl:w-1/2">
               <img className="p-24" src={ this.state.img } />
-            }
-          </div>
+            </div>
+          }
 
           {/* PLOTS */}
           { this.props.children }
