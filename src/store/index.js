@@ -27,6 +27,7 @@ class DataStore {
       this.preloaded = true;
       this.groups = data;
     }
+    
     if (Object.prototype.toString.call(descriptions) && Object.keys(descriptions).length !== 0) {
       this.preloadedDesc = true;
       this.descriptions = descriptions;

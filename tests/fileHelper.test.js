@@ -1,4 +1,4 @@
-import {validateSample, processSampleList} from './fileHelper';
+import {validateSample, processSampleList} from '../src/utils/fileHelper';
 import fs from 'fs';
 import path from 'path';
 
@@ -47,14 +47,14 @@ describe('fileParsing', function () {
           'accessionColumn': 1,
           'countColumn': 4,
           'header': true,
-          'file': fs.readFileSync(path.resolve('src/test_data/test_input_expr_counts_table_head.tsv'), 'utf8')
+          'file': fs.readFileSync(path.resolve('./mocks/table_with_header.tsv'), 'utf8')
         },
         {
           'separator': '\t',
           'accessionColumn': 1,
           'countColumn': 4,
           'header': false,
-          'file': fs.readFileSync(path.resolve('src/test_data/test_input_expr_counts_table_head_no_header.tsv'), 'utf8')
+          'file': fs.readFileSync(path.resolve('./mocks/table_no_header.tsv'), 'utf8')
         }
         ]
       };
