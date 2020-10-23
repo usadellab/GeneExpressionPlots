@@ -91,7 +91,7 @@ export function createGroupPlot (plotData, accessionId, showlegend, showCaption,
 
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
 
-  return {data, layout, config: config(index), caption: accessionId, showCaption: showCaption};
+  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
 }
 
 /**
@@ -144,7 +144,7 @@ export function createStackedLinePlot(plotData, accessionId, showlegend, showCap
     data.push(createLinePlotTrace(plotData, group));
   });
   let layout = getDefaultLayout(showlegend, accessionId, countUnit);
-  return {data, layout, config: config(index), caption: accessionId, showCaption: showCaption};
+  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
 }
 
 /**

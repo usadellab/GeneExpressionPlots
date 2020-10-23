@@ -102,6 +102,32 @@ class AppNavigation extends React.Component {
 
   };
 
+  handleLoadDescriptions = (event) => {
+
+    // Get the file ref
+    const file = event.target.files.item(0);
+
+    // Reset file input (allow consecutive uploads of the same file)
+    event.target.value = null;
+
+    // Accept JSON mime-type only
+    if (!file || file.type !== 'application/json') return;
+
+    // Use FileReader API to parse the input file
+    const fr = new FileReader();
+
+    fr.readAsText(file, 'utf-8');
+
+    fr.onload = () => {
+
+      // Update store
+      Object.assign(store.descriptions, JSON.parse(fr.result));
+
+    };
+
+    fr.onerror = err => console.log(err);
+  }
+
   handleExport = () => {
 
     const blob = new Blob([ JSON.stringify(store.groups, null, 2) ], {
@@ -163,6 +189,16 @@ class AppNavigation extends React.Component {
               icon="hi-upload"
               name="Import Data"
               onChange={ this.handleLoadFile }
+            />
+          }
+          
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="hi-upload"
+              name="Import Captions"
+              onChange={ this.handleLoadDescriptions }
             />
           }
 

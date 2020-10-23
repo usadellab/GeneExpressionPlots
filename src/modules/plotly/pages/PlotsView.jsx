@@ -16,6 +16,8 @@ export default class PlotlyComponent extends React.Component {
           className="relative w-1/2 h-1/2 mt-10 flex flex-col"
           plot={{...plot}}
           showCaption={plot.showCaption}
+          accession={plot.accession}
+          caption={store.descriptions[plot.accession]}
         />
       ))
     );
