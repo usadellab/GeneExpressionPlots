@@ -42,6 +42,16 @@ class DataStore {
 
   }
 
+  @computed({ keepAlive: true})
+  get isPreloading () {
+    return this.preloaded && !this.hasData;
+  }
+
+  @computed({ keepAlive: true })
+  get hasData () {
+    return this.groups.length > 0;
+  }
+
   /**
    * check if the store has captions
    * @returns {boolean} 

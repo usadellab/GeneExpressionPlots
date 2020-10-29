@@ -1,4 +1,7 @@
 import papa from 'papaparse';
+import { promisify } from 'util';
+
+const sleep = promisify(setTimeout);
 
 /**
  * processSampleList - process a List of samples, given a group and a countUnit into a group of samples and their replicates.
@@ -22,9 +25,9 @@ import papa from 'papaparse';
   },
   ...
 ]
- * 
+ *
  * @returns {object} group of the format:
- * 
+ *
  * {
   "[groupName]": {
     "countUnit": "string"     // raw, tpm, rmpk, etc.
@@ -39,13 +42,13 @@ import papa from 'papaparse';
       },
       ...
     ],
-    ...  
+    ...
   ],
   ...
 }
  */
 export const processSampleList = async function(groupName, countUnit, sampleList){
-  
+
   let group = {
     [groupName]: {
       'countUnit': countUnit,
@@ -56,16 +59,16 @@ export const processSampleList = async function(groupName, countUnit, sampleList
   for (let sample of sampleList){
     group[groupName].samples.push(await processSample(sample));
   }
-  
+
   return group;
 };
 
 /**
  * processSample - process one sample by parsing
  * @param {object} sample one sample of the above format
- * 
+ *
  * @returns {array} a list of replicate objects each with the accessions and their respective counts. Of the form:
- * 
+ *
  * [
   {
     "PGSC0003DMT400039136":"1",
@@ -93,7 +96,7 @@ export const processSample = async function(sample) {
 /**
  * validateSample - validates the orrect attributes are present in the given sample
  * @param {objcet} sample one sample of the above format
- * 
+ *
  * @returns true if no Error, otherwise throws appropriate Error
  */
 export const validateSample = function(sample){
@@ -123,11 +126,12 @@ export const validateSample = function(sample){
 /**
  * parseCsv - parse the csv file with papaparse and the given parameters
  * @param {object} file FileObject to be parsed
- * @param {object} config configuration object for papaparse 
- * 
+ * @param {object} config configuration object for papaparse
+ *
  * @returns {Promise} returns a Promise for the file to be parsed.
  */
-export const parseCsv = function(file, config){
+export const parseCsv = async function (file, config, cancel){
+
   return new Promise((resolve, reject) => {
     let geneCounts = {};
     papa.parse(file, {
@@ -135,12 +139,15 @@ export const parseCsv = function(file, config){
         resolve(geneCounts);
       },
       error: reject,
-      step: (row) => {
-        geneCounts[row.data[Object.keys(row.data)[config.accessionColumn - 1]]] = parseFloat(row.data[Object.keys(row.data)[config.countColumn - 1]]);
+      step: (row, parser) => {
+        const accessionColumnIndex = Object.keys(row.data)[config.accessionColumn - 1];
+        const countColumnIndex = Object.keys(row.data)[config.countColumn - 1];
+        geneCounts[row.data[accessionColumnIndex]] = parseFloat(row.data[countColumnIndex]);
       },
       header: config.header,
       delimiter: config.separator,
-      skipEmptyLines: true
+      skipEmptyLines: true,
+      worker: true,
     });
   });
 };

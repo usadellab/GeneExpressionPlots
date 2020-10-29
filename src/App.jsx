@@ -10,7 +10,8 @@ import {
   PRELOAD_DATA
 } from './config/globals.js';
 
-import '@/assets/svg/base.svg';
+import '@/assets/svg/hero-icons.svg';
+
 
 export default class App extends React.Component {
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
 import AppButton   from '@components/AppButton';
-import AppSwitch from '@components/AppSwitch';
+import AppSwitch   from '@components/AppSwitch';
 import AppDatalist from '@components/AppDatalist';
+import AppIcon     from '@components/AppIcon';
 import AppSelect   from '@components/AppSelect';
+import AppSpinner  from '@components/AppSpinner';
 
 import { store } from '@/store';
 
@@ -17,7 +19,9 @@ export default class PlotsForm extends Component {
       showlegend: true,
       showCaption: store.hasCaptions,
       accession: store.accessionIds[0] ?? '',
-      plotType: 'bars'
+      plotType: 'bars',
+      //
+      loading: false,
     };
   }
 
@@ -49,11 +53,10 @@ export default class PlotsForm extends Component {
    * @param {React.FormEvent<HTMLInputElement>} event
    */
   handleSubmit = (event) => {
-    // Prevent default form submit event
     event.preventDefault();
-    // Add plot
+    this.setState({ loading: true });
     store.addPlot(this.state.accession, this.state.showlegend, this.state.showCaption, this.state.plotType);
-    // Close the drawer
+    this.setState({ loading: false });
     this.props.onCancel();
   };
 
@@ -117,7 +120,16 @@ export default class PlotsForm extends Component {
             type="Submit"
             onClick={ this.handleSubmit }
           >
-          Plot Gene
+            {
+              this.state.loading
+                ? <AppSpinner className="mr-3 h-6 w-6 text-white" />
+                : <AppIcon file="hero-icons" id="chart-square-bar" className="w-6 h-6 mr-3"/>
+            }
+            {
+              this.state.loading
+                ? 'Plotting'
+                : 'Plot Gene'
+            }
           </AppButton>
 
           <AppButton

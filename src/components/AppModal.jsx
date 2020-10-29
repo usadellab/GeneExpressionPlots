@@ -38,7 +38,7 @@ export default class AppModal extends React.Component {
                 </h2>
 
                 <AppButton onClick={ this.props.hideModal } >
-                  <AppIcon file="base" id="hi-close" className="w-6 h-6" />
+                  <AppIcon file="hero-icons" id="close" className="w-6 h-6" />
                 </AppButton>
               </div>
 

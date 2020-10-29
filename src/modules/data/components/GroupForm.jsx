@@ -5,6 +5,7 @@ import AppFile   from '@components/AppFile';
 import AppIcon   from '@components/AppIcon';
 import AppSwitch from '@components/AppSwitch';
 import AppSelect from '@components/AppSelect';
+import AppSpinner from '@components/AppSpinner';
 import AppText   from '@components/AppText';
 
 import { store } from '@/store';
@@ -36,24 +37,54 @@ export default class GroupView extends React.Component {
       accessionColumn: 0,
       countColumn: 0,
       header: true,
-      separator: ''
+      separator: '',
+      // Component
+      cancel: false,
+      loading: false,
     };
 
   }
+
+  /* EVENT HANDLERS */
 
   /**
    * Submit new or updated group to the store. Navigate to DataView page.
    * @param {React.FormEvent<HTMLInputElement>} event
    */
-  handleSubmit = async (event) => {
+  onFormSubmit = async (event) => {
 
     event.preventDefault();
 
     const { separator, header, accessionColumn, countColumn } = this.state;
 
+    this.setState({ loading: true });
+
+    const files = [ ...event.target.files ];
+
+    // const file = event.target.files[0];
+
+    // const reader = new FileReader();
+
+    // reader.onload = () => console.log(
+    //   // reader.result.length
+    //   'done'
+    // );
+
+    // reader.onprogress = progress => {
+
+    //   console.log(progress);
+    // };
+
+    // reader.onloadend = () => {
+
+    //   this.setState({ loading: false });
+    // };
+
+    // reader.readAsText(file);
+
     let replicates = await Promise.all(
 
-      [ ...event.target.files ].map((replicate) => parseCsv(replicate, {
+      files.map((replicate) => parseCsv(replicate, {
         separator,
         header,
         accessionColumn,
@@ -63,14 +94,27 @@ export default class GroupView extends React.Component {
     );
 
     store.checkAndAddReplicates(this.state, replicates);
+    this.setState({ loading: false });
     this.props.onSave();
   }
+
+  /* ACTION HANDLERS */
 
   /**
    * Updates the state with the header property value.
    * @param {boolean} value switch on/off state
    */
-  handleHeader = (value) => this.setState({ header: value });
+  onHeaderSwitchClick = (value) => this.setState({
+    header: value
+  });
+
+  /**
+   * Cancel the current form submission and execute the onCancel callback.
+   */
+  onCancelButtonClick = () => {
+    this.setState({ cancel: true });
+    this.props.onCancel();
+  }
 
   render () {
 
@@ -79,7 +123,7 @@ export default class GroupView extends React.Component {
         className={
           `w-full ${this.props.className || ''}`
         }
-        onSubmit={ this.handleSubmit }
+        // onSubmit={ this.onFormSubmit }
       >
 
         {/* GROUP */}
@@ -176,7 +220,7 @@ export default class GroupView extends React.Component {
             className="w-full md:w-1/4 md:ml-2"
             label="Header Row"
             checked={ this.state.header }
-            onChange={ this.handleHeader }
+            onChange={ this.onHeaderSwitchClick }
           />
 
         </div>
@@ -189,18 +233,25 @@ export default class GroupView extends React.Component {
           <AppFile
             className="flex justify-center items-center py-2 px-5 primary-blue"
             multiple
-            // onClick={ this.props.onSave }
-            onChange={ this.handleSubmit }
+            onChange={ this.onFormSubmit }
           >
-            <AppIcon file="base" id="hi-document" className="w-6 h-6 mr-3"/>
-              Upload Tables
+            {
+              this.state.loading
+                ? <AppSpinner className="mr-3 h-6 w-6 text-white" />
+                : <AppIcon file="hero-icons" id="document" className="w-6 h-6 mr-3"/>
+            }
+            {
+              this.state.loading
+                ? 'Uploading'
+                : 'Upload Tables'
+            }
           </AppFile>
 
           <AppButton
             className="ml-3 py-2 px-5 tertiary-pink"
-            type="Button"
+            type="button"
             value="Cancel"
-            onClick={ this.props.onCancel }
+            onClick={ this.onCancelButtonClick }
           >
               Cancel
           </AppButton>

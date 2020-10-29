@@ -19,8 +19,8 @@ export default class Navbar extends React.Component {
         >
           <AppIcon
             className="w-6 h-6"
-            file="base"
-            id={ this.props.show ? 'hi-close' : 'hi-menu' }
+            file="hero-icons"
+            id={ this.props.show ? 'close' : 'menu' }
           />
         </AppButton>
 

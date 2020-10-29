@@ -1,9 +1,9 @@
-import React from 'react';
+import React          from 'react';
 import { withRouter } from 'react-router';
 
-import GroupView  from '@/modules/data/pages/GroupView';
-import PlotsForm  from '@/modules/plotly/pages/PlotsForm';
 import AppModal   from '@components/AppModal';
+import GroupForm  from '@/modules/data/components/GroupForm';
+import PlotsForm  from '@/modules/plotly/components/PlotsForm';
 import TopBar     from './TopBar';
 import Navigation from './Navigation';
 
@@ -25,12 +25,11 @@ class AppLayout extends React.Component {
 
   showGroupModal = () => {
     this.setState({ showGroupModal: true });
-    //change route
     this.changeRoute('data');
   }
+
   showPlotsModal = () => {
     this.setState({ showPlotsModal: true });
-    //change route
     this.changeRoute('plots');
   }
 
@@ -43,6 +42,7 @@ class AppLayout extends React.Component {
   render () {
     return (
       <>
+        {/* NAVIGATION */}
         <div
           className="relative z-20 py-4 px-6 md:w-64
                      shadow-xl bg-white
@@ -67,9 +67,13 @@ class AppLayout extends React.Component {
 
         </div>
 
+        {/* PAGE CONTENT */}
         <div className="relative md:ml-64">
 
+          {/* ROUTES */}
           { this.props.children }
+
+          {/* DATA FORM */}
           {
             this.state.showGroupModal
               ?
@@ -78,7 +82,7 @@ class AppLayout extends React.Component {
                 showModal={ this.state.showGroupModal }
                 hideModal={ this.hideGroupModal }
               >
-                <GroupView
+                <GroupForm
                   onSave={ this.hideGroupModal }
                   onCancel={ this.hideGroupModal }
                 />
@@ -86,6 +90,8 @@ class AppLayout extends React.Component {
               :
               null
           }
+
+          {/* PLOTS FORM */}
           {
             this.state.showPlotsModal
               ?

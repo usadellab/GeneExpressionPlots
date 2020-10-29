@@ -88,7 +88,7 @@ export default class GroupItem extends React.Component {
               className="group p-1 rounded-full"
               onClick={ () => this.handleGroupDelete(this.props.groupIndex)}
             >
-              <AppIcon file="base" id="hi-trash" className="w-6 h-6 group-hover:text-pink-700" />
+              <AppIcon file="hero-icons" id="trash" className="w-6 h-6 group-hover:text-pink-700" />
             </AppButton>
           }
 
