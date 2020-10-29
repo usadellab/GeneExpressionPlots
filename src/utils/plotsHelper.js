@@ -48,7 +48,8 @@ function getDefaultLayout(showlegend, accessionId, countUnit) {
     yaxis: {
       title:{
         text: `count [${countUnit}]` // access to the unit needs to be variable
-      }
+      },
+      hoverformat: '.2f'
     },
     xaxis: {
       tickangle: 'auto',

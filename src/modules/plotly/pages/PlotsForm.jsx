@@ -15,7 +15,7 @@ export default class PlotsForm extends Component {
       accessionIds: store.accessionIds,
       accessionIdsView: store.accessionIds.slice(0, 10),
       showlegend: true,
-      showCaption: true,
+      showCaption: store.hasCaptions,
       accession: store.accessionIds[0] ?? '',
       plotType: 'bars'
     };
@@ -98,13 +98,15 @@ export default class PlotsForm extends Component {
             checked={ this.state.showlegend }
             label="Show legend"
           />
-
-          <AppSwitch
-            className="w-full md:w-1/4 md:ml-2"
-            onChange={ (value) => this.setState({ showCaption: value }) }
-            checked={ this.state.showCaption }
-            label="Show description"
-          />
+          {
+            store.hasCaptions &&
+            <AppSwitch
+              className="w-full md:w-1/4 md:ml-2"
+              onChange={ (value) => this.setState({ showCaption: value }) }
+              checked={ this.state.showCaption }
+              label="Show caption"
+            />
+          }
 
         </div>
 

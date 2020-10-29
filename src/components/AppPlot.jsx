@@ -18,7 +18,7 @@ export default class PlotlyComponent extends React.Component {
           this.props.showCaption &&
           <figcaption className="px-20 text-justify text-gray-800 text-sm">
             <span className="font-semibold">{this.props.accession}</span>
-            {`: ${this.props.caption ? this.props.caption : 'no gene description available'}`}
+            {`: ${this.props.caption ? this.props.caption : 'no gene caption available'}`}
           </figcaption>
         }
       </figure>

@@ -91,8 +91,11 @@ class AppNavigation extends React.Component {
     fr.onload = () => {
 
       // Update store
-      store.groups.push( ...JSON.parse(fr.result) );
-
+      const {data, captions} = JSON.parse(fr.result);
+      if (data)
+        store.groups.push( ...data );
+      if (captions)
+        Object.assign(store.captions, captions);
     };
 
     fr.onerror = err => console.log(err);
@@ -102,7 +105,7 @@ class AppNavigation extends React.Component {
 
   };
 
-  handleLoadDescriptions = (event) => {
+  handleLoadCaptions = (event) => {
 
     // Get the file ref
     const file = event.target.files.item(0);
@@ -121,7 +124,7 @@ class AppNavigation extends React.Component {
     fr.onload = () => {
 
       // Update store
-      Object.assign(store.descriptions, JSON.parse(fr.result));
+      Object.assign(store.captions, JSON.parse(fr.result));
 
     };
 
@@ -208,7 +211,7 @@ class AppNavigation extends React.Component {
               component="file"
               icon="hi-upload"
               name="Import Captions"
-              onChange={ this.handleLoadDescriptions }
+              onChange={ this.handleLoadCaptions }
             />
           }
           

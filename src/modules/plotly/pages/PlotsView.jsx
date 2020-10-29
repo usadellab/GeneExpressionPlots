@@ -17,7 +17,7 @@ export default class PlotlyComponent extends React.Component {
           plot={{...plot}}
           showCaption={plot.showCaption}
           accession={plot.accession}
-          caption={store.descriptions[plot.accession]}
+          caption={store.captions[plot.accession]}
         />
       ))
     );

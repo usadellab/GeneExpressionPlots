@@ -10,7 +10,7 @@ import {
   createStackedLinePlot
 } from '../utils/plotsHelper';
 
-import { PRELOAD_DATA, PRELOAD_CAPTIONS } from '../config/globals';
+import { PRELOAD_DATA } from '../config/globals';
 
 
 class DataStore {
@@ -18,13 +18,11 @@ class DataStore {
   /** @type {Group[]} */
   @observable groups = [];
   @observable plots = [];
-  @observable descriptions = {};
+  @observable captions = {};
   @observable preloaded = false;
-  @observable preloadedDesc = false;
 
   constructor () {
     if (PRELOAD_DATA) this.preloaded = true;
-    if (PRELOAD_CAPTIONS) this.preloadedDesc = true;
   }
 
   @computed({ keepAlive: true })
@@ -45,6 +43,15 @@ class DataStore {
   }
 
   /**
+   * check if the store has captions
+   * @returns {boolean} 
+   */
+  @computed({ keepAlive: true })
+  get hasCaptions() {
+    return this.captions && Object.keys(this.captions).length > 0;
+  }
+
+  /**
    * Reassigns the internal group data to a new object.
    * @param {Group} groups Group object
    */
@@ -52,8 +59,12 @@ class DataStore {
     this.groups = groups;
   }
 
+  /**
+   * Reassigns the internal caption data to a new object.
+   * @param {Group} groups Group object
+   */
   @action assignCaptions (captions) {
-    this.descriptions = captions;
+    this.captions = captions;
   }
 
   /**
