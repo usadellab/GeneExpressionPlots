@@ -35,7 +35,7 @@ export default class PlotsLayout extends React.Component {
 
         <main
           className="flex flex-col items-center mt-10 p-6 w-full h-full
-                     xl:flex-row xl:flex-wrap"
+                     xl:flex-row xl:flex-wrap xl:justify-center xl:items-start"
         >
 
           {/* PRELOADED IMAGE
@@ -69,7 +69,7 @@ export default class PlotsLayout extends React.Component {
           */}
           {
             this.state.img &&
-            <div className="relative w-full pb-1/2 sm:max-w-md lg:max-w-lg xl:w-1/2">
+            <div className="relative w-full pb-1/3 sm:max-w-md lg:max-w-lg xl:w-1/2">
               <img className="absolute w-full h-full object-contain" src={ this.state.img } />
             </div>
           }
