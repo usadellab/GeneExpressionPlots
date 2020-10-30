@@ -7,6 +7,7 @@ import {
 import {
   computeAveragesAndVariances,
   createGroupPlot,
+  createMultiGeneBarPlot,
   createStackedLinePlot
 } from '../utils/plotsHelper';
 
@@ -118,15 +119,21 @@ class DataStore {
 
   /**
    *
-   * @param {*} accessionId
-   * @param {*} showlegend
-   * @param {*} plotType
+   * @param {string[]} accessionIds
+   * @param {boolean} showlegend
+   * @param {string} plotType
    */
-  @action addBarPlot(accessionId, showlegend, showCaption) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionId);
-    this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, 'bar', this.plots.length)
-    );
+  @action addBarPlot(accessionIds, showlegend, showCaption) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+    if(accessionIds.length === 1){
+      this.plots.push(
+        createGroupPlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, 'bar', this.plots.length)
+      );
+    } else if(accessionIds.length > 1){
+      this.plots.push(
+        createMultiGeneBarPlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, this.plots.length)
+      );
+    }
   }
 
   @action addIndivualCurvesPlot(accessionId, showlegend, showCaption) {
