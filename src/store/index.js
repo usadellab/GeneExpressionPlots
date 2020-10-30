@@ -19,6 +19,7 @@ class DataStore {
   @observable groups = [];
   @observable plots = [];
   @observable captions = {};
+  @observable image = null;
   @observable preloaded = false;
 
   constructor () {
@@ -54,7 +55,7 @@ class DataStore {
 
   /**
    * check if the store has captions
-   * @returns {boolean} 
+   * @returns {boolean}
    */
   @computed({ keepAlive: true })
   get hasCaptions() {
@@ -75,6 +76,14 @@ class DataStore {
    */
   @action assignCaptions (captions) {
     this.captions = captions;
+  }
+
+  /**
+   * Reassigns the internal image data to a string URL.
+   * @param {string} image created URL string from the image Blob
+   */
+  @action assignImage (image) {
+    this.image = image;
   }
 
   /**

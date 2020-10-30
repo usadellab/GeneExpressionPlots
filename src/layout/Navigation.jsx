@@ -27,6 +27,23 @@ class AppNavigation extends React.Component {
 
   /* DATA MENU EVENTS */
 
+  onClearDataMenuClick = () => {
+    store.clearData();
+    //change route
+    this.props.changeRoute('data');
+  };
+
+  onExportDataMenuClick = () => {
+
+    const blob = new Blob([ JSON.stringify(store.groups, null, 2) ], {
+      type: 'application/json'
+    });
+
+    this.setState({ exportUrl: URL.createObjectURL(blob) });
+
+    this.props.changeRoute('data');
+  }
+
   onImportDataMenuClick = (event) => {
 
     this.setState({ loading: true });
@@ -90,29 +107,15 @@ class AppNavigation extends React.Component {
     fr.onerror = err => console.log(err);
   }
 
-  onExportDataMenuClick = () => {
-
-    const blob = new Blob([ JSON.stringify(store.groups, null, 2) ], {
-      type: 'application/json'
-    });
-
-    this.setState({ exportUrl: URL.createObjectURL(blob) });
-
-    // change route
-    this.props.changeRoute('data');
+  onUploadImageMenuClick = (event) => {
+    const img = URL.createObjectURL(event.target.files[0]);
+    store.assignImage(img);
   }
-
-  onClearDataMenuClick = () => {
-    store.clearData();
-    //change route
-    this.props.changeRoute('data');
-  };
 
   /* PLOT MENU EVENTS */
 
   onClearPlotsMenuClick = () => {
     store.clearPlots();
-    // change route
     this.props.changeRoute('plots');
   };
 
@@ -170,6 +173,17 @@ class AppNavigation extends React.Component {
               icon="annotation"
               name="Upload Captions"
               onChange={ this.onUploadCaptionsMenuClick }
+            />
+          }
+
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="photograph"
+              accept="image/*"
+              name="Upload Image"
+              onChange={ this.onUploadImageMenuClick }
             />
           }
 
