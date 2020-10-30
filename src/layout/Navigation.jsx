@@ -5,7 +5,6 @@ import AppOverlay from '@components/AppOverlay';
 import AppSpinner from '@components/AppSpinner';
 
 import {
-  NavLink,
   NavGroup,
   NavMenu,
 } from './NavigationItem';
@@ -156,7 +155,7 @@ class AppNavigation extends React.Component {
    */
   onNewPlotMenuClick = () => {
     this.auxChangeRoute('plots');
-    this.props.showPlotsModal;
+    this.props.showPlotsModal();
   }
 
   /* RENDER */
@@ -294,16 +293,18 @@ class AppNavigation extends React.Component {
         {/* DOCUMENTATION */}
         <NavGroup className="mt-6" title="Documentation" to="/" >
 
-          <NavLink
+          <NavMenu
+            component="anchor"
             icon="book"
             name="Guide"
-            to="/"
+            href="https://zendro-dev.gitbook.io/geneexpressionplots/documentation/user-manual"
           />
 
-          <NavLink
+          <NavMenu
+            component="anchor"
             icon="code"
             name="API"
-            to="/api"
+            href="https://zendro-dev.gitbook.io/geneexpressionplots/documentation/api"
           />
 
         </NavGroup>
