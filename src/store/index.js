@@ -96,7 +96,7 @@ class DataStore {
    * check if the store has captions
    * @returns {boolean}
    */
-  @computed({ keepAlive: true }) get hasCaptions() {
+  @computed({ keepAlive: true }) get hasCaptions () {
     return this.captions && Object.keys(this.captions).length > 0;
   }
 

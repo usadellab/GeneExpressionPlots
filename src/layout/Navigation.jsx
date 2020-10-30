@@ -25,23 +25,39 @@ class AppNavigation extends React.Component {
     };
   }
 
+  /* AUXILIARY */
+
+  /**
+   * Trigger a route change if the current location does not match the current route
+   * @param {string} route route name
+   */
+  auxChangeRoute = (route) => {
+    if (this.props.location.pathname !== `/${route}`)
+      this.props.changeRoute(route);
+  }
+
   /* DATA MENU EVENTS */
 
   onClearDataMenuClick = () => {
     store.clearData();
-    if (this.props.location.pathname !== '/data')
-      this.props.changeRoute('data');
+    this.auxChangeRoute('data');
   };
 
   onExportDataMenuClick = () => {
 
-    const blob = new Blob([ JSON.stringify(store.groups, null, 2) ], {
+    const data = {
+      data: store.groups,
+      captions: store.captions,
+      image: store.image,
+    };
+
+    const blob = new Blob([ JSON.stringify(data, null, 2) ], {
       type: 'application/json'
     });
 
     this.setState({ exportUrl: URL.createObjectURL(blob) });
 
-    this.props.changeRoute('data');
+    this.auxChangeRoute('data');
   }
 
   onImportDataMenuClick = (event) => {
@@ -61,17 +77,18 @@ class AppNavigation extends React.Component {
     const reader = new FileReader();
 
     reader.onload = () => {
-      const { data, captions } = JSON.parse(reader.result);
+      const { data, captions, image } = JSON.parse(reader.result);
       if (data)
         store.groups.push( ...data );
       if (captions)
         Object.assign(store.captions, captions);
+      if (image)
+        store.assignImage(image);
     };
 
     reader.onloadend = () => {
       this.setState({ loading: false });
-      if (this.props.location.pathname !== '/data')
-        this.props.changeRoute('data');
+      this.auxChangeRoute('data');
     };
 
     reader.onerror = err => {
@@ -94,36 +111,52 @@ class AppNavigation extends React.Component {
     if (!file || file.type !== 'application/json') return;
 
     // Use FileReader API to parse the input file
-    const fr = new FileReader();
-
-    fr.readAsText(file, 'utf-8');
-
-    fr.onload = () => {
-
-      // Update store
-      Object.assign(store.captions, JSON.parse(fr.result));
-
-    };
-
-    fr.onerror = err => console.log(err);
+    const reader = new FileReader();
+    reader.readAsText(file, 'utf-8');
+    reader.onload = () => Object.assign(store.captions, JSON.parse(reader.result));
+    reader.onloadend = () => this.auxChangeRoute('data');
+    reader.onerror = err => console.log(err);
   }
 
   /* PLOT MENU EVENTS */
 
+  /**
+   * Clear the current plots.
+   */
   onClearPlotsMenuClick = () => {
     store.clearPlots();
-    this.props.changeRoute('plots');
+    this.auxChangeRoute('plots');
   };
 
+  /**
+   * Clear the current legend image.
+   */
   onClearImageMenuClick = () => {
-    if (this.props.location.pathname !== '/plots')
-      this.props.changeRoute('plots');
     store.clearImage();
+    this.auxChangeRoute('plots');
   }
 
+  /**
+   * Convert the user image to an image URL and assign it in the store.
+   * @param {React.FormEvent<HTMLInputElement>} event file input event
+   */
   onNewImageMenuClick = (event) => {
-    const img = URL.createObjectURL(event.target.files[0]);
-    store.assignImage(img);
+
+    const reader = new FileReader();
+    reader.onload = () => store.assignImage(reader.result);
+    reader.onloadend = () => this.auxChangeRoute('plots');
+    reader.onerror = (error) => console.error(error);
+    reader.readAsDataURL(event.target.files[0]);
+
+    this.auxChangeRoute('plots');
+  }
+
+  /**
+   * Show the Plots form modal.
+   */
+  onNewPlotMenuClick = () => {
+    this.auxChangeRoute('plots');
+    this.props.showPlotsModal;
   }
 
   /* RENDER */
@@ -222,7 +255,7 @@ class AppNavigation extends React.Component {
             icon="chart-square-bar"
             name="New Plot"
             disabled={ !store.hasData }
-            onClick={ this.props.showPlotsModal }
+            onClick={ this.onNewPlotMenuClick }
           />
 
           {
@@ -232,7 +265,7 @@ class AppNavigation extends React.Component {
               icon="photograph"
               accept="image/*"
               name="New Image"
-              disabled={ !store.hasData }
+              // disabled={ !store.hasData }
               onChange={ this.onNewImageMenuClick }
             />
           }
