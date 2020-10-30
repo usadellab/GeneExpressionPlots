@@ -13,7 +13,7 @@ export function NavLink (props) {
     <Link
       className="flex items-center py-2 cursor-pointer
                  text-gray-800 hover:text-blue-600 text-base capitalize font-bold"
-      to='/'
+      to={props.to}
     >
       { props.icon && <AppIcon file="hero-icons" id={ props.icon } className="w-6 h-6 mr-2" /> }
       { props.name }
