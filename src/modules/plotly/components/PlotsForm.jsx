@@ -26,6 +26,18 @@ export default class PlotsForm extends Component {
     };
   }
 
+  /* LIFECYCLE METHODS */
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevState.plotType === 'bars' && this.state.plotType !== 'bars') {
+      this.setState(state => ({
+        accessions: state.accessions.slice(0,1)
+      }));
+    }
+  }
+
+  //
+
   onAccessionDataListChange = (accession, index) => {
 
     this.setState(state => {
@@ -125,17 +137,21 @@ export default class PlotsForm extends Component {
                   onSelect={ (accession) => this.onAccessionDataListChange(accession, index) }
                 />
 
-                <AppIcon
-                  className={
-                    `ml-4 w-12 h-12 cursor-pointer
+                {
+                  this.state.plotType === 'bars' &&
+                  <AppIcon
+                    className={
+                      `ml-4 w-12 h-12 cursor-pointer
                      ${ isLast ? 'text-green-700 mb-8' : 'text-pink-700'}`
-                  }
-                  file="hero-icons"
-                  id={ isLast ? 'plus' : 'minus' }
-                  onClick={ () => this.onAccessionDatalistIconClick(
-                    isLast ? 'add' : 'remove', index
-                  ) }
-                />
+                    }
+                    file="hero-icons"
+                    id={ isLast ? 'plus' : 'minus' }
+                    onClick={ () => this.onAccessionDatalistIconClick(
+                      isLast ? 'add' : 'remove', index
+                    ) }
+                  />
+                }
+
               </div>
             );
           })
