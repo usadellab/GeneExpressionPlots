@@ -64,7 +64,7 @@ class AppNavigation extends React.Component {
     reader.readAsText(file, 'utf-8');
   }
 
-  onImportCaptionsMenuClick = (event) => {
+  onUploadCaptionsMenuClick = (event) => {
 
     // Get the file ref
     const file = event.target.files.item(0);
@@ -157,7 +157,7 @@ class AppNavigation extends React.Component {
             !store.preloaded &&
             <NavMenu
               component="button"
-              icon="document"
+              icon="table"
               name="Upload Table"
               onClick={ this.props.showGroupModal }
             />
@@ -167,12 +167,11 @@ class AppNavigation extends React.Component {
             !store.preloaded &&
             <NavMenu
               component="file"
-              icon="upload"
-              name="Import Data"
-              onChange={ this.onImportDataMenuClick }
+              icon="annotation"
+              name="Upload Captions"
+              onChange={ this.onUploadCaptionsMenuClick }
             />
           }
-
 
           <NavMenu
             component="anchor"
@@ -188,8 +187,8 @@ class AppNavigation extends React.Component {
             <NavMenu
               component="file"
               icon="upload"
-              name="Import Captions"
-              onChange={ this.onImportCaptionsMenuClick }
+              name="Import Data"
+              onChange={ this.onImportDataMenuClick }
             />
           }
 
