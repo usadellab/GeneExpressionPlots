@@ -119,12 +119,7 @@ export default class GroupView extends React.Component {
   render () {
 
     return (
-      <form
-        className={
-          `w-full ${this.props.className || ''}`
-        }
-        // onSubmit={ this.onFormSubmit }
-      >
+      <form className="w-full px-6 flex-auto my-4 text-gray-600 text-lg leading-relaxed">
 
         {/* GROUP */}
         <div className="flex flex-col md:flex-row" >

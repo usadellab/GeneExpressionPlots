@@ -28,16 +28,18 @@ export default function AppText (props) {
         { ...inputProps }
       />
 
-      <label
-        htmlFor={ props.label }
-        className={
-          `px-1 py-1 text-sm
+      {
+        props.label &&
+        <label
+          htmlFor={ props.label }
+          className={
+            `px-1 py-1 text-sm
            ${ focus ? 'text-blue-500' : hover ? 'text-gray-800' : 'text-gray-600' }`
-        }
-      >
-        { props.label }
-      </label>
-
+          }
+        >
+          { props.label }
+        </label>
+      }
 
     </div>
   );
