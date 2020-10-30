@@ -29,10 +29,10 @@ export default class AppDatalist extends React.Component {
 
     return (
       <div
-        className={ `relative group ${this.props.className}`}
+        className={ `relative w-full ${this.props.className ?? ''}`}
       >
         <AppText
-          label="Accession ID"
+          label={ this.props.label }
           value={ this.props.value }
           onFocus={ () => this.setState({ focus: true }) }
           onBlur={ () => this.setState({ focus: false }) }
@@ -41,7 +41,7 @@ export default class AppDatalist extends React.Component {
 
         <ul
           className={
-            `absolute py-2 z-40 w-full
+            `absolute flex flex-col justify-center items-center w-full py-2 z-50
              shadow-outer bg-white
              ${ this.state.focus ? 'visible' : 'hidden' }`
           }
@@ -50,7 +50,7 @@ export default class AppDatalist extends React.Component {
             this.props.options.map((opt, index) => (
               <li
                 key={ `${opt}-${index}` }
-                className="px-3 py-1 hover:bg-gray-200 cursor-default"
+                className="px-3 text-gray-900 text-sm hover:bg-blue-700 hover:text-white cursor-default"
                 value={ opt }
                 onMouseDown={ () => this.handleItemClick(opt) }
               >

@@ -156,7 +156,7 @@ class AppNavigation extends React.Component {
    */
   onNewPlotMenuClick = () => {
     this.auxChangeRoute('plots');
-    this.props.showPlotsModal;
+    this.props.showPlotsModal();
   }
 
   /* RENDER */

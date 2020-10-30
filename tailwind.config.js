@@ -61,6 +61,13 @@ module.exports = {
       fontFamily: {
         abeeze: [ 'ABeeZee', 'Roboto', 'sans-serif' ],
       },
+      maxHeight: {
+        xs: '20rem',
+        sm: '24rem',
+        md: '28rem',
+        lg: '32rem',
+        xl: '36rem',
+      },
       spacing: {
         '1/2': '50%',
         '1/3': '33.333333%',

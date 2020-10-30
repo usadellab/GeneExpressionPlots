@@ -9,25 +9,45 @@ import AppSpinner  from '@components/AppSpinner';
 
 import { store } from '@/store';
 
+
 export default class PlotsForm extends Component {
 
   constructor() {
     super();
     this.state = {
+      accessions: [ store.accessionIds[0] ?? '' ],
       accessionIds: store.accessionIds,
       accessionIdsView: store.accessionIds.slice(0, 10),
       showlegend: true,
       showCaption: store.hasCaptions,
-      accession: store.accessionIds[0] ?? '',
       plotType: 'bars',
       //
       loading: false,
     };
   }
 
-  selectAccession = (accession) => {
-    this.setState({ accession });
-    this.searchAccessionIds(accession);
+  onAccessionDataListChange = (accession, index) => {
+
+    this.setState(state => {
+
+      const accessions = state.accessions;
+      accessions[index] = accession;
+
+      return {
+        accessions,
+      };
+    });
+  }
+
+  onAccessionDatalistIconClick = (action, index) => {
+
+    if (action === 'add') this.setState(state => ({
+      accessions: [ ...state.accessions, '' ]
+    }));
+
+    else if (action === 'remove') this.setState(state => ({
+      accessions: state.accessions.filter((_, i) => i !== index)
+    }));
   }
 
   searchAccessionIds = (accession) => {
@@ -47,15 +67,19 @@ export default class PlotsForm extends Component {
     });
   }
 
-
   /**
    * Submit a new plot to the store.
    * @param {React.FormEvent<HTMLInputElement>} event
    */
-  handleSubmit = (event) => {
+  onPlotGeneButtonClick = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
-    store.addPlot(this.state.accession, this.state.showlegend, this.state.showCaption, this.state.plotType);
+    store.addPlot(
+      this.state.accessions,
+      this.state.showlegend,
+      this.state.showCaption,
+      this.state.plotType,
+    );
     this.setState({ loading: false });
     this.props.onCancel();
   };
@@ -66,48 +90,72 @@ export default class PlotsForm extends Component {
 
   render() {
     return (
-      <form className="w-full">
+      <form
+        className="overflow-y-auto w-full max-h-lg px-6 py-4 flex-auto
+                   text-gray-600 text-lg leading-relaxed"
+      >
 
-        <div className="w-full md:flex">
+        <AppSelect
+          label="Plot type"
+          value={ this.state.plotType }
+          options={[
+            { label: 'Bars',  value: 'bars' },
+            { label: 'Individual Curves', value: 'individualCurves' },
+            { label: 'Stacked Curves', value: 'stackedCurves' },
 
-          <AppDatalist
-            className="w-full md:w-1/2"
-            value={ this.state.accession }
-            options={ this.state.accessionIdsView }
-            onChange={ this.selectAccession }
-            onSelect={ this.selectAccession }
-          />
+          ]}
+          onChange={ this.selectPlotType }
+        />
 
-          <AppSelect
-            className="w-full md:w-1/2 md:ml-2"
-            label="Plot type"
-            value={ this.state.plotType }
-            options={[
-              { label: 'Bars',  value: 'bars' },
-              { label: 'Individual Curves', value: 'individualCurves' },
-              { label: 'Stacked Curves', value: 'stackedCurves' },
+        {
+          this.state.accessions.map((acc, index) => {
 
-            ]}
-            onChange={ this.selectPlotType }
-          />
+            const isLast = this.state.accessions.length === index+1;
 
-        </div>
+            return (
+              <div
+                key={ `${acc}-${index}` }
+                className="flex items-center mt-4"
+              >
+                <AppDatalist
+                  label={ isLast ? 'Accession ID' : null }
+                  value={ this.state.accessions[index] }
+                  options={ this.state.accessionIdsView }
+                  onChange={ (accession) => this.onAccessionDataListChange(accession, index) }
+                  onSelect={ (accession) => this.onAccessionDataListChange(accession, index) }
+                />
+
+                <AppIcon
+                  className={
+                    `ml-4 w-12 h-12 cursor-pointer
+                     ${ isLast ? 'text-green-700 mb-8' : 'text-pink-700'}`
+                  }
+                  file="hero-icons"
+                  id={ isLast ? 'plus' : 'minus' }
+                  onClick={ () => this.onAccessionDatalistIconClick(
+                    isLast ? 'add' : 'remove', index
+                  ) }
+                />
+              </div>
+            );
+          })
+        }
 
         <div className="mt-4 w-full md:flex">
 
           <AppSwitch
-            className="w-full md:w-1/4 md:ml-2"
+            className="w-1/2"
             onChange={ (value) => this.setState({ showlegend: value }) }
             checked={ this.state.showlegend }
-            label="Show legend"
+            label="Legend"
           />
           {
-            store.hasCaptions &&
+            // store.hasCaptions &&
             <AppSwitch
-              className="w-full md:w-1/4 md:ml-2"
+              className="w-1/2 md:ml-2"
               onChange={ (value) => this.setState({ showCaption: value }) }
               checked={ this.state.showCaption }
-              label="Show caption"
+              label="Caption"
             />
           }
 
@@ -118,12 +166,12 @@ export default class PlotsForm extends Component {
           <AppButton
             className="px-5 py-2 primary-blue"
             type="Submit"
-            onClick={ this.handleSubmit }
+            onClick={ this.onPlotGeneButtonClick }
           >
             {
               this.state.loading
-                ? <AppSpinner className="mr-3 h-6 w-6 text-white" />
-                : <AppIcon file="hero-icons" id="chart-square-bar" className="w-6 h-6 mr-3"/>
+                ? <AppSpinner className="mr-2 h-6 w-6 text-white" />
+                : <AppIcon file="hero-icons" id="chart-square-bar" className="w-6 h-6 mr-2"/>
             }
             {
               this.state.loading

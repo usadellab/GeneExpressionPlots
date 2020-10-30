@@ -1,7 +1,7 @@
 import React          from 'react';
 import { withRouter } from 'react-router';
 
-import AppModal   from '@components/AppModal';
+import AppModal   from '@components/AppModal2';
 import GroupForm  from '@/modules/data/components/GroupForm';
 import PlotsForm  from '@/modules/plotly/components/PlotsForm';
 import TopBar     from './TopBar';
@@ -25,12 +25,10 @@ class AppLayout extends React.Component {
 
   showGroupModal = () => {
     this.setState({ showGroupModal: true });
-    this.changeRoute('data');
   }
 
   showPlotsModal = () => {
     this.setState({ showPlotsModal: true });
-    this.changeRoute('plots');
   }
 
   hideGroupModal = () => this.setState({ showGroupModal: false })
