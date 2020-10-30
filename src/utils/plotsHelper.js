@@ -30,7 +30,7 @@ const config = (index) => ({
  * @param {string} accessionId accessionId to plot the data for
  * @param {string} countUnit unit used for the y-label
  */
-function getDefaultLayout(showlegend, accessionId, countUnit) {
+function getDefaultLayout(showlegend, countUnit) {
   return {
     showlegend,
     legend: {
@@ -38,12 +38,6 @@ function getDefaultLayout(showlegend, accessionId, countUnit) {
       x: 0,
       y: 1.14,
   
-    },
-    title: {
-      text: `${accessionId}`,
-      font: {
-        size: 14
-      }
     },
     yaxis: {
       title:{
@@ -77,22 +71,64 @@ export const computeVariance = (replicates, accessionId, average) => {
 };
 
 /**
- * creat a Grouped Plot. That is either a bar or a scatter plot. The groups are seperated
+ * compute avevrages and variances for each group and sample given a specific Gene accessionId
+ * @param {array} groups groups array as it is in the mobx store
+ * @param {string} accessionId accessionId to calculate the averages and variances for
+ */
+export function computeAveragesAndVariances(groups, accessionIds) {
+  /**
+     * {
+     *   [groupName]: {
+     *      [sampleName]: {
+     *        acc1:{
+     *          average:,
+     *          variance:
+     *        }
+     *        acc2:{
+     *          average:,
+     *          variance:
+     *        }
+     *      }
+     *   }
+     * }
+     */
+  let plotData = {};
+  groups.forEach(group => {
+    plotData[group.name] = {};
+    group.samples.forEach(sample => {
+      plotData[group.name][sample.name] = {};
+      accessionIds.forEach(accession => {
+        plotData[group.name][sample.name][accession] = {
+          average: computeAverage(sample.replicates, accession)
+        };
+      });
+      accessionIds.forEach(accession => {
+        plotData[group.name][sample.name][accession].variance = computeVariance(
+          sample.replicates, accession, plotData[group.name][sample.name][accession].average
+        );
+      });
+    });
+  });
+  return plotData;
+}
+
+/**
+ * create a Grouped Plot. That is either a bar or a scatter plot. The groups are seperated
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
- * @param {string} accessionId accessionId to plot the data for
+ * @param {string} accessionIds accessionId to plot the data for
  * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-export function createGroupPlot (plotData, accessionId, showlegend, showCaption, countUnit, plotType, index) {
+export function createGroupPlot (plotData, accessionIds, showlegend, showCaption, countUnit, plotType, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
-    data.push(createPlotGroup(plotData, group, plotType));
+    data.push(createPlotGroup(plotData, group, plotType, accessionIds[0]));
   });
 
-  let layout = getDefaultLayout(showlegend, accessionId, countUnit);
+  let layout = getDefaultLayout(showlegend, countUnit);
 
-  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
+  return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
 }
 
 /**
@@ -101,7 +137,7 @@ export function createGroupPlot (plotData, accessionId, showlegend, showCaption,
  * @param {object} group group to plot
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-function createPlotGroup (plotData, group, plotType){
+function createPlotGroup (plotData, group, plotType, accessionId){
   let groupArr = [];
   let sampleArr = [];
   let y = [];
@@ -113,8 +149,8 @@ function createPlotGroup (plotData, group, plotType){
 
     groupArr.push(group);
     sampleArr.push(sampleName);
-    y.push(sample.average);
-    errs.push(sample.variance);
+    y.push(sample[accessionId].average);
+    errs.push(sample[accessionId].variance);
   });
 
   const x = [groupArr, sampleArr];
@@ -135,17 +171,17 @@ function createPlotGroup (plotData, group, plotType){
 /**
  * create a stacked Line plot, that is a Plot with multiple traces; one for each group
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
- * @param {string} accessionId accessionId to plot the data for
+ * @param {string} accessionIds accessionId to plot the data for
  * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
  */
-export function createStackedLinePlot(plotData, accessionId, showlegend, showCaption, countUnit, index) {
+export function createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, countUnit, index) {
   let data = [];
   Object.keys(plotData).forEach(group => {
-    data.push(createLinePlotTrace(plotData, group));
+    data.push(createLinePlotTrace(plotData, group, accessionIds[0]));
   });
-  let layout = getDefaultLayout(showlegend, accessionId, countUnit);
-  return {data, layout, config: config(index), accession: accessionId, showCaption: showCaption};
+  let layout = getDefaultLayout(showlegend, countUnit);
+  return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
 }
 
 /**
@@ -153,7 +189,7 @@ export function createStackedLinePlot(plotData, accessionId, showlegend, showCap
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
  * @param {object} group group to plot
  */
-function createLinePlotTrace(plotData, group) {
+function createLinePlotTrace(plotData, group, accessionId) {
 
   let trace = {
     x: [],
@@ -172,42 +208,50 @@ function createLinePlotTrace(plotData, group) {
     const sample = plotData[group][sampleName];
     
     trace.x.push(sampleName);
-    trace.y.push(sample.average);
-    trace.error_y.array.push(sample.variance);
+    trace.y.push(sample[accessionId].average);
+    trace.error_y.array.push(sample[accessionId].variance);
 
   });
 
   return trace;
 }
 
-/**
- * compute avevrages and variances for each group and sample given a specific Gene accessionId
- * @param {array} groups groups array as it is in the mobx store
- * @param {string} accessionId accessionId to calculate the averages and variances for
- */
-export function computeAveragesAndVariances(groups, accessionId) {
-  /**
-     * {
-     *   [groupName]: {
-     *      [sampleName]: {
-     *        average:,
-     *        variance:,
-     *      }
-     *   }
-     * }
-     */
-  let plotData = {};
-  groups.forEach(group => {
-    plotData[group.name] = {};
-    group.samples.forEach(sample => {
-      plotData[group.name][sample.name] = {
-        average: computeAverage(sample.replicates, accessionId),
-      };
-      plotData[group.name][sample.name].variance = computeVariance(
-        sample.replicates, accessionId, plotData[group.name][sample.name].average
-      );
+
+export function createMultiGeneBarPlot(plotData, accessionIds, showlegend, showCaption, countUnit, index){
+  let data = [];
+  let x = [[],[]];
+  let yData = {};
+  accessionIds.forEach(accession => {
+    yData[accession] = {averages: [], variances: []};
+  });
+  Object.keys(plotData).forEach(group => {
+    Object.keys(plotData[group]).forEach(sample => {
+      Object.keys(plotData[group][sample]).forEach(accession => {
+        yData[accession].averages.push(plotData[group][sample][accession].average);
+        yData[accession].variances.push(plotData[group][sample][accession].variance);
+      });
+      x[0].push(group);
+      x[1].push(sample);
     });
   });
+  Object.keys(yData).forEach(accession => {
+    data.push(createGeneTrace(x,yData[accession].averages, yData[accession].variances,accession));
+  });
+  let layout = getDefaultLayout(showlegend, countUnit);
+  return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
+}
 
-  return plotData;
+function createGeneTrace(x, y, error_y, accession) {
+
+  return {
+    x,
+    y,
+    error_y: {
+      type: 'data',
+      array: error_y,
+      visible: true
+    },
+    type:'bar',
+    name: accession
+  };
 }

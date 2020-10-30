@@ -16,8 +16,10 @@ export default class PlotlyComponent extends React.Component {
           className="relative flex flex-col mt-10 xl:mt-0 w-full xl:w-1/2 xl:h-1/2"
           plot={{...plot}}
           showCaption={plot.showCaption}
-          accession={plot.accession}
-          caption={store.captions[plot.accession]}
+          accessions={plot.accessions}
+          captions={plot.accessions.map(accession => {
+            return store.captions[accession] ? store.captions[accession] : 'no gene caption available';
+          })}
         />
       ))
     );

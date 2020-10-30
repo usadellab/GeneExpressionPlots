@@ -18,7 +18,7 @@ export default class PlotsForm extends Component {
       accessionIdsView: store.accessionIds.slice(0, 10),
       showlegend: true,
       showCaption: store.hasCaptions,
-      accession: store.accessionIds[0] ?? '',
+      accessions: [store.accessionIds[0]] ?? [''],
       plotType: 'bars',
       //
       loading: false,
@@ -26,7 +26,7 @@ export default class PlotsForm extends Component {
   }
 
   selectAccession = (accession) => {
-    this.setState({ accession });
+    this.setState({ accessions: [accession] });
     this.searchAccessionIds(accession);
   }
 
@@ -55,7 +55,7 @@ export default class PlotsForm extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
-    store.addPlot(this.state.accession, this.state.showlegend, this.state.showCaption, this.state.plotType);
+    store.addPlot(this.state.accessions, this.state.showlegend, this.state.showCaption, this.state.plotType);
     this.setState({ loading: false });
     this.props.onCancel();
   };
@@ -72,7 +72,7 @@ export default class PlotsForm extends Component {
 
           <AppDatalist
             className="w-full md:w-1/2"
-            value={ this.state.accession }
+            value={ this.state.accessions[0] }
             options={ this.state.accessionIdsView }
             onChange={ this.selectAccession }
             onSelect={ this.selectAccession }
