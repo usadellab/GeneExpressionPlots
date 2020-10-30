@@ -29,8 +29,8 @@ class AppNavigation extends React.Component {
 
   onClearDataMenuClick = () => {
     store.clearData();
-    //change route
-    this.props.changeRoute('data');
+    if (this.props.location.pathname !== '/data')
+      this.props.changeRoute('data');
   };
 
   onExportDataMenuClick = () => {
@@ -70,7 +70,8 @@ class AppNavigation extends React.Component {
 
     reader.onloadend = () => {
       this.setState({ loading: false });
-      this.props.changeRoute('data');
+      if (this.props.location.pathname !== '/data')
+        this.props.changeRoute('data');
     };
 
     reader.onerror = err => {
@@ -107,17 +108,23 @@ class AppNavigation extends React.Component {
     fr.onerror = err => console.log(err);
   }
 
-  onUploadImageMenuClick = (event) => {
-    const img = URL.createObjectURL(event.target.files[0]);
-    store.assignImage(img);
-  }
-
   /* PLOT MENU EVENTS */
 
   onClearPlotsMenuClick = () => {
     store.clearPlots();
     this.props.changeRoute('plots');
   };
+
+  onClearImageMenuClick = () => {
+    if (this.props.location.pathname !== '/plots')
+      this.props.changeRoute('plots');
+    store.clearImage();
+  }
+
+  onNewImageMenuClick = (event) => {
+    const img = URL.createObjectURL(event.target.files[0]);
+    store.assignImage(img);
+  }
 
   /* RENDER */
 
@@ -176,24 +183,13 @@ class AppNavigation extends React.Component {
             />
           }
 
-          {
-            !store.preloaded &&
-            <NavMenu
-              component="file"
-              icon="photograph"
-              accept="image/*"
-              name="Upload Image"
-              onChange={ this.onUploadImageMenuClick }
-            />
-          }
-
           <NavMenu
             component="anchor"
             icon="download"
             name="Export Data"
+            download="data.json"
             href={ this.state.exportUrl }
             onClick={ this.onExportDataMenuClick }
-            download="data.json"
           />
 
           {
@@ -225,17 +221,40 @@ class AppNavigation extends React.Component {
             component="button"
             icon="chart-square-bar"
             name="New Plot"
-            onClick={ this.props.showPlotsModal }
             disabled={ !store.hasData }
+            onClick={ this.props.showPlotsModal }
           />
+
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="photograph"
+              accept="image/*"
+              name="New Image"
+              disabled={ !store.hasData }
+              onChange={ this.onNewImageMenuClick }
+            />
+          }
 
           <NavMenu
             component="button"
             icon="trash"
             name="Clear Plots"
-            onClick={ this.onClearPlotsMenuClick }
             disabled={ !store.hasData }
+            onClick={ this.onClearPlotsMenuClick }
           />
+
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="button"
+              icon="trash"
+              name="Clear Image"
+              disabled={ !store.hasData }
+              onClick={ this.onClearImageMenuClick }
+            />
+          }
 
         </NavGroup>
 

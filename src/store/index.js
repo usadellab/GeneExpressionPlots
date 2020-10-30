@@ -26,8 +26,9 @@ class DataStore {
     if (PRELOAD_DATA) this.preloaded = true;
   }
 
-  @computed({ keepAlive: true })
-  get accessionIds() {
+  /* DATA */
+
+  @computed({ keepAlive: true }) get accessionIds() {
     if (this.groups.length) {
 
       if (this.groups[0].samples.length) {
@@ -43,23 +44,12 @@ class DataStore {
 
   }
 
-  @computed({ keepAlive: true})
-  get isPreloading () {
-    return this.preloaded && !this.hasData;
-  }
-
-  @computed({ keepAlive: true })
-  get hasData () {
+  @computed({ keepAlive: true }) get hasData () {
     return this.groups.length > 0;
   }
 
-  /**
-   * check if the store has captions
-   * @returns {boolean}
-   */
-  @computed({ keepAlive: true })
-  get hasCaptions() {
-    return this.captions && Object.keys(this.captions).length > 0;
+  @computed({ keepAlive: true}) get isPreloading () {
+    return this.preloaded && !this.hasData;
   }
 
   /**
@@ -68,22 +58,6 @@ class DataStore {
    */
   @action assignData (groups) {
     this.groups = groups;
-  }
-
-  /**
-   * Reassigns the internal caption data to a new object.
-   * @param {Group} groups Group object
-   */
-  @action assignCaptions (captions) {
-    this.captions = captions;
-  }
-
-  /**
-   * Reassigns the internal image data to a string URL.
-   * @param {string} image created URL string from the image Blob
-   */
-  @action assignImage (image) {
-    this.image = image;
   }
 
   /**
@@ -116,46 +90,30 @@ class DataStore {
     this.groups.splice(index,1);
   }
 
+  /* PLOTS */
+
   /**
-   * Delete a plot from the store
-   * @param {number} index plot index in the store
+   * check if the store has captions
+   * @returns {boolean}
    */
-  @action deletePlot(index){
-    this.plots.splice(index,1);
+  @computed({ keepAlive: true }) get hasCaptions() {
+    return this.captions && Object.keys(this.captions).length > 0;
   }
 
   /**
-   * Add replicates to an existing sample within a group. Adds a new sample/group if it doesn't exist yet
-   * @param {object} groupView
-   * @param {array} replicates
+   * Reassigns the internal image data to a string URL.
+   * @param {string} image created URL string from the image Blob
    */
-  @action checkAndAddReplicates(groupView, replicates){
-    let groupIndex = this.groups.findIndex(group => group.name === groupView.groupName);
+  @action assignImage (image) {
+    this.image = image;
+  }
 
-    if (groupIndex !== -1) {
-      let sampleIndex = this.groups[groupIndex].samples.findIndex(sample => sample.name === groupView.sampleName);
-      if (sampleIndex !== -1) {
-        this.groups[groupIndex].samples[sampleIndex].replicates.push(...replicates);
-      } else {
-        let newSample = {
-          name: groupView.sampleName,
-          xTickValue: groupView.xTickValue,
-          replicates: replicates
-        };
-        this.groups[groupIndex].samples.push(newSample);
-      }
-    } else {
-      let newGroup = {
-        name: groupView.groupName,
-        countUnit: groupView.countUnit,
-        samples: [{
-          name: groupView.sampleName,
-          xTickValue: groupView.xTickValue,
-          replicates: replicates
-        }]
-      };
-      this.groups.push(newGroup);
-    }
+  /**
+   * Reassigns the internal caption data to a new object.
+   * @param {Group} groups Group object
+   */
+  @action assignCaptions (captions) {
+    this.captions = captions;
   }
 
   /**
@@ -202,10 +160,59 @@ class DataStore {
   }
 
   /**
-   * clear the plots array in the store
+   * Add replicates to an existing sample within a group. Adds a new sample/group if it doesn't exist yet
+   * @param {object} groupView
+   * @param {array} replicates
+   */
+  @action checkAndAddReplicates(groupView, replicates){
+    let groupIndex = this.groups.findIndex(group => group.name === groupView.groupName);
+
+    if (groupIndex !== -1) {
+      let sampleIndex = this.groups[groupIndex].samples.findIndex(sample => sample.name === groupView.sampleName);
+      if (sampleIndex !== -1) {
+        this.groups[groupIndex].samples[sampleIndex].replicates.push(...replicates);
+      } else {
+        let newSample = {
+          name: groupView.sampleName,
+          xTickValue: groupView.xTickValue,
+          replicates: replicates
+        };
+        this.groups[groupIndex].samples.push(newSample);
+      }
+    } else {
+      let newGroup = {
+        name: groupView.groupName,
+        countUnit: groupView.countUnit,
+        samples: [{
+          name: groupView.sampleName,
+          xTickValue: groupView.xTickValue,
+          replicates: replicates
+        }]
+      };
+      this.groups.push(newGroup);
+    }
+  }
+
+  /**
+   * Delete the existing image legend.
+   */
+  @action clearImage () {
+    this.image = null;
+  }
+
+  /**
+   * Clear the plots array in the store.
    */
   @action clearPlots () {
     this.plots = [];
+  }
+
+  /**
+   * Delete a plot from the store
+   * @param {number} index plot index in the store
+   */
+  @action deletePlot(index){
+    this.plots.splice(index,1);
   }
 
 }
