@@ -1,31 +1,11 @@
 import React from 'react';
 
-import { PRELOAD_IMAGE } from '@/config/globals.js';
+import { store }    from '@/store';
+import { observer } from 'mobx-react';
 
 
+@observer
 export default class PlotsLayout extends React.Component {
-
-  constructor () {
-    super();
-    this.state = {
-      img: null,
-    };
-  }
-
-  async componentDidMount () {
-    if (PRELOAD_IMAGE) {
-      try {
-        const response = await fetch(PRELOAD_IMAGE);
-        if (response.ok)
-          this.setState({ img: response.url });
-        else
-          console.error('Loading preloaded image caused an error');
-      }
-      catch (error) {
-        console.error(error.message);
-      }
-    }
-  }
 
   render () {
     return (
@@ -68,9 +48,9 @@ export default class PlotsLayout extends React.Component {
 
           */}
           {
-            this.state.img &&
+            store.image &&
             <div className="relative w-full pb-1/3 sm:max-w-md lg:max-w-lg xl:w-1/2">
-              <img className="absolute w-full h-full object-contain" src={ this.state.img } />
+              <img className="absolute w-full h-full object-contain" src={ store.image } />
             </div>
           }
 
