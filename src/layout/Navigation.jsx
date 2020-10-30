@@ -265,7 +265,7 @@ class AppNavigation extends React.Component {
               icon="photograph"
               accept="image/*"
               name="New Image"
-              // disabled={ !store.hasData }
+              disabled={ !store.hasData }
               onChange={ this.onNewImageMenuClick }
             />
           }
