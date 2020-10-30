@@ -26,6 +26,25 @@ export default class PlotsForm extends Component {
     };
   }
 
+  /* AUXILIARY */
+
+  searchAccessionIds = (accession) => {
+
+    let accessionIdsView = [];
+    for (let i = 0; i < store.accessionIds.length; i++) {
+
+      if (store.accessionIds[i].includes(accession))
+        accessionIdsView.push(store.accessionIds[i]);
+
+      if (accessionIdsView.length >= 10)
+        break;
+    }
+
+    this.setState({
+      accessionIdsView,
+    });
+  }
+
   /* LIFECYCLE METHODS */
 
   componentDidUpdate (prevProps, prevState) {
@@ -49,6 +68,7 @@ export default class PlotsForm extends Component {
         accessions,
       };
     });
+    this.searchAccessionIds(accession);
   }
 
   onAccessionDatalistIconClick = (action, index) => {
@@ -60,23 +80,6 @@ export default class PlotsForm extends Component {
     else if (action === 'remove') this.setState(state => ({
       accessions: state.accessions.filter((_, i) => i !== index)
     }));
-  }
-
-  searchAccessionIds = (accession) => {
-
-    let accessionIdsView = [];
-    for (let i = 0; i < store.accessionIds.length; i++) {
-
-      if (store.accessionIds[i].includes(accession))
-        accessionIdsView.push(store.accessionIds[i]);
-
-      if (accessionIdsView.length >= 10)
-        break;
-    }
-
-    this.setState({
-      accessionIdsView,
-    });
   }
 
   /**
@@ -125,8 +128,13 @@ export default class PlotsForm extends Component {
             const isLast = this.state.accessions.length === index+1;
 
             return (
+              /**
+               * We need to use `index` as key, since `acc` will mutate
+               * each time the user changes the input, causing the element
+               * to re-render every time a key is pressed and losing focus.
+               */
               <div
-                key={ `${acc}-${index}` }
+                key={ index }
                 className="flex items-center mt-4"
               >
                 <AppDatalist
@@ -135,6 +143,7 @@ export default class PlotsForm extends Component {
                   options={ this.state.accessionIdsView }
                   onChange={ (accession) => this.onAccessionDataListChange(accession, index) }
                   onSelect={ (accession) => this.onAccessionDataListChange(accession, index) }
+                  onClick={ () => this.searchAccessionIds(acc) }
                 />
 
                 {

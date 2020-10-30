@@ -13,7 +13,7 @@ export default class AppDatalist extends React.Component {
     };
   }
 
-  handleItemClick = (accession) => {
+  onListItemClick = (accession) => {
 
     this.setState({ focus: false });
     this.props.onSelect(accession);
@@ -37,6 +37,7 @@ export default class AppDatalist extends React.Component {
           onFocus={ () => this.setState({ focus: true }) }
           onBlur={ () => this.setState({ focus: false }) }
           onChange={ (e) => this.props.onChange(e.target.value) }
+          onClick={ this.props.onClick }
         />
 
         <ul
@@ -52,7 +53,7 @@ export default class AppDatalist extends React.Component {
                 key={ `${opt}-${index}` }
                 className="px-3 text-gray-900 text-sm hover:bg-blue-700 hover:text-white cursor-default"
                 value={ opt }
-                onMouseDown={ () => this.handleItemClick(opt) }
+                onMouseDown={ () => this.onListItemClick(opt) }
               >
                 { opt }
               </li>
