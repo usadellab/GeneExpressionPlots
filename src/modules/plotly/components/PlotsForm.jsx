@@ -48,7 +48,8 @@ export default class PlotsForm extends Component {
   /* LIFECYCLE METHODS */
 
   componentDidUpdate (prevProps, prevState) {
-    if (prevState.plotType === 'bars' && this.state.plotType !== 'bars') {
+    // if (prevState.plotType === 'bars' && this.state.plotType !== 'bars') {
+    if (prevState.plotType !== 'stackedCurves' && this.state.plotType === 'stackedCurves') {
       this.setState(state => ({
         accessions: state.accessions.slice(0,1)
       }));
@@ -147,7 +148,7 @@ export default class PlotsForm extends Component {
                 />
 
                 {
-                  this.state.plotType === 'bars' &&
+                  this.state.plotType !== 'stackedCurves' &&
                   <AppIcon
                     className={
                       `ml-4 w-12 h-12 cursor-pointer

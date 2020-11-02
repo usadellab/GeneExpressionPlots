@@ -264,7 +264,6 @@ class AppNavigation extends React.Component {
               icon="photograph"
               accept="image/*"
               name="New Image"
-              disabled={ !store.hasData }
               onChange={ this.onNewImageMenuClick }
             />
           }
@@ -273,7 +272,7 @@ class AppNavigation extends React.Component {
             component="button"
             icon="trash"
             name="Clear Plots"
-            disabled={ !store.hasData }
+            disabled={ !store.hasPlots }
             onClick={ this.onClearPlotsMenuClick }
           />
 
@@ -283,7 +282,7 @@ class AppNavigation extends React.Component {
               component="button"
               icon="trash"
               name="Clear Image"
-              disabled={ !store.hasData }
+              disabled={ !store.hasImage }
               onClick={ this.onClearImageMenuClick }
             />
           }

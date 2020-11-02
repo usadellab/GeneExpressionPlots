@@ -49,8 +49,16 @@ class DataStore {
     return this.groups.length > 0;
   }
 
+  @computed({ keepAlive: true }) get hasImage () {
+    return this.image ? true : false;
+  }
+
   @computed({ keepAlive: true}) get isPreloading () {
     return this.preloaded && !this.hasData;
+  }
+  
+  @computed({ keepAlive: true}) get hasPlots () {
+    return this.plots.length > 0;
   }
 
   /**
@@ -136,10 +144,10 @@ class DataStore {
     }
   }
 
-  @action addIndivualCurvesPlot(accessionId, showlegend, showCaption) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+  @action addIndivualCurvesPlot(accessionIds, showlegend, showCaption) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
     this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, 'scatter', this.plots.length)
+      createGroupPlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, 'scatter', this.plots.length)
     );
   }
 

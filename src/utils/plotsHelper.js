@@ -1,5 +1,20 @@
 // import Plotly from 'plotly.js/lib/core';
 import {store} from '@/store';
+
+const colors = [
+  '#1f77b4',  // muted blue
+  '#ff7f0e',  // safety orange
+  '#2ca02c',  // cooked asparagus green
+  '#d62728',  // brick red
+  '#9467bd',  // muted purple
+  '#8c564b',  // chestnut brown
+  '#e377c2',  // raspberry yogurt pink
+  '#7f7f7f',  // middle gray
+  '#bcbd22',  // curry yellow-green
+  '#17becf'   // blue-teal
+];
+
+
 /**
  * constant config object for plotly
  */
@@ -36,7 +51,7 @@ function getDefaultLayout(showlegend, countUnit) {
     legend: {
       orientation:'h',
       x: 0,
-      y: 1.14,
+      y: 1.25,
   
     },
     yaxis: {
@@ -122,8 +137,18 @@ export function computeAveragesAndVariances(groups, accessionIds) {
  */
 export function createGroupPlot (plotData, accessionIds, showlegend, showCaption, countUnit, plotType, index) {
   let data = [];
-  Object.keys(plotData).forEach(group => {
-    data.push(createPlotGroup(plotData, group, plotType, accessionIds[0]));
+  let line = null;
+  let showLegendCurve = null;
+  accessionIds.forEach((accession, index) => {
+    if(accessionIds.length > 1) {
+      line = {
+        color : colors[index],
+      };
+    }
+    Object.keys(plotData).forEach((group,index) => {
+      showLegendCurve = index > 0 ? false : true;
+      data.push(createPlotGroup(plotData, group, plotType, accession, line, showLegendCurve));
+    });
   });
 
   let layout = getDefaultLayout(showlegend, countUnit);
@@ -137,12 +162,11 @@ export function createGroupPlot (plotData, accessionIds, showlegend, showCaption
  * @param {object} group group to plot
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-function createPlotGroup (plotData, group, plotType, accessionId){
+function createPlotGroup (plotData, group, plotType, accessionId, line, showlegend){
   let groupArr = [];
   let sampleArr = [];
   let y = [];
   let errs = [];
-
   Object.keys(plotData[group]).forEach(sampleName =>{
 
     const sample = plotData[group][sampleName];
@@ -152,10 +176,10 @@ function createPlotGroup (plotData, group, plotType, accessionId){
     y.push(sample[accessionId].average);
     errs.push(sample[accessionId].variance);
   });
-
+  console.log(showlegend);
   const x = [groupArr, sampleArr];
 
-  return {
+  let ret = {
     x,
     y,
     error_y:{
@@ -164,8 +188,12 @@ function createPlotGroup (plotData, group, plotType, accessionId){
       visible: true,
     },
     type: plotType,
-    name: group
+    name: (line ? accessionId : group),
+    ...(line && {line}),
+    showlegend
   };
+  console.log(ret);
+  return ret;
 }
 
 /**
