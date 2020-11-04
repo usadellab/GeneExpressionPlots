@@ -151,23 +151,23 @@ class DataStore {
     );
   }
 
-  @action addStackedCurvePlot(accessionId, showlegend, showCaption) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionId);
+  @action addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
     this.plots.push(
-      createStackedLinePlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, this.plots.length)
+      createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, this.plots.length, colorBy)
     );
   }
 
-  @action addPlot(accessionId, showlegend, showCaption, plotType){
+  @action addPlot(accessionIds, showlegend, showCaption, plotType, colorBy){
     switch (plotType) {
       case 'bars':
-        this.addBarPlot(accessionId, showlegend, showCaption);
+        this.addBarPlot(accessionIds, showlegend, showCaption);
         break;
       case 'individualCurves':
-        this.addIndivualCurvesPlot(accessionId, showlegend, showCaption);
+        this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption);
         break;
       case 'stackedCurves':
-        this.addStackedCurvePlot(accessionId, showlegend, showCaption);
+        this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy);
         break;
       default:
         break;

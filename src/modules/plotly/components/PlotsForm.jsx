@@ -21,6 +21,7 @@ export default class PlotsForm extends Component {
       showlegend: true,
       showCaption: store.hasCaptions,
       plotType: 'bars',
+      colorBy: 'gene',
       //
       loading: false,
     };
@@ -43,17 +44,6 @@ export default class PlotsForm extends Component {
     this.setState({
       accessionIdsView,
     });
-  }
-
-  /* LIFECYCLE METHODS */
-
-  componentDidUpdate (prevProps, prevState) {
-    // if (prevState.plotType === 'bars' && this.state.plotType !== 'bars') {
-    if (prevState.plotType !== 'stackedCurves' && this.state.plotType === 'stackedCurves') {
-      this.setState(state => ({
-        accessions: state.accessions.slice(0,1)
-      }));
-    }
   }
 
   /* EVENT HANDLERS */
@@ -95,6 +85,7 @@ export default class PlotsForm extends Component {
       this.state.showlegend,
       this.state.showCaption,
       this.state.plotType,
+      this.state.colorBy
     );
     this.setState({ loading: false });
     this.props.onCancel();
@@ -102,6 +93,10 @@ export default class PlotsForm extends Component {
 
   onSelectPlotTypeChange = (event) => {
     this.setState({ plotType: event.target.value });
+  }
+
+  onSelectColorByChange = (event) => {
+    this.setState({ colorBy: event.target.value });
   }
 
   render() {
@@ -147,26 +142,36 @@ export default class PlotsForm extends Component {
                   onClick={ () => this.searchAccessionIds(acc) }
                 />
 
-                {
-                  this.state.plotType !== 'stackedCurves' &&
-                  <AppIcon
-                    className={
-                      `ml-4 w-12 h-12 cursor-pointer
+                <AppIcon
+                  className={
+                    `ml-4 w-12 h-12 cursor-pointer
                      ${ isLast ? 'text-green-700 mb-8' : 'text-pink-700'}`
-                    }
-                    file="hero-icons"
-                    id={ isLast ? 'plus' : 'minus' }
-                    onClick={ () => this.onAccessionDatalistIconClick(
-                      isLast ? 'add' : 'remove', index
-                    ) }
-                  />
-                }
+                  }
+                  file="hero-icons"
+                  id={ isLast ? 'plus' : 'minus' }
+                  onClick={ () => this.onAccessionDatalistIconClick(
+                    isLast ? 'add' : 'remove', index
+                  ) }
+                />
 
               </div>
             );
           })
         }
-
+        {
+          this.state.plotType === 'stackedCurves' &&
+          <AppSelect
+            className="py-4"
+            label="color by"
+            value={ this.state.colorBy }
+            options={[
+              { label: 'gene', value: 'gene' },
+              { label: 'group',  value: 'group' },
+            ]}
+            onChange={ this.onSelectColorByChange }
+            disabled={this.state.accessions.length === 1}
+          />
+        }
         <div className="mt-4 w-full md:flex">
 
           <AppSwitch
@@ -176,7 +181,7 @@ export default class PlotsForm extends Component {
             label="Legend"
           />
           {
-            // store.hasCaptions &&
+            store.hasCaptions &&
             <AppSwitch
               className="w-1/2 md:ml-2"
               onChange={ (value) => this.setState({ showCaption: value }) }

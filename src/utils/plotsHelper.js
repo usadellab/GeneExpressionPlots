@@ -14,6 +14,8 @@ const colors = [
   '#17becf'   // blue-teal
 ];
 
+const lineStyles = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot'];
+const markerStyles = ['circle','square','diamond', 'cross', 'triangle-up','pentagon'];
 
 /**
  * constant config object for plotly
@@ -51,7 +53,7 @@ function getDefaultLayout(showlegend, countUnit) {
     legend: {
       orientation:'h',
       x: 0,
-      y: 1.25,
+      y: -0.30,
   
     },
     yaxis: {
@@ -176,10 +178,9 @@ function createPlotGroup (plotData, group, plotType, accessionId, line, showlege
     y.push(sample[accessionId].average);
     errs.push(sample[accessionId].variance);
   });
-  console.log(showlegend);
   const x = [groupArr, sampleArr];
 
-  let ret = {
+  return {
     x,
     y,
     error_y:{
@@ -192,8 +193,6 @@ function createPlotGroup (plotData, group, plotType, accessionId, line, showlege
     ...(line && {line}),
     showlegend
   };
-  console.log(ret);
-  return ret;
 }
 
 /**
@@ -202,11 +201,31 @@ function createPlotGroup (plotData, group, plotType, accessionId, line, showlege
  * @param {string} accessionIds accessionId to plot the data for
  * @param {boolean} showlegend show the legend of the plot 
  * @param {string} countUnit unit used for the y-label
+ * @param {int} index plotIndex
+ * @param {string} colorBy color the plot by group or gene. The other will be distinguishable by linestyle
  */
-export function createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, countUnit, index) {
+export function createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, countUnit, index, colorBy) {
   let data = [];
-  Object.keys(plotData).forEach(group => {
-    data.push(createLinePlotTrace(plotData, group, accessionIds[0]));
+  let colorIndex = 0;
+  let styleIndex = 0;
+  let line = null;
+  let marker = null;
+  accessionIds.forEach( accession => {
+    Object.keys(plotData).forEach(group => {
+
+      if (accessionIds.length > 1) {
+        line = {
+          color: colors[colorIndex],
+          dash: lineStyles[styleIndex]
+        };
+        marker = {
+          symbol: markerStyles[styleIndex]
+        };
+      }
+      data.push(createLinePlotTrace(plotData, group, accession, line, marker));
+      colorBy === 'group' ? colorIndex++ : styleIndex++;
+    });
+    colorBy === 'group' ? (colorIndex = 0, styleIndex++) : (colorIndex++, styleIndex = 0);
   });
   let layout = getDefaultLayout(showlegend, countUnit);
   return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
@@ -217,7 +236,7 @@ export function createStackedLinePlot(plotData, accessionIds, showlegend, showCa
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
  * @param {object} group group to plot
  */
-function createLinePlotTrace(plotData, group, accessionId) {
+function createLinePlotTrace(plotData, group, accessionId, line, marker) {
 
   let trace = {
     x: [],
@@ -228,7 +247,9 @@ function createLinePlotTrace(plotData, group, accessionId) {
       visible: true
     },
     type: 'scatter',
-    name: group
+    name: `${group} - ${accessionId}`,
+    ...(line && {line}),
+    ...(marker && {marker})
   };
 
   Object.keys(plotData[group]).forEach(sampleName => {
