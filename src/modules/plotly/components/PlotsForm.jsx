@@ -21,7 +21,7 @@ export default class PlotsForm extends Component {
       showlegend: true,
       showCaption: store.hasCaptions,
       plotType: 'bars',
-      colorBy: 'gene',
+      colorBy: 'group',
       //
       loading: false,
     };
@@ -119,6 +119,20 @@ export default class PlotsForm extends Component {
         />
 
         {
+          this.state.plotType === 'stackedCurves' &&
+          <AppSelect
+            label="Color by"
+            value={ this.state.colorBy }
+            options={[
+              { label: 'group', value: 'group' },
+              { label: 'gene',  value: 'gene', disabled: this.state.accessions.length === 1 },
+            ]}
+            onChange={ this.onSelectColorByChange }
+            // disabled={this.state.accessions.length === 1}
+          />
+        }
+
+        {
           this.state.accessions.map((acc, index) => {
 
             const isLast = this.state.accessions.length === index+1;
@@ -157,20 +171,6 @@ export default class PlotsForm extends Component {
               </div>
             );
           })
-        }
-        {
-          this.state.plotType === 'stackedCurves' &&
-          <AppSelect
-            className="py-4"
-            label="color by"
-            value={ this.state.colorBy }
-            options={[
-              { label: 'gene', value: 'gene' },
-              { label: 'group',  value: 'group' },
-            ]}
-            onChange={ this.onSelectColorByChange }
-            disabled={this.state.accessions.length === 1}
-          />
         }
         <div className="mt-4 w-full md:flex">
 
