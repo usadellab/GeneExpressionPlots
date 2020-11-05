@@ -247,7 +247,7 @@ function createLinePlotTrace(plotData, group, accessionId, line, marker) {
       visible: true
     },
     type: 'scatter',
-    name: `${group} - ${accessionId}`,
+    name: (line ? `${group} - ${accessionId}` : group),
     ...(line && {line}),
     ...(marker && {marker})
   };
