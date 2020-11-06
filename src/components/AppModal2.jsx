@@ -24,15 +24,15 @@ export default class AppModal extends React.Component {
 
         {/* HEADER */}
         <div
-          className="flex items-start justify-between px-6 mt-5 rounded-t text-gray-800"
+          className="flex items-center justify-between px-6 pb-2 mt-5 rounded-t text-gray-800"
         >
 
-          <h2 className="uppercase text-3xl font-semibold">
+          <h2 className="uppercase w-full text-center text-3xl font-semibold">
             { this.props.title }
           </h2>
 
-          <AppButton onClick={ this.props.hideModal } >
-            <AppIcon file="hero-icons" id="close" className="w-6 h-6" />
+          <AppButton onClick={ this.props.hideModal } className="group" >
+            <AppIcon file="hero-icons" id="close" className="w-6 h-6 group-hover:text-pink-700" />
           </AppButton>
         </div>
 
