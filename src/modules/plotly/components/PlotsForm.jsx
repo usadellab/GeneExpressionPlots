@@ -15,8 +15,7 @@ export default class PlotsForm extends Component {
   constructor() {
     super();
     this.state = {
-      accessions: [ store.accessionIds[0] ?? '' ],
-      accessionIds: store.accessionIds,
+      accessionIds: [ store.accessionIds[0] ?? '' ],
       accessionIdsView: store.accessionIds.slice(0, 10),
       showlegend: true,
       showCaption: store.hasCaptions,
@@ -24,6 +23,7 @@ export default class PlotsForm extends Component {
       colorBy: 'group',
       //
       loading: false,
+      validForm: true,
     };
   }
 
@@ -31,6 +31,10 @@ export default class PlotsForm extends Component {
 
   searchAccessionIds = (accession) => {
 
+    // Flag whether the current accession id is valid for submission
+    this.setState({ validForm: store.accessionIds.includes(accession) });
+
+    // Update the search window with the accession matching ids
     let accessionIdsView = [];
     for (let i = 0; i < store.accessionIds.length; i++) {
 
@@ -50,27 +54,32 @@ export default class PlotsForm extends Component {
 
   onAccessionDataListChange = (accession, index) => {
 
+    // Update the internal accession id with the new input value
     this.setState(state => {
 
-      const accessions = state.accessions;
-      accessions[index] = accession;
+      const accessionIds = state.accessionIds;
+      accessionIds[index] = accession;
 
       return {
-        accessions,
+        accessionIds,
       };
     });
+
+    // Update the search window with the new matching ids
     this.searchAccessionIds(accession);
   }
 
   onAccessionDatalistIconClick = (action, index) => {
 
     if (action === 'add') this.setState(state => ({
-      accessions: [ ...state.accessions, '' ]
+      accessionIds: [ ...state.accessionIds, '' ],
+      validForm: false,
     }));
 
     else if (action === 'remove') this.setState(state => ({
-      accessions: state.accessions.filter((_, i) => i !== index)
+      accessionIds: state.accessionIds.filter((_, i) => i !== index)
     }));
+
   }
 
   /**
@@ -81,7 +90,7 @@ export default class PlotsForm extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     store.addPlot(
-      this.state.accessions,
+      this.state.accessionIds,
       this.state.showlegend,
       this.state.showCaption,
       this.state.plotType,
@@ -102,7 +111,7 @@ export default class PlotsForm extends Component {
   render() {
     return (
       <form
-        className="overflow-y-auto w-full max-h-lg px-6 py-4 flex-auto
+        className="overflow-y-auto w-full max-h-xl px-6 py-4 flex-auto
                    text-gray-600 text-lg leading-relaxed"
       >
 
@@ -125,21 +134,20 @@ export default class PlotsForm extends Component {
             value={ this.state.colorBy }
             options={[
               { label: 'group', value: 'group' },
-              { label: 'gene',  value: 'gene', disabled: this.state.accessions.length === 1 },
+              { label: 'gene',  value: 'gene', disabled: this.state.accessionIds.length === 1 },
             ]}
             onChange={ this.onSelectColorByChange }
-            // disabled={this.state.accessions.length === 1}
           />
         }
 
         {
-          this.state.accessions.map((acc, index) => {
+          this.state.accessionIds.map((accession, index) => {
 
-            const isLast = this.state.accessions.length === index+1;
+            const isLast = this.state.accessionIds.length === index+1;
 
             return (
               /**
-               * We need to use `index` as key, since `acc` will mutate
+               * We need to use `index` as key, since `accession` will mutate
                * each time the user changes the input, causing the element
                * to re-render every time a key is pressed and losing focus.
                */
@@ -149,11 +157,11 @@ export default class PlotsForm extends Component {
               >
                 <AppDatalist
                   label={ isLast ? 'Accession ID' : null }
-                  value={ this.state.accessions[index] }
+                  value={ this.state.accessionIds[index] }
                   options={ this.state.accessionIdsView }
                   onChange={ (accession) => this.onAccessionDataListChange(accession, index) }
                   onSelect={ (accession) => this.onAccessionDataListChange(accession, index) }
-                  onClick={ () => this.searchAccessionIds(acc) }
+                  onFocus={ () => this.searchAccessionIds(accession) }
                 />
 
                 <AppIcon
@@ -195,8 +203,12 @@ export default class PlotsForm extends Component {
         <div className="mt-8 flex justify-start w-full">
 
           <AppButton
-            className="px-5 py-2 primary-blue"
+            className={
+              `px-5 py-2 shadow-outer text-white
+              ${ this.state.validForm ?'bg-blue-700' : 'bg-gray-700 cursor-not-allowed'}`
+            }
             type="Submit"
+            disabled={ !this.state.validForm }
             onClick={ this.onPlotGeneButtonClick }
           >
             {
