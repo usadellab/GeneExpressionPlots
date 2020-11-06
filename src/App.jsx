@@ -20,13 +20,15 @@ export default class App extends React.Component {
       try {
         const response = await fetch(PRELOAD_DATA);
         if (response.ok) {
-          const {data, captions} = await response.json();
+          const { data, captions, image } = await response.json();
           if (data)
-            store.assignData( data );
+            store.assignData(data);
           else
             throw new Error('Loading preloaded data caused an error: no data found');
           if (captions)
-            store.assignCaptions( captions );
+            store.assignCaptions(captions);
+          if (image)
+            store.assignImage(image);
         }
         else
           console.error('Loading preloaded data caused an error');

@@ -14,8 +14,8 @@ export default class PlotsLayout extends React.Component {
         {/* MAIN CONTENT: ROUTES */}
 
         <main
-          className="flex flex-col items-center mt-10 p-6 w-full h-full
-                     xl:flex-row xl:flex-wrap xl:justify-center xl:items-start"
+          className="flex flex-col items-center p-6 w-full h-full
+                     xl:flex-row xl:flex-wrap xl:justify-center xl:items-center"
         >
 
           {/* PRELOADED IMAGE
@@ -49,8 +49,8 @@ export default class PlotsLayout extends React.Component {
           */}
           {
             store.image &&
-            <div className="relative w-full pb-1/3 sm:max-w-md lg:max-w-lg xl:w-1/2">
-              <img className="absolute w-full h-full object-contain" src={ store.image } />
+            <div className="flex justify-center items-center mt-10 w-full xl:w-1/2 xl:h-1/2">
+              <img src={ store.image } />
             </div>
           }
 
