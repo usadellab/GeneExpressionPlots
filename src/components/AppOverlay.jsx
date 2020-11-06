@@ -14,7 +14,7 @@ export default class AppOverlay extends React.Component {
       <>
         {/* CONTAINER */}
         <div
-          className="fixed inset-0 z-50
+          className="fixed inset-0 z-40
                      flex justify-center items-center
                      outline-none focus:outline-none"
         >
@@ -30,7 +30,7 @@ export default class AppOverlay extends React.Component {
 
         {/* OVERLAY */}
         <div
-          className={ `opacity-25 fixed inset-0 z-40 ${this.props.overlayClass}` }
+          className={ `opacity-25 fixed inset-0 z-30 ${this.props.overlayClass}` }
           onClick={ this.props.onClick }
         />
 

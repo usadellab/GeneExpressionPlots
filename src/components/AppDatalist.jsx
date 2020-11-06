@@ -9,55 +9,84 @@ export default class AppDatalist extends React.Component {
     super();
 
     this.state = {
-      focus: false
+      focus: false,
     };
+
+    this.dataListContainerRef = null;
   }
 
-  onListItemClick = (accession) => {
+  get containerWidth () {
+    return this.dataListContainerRef
+      ? this.dataListContainerRef.clientWidth
+      : null;
+  }
+
+  /**
+   *
+   * @param {HTMLDivElement} ref
+   */
+  setContainerRef = (ref) => {
+    this.dataListContainerRef = ref;
+  }
+
+  onListItemClick = (option) => {
 
     this.setState({ focus: false });
-    this.props.onSelect(accession);
+    this.props.onSelect(option);
   }
 
-  closeDropDown = () => {
+  onAppTextChange = (event) => {
+    this.props.onChange(event.target.value);
+  }
 
-    if (!this.state.focus)
-      this.setState({ focus: false });
+  onAppTextFocus = (event) => {
+    this.setState({ focus: true });
+    this.props.onFocus(event);
+  }
+
+  onAppTextBlur = (event) => {
+    this.setState({ focus: false });
   }
 
   render () {
 
     return (
       <div
+        ref={ this.setContainerRef }
         className={ `relative w-full ${this.props.className ?? ''}`}
       >
         <AppText
           label={ this.props.label }
           value={ this.props.value }
-          onFocus={ () => this.setState({ focus: true }) }
-          onBlur={ () => this.setState({ focus: false }) }
-          onChange={ (e) => this.props.onChange(e.target.value) }
-          onClick={ this.props.onClick }
+          onFocus={ this.onAppTextFocus }
+          onBlur={ this.onAppTextBlur }
+          onChange={ this.onAppTextChange }
         />
 
         <ul
+          style={{ width: this.containerWidth }}
           className={
-            `absolute flex flex-col justify-center items-center w-full py-2 z-50
-             shadow-outer bg-white
+            `fixed flex flex-col justify-center items-center py-2 z-50
+             border bg-white transform -translate-y-6
              ${ this.state.focus ? 'visible' : 'hidden' }`
           }
         >
           {
-            this.props.options.map((opt, index) => (
-              <li
-                key={ `${opt}-${index}` }
-                className="px-3 text-gray-900 text-sm hover:bg-blue-700 hover:text-white cursor-default"
-                value={ opt }
-                onMouseDown={ () => this.onListItemClick(opt) }
-              >
-                { opt }
-              </li>
-            ))
+            this.props.options.length === 0
+              ?
+              <li>{ this.props.noItemsMessage ?? 'No matches found' }</li>
+              :
+              this.props.options.map((opt, index) => (
+                <li
+                  key={ `${opt}-${index}` }
+                  className="px-3 w-full cursor-default hover:bg-blue-700
+                             text-sm text-center text-gray-900 hover:text-white"
+                  value={ opt }
+                  onMouseDown={ () => this.onListItemClick(opt) }
+                >
+                  { opt }
+                </li>
+              ))
           }
         </ul>
 
