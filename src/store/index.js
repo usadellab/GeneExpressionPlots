@@ -29,20 +29,15 @@ class DataStore {
 
   /* DATA */
 
+  /**
+   * Get the keys of a replicate singleton. This method assumes
+   */
   @computed({ keepAlive: true }) get accessionIds() {
-    if (this.groups.length) {
 
-      if (this.groups[0].samples.length) {
-
-        if (this.groups[0].samples[0].replicates.length) {
-
-          return Object.keys(this.groups[0].samples[0].replicates[0]);
-
-        }
-      }
-    }
-    return [];
-
+    const singleReplicates = Object.keys(
+      this.groups[0]?.samples?.[0].replicates?.[0] ?? {}
+    );
+    return singleReplicates.sort();
   }
 
   @computed({ keepAlive: true }) get hasData () {
@@ -56,7 +51,7 @@ class DataStore {
   @computed({ keepAlive: true}) get isPreloading () {
     return this.preloaded && !this.hasData;
   }
-  
+
   @computed({ keepAlive: true}) get hasPlots () {
     return this.plots.length > 0;
   }
