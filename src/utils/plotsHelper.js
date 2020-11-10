@@ -42,19 +42,27 @@ const config = (index) => ({
 });
 
 /**
- * 
- * @param {boolean} showlegend show the legend of the plot 
+ *
+ * @param {boolean} showlegend show the legend of the plot
  * @param {string} accessionId accessionId to plot the data for
  * @param {string} countUnit unit used for the y-label
  */
-function getDefaultLayout(showlegend, countUnit) {
+function getDefaultLayout(showlegend, countUnit, plotTitle) {
   return {
+    title: {
+      text: plotTitle,
+      font: {
+        family: 'ABeeZee',
+        size: 24
+      },
+      y: 0.9,
+    },
     showlegend,
     legend: {
       orientation:'h',
       x: 0,
       y: -0.30,
-  
+
     },
     yaxis: {
       title:{
@@ -133,11 +141,11 @@ export function computeAveragesAndVariances(groups, accessionIds) {
  * create a Grouped Plot. That is either a bar or a scatter plot. The groups are seperated
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
  * @param {string} accessionIds accessionId to plot the data for
- * @param {boolean} showlegend show the legend of the plot 
+ * @param {boolean} showlegend show the legend of the plot
  * @param {string} countUnit unit used for the y-label
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-export function createGroupPlot (plotData, accessionIds, showlegend, showCaption, countUnit, plotType, index) {
+export function createGroupPlot (plotData, accessionIds, showlegend, showCaption, countUnit, plotType, index, plotTitle) {
   let data = [];
   let line = null;
   let showLegendCurve = null;
@@ -153,7 +161,7 @@ export function createGroupPlot (plotData, accessionIds, showlegend, showCaption
     });
   });
 
-  let layout = getDefaultLayout(showlegend, countUnit);
+  let layout = getDefaultLayout(showlegend, countUnit, plotTitle);
 
   return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
 }
@@ -199,12 +207,12 @@ function createPlotGroup (plotData, group, plotType, accessionId, line, showlege
  * create a stacked Line plot, that is a Plot with multiple traces; one for each group
  * @param {object} plotData plotData used to build the plot from. Contains averages and variances for the given accessionId
  * @param {string} accessionIds accessionId to plot the data for
- * @param {boolean} showlegend show the legend of the plot 
+ * @param {boolean} showlegend show the legend of the plot
  * @param {string} countUnit unit used for the y-label
  * @param {int} index plotIndex
  * @param {string} colorBy color the plot by group or gene. The other will be distinguishable by linestyle
  */
-export function createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, countUnit, index, colorBy) {
+export function createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, countUnit, index, colorBy, plotTitle) {
   let data = [];
   let colorIndex = 0;
   let styleIndex = 0;
@@ -227,7 +235,7 @@ export function createStackedLinePlot(plotData, accessionIds, showlegend, showCa
     });
     colorBy === 'group' ? (colorIndex = 0, styleIndex++) : (colorIndex++, styleIndex = 0);
   });
-  let layout = getDefaultLayout(showlegend, countUnit);
+  let layout = getDefaultLayout(showlegend, countUnit, plotTitle);
   return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
 }
 
@@ -253,9 +261,9 @@ function createLinePlotTrace(plotData, group, accessionId, line, marker) {
   };
 
   Object.keys(plotData[group]).forEach(sampleName => {
-    
+
     const sample = plotData[group][sampleName];
-    
+
     trace.x.push(sampleName);
     trace.y.push(sample[accessionId].average);
     trace.error_y.array.push(sample[accessionId].variance);
@@ -266,7 +274,7 @@ function createLinePlotTrace(plotData, group, accessionId, line, marker) {
 }
 
 
-export function createMultiGeneBarPlot(plotData, accessionIds, showlegend, showCaption, countUnit, index){
+export function createMultiGeneBarPlot(plotData, accessionIds, showlegend, showCaption, countUnit, index, plotTitle){
   let data = [];
   let x = [[],[]];
   let yData = {};
@@ -286,7 +294,7 @@ export function createMultiGeneBarPlot(plotData, accessionIds, showlegend, showC
   Object.keys(yData).forEach(accession => {
     data.push(createGeneTrace(x,yData[accession].averages, yData[accession].variances,accession));
   });
-  let layout = getDefaultLayout(showlegend, countUnit);
+  let layout = getDefaultLayout(showlegend, countUnit, plotTitle);
   return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
 }
 

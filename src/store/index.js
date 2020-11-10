@@ -126,43 +126,79 @@ class DataStore {
    * @param {boolean} showlegend
    * @param {string} plotType
    */
-  @action addBarPlot(accessionIds, showlegend, showCaption) {
+  @action addBarPlot(accessionIds, showlegend, showCaption, plotTitle) {
+
     let plotData = computeAveragesAndVariances(this.groups, accessionIds);
-    if(accessionIds.length === 1){
-      this.plots.push(
-        createGroupPlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, 'bar', this.plots.length)
-      );
-    } else if(accessionIds.length > 1){
-      this.plots.push(
-        createMultiGeneBarPlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, this.plots.length)
-      );
-    }
+
+    if (accessionIds.length === 1) this.plots.push(
+      createGroupPlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        'bar',
+        this.plots.length,
+        plotTitle,
+      )
+    );
+    else if (accessionIds.length > 1) this.plots.push(
+      createMultiGeneBarPlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        this.plots.length,
+        plotTitle,
+      )
+    );
+
   }
 
-  @action addIndivualCurvesPlot(accessionIds, showlegend, showCaption) {
+  @action addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle) {
     let plotData = computeAveragesAndVariances(this.groups, accessionIds);
     this.plots.push(
-      createGroupPlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, 'scatter', this.plots.length)
+      createGroupPlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        'scatter',
+        this.plots.length,
+        plotTitle,
+      )
     );
   }
 
-  @action addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy) {
+  @action addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle) {
     let plotData = computeAveragesAndVariances(this.groups, accessionIds);
     this.plots.push(
-      createStackedLinePlot(plotData, accessionIds, showlegend, showCaption, this.groups[0].countUnit, this.plots.length, colorBy)
+      createStackedLinePlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        this.plots.length,
+        colorBy,
+        plotTitle,
+      )
     );
   }
 
-  @action addPlot(accessionIds, showlegend, showCaption, plotType, colorBy){
+  @action addPlot(accessionIds, showlegend, showCaption, plotType, colorBy, plotTitle){
+
     switch (plotType) {
       case 'bars':
-        this.addBarPlot(accessionIds, showlegend, showCaption);
+        this.addBarPlot(accessionIds, showlegend, showCaption, plotTitle);
         break;
       case 'individualCurves':
-        this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption);
+        this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle);
         break;
       case 'stackedCurves':
-        this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy);
+        this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle);
         break;
       default:
         break;

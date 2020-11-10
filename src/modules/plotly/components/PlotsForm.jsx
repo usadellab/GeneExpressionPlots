@@ -6,6 +6,7 @@ import AppDatalist from '@components/AppDatalist';
 import AppIcon     from '@components/AppIcon';
 import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
+import AppText     from '@components/AppText';
 
 import { store } from '@/store';
 
@@ -17,10 +18,11 @@ export default class PlotsForm extends Component {
     this.state = {
       accessionIds: [ store.accessionIds[0] ?? '' ],
       accessionIdsView: store.accessionIds.slice(0, 10),
+      colorBy: 'group',
+      plotTitle: '',
+      plotType: 'bars',
       showlegend: true,
       showCaption: store.hasCaptions,
-      plotType: 'bars',
-      colorBy: 'group',
       //
       loading: false,
       validForm: true,
@@ -84,7 +86,7 @@ export default class PlotsForm extends Component {
 
   /**
    * Submit a new plot to the store.
-   * @param {React.FormEvent<HTMLInputElement>} event
+   * @param {React.FormEvent<HTMLButtonElement>} event button click event
    */
   onPlotGeneButtonClick = (event) => {
     event.preventDefault();
@@ -94,11 +96,21 @@ export default class PlotsForm extends Component {
       this.state.showlegend,
       this.state.showCaption,
       this.state.plotType,
-      this.state.colorBy
+      this.state.colorBy,
+      this.state.plotTitle,
     );
     this.setState({ loading: false });
     this.props.onCancel();
   };
+
+
+  /**
+   * Update the plot title state.
+   * @param {React.FormEvent<HTMLInputElement>} event text input change event
+   */
+  onPlotTitleChange = (event) => {
+    this.setState({ plotTitle: event.target.value });
+  }
 
   onSelectPlotTypeChange = (event) => {
     this.setState({ plotType: event.target.value });
@@ -114,6 +126,11 @@ export default class PlotsForm extends Component {
         className="overflow-y-auto w-full max-h-xl px-6 py-4 flex-auto
                    text-gray-600 text-lg leading-relaxed"
       >
+        <AppText
+          label="Plot title"
+          value={ this.state.groupName }
+          onChange={ this.onPlotTitleChange }
+        />
 
         <AppSelect
           label="Plot type"
