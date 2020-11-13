@@ -200,8 +200,18 @@ class AppNavigation extends React.Component {
             <NavMenu
               component="button"
               icon="table"
-              name="Upload Table"
+              name="Upload Replicate Table"
               onClick={ this.props.showGroupModal }
+            />
+          }
+
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="button"
+              icon="table"
+              name="Upload Expression Table"
+              onClick={ this.props.showTableModal }
             />
           }
 
