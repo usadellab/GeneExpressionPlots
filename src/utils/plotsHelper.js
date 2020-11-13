@@ -145,25 +145,28 @@ export function computeAveragesAndVariances(groups, accessionIds) {
  * @param {string} countUnit unit used for the y-label
  * @param {string} plotType type of the plot. can be either bar or scatter
  */
-export function createGroupPlot (plotData, accessionIds, showlegend, showCaption, countUnit, plotType, index, plotTitle) {
+export function createGroupPlot (plotData, accessionIds, showlegend, showCaption, countUnit, plotType, plotIndex, plotTitle) {
   let data = [];
   let line = null;
   let showLegendCurve = null;
-  accessionIds.forEach((accession, index) => {
+  console.log(accessionIds);
+  console.log(plotData);
+  accessionIds.forEach((accession, accessionIndex) => {
     if(accessionIds.length > 1) {
       line = {
-        color : colors[index],
+        color : colors[accessionIndex],
       };
     }
-    Object.keys(plotData).forEach((group,index) => {
-      showLegendCurve = index > 0 ? false : true;
+    Object.keys(plotData).forEach((group,groupIndex) => {
+      showLegendCurve = accessionIds.length > 1 ? (groupIndex > 0 ? false : true) : true;
+      console.log(`${groupIndex} ${accessionIndex} ${showLegendCurve}`);
       data.push(createPlotGroup(plotData, group, plotType, accession, line, showLegendCurve));
     });
   });
 
   let layout = getDefaultLayout(showlegend, countUnit, plotTitle);
 
-  return {data, layout, config: config(index), accessions: accessionIds, showCaption: showCaption};
+  return {data, layout, config: config(plotIndex), accessions: accessionIds, showCaption: showCaption};
 }
 
 /**
