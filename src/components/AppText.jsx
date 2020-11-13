@@ -17,7 +17,8 @@ export default class AppText extends React.Component {
    */
   onInputFocus = (event) => {
     this.setState({ focus: true });
-    this.props.onFocus(event);
+    if (this.props.onFocus)
+      this.props.onFocus(event);
   }
 
   /**
@@ -26,7 +27,8 @@ export default class AppText extends React.Component {
    */
   onInputBlur = (event) => {
     this.setState({ focus: false });
-    this.props.onBlur(event);
+    if (this.props.onBlur)
+      this.props.onBlur(event);
   }
 
   render () {

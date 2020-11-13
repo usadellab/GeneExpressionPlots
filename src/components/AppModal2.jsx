@@ -27,7 +27,7 @@ export default class AppModal extends React.Component {
           className="flex items-center justify-between px-6 pb-2 mt-5 rounded-t text-gray-800"
         >
 
-          <h2 className="uppercase w-full text-center text-3xl font-semibold">
+          <h2 className="uppercase w-full text-center text-xl md:text-2xl font-semibold">
             { this.props.title }
           </h2>
 
