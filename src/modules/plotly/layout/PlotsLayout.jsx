@@ -1,23 +1,19 @@
-import React from 'react';
+import React from "react";
 
-import { store }    from '@/store';
-import { observer } from 'mobx-react';
-
+import { store } from "@/store";
+import { observer } from "mobx-react";
 
 @observer
 export default class PlotsLayout extends React.Component {
-
-  render () {
+  render() {
     return (
       <div className="flex flex-col xl:flex-row max-w-screen">
-
         {/* MAIN CONTENT: ROUTES */}
 
         <main
           className="flex flex-col items-center p-6 w-full h-full
                      xl:flex-row xl:flex-wrap xl:justify-center xl:items-center"
         >
-
           {/* PRELOADED IMAGE
 
             This <img/> element is pre-styled to integrate with the existing layout as
@@ -47,18 +43,15 @@ export default class PlotsLayout extends React.Component {
             Source: https://tailwindcss.com/course/locking-images-to-a-fixed-aspect-ratio
 
           */}
-          {
-            store.image &&
-            <div className="flex justify-center items-center mt-10 w-full xl:w-1/2 xl:h-1/2">
-              <img src={ store.image } />
+          {store.image && (
+            <div className="flex justify-center items-center mt-10 w-full">
+              <img src={store.image} />
             </div>
-          }
+          )}
 
           {/* PLOTS */}
-          { this.props.children }
-
+          {this.props.children}
         </main>
-
       </div>
     );
   }
