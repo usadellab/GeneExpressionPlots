@@ -37,7 +37,7 @@ export default class AppSwitch extends React.Component {
         >
           <span
             className={
-              `h-1/2 w-1/2 bg-white rounded-full
+              `w-1/2 bg-white rounded-full
               transition duration-200 ease-in-out
               transform ${this.state.switchValue ? 'translate-x-full' : 'translate-x-0' }`
             }

@@ -36,6 +36,7 @@ export default function AppSelect (props) {
             <option
               key={ `${opt.value}-${index}`}
               value={ opt.value }
+              disabled={ opt.disabled }
             >
               { opt.label }
             </option>

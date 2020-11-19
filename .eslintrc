@@ -18,6 +18,8 @@
 
     "linebreak-style": [ "error", "unix" ],
 
+    "no-unreachable": "off",
+
     "no-unused-vars": [ "warn", {
       "args": "none",
       "varsIgnorePattern": "_"

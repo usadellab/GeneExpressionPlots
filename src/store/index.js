@@ -7,10 +7,11 @@ import {
 import {
   computeAveragesAndVariances,
   createGroupPlot,
+  createMultiGeneBarPlot,
   createStackedLinePlot
 } from '../utils/plotsHelper';
 
-import { PRELOAD_DATA, PRELOAD_CAPTIONS } from '../config/globals';
+import { PRELOAD_DATA } from '../config/globals';
 
 
 class DataStore {
@@ -18,30 +19,41 @@ class DataStore {
   /** @type {Group[]} */
   @observable groups = [];
   @observable plots = [];
-  @observable descriptions = {};
+  @observable captions = {};
+  @observable image = null;
   @observable preloaded = false;
-  @observable preloadedDesc = false;
 
   constructor () {
     if (PRELOAD_DATA) this.preloaded = true;
-    if (PRELOAD_CAPTIONS) this.preloadedDesc = true;
   }
 
-  @computed({ keepAlive: true })
-  get accessionIds() {
-    if (this.groups.length) {
+  /* DATA */
 
-      if (this.groups[0].samples.length) {
+  /**
+   * Get the keys of a replicate singleton. This method assumes
+   */
+  @computed({ keepAlive: true }) get accessionIds() {
 
-        if (this.groups[0].samples[0].replicates.length) {
+    const singleReplicates = Object.keys(
+      this.groups[0]?.samples?.[0].replicates?.[0] ?? {}
+    );
+    return singleReplicates.sort();
+  }
 
-          return Object.keys(this.groups[0].samples[0].replicates[0]);
+  @computed({ keepAlive: true }) get hasData () {
+    return this.groups.length > 0;
+  }
 
-        }
-      }
-    }
-    return [];
+  @computed({ keepAlive: true }) get hasImage () {
+    return this.image ? true : false;
+  }
 
+  @computed({ keepAlive: true}) get isPreloading () {
+    return this.preloaded && !this.hasData;
+  }
+
+  @computed({ keepAlive: true}) get hasPlots () {
+    return this.plots.length > 0;
   }
 
   /**
@@ -50,10 +62,6 @@ class DataStore {
    */
   @action assignData (groups) {
     this.groups = groups;
-  }
-
-  @action assignCaptions (captions) {
-    this.descriptions = captions;
   }
 
   /**
@@ -86,12 +94,115 @@ class DataStore {
     this.groups.splice(index,1);
   }
 
+  /* PLOTS */
+
   /**
-   * Delete a plot from the store
-   * @param {number} index plot index in the store
+   * check if the store has captions
+   * @returns {boolean}
    */
-  @action deletePlot(index){
-    this.plots.splice(index,1);
+  @computed({ keepAlive: true }) get hasCaptions () {
+    return this.captions && Object.keys(this.captions).length > 0;
+  }
+
+  /**
+   * Reassigns the internal image data to a string URL.
+   * @param {string} image created URL string from the image Blob
+   */
+  @action assignImage (image) {
+    this.image = image;
+  }
+
+  /**
+   * Reassigns the internal caption data to a new object.
+   * @param {Group} groups Group object
+   */
+  @action assignCaptions (captions) {
+    this.captions = captions;
+  }
+
+  /**
+   *
+   * @param {string[]} accessionIds
+   * @param {boolean} showlegend
+   * @param {string} plotType
+   */
+  @action addBarPlot(accessionIds, showlegend, showCaption, plotTitle) {
+
+    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+
+    if (accessionIds.length === 1) this.plots.push(
+      createGroupPlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        'bar',
+        this.plots.length,
+        plotTitle,
+      )
+    );
+    else if (accessionIds.length > 1) this.plots.push(
+      createMultiGeneBarPlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        this.plots.length,
+        plotTitle,
+      )
+    );
+
+  }
+
+  @action addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+    this.plots.push(
+      createGroupPlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        'scatter',
+        this.plots.length,
+        plotTitle,
+      )
+    );
+  }
+
+  @action addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle) {
+    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+    this.plots.push(
+      createStackedLinePlot(
+        plotData,
+        accessionIds,
+        showlegend,
+        showCaption,
+        this.groups[0].countUnit,
+        this.plots.length,
+        colorBy,
+        plotTitle,
+      )
+    );
+  }
+
+  @action addPlot(accessionIds, showlegend, showCaption, plotType, colorBy, plotTitle){
+
+    switch (plotType) {
+      case 'bars':
+        this.addBarPlot(accessionIds, showlegend, showCaption, plotTitle);
+        break;
+      case 'individualCurves':
+        this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle);
+        break;
+      case 'stackedCurves':
+        this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle);
+        break;
+      default:
+        break;
+    }
   }
 
   /**
@@ -129,53 +240,25 @@ class DataStore {
   }
 
   /**
-   *
-   * @param {*} accessionId
-   * @param {*} showlegend
-   * @param {*} plotType
+   * Delete the existing image legend.
    */
-  @action addBarPlot(accessionId, showlegend, showCaption) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionId);
-    this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, 'bar', this.plots.length)
-    );
-  }
-
-  @action addIndivualCurvesPlot(accessionId, showlegend, showCaption) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionId);
-    this.plots.push(
-      createGroupPlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, 'scatter', this.plots.length)
-    );
-  }
-
-  @action addStackedCurvePlot(accessionId, showlegend, showCaption) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionId);
-    this.plots.push(
-      createStackedLinePlot(plotData, accessionId, showlegend, showCaption, this.groups[0].countUnit, this.plots.length)
-    );
-  }
-
-  @action addPlot(accessionId, showlegend, showCaption, plotType){
-    switch (plotType) {
-      case 'bars':
-        this.addBarPlot(accessionId, showlegend, showCaption);
-        break;
-      case 'individualCurves':
-        this.addIndivualCurvesPlot(accessionId, showlegend, showCaption);
-        break;
-      case 'stackedCurves':
-        this.addStackedCurvePlot(accessionId, showlegend, showCaption);
-        break;
-      default:
-        break;
-    }
+  @action clearImage () {
+    this.image = null;
   }
 
   /**
-   * clear the plots array in the store
+   * Clear the plots array in the store.
    */
   @action clearPlots () {
     this.plots = [];
+  }
+
+  /**
+   * Delete a plot from the store
+   * @param {number} index plot index in the store
+   */
+  @action deletePlot(index){
+    this.plots.splice(index,1);
   }
 
 }

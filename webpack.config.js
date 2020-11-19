@@ -95,10 +95,10 @@ module.exports = {
     new EnvironmentPlugin({
       'NODE_ENV': 'development',
       'BASE_URL': '/',
-      'PRELOAD_CAPTIONS': process.env.PRELOAD_CAPTIONS ?? null,
-      'PRELOAD_DATA': process.env.PRELOAD_DATA         ?? null,
-      'PRELOAD_IMAGE': process.env.PRELOAD_IMAGE       ?? null,
-      'PRELOAD_PLOTS': process.env.PRELOAD_PLOTS       ?? null,
+      'PRELOAD_CAPTIONS': process.env.PRELOAD_CAPTIONS || null,
+      'PRELOAD_DATA': process.env.PRELOAD_DATA         || null,
+      'PRELOAD_IMAGE': process.env.PRELOAD_IMAGE       || null,
+      'PRELOAD_PLOTS': process.env.PRELOAD_PLOTS       || null,
     }),
 
     // Generate dist/index.html

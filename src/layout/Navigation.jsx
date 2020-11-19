@@ -1,64 +1,17 @@
-import React    from 'react';
-import { Link } from 'react-router-dom';
+import React          from 'react';
 import { withRouter } from 'react-router';
 
-import AppAnchor from '@components/AppAnchor';
-import AppButton from '@components/AppButton';
-import AppIcon   from '@components/AppIcon';
-import AppFile   from '@components/AppFile';
+import AppOverlay from '@components/AppOverlay';
+import AppSpinner from '@components/AppSpinner';
 
-import { store } from '@/store';
+import {
+  NavGroup,
+  NavMenu,
+} from './NavigationItem';
+
+import { store }    from '@/store';
 import { observer } from 'mobx-react';
 
-
-
-const NavMenu = (props) => {
-
-  const menuType = {
-    anchor: AppAnchor,
-    button: AppButton,
-    file: AppFile,
-    link: Link
-  };
-
-  const MenuComponent = menuType[props.component];
-
-  return (
-    <li key={`${props.name}`} >
-      <MenuComponent
-        className= {
-          `flex items-center py-2 cursor-pointer
-                   text-gray-800 hover:text-blue-600 text-base capitalize font-bold ${props.disabled ? 'opacity-50 cursor-not-allowed' : ''}`
-        } 
-                    
-        { ...props }
-      >
-        { props.icon && <AppIcon file="base" id={ props.icon } className="w-6 h-6 mr-2" /> }
-        { props.name }
-      </MenuComponent>
-    </li>
-  );
-};
-
-const NavSection = (props) => (
-  <div
-    className={ `flex flex-col items-center ${props.className}` }
-  >
-    <Link
-      className="md:min-w-full font-bold text-lg uppercase text-gray-600"
-      to={ props.to }
-    >
-      { props.title }
-    </Link>
-
-    <ul
-      className="flex flex-col items-center justify-center list-none
-                 md:min-w-full md:items-start md:ml-4"
-    >
-      { props.children }
-    </ul>
-  </div>
-);
 
 @observer
 class AppNavigation extends React.Component {
@@ -67,93 +20,145 @@ class AppNavigation extends React.Component {
     super();
     this.state = {
       exportUrl: null,
+      loading: false,
     };
   }
 
-  
+  /* AUXILIARY */
 
-  handleLoadFile = (event) => {
+  /**
+   * Trigger a route change if the current location does not match the current route
+   * @param {string} route route name
+   */
+  auxChangeRoute = (route) => {
+    if (this.props.location.pathname !== `/${route}`)
+      this.props.changeRoute(route);
+  }
 
-    // Get the file ref
-    const file = event.target.files.item(0);
+  /* DATA MENU EVENTS */
 
-    // Reset file input (allow consecutive uploads of the same file)
-    event.target.value = null;
-
-    // Accept JSON mime-type only
-    if (!file || file.type !== 'application/json') return;
-
-    // Use FileReader API to parse the input file
-    const fr = new FileReader();
-
-    fr.readAsText(file, 'utf-8');
-
-    fr.onload = () => {
-
-      // Update store
-      store.groups.push( ...JSON.parse(fr.result) );
-
-    };
-
-    fr.onerror = err => console.log(err);
-
-    // change route
-    this.props.changeRoute('data');
-
+  onClearDataMenuClick = () => {
+    store.clearData();
+    this.auxChangeRoute('data');
   };
 
-  handleLoadDescriptions = (event) => {
+  onExportDataMenuClick = () => {
 
-    // Get the file ref
-    const file = event.target.files.item(0);
-
-    // Reset file input (allow consecutive uploads of the same file)
-    event.target.value = null;
-
-    // Accept JSON mime-type only
-    if (!file || file.type !== 'application/json') return;
-
-    // Use FileReader API to parse the input file
-    const fr = new FileReader();
-
-    fr.readAsText(file, 'utf-8');
-
-    fr.onload = () => {
-
-      // Update store
-      Object.assign(store.descriptions, JSON.parse(fr.result));
-
+    const data = {
+      data: store.groups,
+      captions: store.captions,
+      image: store.image,
     };
 
-    fr.onerror = err => console.log(err);
-  }
-
-  handleExport = () => {
-
-    const blob = new Blob([ JSON.stringify(store.groups, null, 2) ], {
+    const blob = new Blob([ JSON.stringify(data, null, 2) ], {
       type: 'application/json'
     });
 
     this.setState({ exportUrl: URL.createObjectURL(blob) });
 
-    // change route
-    this.props.changeRoute('data');
+    this.auxChangeRoute('data');
   }
 
-  handleClearPlots = () => {
+  onImportDataMenuClick = (event) => {
+
+    this.setState({ loading: true });
+
+    // Get the file ref
+    const file = event.target.files.item(0);
+
+    // Reset file input (allow consecutive uploads of the same file)
+    event.target.value = null;
+
+    // Accept JSON mime-type only
+    if (!file || file.type !== 'application/json') return;
+
+    // Use FileReader API to parse the input file
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const { data, captions, image } = JSON.parse(reader.result);
+      if (data)
+        store.groups.push( ...data );
+      if (captions)
+        Object.assign(store.captions, captions);
+      if (image)
+        store.assignImage(image);
+    };
+
+    reader.onloadend = () => {
+      this.setState({ loading: false });
+      this.auxChangeRoute('data');
+    };
+
+    reader.onerror = err => {
+      console.log(err);
+      this.setState({ loading: false });
+    };
+
+    reader.readAsText(file, 'utf-8');
+  }
+
+  onUploadCaptionsMenuClick = (event) => {
+
+    // Get the file ref
+    const file = event.target.files.item(0);
+
+    // Reset file input (allow consecutive uploads of the same file)
+    event.target.value = null;
+
+    // Accept JSON mime-type only
+    if (!file || file.type !== 'application/json') return;
+
+    // Use FileReader API to parse the input file
+    const reader = new FileReader();
+    reader.readAsText(file, 'utf-8');
+    reader.onload = () => Object.assign(store.captions, JSON.parse(reader.result));
+    reader.onloadend = () => this.auxChangeRoute('data');
+    reader.onerror = err => console.log(err);
+  }
+
+  /* PLOT MENU EVENTS */
+
+  /**
+   * Clear the current plots.
+   */
+  onClearPlotsMenuClick = () => {
     store.clearPlots();
-    // change route
-    this.props.changeRoute('plots');
-  };
-  handleClearData = () => {
-    store.clearData();
-    //change route
-    this.props.changeRoute('data');
+    this.auxChangeRoute('plots');
   };
 
-  get storeHasData() {
-    return store.groups.length === 0 ? true : false;
+  /**
+   * Clear the current legend image.
+   */
+  onClearImageMenuClick = () => {
+    store.clearImage();
+    this.auxChangeRoute('plots');
   }
+
+  /**
+   * Convert the user image to an image URL and assign it in the store.
+   * @param {React.FormEvent<HTMLInputElement>} event file input event
+   */
+  onNewImageMenuClick = (event) => {
+
+    const reader = new FileReader();
+    reader.onload = () => store.assignImage(reader.result);
+    reader.onloadend = () => this.auxChangeRoute('plots');
+    reader.onerror = (error) => console.error(error);
+    reader.readAsDataURL(event.target.files[0]);
+
+    this.auxChangeRoute('plots');
+  }
+
+  /**
+   * Show the Plots form modal.
+   */
+  onNewPlotMenuClick = () => {
+    this.auxChangeRoute('plots');
+    this.props.showPlotsModal();
+  }
+
+  /* RENDER */
 
   render () {
     return (
@@ -169,15 +174,33 @@ class AppNavigation extends React.Component {
         }
         onClick={ this.props.onClick }
       >
+        {/* LOADING SPINNER */}
+        {
+          (this.state.loading || store.isPreloading) &&
+          <AppOverlay
+            className="flex flex-col justify-center items-center rounded-lg py-4 px-6"
+            overlayClass="bg-gray-600"
+          >
+            <AppSpinner className="mt-2 w-20 h-20 text-blue-700" />
+            <span className="uppercase mt-4 font-semibold">
+              {
+                this.state.loading
+                  ? 'Importing Data'
+                  : 'Preloading Data'
+              }
+            </span>
+          </AppOverlay>
+        }
 
-        <NavSection className="mt-0" title="Data" to="/data" >
+        {/* DATA */}
+        <NavGroup className="mt-0" title="Data" to="/data" >
 
           {
             !store.preloaded &&
             <NavMenu
               component="button"
-              icon="hi-document"
-              name="Upload Table"
+              icon="table"
+              name="Upload Replicate Table"
               onClick={ this.props.showGroupModal }
             />
           }
@@ -185,87 +208,115 @@ class AppNavigation extends React.Component {
           {
             !store.preloaded &&
             <NavMenu
-              component="file"
-              icon="hi-upload"
-              name="Import Data"
-              onChange={ this.handleLoadFile }
+              component="button"
+              icon="table"
+              name="Upload Expression Table"
+              onClick={ this.props.showTableModal }
             />
           }
-          
+
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="annotation"
+              name="Upload Captions"
+              onChange={ this.onUploadCaptionsMenuClick }
+            />
+          }
 
           <NavMenu
             component="anchor"
-            icon="hi-download"
+            icon="download"
             name="Export Data"
-            href={ this.state.exportUrl }
-            onClick={ this.handleExport }
             download="data.json"
+            href={ this.state.exportUrl }
+            onClick={ this.onExportDataMenuClick }
           />
 
           {
             !store.preloaded &&
             <NavMenu
               component="file"
-              icon="hi-upload"
-              name="Import Captions"
-              onChange={ this.handleLoadDescriptions }
+              icon="upload"
+              name="Import Data"
+              onChange={ this.onImportDataMenuClick }
             />
           }
-          
+
           {
             !store.preloaded &&
             <NavMenu
               component="button"
-              icon="hi-trash"
+              icon="trash"
               name="Clear Data"
-              onClick={ this.handleClearData }
+              onClick={ this.onClearDataMenuClick }
             />
           }
 
-        </NavSection>
+        </NavGroup>
 
-
-        <NavSection className="mt-6" title="Plots" to="/plots" >
+        {/* PLOTS */}
+        <NavGroup className="mt-6" title="Plots" to="/plots" >
 
           <NavMenu
             component="button"
-            icon="hi-chart-square-bar"
+            icon="chart-square-bar"
             name="New Plot"
-            onClick={ this.props.showPlotsModal }
-            disabled={ this.storeHasData }
+            disabled={ !store.hasData }
+            onClick={ this.onNewPlotMenuClick }
           />
+
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="file"
+              icon="photograph"
+              accept="image/*"
+              name="New Image"
+              onChange={ this.onNewImageMenuClick }
+            />
+          }
 
           <NavMenu
             component="button"
-            icon="hi-trash"
+            icon="trash"
             name="Clear Plots"
-            onClick={ this.handleClearPlots }
-            disabled={ this.storeHasData }
+            disabled={ !store.hasPlots }
+            onClick={ this.onClearPlotsMenuClick }
           />
 
-        </NavSection>
+          {
+            !store.preloaded &&
+            <NavMenu
+              component="button"
+              icon="trash"
+              name="Clear Image"
+              disabled={ !store.hasImage }
+              onClick={ this.onClearImageMenuClick }
+            />
+          }
 
-        <NavSection className="mt-6" title="Documentation" to="/" >
+        </NavGroup>
 
-          <Link
-            className="flex items-center py-2 cursor-pointer
-                   text-gray-800 hover:text-blue-600 text-base capitalize font-bold"
-            to='/'
-          >
-            <AppIcon file="base" id='hi-book' className="w-6 h-6 mr-2" />
-            Guide
-          </Link>
+        {/* DOCUMENTATION */}
+        <NavGroup className="mt-6" title="Documentation" to="/" >
 
-          <Link
-            className="flex items-center py-2 cursor-pointer
-                   text-gray-800 hover:text-blue-600 text-base capitalize font-bold"
-            to='/api'
-          >
-            <AppIcon file="base" id='hi-code' className="w-6 h-6 mr-2" />
-            API
-          </Link>
+          <NavMenu
+            component="anchor"
+            icon="book"
+            name="Guide"
+            href="https://zendro-dev.gitbook.io/geneexpressionplots/documentation/user-manual"
+          />
 
-        </NavSection>
+          <NavMenu
+            component="anchor"
+            icon="code"
+            name="API"
+            href="https://zendro-dev.gitbook.io/geneexpressionplots/documentation/api"
+          />
+
+        </NavGroup>
 
       </nav>
     );

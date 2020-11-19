@@ -6,11 +6,12 @@ import AppLayout from './layout/AppLayout';
 
 import { store } from '@/store';
 import {
-  PRELOAD_CAPTIONS,
-  PRELOAD_DATA
+  PRELOAD_DATA,
+  PRELOAD_IMAGE,
 } from './config/globals.js';
 
-import '@/assets/svg/base.svg';
+import '@/assets/svg/hero-icons.svg';
+
 
 export default class App extends React.Component {
 
@@ -18,8 +19,17 @@ export default class App extends React.Component {
     if (PRELOAD_DATA) {
       try {
         const response = await fetch(PRELOAD_DATA);
-        if (response.ok)
-          store.assignData( await response.json() );
+        if (response.ok) {
+          const { data, captions, image } = await response.json();
+          if (data)
+            store.assignData(data);
+          else
+            throw new Error('Loading preloaded data caused an error: no data found');
+          if (captions)
+            store.assignCaptions(captions);
+          if (image)
+            store.assignImage(image);
+        }
         else
           console.error('Loading preloaded data caused an error');
       }
@@ -28,13 +38,13 @@ export default class App extends React.Component {
       }
     }
 
-    if (PRELOAD_CAPTIONS) {
+    if (PRELOAD_IMAGE) {
       try {
-        const response = await fetch(PRELOAD_CAPTIONS);
+        const response = await fetch(PRELOAD_IMAGE);
         if (response.ok)
-          store.assignCaptions( await response.json() );
+          store.assignImage(response.url);
         else
-          console.error('Loading preloaded captions caused an error');
+          console.error('Loading preloaded image caused an error');
       }
       catch (error) {
         console.error(error.message);

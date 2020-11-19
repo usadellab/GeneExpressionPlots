@@ -1,9 +1,10 @@
-import React from 'react';
+import React          from 'react';
 import { withRouter } from 'react-router';
 
-import GroupView  from '@/modules/data/pages/GroupView';
-import PlotsForm  from '@/modules/plotly/pages/PlotsForm';
-import AppModal   from '@components/AppModal';
+import AppModal   from '@components/AppModal2';
+import GroupForm  from '@/modules/data/components/GroupForm';
+import TableForm  from '@/modules/data/components/TableForm';
+import PlotsForm  from '@/modules/plotly/components/PlotsForm';
 import TopBar     from './TopBar';
 import Navigation from './Navigation';
 
@@ -16,33 +17,41 @@ class AppLayout extends React.Component {
       showNav: false,
       showGroupModal: false,
       showPlotsModal: false,
+      showTableModal: false,
     };
   }
 
-  changeRoute = (route) => {
-    this.props.history.push(`/${route}`);
-  }
+  /* AUXILIARY */
 
-  showGroupModal = () => {
-    this.setState({ showGroupModal: true });
-    //change route
-    this.changeRoute('data');
-  }
-  showPlotsModal = () => {
-    this.setState({ showPlotsModal: true });
-    //change route
-    this.changeRoute('plots');
-  }
+  changeRoute = (route) => this.props.history.push(`/${route}`);
 
-  hideGroupModal = () => this.setState({ showGroupModal: false })
-  hidePlotsModal = () => this.setState({ showPlotsModal: false })
+  /* NAVIGATION */
 
-  toggleNav = () => this.setState(state => ({ showNav: !state.showNav }))
-  hideNav = () => this.setState({ showNav: false })
+  onTopBarToggle = () => this.setState(state => ({ showNav: !state.showNav }))
+  onNavigationClick = () => this.setState({ showNav: false })
+
+  onShowGroupModal = () => this.setState({ showGroupModal: true });
+  onShowPlotsModal = () => this.setState({ showPlotsModal: true });
+  onShowTableModal = () => this.setState({ showTableModal: true })
+
+  /* MODALS */
+
+  onGroupFormModalHide = () => this.setState({ showGroupModal: false })
+  onGroupFormCancel = () => this.setState({ showGroupModal: false })
+  onGroupFormSave = () => this.setState({ showGroupModal: false })
+
+  onPlotFormModalHide = () => this.setState({ showPlotsModal: false })
+  onPlotFormCancel = () => this.setState({ showPlotsModal: false })
+
+  onTableFormModalHide = () => this.setState({ showTableModal: false })
+  onTableFormCancel = () => this.setState({ showTableModal: false })
+  onTableFormSave = () => this.setState({ showTableModal: false })
+
 
   render () {
     return (
       <>
+        {/* NAVIGATION */}
         <div
           className="relative z-20 py-4 px-6 md:w-64
                      shadow-xl bg-white
@@ -51,7 +60,7 @@ class AppLayout extends React.Component {
 
           {/* NAVIGATION HEADER */}
           <TopBar
-            onToggle={ this.toggleNav }
+            onToggle={ this.onTopBarToggle }
             show={ this.state.showNav }
             brand="Gene Expression Plots"
           />
@@ -59,43 +68,62 @@ class AppLayout extends React.Component {
           {/* COLLAPSIBLE NAVIGATION */}
           <Navigation
             show={ this.state.showNav }
-            showGroupModal={ this.showGroupModal }
-            showPlotsModal={ this.showPlotsModal }
-            onClick={ this.hideNav }
+            showGroupModal={ this.onShowGroupModal }
+            showPlotsModal={ this.onShowPlotsModal }
+            showTableModal={ this.onShowTableModal }
+            onClick={ this.onNavigationClick }
             changeRoute = { this.changeRoute }
           />
 
         </div>
 
+        {/* PAGE CONTENT */}
         <div className="relative md:ml-64">
 
+          {/* ROUTES */}
           { this.props.children }
+
+          {/* DATA GROUP FORM */}
           {
-            this.state.showGroupModal
-              ?
-              <AppModal
-                title="Add Tables"
-                showModal={ this.state.showGroupModal }
-                hideModal={ this.hideGroupModal }
-              >
-                <GroupView
-                  onSave={ this.hideGroupModal }
-                  onCancel={ this.hideGroupModal }
-                />
-              </AppModal>
-              :
-              null
+            this.state.showGroupModal &&
+            <AppModal
+              title="Add Replicate Tables"
+              showModal={ this.state.showGroupModal }
+              hideModal={ this.onGroupFormModalHide }
+            >
+              <GroupForm
+                onSave={ this.onGroupFormSave }
+                onCancel={ this.onGroupFormCancel }
+              />
+            </AppModal>
           }
+
+          {/* DATA TABLE FORM */}
+          {
+            this.state.showTableModal &&
+            <AppModal
+              title="Add Expression Table"
+              showModal={ this.state.showTableModal }
+              hideModal={ this.onTableFormModalHide }
+            >
+              <TableForm
+                onSave={ this.onTableFormSave }
+                onCancel={ this.onTableFormCancel }
+              />
+            </AppModal>
+          }
+
+          {/* PLOTS FORM */}
           {
             this.state.showPlotsModal
               ?
               <AppModal
                 title="Add Plot"
                 showModal={ this.state.showPlotsModal }
-                hideModal={ this.hidePlotsModal }
+                hideModal={ this.onPlotFormModalHide }
               >
                 <PlotsForm
-                  onCancel={ this.hidePlotsModal }
+                  onCancel={ this.onPlotFormCancel }
                 />
               </AppModal>
               :

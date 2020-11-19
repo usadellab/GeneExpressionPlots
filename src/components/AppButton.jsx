@@ -20,7 +20,10 @@ export default function AppButton (props) {
 
       { props.children }
 
-      <AppRipple />
+      {
+        props.disabled ||
+        <AppRipple />
+      }
 
     </button>
   );

@@ -4,20 +4,23 @@ import AppPlot from '@components/AppPlot';
 
 import { store } from '@/store';
 
-
 @observer
 export default class PlotlyComponent extends React.Component {
-
-  render () {
+  render() {
     return (
-      store.plots.length > 0 && store.plots.map((plot, index) => (
+      store.plots.length > 0 &&
+      store.plots.map((plot, index) => (
         <AppPlot
-          key={ `${plot?.layout?.title?.text}-${index}` }
-          className="relative w-full xl:w-1/2 xl:h-1/2 mt-10 flex flex-col"
-          plot={{...plot}}
+          key={`${plot?.layout?.title?.text}-${index}`}
+          className="relative flex flex-col mt-10 w-full"
+          plot={{ ...plot }}
           showCaption={plot.showCaption}
-          accession={plot.accession}
-          caption={store.descriptions[plot.accession]}
+          accessions={plot.accessions}
+          captions={plot.accessions.map((accession) => {
+            return store.captions[accession]
+              ? store.captions[accession]
+              : 'no gene caption available';
+          })}
         />
       ))
     );
