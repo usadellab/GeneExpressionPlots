@@ -1,0 +1,12 @@
+.js-plotly-plot .plotly .modebar {
+  @apply flex justify-center;
+  @apply w-full;
+}
+
+/* .js-plotly-plot .plotly .modebar--hover > :not(.watermark) {
+  @apply opacity-100;
+} */
+
+.js-plotly-plot .plotly .modebar-group {
+  @apply flex;
+}
