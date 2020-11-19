@@ -39,9 +39,9 @@ npm run serve
 ### Available Commands
 
 ```sh
-npm run serv    # serve for development
+npm run serve   # start development server
 npm run build   # build for production
-npm run lint    # show linting errors
+npm run lint    # lint code using ESLint
 ```
 
 ### Example Data
