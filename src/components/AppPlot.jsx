@@ -17,12 +17,25 @@ class AppPlotCaption extends React.Component {
 }
 
 export default class PlotlyComponent extends React.Component {
+
+  componentDidMount () {
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        window.Plotly.Plots.resize(entry.target);
+      }
+    });
+    this.resizeObserver.observe(this.plot.el);
+  }
+
+  componentWillUnmount () {
+    this.resizeObserver.unobserve(this.plot.el);
+  }
+
   render () {
     return (
-      <figure
-        className={this.props.className}
-      >
+      <figure className={this.props.className} >
         <Plot
+          ref={ ref => this.plot = ref }
           { ...this.props.plot }
         />
         {
