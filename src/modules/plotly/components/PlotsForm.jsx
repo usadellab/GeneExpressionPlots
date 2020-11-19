@@ -4,10 +4,10 @@ import AppButton   from '@components/AppButton';
 import AppSwitch   from '@components/AppSwitch';
 import AppDatalist from '@components/AppDatalist';
 import AppIcon     from '@components/AppIcon';
+import AppNumber   from '@components/AppNumber';
 import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
 import AppText     from '@components/AppText';
-import InputNumber from '@components/InputNumber';
 
 import { store } from '@/store';
 
@@ -147,7 +147,7 @@ export default class PlotsForm extends Component {
 
         <div className="md:flex">
 
-          <InputNumber
+          <AppNumber
             className="w-full md:w-1/2"
             label="Plot height"
             value={ this.state.plotHeight }
@@ -155,7 +155,7 @@ export default class PlotsForm extends Component {
             onChange={ this.onPlotHeightChange }
           />
 
-          <InputNumber
+          <AppNumber
             className="w-full md:w-1/2 md:ml-2"
             label="Plot width"
             value= { this.state.plotWidth }
