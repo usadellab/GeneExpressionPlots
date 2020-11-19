@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonJS",
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react",
-    "experimentalDecorators": true
-  }
-}
