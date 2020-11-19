@@ -7,6 +7,7 @@ import AppIcon     from '@components/AppIcon';
 import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
 import AppText     from '@components/AppText';
+import InputNumber from '@components/InputNumber';
 
 import { store } from '@/store';
 
@@ -19,6 +20,8 @@ export default class PlotsForm extends Component {
       accessionIds: [ store.accessionIds[0] ?? '' ],
       accessionIdsView: store.accessionIds.slice(0, 10),
       colorBy: 'group',
+      plotHeight: '',
+      plotWidth: '',
       plotTitle: '',
       plotType: 'bars',
       showlegend: true,
@@ -98,6 +101,8 @@ export default class PlotsForm extends Component {
       this.state.plotType,
       this.state.colorBy,
       this.state.plotTitle,
+      this.state.plotHeight,
+      this.state.plotWidth,
     );
     this.setState({ loading: false });
     this.props.onCancel();
@@ -110,6 +115,14 @@ export default class PlotsForm extends Component {
    */
   onPlotTitleChange = (event) => {
     this.setState({ plotTitle: event.target.value });
+  }
+
+  onPlotHeightChange = (event) => {
+    this.setState({ plotHeight: event.target.value });
+  }
+
+  onPlotWidthChange = (event) => {
+    this.setState({ plotWidth: event.target.value });
   }
 
   onSelectPlotTypeChange = (event) => {
@@ -131,6 +144,26 @@ export default class PlotsForm extends Component {
           value={ this.state.groupName }
           onChange={ this.onPlotTitleChange }
         />
+
+        <div className="md:flex">
+
+          <InputNumber
+            className="w-full md:w-1/2"
+            label="Plot height"
+            value={ this.state.plotHeight }
+            min={ 0 }
+            onChange={ this.onPlotHeightChange }
+          />
+
+          <InputNumber
+            className="w-full md:w-1/2 md:ml-2"
+            label="Plot width"
+            value= { this.state.plotWidth }
+            min={ 0 }
+            onChange={ this.onPlotWidthChange }
+          />
+
+        </div>
 
         <AppSelect
           label="Plot type"
