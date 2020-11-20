@@ -32,6 +32,7 @@ export default class DataView extends React.Component {
           store.groups.map((group, index) => (
 
             <GroupItem
+              className="mt-6 first:mt-0"
               key={ `${group.name}-${index}`}
               group={ group }
               groupIndex={ index }

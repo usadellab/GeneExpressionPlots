@@ -149,8 +149,6 @@ export function createGroupPlot (plotData, accessionIds, showlegend, showCaption
   let data = [];
   let line = null;
   let showLegendCurve = null;
-  console.log(accessionIds);
-  console.log(plotData);
   accessionIds.forEach((accession, accessionIndex) => {
     if(accessionIds.length > 1) {
       line = {
@@ -159,7 +157,6 @@ export function createGroupPlot (plotData, accessionIds, showlegend, showCaption
     }
     Object.keys(plotData).forEach((group,groupIndex) => {
       showLegendCurve = accessionIds.length > 1 ? (groupIndex > 0 ? false : true) : true;
-      console.log(`${groupIndex} ${accessionIndex} ${showLegendCurve}`);
       data.push(createPlotGroup(plotData, group, plotType, accession, line, showLegendCurve));
     });
   });

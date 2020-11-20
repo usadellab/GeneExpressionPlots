@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { store } from "@/store";
-import { observer } from "mobx-react";
+import { store } from '@/store';
+import { observer } from 'mobx-react';
 
 @observer
 export default class PlotsLayout extends React.Component {
@@ -10,10 +10,7 @@ export default class PlotsLayout extends React.Component {
       <div className="flex flex-col xl:flex-row max-w-screen">
         {/* MAIN CONTENT: ROUTES */}
 
-        <main
-          className="flex flex-col items-center p-6 w-full h-full
-                     xl:flex-row xl:flex-wrap xl:justify-center xl:items-center"
-        >
+        <main className="flex flex-wrap w-full" >
           {/* PRELOADED IMAGE
 
             This <img/> element is pre-styled to integrate with the existing layout as
@@ -44,7 +41,9 @@ export default class PlotsLayout extends React.Component {
 
           */}
           {store.image && (
-            <div className="flex justify-center items-center mt-10 w-full">
+            <div className="flex justify-center items-center m-3 w-full
+                            resize-x overflow-auto shadow-outer bg-white"
+            >
               <img src={store.image} />
             </div>
           )}
