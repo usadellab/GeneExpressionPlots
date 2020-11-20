@@ -12,7 +12,7 @@ export default class PlotlyComponent extends React.Component {
       store.plots.map((plot, index) => (
         <AppPlot
           key={`${plot?.layout?.title?.text}-${index}`}
-          className="relative flex flex-col mt-10 w-full"
+          className="relative flex flex-col m-3 py-6 w-full resize-x shadow-outer overflow-auto bg-white"
           plot={{ ...plot }}
           showCaption={plot.showCaption}
           accessions={plot.accessions}

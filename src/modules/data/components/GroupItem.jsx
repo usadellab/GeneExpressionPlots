@@ -22,8 +22,8 @@ const GroupItemStat = (props) => {
 
   return (
     <div className={`flex mt-1 text-sm ${props.className}`}>
-      <span className="text-gray-500">{ label }</span>
-      <span className="ml-1 text-gray-600">{ value }</span>
+      <span className="text-gray-700 font-bold">{ label }</span>
+      <span className="ml-1 text-gray-800">{ value }</span>
     </div>
   );
 };
@@ -60,20 +60,17 @@ export default class GroupItem extends React.Component {
   render () {
     return (
       <div className={
-        `flex items-center mb-6 p-6
-       shadow-lg
-       bg-blue-200 hover:bg-blue-300
-       ${this.props.className}`
+        `flex items-center p-6 shadow-lg bg-white ${this.props.className}`
       }>
 
         <div className="w-full" >
 
           <h2 className="text-lg text-gray-800">{ this.props.group.name }</h2>
 
-          <div className="flex mt-2" >
+          <div className="sm:flex mt-2" >
             <GroupItemStat label="Units:" value={ this.props.group.countUnit } />
-            <GroupItemStat className="ml-4" label="Samples:" value={ this.props.group.samples.length } />
-            <GroupItemStat className="ml-4" label="Replicates:" value={ this.groupReplicates } />
+            <GroupItemStat className="sm:ml-4" label="Samples:" value={ this.props.group.samples.length } />
+            <GroupItemStat className="sm:ml-4" label="Replicates:" value={ this.groupReplicates } />
           </div>
 
         </div>
