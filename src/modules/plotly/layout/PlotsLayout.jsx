@@ -10,7 +10,7 @@ export default class PlotsLayout extends React.Component {
       <div className="flex flex-col xl:flex-row max-w-screen">
         {/* MAIN CONTENT: ROUTES */}
 
-        <main className="flex flex-wrap" >
+        <main className="flex flex-wrap w-full" >
           {/* PRELOADED IMAGE
 
             This <img/> element is pre-styled to integrate with the existing layout as
@@ -41,7 +41,9 @@ export default class PlotsLayout extends React.Component {
 
           */}
           {store.image && (
-            <div className="flex justify-center items-center m-3 resize-x overflow-auto shadow-outer bg-white">
+            <div className="flex justify-center items-center m-3 w-full
+                            resize-x overflow-auto shadow-outer bg-white"
+            >
               <img src={store.image} />
             </div>
           )}
