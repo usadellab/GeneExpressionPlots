@@ -53,7 +53,7 @@ class AppLayout extends React.Component {
       <>
         {/* NAVIGATION */}
         <div
-          className="relative z-20 py-4 px-6 md:w-64
+          className="relative z-20 py-4 px-3 md:w-64
                      shadow-xl bg-white
                      md:fixed md:block md:inset-y-0 md:left-0"
         >
