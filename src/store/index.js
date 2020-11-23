@@ -1,6 +1,7 @@
 import {
   action,
   computed,
+  makeObservable,
   observable,
 } from 'mobx';
 
@@ -24,6 +25,7 @@ class DataStore {
   @observable preloaded = false;
 
   constructor () {
+    makeObservable(this);
     if (PRELOAD_DATA) this.preloaded = true;
   }
 

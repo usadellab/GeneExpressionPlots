@@ -98,11 +98,4 @@ module.exports = {
       },
     },
   },
-  variants: [
-    'responsive',
-    'first',
-    'hover', 'group-hover',
-    'focus', 'focus-within', 'group-focus'
-  ],
-  plugins: [],
 };
