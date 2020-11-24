@@ -35,34 +35,33 @@ export default class AppText extends React.Component {
 
     return (
       <div
-        className={ `group ${this.props.className ?? ''}` }
+        className={ this.props.className }
         onMouseEnter={ () => this.setState({ hover: true }) }
         onMouseLeave={ () => this.setState({ hover: false }) }
       >
 
         <input
-          className="py-3 px-4 w-full
-                     rounded border-2 border-transparent
-                     hover:border-blue-400 focus:border-blue-600
-                     shadow-xs bg-gray-100 text-gray-800 text-sm
-                     focus:outline-none focus:bg-white group-hover:bg-white"
-          id={ this.props.label }
+          { ...this.props }
+          className={
+            `py-3 px-4 w-full
+             rounded border-2 border-grey-600
+             hover:border-blue-500 focus:border-blue-600
+             shadow-xs bg-gray-200 text-gray-800 text-sm
+             focus:outline-none focus:bg-white`
+          }
+          id={ this.props.label ?? this.props.id }
           type="text"
-          value={ this.props.value }
-          placeholder={ this.props.placeholder }
           onBlur={ this.onInputBlur }
-          onChange={ this.props.onChange }
-          onClick={ this.props.onClick }
           onFocus={ this.onInputFocus }
         />
 
         {
-          this.props.label && !this.props.labelPosition &&
+          this.props.label &&
           <label
-            htmlFor={ this.props.label }
+            htmlFor={ this.props.label ?? this.props.id }
             className={
               `px-1 py-1 text-sm
-             ${ this.state.focus ? 'text-blue-500' : this.state.hover ? 'text-gray-800' : 'text-gray-600' }`
+             ${ this.state.focus ? 'text-blue-600' : this.state.hover ? 'text-gray-800' : 'text-gray-600' }`
             }
           >
             { this.props.label }
