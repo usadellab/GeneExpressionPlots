@@ -7,6 +7,7 @@ import AppSpinner from '@components/AppSpinner';
 import {
   NavGroup,
   NavMenu,
+  NavLink,
 } from './NavigationItem';
 
 import { store }    from '@/store';
@@ -296,6 +297,19 @@ class AppNavigation extends React.Component {
               onClick={ this.onClearImageMenuClick }
             />
           }
+
+        </NavGroup>
+
+        {/* TOOLS */}
+        <NavGroup className="mt-6" title="Tools" to="/tools" >
+
+          <NavLink
+            to="/tools/gene-browser"
+            icon="search"
+            name="Gene Browser"
+            disabled={ !store.hasData }
+            onClick={ () => {} }
+          />
 
         </NavGroup>
 
