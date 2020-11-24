@@ -19,8 +19,6 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
-    console.log('update');
-
     let geneView = [];
     let countOffset = this.state.countOffset;
 
