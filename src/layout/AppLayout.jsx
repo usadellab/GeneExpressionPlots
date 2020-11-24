@@ -78,7 +78,7 @@ class AppLayout extends React.Component {
         </div>
 
         {/* PAGE CONTENT */}
-        <div className="relative md:ml-64 min-h-screen bg-gray-300">
+        <div className="relative md:ml-64 flex flex-col min-h-screen bg-gray-300">
 
           {/* ROUTES */}
           { this.props.children }
