@@ -32,14 +32,21 @@ class DataStore {
   /* DATA */
 
   /**
-   * Get the keys of a replicate singleton. This method assumes
+   * Get an array of all unique gene accession ids.
    */
   @computed({ keepAlive: true }) get accessionIds() {
 
-    const singleReplicates = Object.keys(
-      this.groups[0]?.samples?.[0].replicates?.[0] ?? {}
-    );
-    return singleReplicates.sort();
+    if (this.groups.length === 0)
+      return [];
+
+    if (this.groups[0].samples.length === 0)
+      return [];
+
+    if (this.groups[0].samples[0].replicates.length === 0)
+      return [];
+
+    return Object.keys(this.groups[0].samples[0].replicates[0]).sort();
+
   }
 
   @computed({ keepAlive: true }) get hasData () {
