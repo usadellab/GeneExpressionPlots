@@ -19,6 +19,8 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
+    console.log('update');
+
     let geneView = [];
     let countOffset = this.state.countOffset;
 
@@ -33,7 +35,7 @@ export default class GeneBrowser extends Component {
       });
 
       countOffset++;
-      if (countOffset > this.state.countView)
+      if (countOffset >= this.state.countView)
         break;
     }
 
