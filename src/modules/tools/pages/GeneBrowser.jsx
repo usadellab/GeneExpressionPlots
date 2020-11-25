@@ -22,9 +22,11 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
+    const regexp = new RegExp(this.state.searchId, 'i');
+
     const accessionIds = store.accessionIds.reduce((array, accessionId) => {
 
-      if (accessionId.includes(this.state.searchId)) {
+      if (accessionId.search(regexp) > -1) {
         array.push({
           accessionId,
           description: store.captions[accessionId],
@@ -39,7 +41,7 @@ export default class GeneBrowser extends Component {
     const end = this.state.pageOffset * countView;
 
     const geneView = accessionIds.slice(start, end);
-    const pageMax = Math.ceil(accessionIds.length / this.state.countView);
+    const pageMax = Math.ceil(accessionIds.length / this.state.countView) || 1;
 
     this.setState(({ geneView, pageMax }));
 
@@ -85,9 +87,8 @@ export default class GeneBrowser extends Component {
    */
   onGeneSearchSubmit = (event) => {
     if (event.key === 'Enter') {
-      this.setState({ searchId: event.target.value});
+      this.setState({ pageOffset: 1, searchId: event.target.value});
     }
-
   }
 
   /**
@@ -95,16 +96,24 @@ export default class GeneBrowser extends Component {
    * @param {React.ChangeEvent<HTMLInputElement} event
    */
   onPageOffsetChange = (event) => {
-    this.setState({ pageOffset: event.target.value });
+
+    let pageOffset = event.target.value;
+
+    if (pageOffset <= 0 || pageOffset > this.state.pageMax) {
+      pageOffset = this.state.pageOffset;
+    }
+
+    this.setState({ pageOffset });
+
   }
 
   /* RENDER */
 
   render() {
     return (
-      <div className="m-2">
+      <div className="m-6">
 
-        <div className="mt-4 flex flex-col lg:flex-row">
+        <div className="mt-4 flex flex-col lg:flex-row bg-white px-6 py-5">
 
           <AppText
             className="lg:w-3/4 w-full"
@@ -113,18 +122,19 @@ export default class GeneBrowser extends Component {
             onKeyDown={ this.onGeneSearchSubmit }
           />
 
-          <div className="sm:flex">
+          <div className="flex flex-col flex-grow sm:flex-row">
             <AppNumber
-              className="w-full sm:w-1/2 lg:ml-3"
-              label="Page"
+              className="w-full mt-4 sm:w-1/2 lg:ml-3 lg:mt-0"
+              label={ `Page ${this.state.pageOffset}/${this.state.pageMax}`}
               min={ 1 }
               max={ this.state.pageMax }
+              required={ true }
               value={ this.state.pageOffset }
               onChange={ this.onPageOffsetChange }
             />
 
             <AppSelect
-              className="w-full sm:ml-3 sm:w-1/2"
+              className="w-full mt-4 sm:ml-3 sm:w-1/2 lg:mt-0"
               id="gene-browser-search"
               label="Display count"
               value={ this.state.countView }
