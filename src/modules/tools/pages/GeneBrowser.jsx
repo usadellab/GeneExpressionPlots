@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { autorun } from 'mobx';
 import { store } from '@/store';
-import AppText from '@/components/AppText';
+
+import AppNumber from '@/components/AppNumber';
 import AppSelect from '@/components/AppSelect';
+import AppText from '@/components/AppText';
 
 export default class GeneBrowser extends Component {
   constructor () {
@@ -10,7 +12,8 @@ export default class GeneBrowser extends Component {
     this.state = {
       geneView: [],
       searchId: '',
-      countOffset: 0,
+      pageOffset: 1,
+      pageMax: 1,
       countView: 20,
     };
   }
@@ -19,25 +22,27 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
-    let geneView = [];
-    let countOffset = this.state.countOffset;
+    const accessionIds = store.accessionIds.reduce((array, accessionId) => {
 
-    for (const accessionId of store.accessionIds) {
+      if (accessionId.includes(this.state.searchId)) {
+        array.push({
+          accessionId,
+          description: store.captions[accessionId],
+        });
+      }
 
-      if (this.state.searchId && !accessionId.includes(this.state.searchId))
-        continue;
+      return array;
+    }, []);
 
-      geneView.push({
-        accessionId,
-        description: store.captions[accessionId]
-      });
+    const countView = parseInt(this.state.countView);
+    const start = (this.state.pageOffset-1) * countView;
+    const end = this.state.pageOffset * countView;
 
-      countOffset++;
-      if (countOffset >= this.state.countView)
-        break;
-    }
+    const geneView = accessionIds.slice(start, end);
+    const pageMax = Math.ceil(accessionIds.length / this.state.countView);
 
-    this.setState({ geneView });
+    this.setState(({ geneView, pageMax }));
+
   }
 
   /* LYFECYCLE */
@@ -47,12 +52,14 @@ export default class GeneBrowser extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (
-      prevState.countView !== this.state.countView
-      || prevState.searchId !== this.state.searchId
+
+    if( prevState.searchId !== this.state.searchId
+        || prevState.pageOffset !== this.state.pageOffset
+        || prevState.countView !== this.state.countView
     ) {
       this.computeGeneView();
     }
+
   }
 
   componentWillUnmount () {
@@ -77,8 +84,18 @@ export default class GeneBrowser extends Component {
    * @param {React.KeyboardEvent} event
    */
   onGeneSearchSubmit = (event) => {
-    if (event.key === 'Enter')
+    if (event.key === 'Enter') {
       this.setState({ searchId: event.target.value});
+    }
+
+  }
+
+  /**
+   * Update the _pageOffset_ state property.
+   * @param {React.ChangeEvent<HTMLInputElement} event
+   */
+  onPageOffsetChange = (event) => {
+    this.setState({ pageOffset: event.target.value });
   }
 
   /* RENDER */
@@ -86,37 +103,46 @@ export default class GeneBrowser extends Component {
   render() {
     return (
       <div className="m-2">
-        <div className="mt-4 flex">
+
+        <div className="mt-4 flex flex-col lg:flex-row">
 
           <AppText
-            className="w-3/4"
+            className="lg:w-3/4 w-full"
             id="gene-browser-search"
             label="Search accession"
             onKeyDown={ this.onGeneSearchSubmit }
           />
 
-          <AppSelect
-            id="gene-browser-search"
-            className="ml-3 w-1/4"
-            label="Display count"
-            value={ this.state.countView }
-            onChange={ this.onDisplayCountSelect }
-            options={[
-              { value: 5 },
-              { value: 10 },
-              { value: 20 },
-              { value: 50 },
-              { value: 100 },
-            ]}
-          />
+          <div className="sm:flex">
+            <AppNumber
+              className="w-full sm:w-1/2 lg:ml-3"
+              label="Page"
+              min={ 1 }
+              max={ this.state.pageMax }
+              value={ this.state.pageOffset }
+              onChange={ this.onPageOffsetChange }
+            />
+
+            <AppSelect
+              className="w-full sm:ml-3 sm:w-1/2"
+              id="gene-browser-search"
+              label="Display count"
+              value={ this.state.countView }
+              onChange={ this.onDisplayCountSelect }
+              options={[
+                { value: 5 },
+                { value: 10 },
+                { value: 20 },
+                { value: 50 },
+                { value: 100 },
+              ]}
+            />
+          </div>
 
         </div>
 
         <div className="bg-white mt-6 p-6">
           {
-            // store.accessionIds
-            //   .filter(accessionId => this.state.searchId ? accessionId.includes(this.state.searchId) : true)
-            //   .slice(this.state.countOffset, this.state.countView)
             this.state.geneView.map(({ accessionId, description }) => (
 
               <div
@@ -124,12 +150,13 @@ export default class GeneBrowser extends Component {
                 key={ accessionId }
               >
                 <div className="font-bold">{ accessionId }</div>
-                <div className="mx-6">{ description }</div>
+                <div className="mx-6">{ description ?? 'No description exists for this gene.' }</div>
               </div>
 
             ))
           }
         </div>
+
       </div>
     );
   }
