@@ -43,7 +43,7 @@ export default class GeneBrowser extends Component {
   /* LYFECYCLE */
 
   componentDidMount () {
-    autorun( this.computeGeneView );
+    this.disposeGeneViewListener = autorun( this.computeGeneView );
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -53,6 +53,10 @@ export default class GeneBrowser extends Component {
     ) {
       this.computeGeneView();
     }
+  }
+
+  componentWillUnmount () {
+    this.disposeGeneViewListener();
   }
 
   /* EVENTS */
