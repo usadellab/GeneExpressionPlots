@@ -298,7 +298,7 @@ class AppNavigation extends React.Component {
         </NavGroup>
 
         {/* TOOLS */}
-        <NavGroup className="mt-6" title="Tools" to="/tools" >
+        <NavGroup className="mt-6" title="Tools" to="/" >
 
           <NavLink
             to="/tools/gene-browser"
