@@ -2,7 +2,6 @@ import React from 'react';
 import BaseInput from './BaseInput';
 
 export default class AppText extends React.Component {
-
   render () {
     return (
       <BaseInput
@@ -13,6 +12,7 @@ export default class AppText extends React.Component {
         placeholder={ this.props.placeholder }
         max={ this.props.max }
         min={ this.props.min }
+        required={ this.props.required }
         step={ this.props.step }
         onBlur={ this.props.onBlur }
         onChange={ this.props.onChange }
