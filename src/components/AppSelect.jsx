@@ -9,7 +9,7 @@ export default function AppSelect (props) {
 
   return (
     <div
-      className={ `group ${className}` }
+      className={ className }
       onMouseEnter={ () => setHover(true) }
       onMouseLeave={ () => setHover(false) }
     >
@@ -18,10 +18,10 @@ export default function AppSelect (props) {
         { ...selectProps }
         id={ props.label || props.id }
         className="py-3 px-4 w-full
-                   rounded border-2 border-transparent
-                   hover:border-blue-400 focus:border-blue-600
-                   shadow-xs bg-gray-100 text-gray-800 text-sm
-                   focus:outline-none focus:bg-white group-hover:bg-white"
+                   rounded border-2 border-gray-300
+                   hover:border-blue-500 focus:border-blue-600
+                   shadow-xs bg-white text-gray-800 text-sm
+                   focus:outline-none"
         onFocus={ () => setFocus(true) }
         onBlur={ () => setFocus(false) }
       >
@@ -42,7 +42,7 @@ export default function AppSelect (props) {
         htmlFor={ props.label || props.id }
         className={
           `px-1 py-1 text-sm
-           ${ focus ? 'text-blue-500' : hover ? 'text-gray-800' : 'text-gray-600' }`
+           ${ focus ? 'text-blue-600' : hover ? 'text-gray-800' : 'text-gray-600' }`
         }
       >
         { props.label }
