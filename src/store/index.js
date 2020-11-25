@@ -74,6 +74,13 @@ class DataStore {
   }
 
   /**
+   * Assign a new captions object.
+   */
+  @action assignCaptions (captions) {
+    this.captions = captions;
+  }
+
+  /**
    * Add a new group to the store.
    * @param {Group} group
    */
@@ -119,14 +126,6 @@ class DataStore {
    */
   @action assignImage (image) {
     this.image = image;
-  }
-
-  /**
-   * Reassigns the internal caption data to a new object.
-   * @param {Group} groups Group object
-   */
-  @action assignCaptions (captions) {
-    this.captions = captions;
   }
 
   /**

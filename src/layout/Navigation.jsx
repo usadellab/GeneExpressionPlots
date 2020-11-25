@@ -78,12 +78,9 @@ class AppNavigation extends React.Component {
 
     reader.onload = () => {
       const { data, captions, image } = JSON.parse(reader.result);
-      if (data)
-        store.groups.push( ...data );
-      if (captions)
-        Object.assign(store.captions, captions);
-      if (image)
-        store.assignImage(image);
+      if (data)     store.assignData(data);
+      if (captions) store.assignCaptions(captions);
+      if (image)    store.assignImage(image);
     };
 
     reader.onloadend = () => {
