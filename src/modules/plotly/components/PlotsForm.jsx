@@ -133,6 +133,7 @@ export default class PlotsForm extends Component {
         />
 
         <AppSelect
+          className="mt-4"
           label="Plot type"
           value={ this.state.plotType }
           options={[
@@ -147,6 +148,7 @@ export default class PlotsForm extends Component {
         {
           this.state.plotType === 'stackedCurves' &&
           <AppSelect
+            className="mt-4"
             label="Color by"
             value={ this.state.colorBy }
             options={[
