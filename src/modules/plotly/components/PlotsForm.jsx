@@ -123,7 +123,7 @@ export default class PlotsForm extends Component {
   render() {
     return (
       <form
-        className="overflow-y-auto w-full max-h-xl px-6 py-4 flex-auto
+        className="overflow-y-auto w-full max-h-3xl px-6 py-4 flex-auto
                    text-gray-600 text-lg leading-relaxed"
       >
         <AppText
