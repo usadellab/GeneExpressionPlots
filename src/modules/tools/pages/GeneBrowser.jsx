@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { autorun } from 'mobx';
 import { store } from '@/store';
+import { escapeRegExp } from '@/utils/validation';
 
 import AppNumber from '@/components/AppNumber';
 import AppSelect from '@/components/AppSelect';
@@ -22,17 +23,16 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
-    const regexp = new RegExp(this.state.searchId, 'i');
+    const regexp = new RegExp( escapeRegExp(this.state.searchId), 'i' );
 
-    // search accessionIds and captions
     const accessionIds = store.accessionIds.reduce((array, accessionId) => {
 
-      const description = store.captions[accessionId];
-
       const matchAccesion = accessionId.search(regexp) > -1;
-      let matchCaption;
-      if (description)
-        matchCaption = description.search(regexp) > -1;
+
+      const description = store.captions[accessionId];
+      const matchCaption = description
+        ? description.search(regexp) > -1
+        : false;
 
       if (matchAccesion || matchCaption) {
         array.push({
