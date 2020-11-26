@@ -123,7 +123,7 @@ export default class PlotsForm extends Component {
   render() {
     return (
       <form
-        className="overflow-y-auto w-full max-h-xl px-6 py-4 flex-auto
+        className="overflow-y-auto w-full max-h-3xl px-6 py-4 flex-auto
                    text-gray-600 text-lg leading-relaxed"
       >
         <AppText
@@ -133,6 +133,7 @@ export default class PlotsForm extends Component {
         />
 
         <AppSelect
+          className="mt-4"
           label="Plot type"
           value={ this.state.plotType }
           options={[
@@ -147,6 +148,7 @@ export default class PlotsForm extends Component {
         {
           this.state.plotType === 'stackedCurves' &&
           <AppSelect
+            className="mt-4"
             label="Color by"
             value={ this.state.colorBy }
             options={[

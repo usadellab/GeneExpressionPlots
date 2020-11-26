@@ -7,6 +7,7 @@ import AppSpinner from '@components/AppSpinner';
 import {
   NavGroup,
   NavMenu,
+  NavLink,
 } from './NavigationItem';
 
 import { store }    from '@/store';
@@ -77,12 +78,9 @@ class AppNavigation extends React.Component {
 
     reader.onload = () => {
       const { data, captions, image } = JSON.parse(reader.result);
-      if (data)
-        store.groups.push( ...data );
-      if (captions)
-        Object.assign(store.captions, captions);
-      if (image)
-        store.assignImage(image);
+      if (data)     store.assignData(data);
+      if (captions) store.assignCaptions(captions);
+      if (image)    store.assignImage(image);
     };
 
     reader.onloadend = () => {
@@ -166,7 +164,7 @@ class AppNavigation extends React.Component {
         className={
           `absolute top-0 left-0 right-0 z-40 overflow-x-hidden
            flex flex-col items-center justify-center
-           mt-20 mx-3 py-5 shadow-outer rounded bg-white
+           mt-20 py-5 shadow-outer rounded bg-white
            md:relative md:flex md:flex-col
            md:mt-0 md:items-stretch md:shadow-none
            ${this.props.show ? 'visible' : 'hidden'}`
@@ -296,6 +294,19 @@ class AppNavigation extends React.Component {
               onClick={ this.onClearImageMenuClick }
             />
           }
+
+        </NavGroup>
+
+        {/* TOOLS */}
+        <NavGroup className="mt-6" title="Tools" to="/" >
+
+          <NavLink
+            to="/tools/gene-browser"
+            icon="search"
+            name="Gene Browser"
+            disabled={ !store.hasData }
+            onClick={ () => {} }
+          />
 
         </NavGroup>
 

@@ -133,23 +133,15 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: !prod,
-              sourceMap: true,
-            },
           },
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              sourceMap: true,
             },
           },
           {
             loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-            }
           }
         ],
       },

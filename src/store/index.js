@@ -1,6 +1,7 @@
 import {
   action,
   computed,
+  makeObservable,
   observable,
 } from 'mobx';
 
@@ -24,20 +25,28 @@ class DataStore {
   @observable preloaded = false;
 
   constructor () {
+    makeObservable(this);
     if (PRELOAD_DATA) this.preloaded = true;
   }
 
   /* DATA */
 
   /**
-   * Get the keys of a replicate singleton. This method assumes
+   * Get an array of all unique gene accession ids.
    */
   @computed({ keepAlive: true }) get accessionIds() {
 
-    const singleReplicates = Object.keys(
-      this.groups[0]?.samples?.[0].replicates?.[0] ?? {}
-    );
-    return singleReplicates.sort();
+    if (this.groups.length === 0)
+      return [];
+
+    if (this.groups[0].samples.length === 0)
+      return [];
+
+    if (this.groups[0].samples[0].replicates.length === 0)
+      return [];
+
+    return Object.keys(this.groups[0].samples[0].replicates[0]).sort();
+
   }
 
   @computed({ keepAlive: true }) get hasData () {
@@ -62,6 +71,13 @@ class DataStore {
    */
   @action assignData (groups) {
     this.groups = groups;
+  }
+
+  /**
+   * Assign a new captions object.
+   */
+  @action assignCaptions (captions) {
+    this.captions = captions;
   }
 
   /**
@@ -110,14 +126,6 @@ class DataStore {
    */
   @action assignImage (image) {
     this.image = image;
-  }
-
-  /**
-   * Reassigns the internal caption data to a new object.
-   * @param {Group} groups Group object
-   */
-  @action assignCaptions (captions) {
-    this.captions = captions;
   }
 
   /**
