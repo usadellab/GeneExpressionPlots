@@ -18,7 +18,10 @@ module.exports = {
   },
   variants: {
     extend: {
-      margin: ['first']
+      backgroundColor: ['odd'],
+      borderWidth: ['first'],
+      margin: ['first'],
+      visibility: ['group-hover'],
     }
   }
 };
