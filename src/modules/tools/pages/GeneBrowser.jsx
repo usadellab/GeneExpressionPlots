@@ -24,12 +24,20 @@ export default class GeneBrowser extends Component {
 
     const regexp = new RegExp(this.state.searchId, 'i');
 
+    // search accessionIds and captions
     const accessionIds = store.accessionIds.reduce((array, accessionId) => {
 
-      if (accessionId.search(regexp) > -1) {
+      const description = store.captions[accessionId];
+
+      const matchAccesion = accessionId.search(regexp) > -1;
+      let matchCaption;
+      if (description)
+        matchCaption = description.search(regexp) > -1;
+
+      if (matchAccesion || matchCaption) {
         array.push({
           accessionId,
-          description: store.captions[accessionId],
+          description,
         });
       }
 
