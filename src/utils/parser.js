@@ -1,12 +1,12 @@
 /**
+ * Reads an expression table spec as defined [here](url)
+ *
  * @typedef  {Object}  ExpTableOptions Options object for the expression table parser
  * @property {number?}  captionsColumn column index with caption strings
  * @property {string}        countUnit one of raw|rpkm|tpm
  * @property {string}   fieldSeparator delimiter for each column field
  * @property {string}  headerSeparator delimiter for each column header-cell
-**/
-/**
- * Reads an expression table spec as defined [here](url)
+ *
  * @param {string}            table table as a single string
  * @param {ExpTableOptions} options parser options
  */
@@ -81,4 +81,35 @@ export function readExpressionTable (table, options) {
   });
 
   return skeleton;
+}
+
+/**
+ * Parse a tabular file to its in-memory object representation.
+ *
+ * @typedef  {Object} readTableOptions Options object for the expression table parser
+ * @property {string} fieldSeparator delimiter for each column field
+ *
+ * @param {string} table table as a single string
+ * @param {readTableOptions} options parser options
+ */
+export function readTable (table, options) {
+
+  const lines = table.split(/\r?\n|\r/);
+
+  const header = lines
+    .shift()
+    .split(options.fieldSeparator)
+    .slice(1);
+
+  const rows = lines.reduce((acc, line) => {
+    const values = line.split(options.fieldSeparator);
+    const key = values.shift();
+    Object.assign(acc, { [key]: values });
+    return acc;
+  }, {});
+
+  return {
+    header,
+    rows,
+  };
 }

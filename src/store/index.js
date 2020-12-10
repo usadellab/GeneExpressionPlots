@@ -12,6 +12,8 @@ import {
   createStackedLinePlot
 } from '../utils/plotsHelper';
 
+import { objectFromArrays } from '@/utils/collection';
+
 import { PRELOAD_DATA } from '../config/globals';
 
 
@@ -106,8 +108,17 @@ class DataStore {
    * Delete a group from the store
    * @param {number} index group index in the store
    */
-  @action deleteGroup(index){
+  @action deleteGroup(index) {
     this.groups.splice(index,1);
+  }
+
+  @action getCaption(accession) {
+    const row = this.captions.rows[accession];
+    if (!row) return null;
+
+    const caption = objectFromArrays(this.captions.header, row);
+    console.log(caption);
+    return caption;
   }
 
   /* PLOTS */
