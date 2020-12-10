@@ -3,9 +3,13 @@ import { withRouter } from 'react-router';
 
 import AppOverlay from '@components/AppOverlay';
 import AppSpinner from '@components/AppSpinner';
-import { NavGroup, NavMenu, NavLink } from './NavigationItem';
+import {
+  NavGroup,
+  NavMenu,
+  NavLink,
+} from './NavigationItem';
 
-import { store } from '@/store';
+import { store }    from '@/store';
 import { observer } from 'mobx-react';
 import { readTable } from '@/utils/parser';
 
