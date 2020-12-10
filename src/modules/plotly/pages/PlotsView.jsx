@@ -19,9 +19,9 @@ export default class PlotsView extends React.Component {
         >
           {
             plot.showCaption &&
-            plot.accessions.map(accession => (
+            plot.accessions.map((accession, index) => (
               <PlotCaption
-                key={ accession }
+                key={ `accession-${index}` }
                 accession={ accession }
                 caption={ store.getCaption(accession) }
               />
