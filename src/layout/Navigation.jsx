@@ -225,7 +225,7 @@ class AppNavigation extends React.Component {
           }
 
           {
-            // !store.preloaded &&
+            !store.preloaded &&
             <NavMenu
               component="file"
               icon="annotation"
