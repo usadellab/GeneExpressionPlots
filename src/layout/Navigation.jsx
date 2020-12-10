@@ -1,13 +1,17 @@
-import React from 'react';
+import React          from 'react';
 import { withRouter } from 'react-router';
 
 import AppOverlay from '@components/AppOverlay';
 import AppSpinner from '@components/AppSpinner';
-import { NavGroup, NavMenu, NavLink } from './NavigationItem';
 
-import { store } from '@/store';
+import {
+  NavGroup,
+  NavMenu,
+  NavLink,
+} from './NavigationItem';
+
+import { store }    from '@/store';
 import { observer } from 'mobx-react';
-import { readTable } from '@/utils/parser';
 
 
 @observer
@@ -100,30 +104,15 @@ class AppNavigation extends React.Component {
     // Reset file input (allow consecutive uploads of the same file)
     event.target.value = null;
 
-    const validTypes = [
-      'text/tab-separated-values',
-      'text/csv',
-      'text/plain',
-    ];
     // Accept JSON mime-type only
-    if (!file || !validTypes.includes(file.type)) {
-      console.error(`Invalid file type: ${file.type}`);
-      return;
-    }
+    if (!file || file.type !== 'application/json') return;
 
     // Use FileReader API to parse the input file
     const reader = new FileReader();
-    reader.onload = () => {
-      store.assignCaptions(
-        readTable(reader.result, {
-          fieldSeparator: '\t'
-        })
-      );
-      console.log(store.captions);
-    };
-    reader.onerror = err => console.log(err);
-    reader.onloadend = () => this.auxChangeRoute('data');
     reader.readAsText(file, 'utf-8');
+    reader.onload = () => Object.assign(store.captions, JSON.parse(reader.result));
+    reader.onloadend = () => this.auxChangeRoute('data');
+    reader.onerror = err => console.log(err);
   }
 
   /* PLOT MENU EVENTS */
