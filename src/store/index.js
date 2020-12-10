@@ -60,7 +60,7 @@ class DataStore {
   }
 
   @computed({ keepAlive: true}) get isPreloading () {
-    return this.preloaded && !this.hasData;
+    return this.preloaded && this.hasData;
   }
 
   @computed({ keepAlive: true}) get hasPlots () {

@@ -16,19 +16,24 @@ import { readTable } from '@/utils/parser';
 
 import '@/assets/svg/hero-icons.svg';
 
-
+import { dataTable } from '@/store/dataframe';
 export default class App extends React.Component {
 
   async componentDidMount () {
 
-    let groups = [];
+    let data = [];
     let captions = {};
     let image = null;
 
+    // if (PRELOAD_DATA) {
+    //   const dataRes = await fetchResource(PRELOAD_DATA, { type: 'json' });
+    //   if (dataRes?.data) groups = dataRes.data;
+    //   if (dataRes?.image) image = dataRes.image;
+    // }
     if (PRELOAD_DATA) {
-      const dataRes = await fetchResource(PRELOAD_DATA, { type: 'json' });
-      if (dataRes?.data) groups = dataRes.data;
-      if (dataRes?.image) image = dataRes.image;
+      const dataResponse = await fetchResource(PRELOAD_DATA, { type: 'text' });
+      if (dataResponse) data = readTable(dataResponse, { fieldSeparator: ',' });
+      console.log(data);
     }
 
     if (PRELOAD_CAPTIONS) {
@@ -42,7 +47,8 @@ export default class App extends React.Component {
 
     store.assignCaptions(captions);
     store.assignImage(image);
-    store.assignData(groups);
+    // store.assignData(groups);
+    dataTable.assignDataFrame(data.header, data.rows);
   }
 
   render () {

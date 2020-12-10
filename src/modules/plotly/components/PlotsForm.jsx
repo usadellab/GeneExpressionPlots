@@ -10,14 +10,16 @@ import AppText     from '@components/AppText';
 
 import { store } from '@/store';
 
+import { dataTable } from '@/store/dataframe'; 
 
 export default class PlotsForm extends Component {
-
+  
   constructor() {
     super();
+    console.log(dataTable.accessionIds);
     this.state = {
-      accessionIds: [ store.accessionIds[0] ?? '' ],
-      accessionIdsView: store.accessionIds.slice(0, 10),
+      accessionIds: [ dataTable.accessionIds[0] ?? '' ],
+      accessionIdsView: dataTable.accessionIds.slice(0, 10),
       colorBy: 'group',
       plotTitle: '',
       plotType: 'bars',
@@ -34,14 +36,14 @@ export default class PlotsForm extends Component {
   searchAccessionIds = (accession) => {
 
     // Flag whether the current accession id is valid for submission
-    this.setState({ validForm: store.accessionIds.includes(accession) });
+    this.setState({ validForm: dataTable.accessionIds.includes(accession) });
 
     // Update the search window with the accession matching ids
     let accessionIdsView = [];
-    for (let i = 0; i < store.accessionIds.length; i++) {
+    for (let i = 0; i < dataTable.accessionIds.length; i++) {
 
-      if (store.accessionIds[i].includes(accession))
-        accessionIdsView.push(store.accessionIds[i]);
+      if (dataTable.accessionIds[i].includes(accession))
+        accessionIdsView.push(dataTable.accessionIds[i]);
 
       if (accessionIdsView.length >= 10)
         break;

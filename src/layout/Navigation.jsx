@@ -276,7 +276,7 @@ class AppNavigation extends React.Component {
             component="button"
             icon="chart-square-bar"
             name="New Plot"
-            disabled={ !store.hasData }
+            // disabled={ !store.hasData }
             onClick={ this.onNewPlotMenuClick }
           />
 
