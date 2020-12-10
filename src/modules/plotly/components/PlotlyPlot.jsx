@@ -27,7 +27,9 @@ export default class PlotlyPlot extends React.Component {
           ref={ ref => this.plot = ref }
           { ...this.props.plot }
         />
-        { this.props.children }
+        <div className="flex flex-wrap">
+          { this.props.children }
+        </div>
       </figure>
     );
   }
