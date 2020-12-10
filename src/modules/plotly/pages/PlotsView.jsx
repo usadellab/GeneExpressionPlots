@@ -16,7 +16,6 @@ export default class PlotsView extends React.Component {
           className="relative flex flex-col m-3 py-6 w-full resize-x
                      shadow-outer overflow-auto bg-white"
           plot={{ ...plot }}
-          showCaption={ plot.showCaption }
         >
           {
             plot.showCaption &&
