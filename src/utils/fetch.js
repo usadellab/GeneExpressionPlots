@@ -23,7 +23,7 @@ export async function fetchResource (file, options) {
     else if (options.type === 'text') payload = await response.text();
     else    throw new Error(`Unsupported read method for ${file}`);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   if (!payload)

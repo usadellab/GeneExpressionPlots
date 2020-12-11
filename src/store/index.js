@@ -115,10 +115,7 @@ class DataStore {
   @action getCaption(accession) {
     const row = this.captions.rows[accession];
     if (!row) return null;
-
-    const caption = objectFromArrays(this.captions.header, row);
-    console.log(caption);
-    return caption;
+    return objectFromArrays(this.captions.header, row);
   }
 
   /* PLOTS */

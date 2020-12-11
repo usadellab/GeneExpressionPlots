@@ -89,7 +89,7 @@ class AppNavigation extends React.Component {
     };
 
     reader.onerror = err => {
-      console.log(err);
+      console.error(err);
       this.setState({ loading: false });
     };
 
@@ -123,9 +123,8 @@ class AppNavigation extends React.Component {
           fieldSeparator: '\t'
         })
       );
-      console.log(store.captions);
     };
-    reader.onerror = err => console.log(err);
+    reader.onerror = err => console.error(err);
     reader.onloadend = () => this.auxChangeRoute('data');
     reader.readAsText(file, 'utf-8');
   }
