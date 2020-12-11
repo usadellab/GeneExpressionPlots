@@ -4,6 +4,7 @@ import PlotlyPlot from '../components/PlotlyPlot';
 import PlotCaption from '../components/PlotCaption';
 
 import { store } from '@/store';
+import { colors } from '@/utils/plotsHelper';
 
 @observer
 export default class PlotsView extends React.Component {
@@ -24,6 +25,7 @@ export default class PlotsView extends React.Component {
                 key={ `accession-${index}` }
                 accession={ accession }
                 caption={ store.getCaption(accession) }
+                color={ plot.accessions.length > 1  ? colors[index] : null }
               />
             ))
           }
