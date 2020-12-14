@@ -1,11 +1,19 @@
 /**
- * Sanitizes special characters used in regular expressions, so these can be
- * used as a literal search input.
- *
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
- *
- * @param {string} string input string to be escaped
+ * Check whether the unknown object is:
+ * - empty object
+ * - empty array
+ * - empty string
+ * - NaN
+ * @param {unknown} x unknown object
  */
-export function escapeRegExp(string) {
-  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+export function isEmptyObject (x) {
+  return typeof x === 'object' && Object.keys(x).length === 0;
+}
+
+/**
+ * Check wether the array object is empty.
+ * @param {any[]} array array of values
+ */
+export function isEmptyArray (array) {
+  return array.length === 0;
 }
