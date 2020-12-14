@@ -1,57 +1,64 @@
 import { makeAutoObservable } from 'mobx';
+import { objectFromArrays } from '@/utils/collection';
+
 
 export class Dataframe {
 
-  constructor(columnNames, rows){
-    this.columnNames = columnNames; 
-    this.rows = rows;
+  header = [];
+  rows = {};
+
+  constructor () {
     makeAutoObservable(this);
   }
-  /**
-   * 
-   * @param {String} accessionId 
-   */
-  getRow(accessionId) {
-    return this.rows[accessionId] ? this.rows[accessionId] : null;
+
+  loadFromObject (table) {
+    this.header = table.header;
+    this.rows = table.rows;
   }
 
-  /**
-   * 
-   * @param {String} accessionId 
-   */
-  getAnnotatedRow(accessionId) {
-    return this.columnNames.reduce((acc,curr,i) => {
-      acc[curr] = this.rows[accessionId][i];
-      return acc;
-    }, {});
-  }
+  /* COMPUTED */
 
-  /**
-   * 
-   * @param {Number} index 
-   * @param {String} separator 
-   */
-  getColumnByIndex(index, separator) {
-    return this.columnNames[index].split(separator);
-  }
-
-  get accessionIds() {
+  get rowNames () {
     return Object.keys(this.rows);
   }
 
+  /* QUERIES */
+
   /**
-   * 
-   * @param {String} accessionId 
-   * @param {any[]} row 
+   * Get a single row as an array of values.
+   * @param {string} rowName unique row name
    */
-  addRow(accessionId, row){
-    this.rows[accessionId] = row;
+  getRow (rowName) {
+    return this.rows[rowName] ? this.rows[rowName] : null;
   }
 
-  assignDataFrame(columnNames, rows) {
-    this.columnNames = columnNames; 
-    this.rows = rows;
+  /**
+   * Get a single row as an object of key-value pairs.
+   * @param {String} rowName unique row name
+   */
+  getAnnotatedRow (rowName) {
+    const row = this.rows[rowName];
+    return objectFromArrays(this.header, row);
   }
+
+  /**
+   *
+   * @param {Number} index
+   * @param {String} separator
+   */
+  getColumnByIndex (index, separator) {
+    return this.header[index].split(separator);
+  }
+
+  /* MUTATIONS */
+
+  /**
+   *
+   * @param {String} rowName
+   * @param {any[]} row
+   */
+  addRow (rowName, row){
+    this.rows[rowName] = row;
+  }
+
 }
-
-export const dataTable = new Dataframe();
