@@ -7,9 +7,7 @@ import AppSelect  from '@components/AppSelect';
 import AppSpinner from '@components/AppSpinner';
 import AppText    from '@components/AppText';
 
-import { store } from '@/store';
-import { readExpressionTable } from '@/utils/parser';
-
+import { readTable } from '@/utils/parser';
 
 export default class TableForm extends React.Component {
 
@@ -55,26 +53,29 @@ export default class TableForm extends React.Component {
 
     const file = event.target.files[0];
 
+    // Accept tabular types only
+    const validTypes = [
+      'text/tab-separated-values',
+      'text/csv',
+      'text/plain',
+    ];
+
+    if (!file || !validTypes.includes(file.type)) {
+      console.error(`Invalid file type: ${file.type}`);
+      this.setState({ loading: false });
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = () => {
-      const spaghetti = readExpressionTable(reader.result, {
-        captionsColumn: this.state.captionsColumn,
-        headerSeparator: this.state.headerSeparator,
-        countUnit: this.state.countUnit,
-        fieldSeparator: this.state.fieldSeparator,
+      const table = readTable(reader.result, {
+        fieldSeparator: '\t'
       });
-      store.assignData(Object.values(spaghetti));
-    };
-
-    reader.onprogress = progress => {
-
-      // console.log(progress);
+      console.log(table);
     };
 
     reader.onloadend = () => {
-
-      // store.checkAndAddReplicates(this.state, replicates);
       this.setState({ loading: false });
       this.props.onSave();
     };
