@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { autorun } from 'mobx';
 import { store } from '@/store';
-import { escapeRegExp } from '@/utils/validation';
+import { escapeRegExp } from '@/utils/string';
 
 import AppNumber from '@/components/AppNumber';
 import AppSelect from '@/components/AppSelect';
