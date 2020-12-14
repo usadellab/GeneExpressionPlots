@@ -70,17 +70,22 @@ class AppNavigation extends React.Component {
     // Reset file input (allow consecutive uploads of the same file)
     event.target.value = null;
 
-    // Accept JSON mime-type only
-    if (!file || file.type !== 'application/json') return;
+    // Accept zipped files only
+    if (!file || file.type !== 'application/zip') {
+      console.error(`Invalid file type: ${file.type}`);
+      this.setState({ loading: false });
+      return;
+    }
+
 
     // Use FileReader API to parse the input file
     const reader = new FileReader();
 
     reader.onload = () => {
-      const { data, captions, image } = JSON.parse(reader.result);
-      if (data)     store.assignData(data);
-      if (captions) store.assignCaptions(captions);
-      if (image)    store.assignImage(image);
+      // const { data, captions, image } = JSON.parse(reader.result);
+      // if (data)     store.assignData(data);
+      // if (captions) store.assignCaptions(captions);
+      // if (image)    store.assignImage(image);
     };
 
     reader.onloadend = () => {
@@ -104,14 +109,16 @@ class AppNavigation extends React.Component {
     // Reset file input (allow consecutive uploads of the same file)
     event.target.value = null;
 
+    // Accept tabular types only
     const validTypes = [
       'text/tab-separated-values',
       'text/csv',
       'text/plain',
     ];
-    // Accept JSON mime-type only
+
     if (!file || !validTypes.includes(file.type)) {
       console.error(`Invalid file type: ${file.type}`);
+      this.setState({ loading: false });
       return;
     }
 
