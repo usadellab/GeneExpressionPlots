@@ -12,28 +12,24 @@ import {
 } from './config/globals.js';
 
 import { fetchResource } from '@/utils/fetch';
-import { readTable } from '@/utils/parser';
+import { readTable }     from '@/utils/parser';
+import { dataTable }     from '@/store/data-store';
 
 import '@/assets/svg/hero-icons.svg';
 
-import { dataTable } from '@/store/dataframe';
+
 export default class App extends React.Component {
 
   async componentDidMount () {
 
-    let data = [];
     let captions = {};
     let image = null;
 
-    // if (PRELOAD_DATA) {
-    //   const dataRes = await fetchResource(PRELOAD_DATA, { type: 'json' });
-    //   if (dataRes?.data) groups = dataRes.data;
-    //   if (dataRes?.image) image = dataRes.image;
-    // }
     if (PRELOAD_DATA) {
       const dataResponse = await fetchResource(PRELOAD_DATA, { type: 'text' });
-      if (dataResponse) data = readTable(dataResponse, { fieldSeparator: ',' });
-      console.log(data);
+      if (dataResponse) dataTable.loadFromObject(
+        readTable(dataResponse, { fieldSeparator: '\t' })
+      );
     }
 
     if (PRELOAD_CAPTIONS) {
@@ -47,8 +43,6 @@ export default class App extends React.Component {
 
     store.assignCaptions(captions);
     store.assignImage(image);
-    // store.assignData(groups);
-    dataTable.assignDataFrame(data.header, data.rows);
   }
 
   render () {
