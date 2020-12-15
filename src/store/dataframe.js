@@ -1,19 +1,45 @@
 import { makeAutoObservable } from 'mobx';
 import { objectFromArrays } from '@/utils/collection';
 
+/**
+ * @typedef  {Object<string, string[]>} Row table row
+**/
+
+/**
+ * @typedef  {Object} TableObject In-memory representation of a parsed table
+ * @property {string[]}   header array of column names
+ * @property {Row[]}        rows array of row objects
+**/
 
 export class Dataframe {
 
+  /** @type {string[]} */
   header = [];
+
+  /** @type {Row} */
   rows = {};
+
+  /**
+   * @typedef  {Object} DfOptions Dataframe class options
+   * @property {string} multiHeader separator for tree-like headers
+  **/
+  config = {
+    multiHeader: ''
+  }
 
   constructor () {
     makeAutoObservable(this);
   }
 
-  loadFromObject (table) {
+  /**
+   * Load the dataframe with an already parsed table.
+   * @param {TableObject} table
+   * @param {DfOptions} options
+   */
+  loadFromObject (table, options) {
     this.header = table.header;
     this.rows = table.rows;
+    Object.assign(this.config, options);
   }
 
   /* COMPUTED */
@@ -23,7 +49,9 @@ export class Dataframe {
   }
 
   get colNames () {
-    return this.header;
+    return this.config.multiHeader
+      ? this.header.map(multiHeader => multiHeader.split(this.config.multiHeader))
+      : this.header;
   }
 
   /* QUERIES */
@@ -32,15 +60,50 @@ export class Dataframe {
    * Get a single row as an array of values.
    * @param {string} rowName unique row name
    */
-  getRow (rowName, depth) {
+  getRow (rowName) {
+    return this.rows[rowName];
+  }
 
-    if (!depth) return this.rows[rowName];
+  /**
+   * Get a single row as an object of key-value pairs.
+   *
+   * - Each key represents the column header for a single cell value.
+   * - Each value represents the value of the cell.
+   *
+   * @param {String} rowName unique row name
+   */
+  getRowAsObject (rowName) {
+    return objectFromArrays(this.header, this.rows[rowName]);
+  }
+
+  /**
+   * In multi-header configurations, return the cells of a single row grouped
+   * by a subset of their respective headers. The returned object is a custom
+   * Map of array_key-array_value pairs.
+   *
+   * - Each key is an array with the composite column header group elements.
+   * - Each value is an array of cell values under that header group.
+   *
+   * @param {string} rowName unique row name
+   * @param {number} groupBy sub-header index
+   */
+  getRowAsGroups (rowName, groupBy) {
+
+    if (!this.config.multiHeader) {
+      console.error(
+        'The groupBy option of getRow is only supported in multi-header dataframes'
+      );
+      return null;
+    }
 
     const memory = {};
 
     return this.rows[rowName].reduce((obj, count, index) => {
 
-      const headerSlice = this.header[index].split('*').slice(0, depth).join('*');
+      const headerSlice = this.header[index]
+        .split(this.config.multiHeader)
+        .slice(0, groupBy+1)
+        .join(this.config.multiHeader);
 
       if (!memory[headerSlice])
         memory[headerSlice] = headerSlice.split('*');
@@ -54,7 +117,6 @@ export class Dataframe {
       return obj;
 
     }, new Map());
-
   }
 
   /**
@@ -64,15 +126,6 @@ export class Dataframe {
    */
   getRows (rowNames) {
     return rowNames.reduce((obj, rowName) => ({ ...obj, [rowName]: this.rows[rowName] }), {});
-  }
-
-  /**
-   * Get a single row as an object of key-value pairs.
-   * @param {String} rowName unique row name
-   */
-  getAnnotatedRow (rowName) {
-    const row = this.rows[rowName];
-    return objectFromArrays(this.header, row);
   }
 
   /**
