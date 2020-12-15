@@ -76,6 +76,26 @@ export class Dataframe {
   }
 
   /**
+   * 
+   * @param {String} rowName unique row key
+   * @returns {object} tree-like object mapping the multi-index levels to the row
+   */
+  getRowAsTree (rowName) {
+    const row = this.rows[rowName];
+    return this.header.reduce((tree,column,i) => {
+      let split = column.split('*');
+      let group = split[0];
+      let sample = split[1];
+      tree[group]
+        ? (tree[group][sample] 
+          ? tree[group][sample].push(row[i])
+          : tree[group][sample] = [row[i]])
+        : tree[group] = {[sample]:[row[i]]};
+      return tree;
+    }, {});
+  }
+
+  /**
    *
    * @param {Number} index
    * @param {String} separator
