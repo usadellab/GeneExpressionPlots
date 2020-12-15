@@ -96,6 +96,16 @@ export const computeVariance = (replicates, accessionId, average) => {
 };
 
 /**
+ * compute the average gene count over all replicates for a specific gene
+ * @param {Array} replicates list of replicates
+ * @param {string} accessionId The accessionId to compute the avereage for
+ * @param {number} average The computed average gene count over all replicates for the gien gene acecssion
+ */
+export const computeStandardDeviation = (replicates, accessionId, average) => {
+  return Math.sqrt(replicates.reduce((variance, current) => variance += ((average - current[accessionId])**2)/replicates.length, 0));
+};
+
+/**
  * compute avevrages and variances for each group and sample given a specific Gene accessionId
  * @param {array} groups groups array as it is in the mobx store
  * @param {string} accessionId accessionId to calculate the averages and variances for
@@ -128,7 +138,7 @@ export function computeAveragesAndVariances(groups, accessionIds) {
         };
       });
       accessionIds.forEach(accession => {
-        plotData[group.name][sample.name][accession].variance = computeVariance(
+        plotData[group.name][sample.name][accession].variance = computeStandardDeviation(
           sample.replicates, accession, plotData[group.name][sample.name][accession].average
         );
       });
