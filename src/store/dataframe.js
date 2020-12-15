@@ -31,6 +31,7 @@ export class Dataframe {
   /**
    * Get a single row as an array of values.
    * @param {string} rowName unique row name
+   * @returns reutrn the specified row
    */
   getRow (rowName, depth) {
 
@@ -58,6 +59,15 @@ export class Dataframe {
   }
 
   /**
+   * Get multiple rows from the dataframe
+   * @param {array} rowNames unique row name
+   * @returns {object} returns the specified rows.
+   */
+  getRows (rowNames) {
+    return rowNames.reduce((obj, rowName) => ({ ...obj, [rowName]: this.rows[rowName] }), {});
+  }
+
+  /**
    * Get a single row as an object of key-value pairs.
    * @param {String} rowName unique row name
    */
@@ -75,6 +85,19 @@ export class Dataframe {
     return this.header[index].split(separator);
   }
 
+  getRowFilter(rowName, expr) {
+    const headerIndeces = this.matchExprToHeader(expr);
+    return headerIndeces.map(i => this.getRow(rowName)[i]);
+  }
+
+  matchExprToHeader(expr) {
+    return this.header.reduce((arr, columnNames, i) => {
+      if (columnNames.includes(expr))
+        arr.push(i);
+      return arr;
+    }, []);
+  }
+
   /* MUTATIONS */
 
   /**
@@ -85,5 +108,4 @@ export class Dataframe {
   addRow (rowName, row){
     this.rows[rowName] = row;
   }
-
 }
