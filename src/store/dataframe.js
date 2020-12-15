@@ -65,18 +65,6 @@ export class Dataframe {
   }
 
   /**
-   * Get a single row as an object of key-value pairs.
-   *
-   * - Each key represents the column header for a single cell value.
-   * - Each value represents the value of the cell.
-   *
-   * @param {String} rowName unique row name
-   */
-  getRowAsObject (rowName) {
-    return objectFromArrays(this.header, this.rows[rowName]);
-  }
-
-  /**
    * In multi-header configurations, return the cells of a single row grouped
    * by a subset of their respective headers. The returned object is a custom
    * Map of array_key-array_value pairs.
@@ -117,6 +105,38 @@ export class Dataframe {
       return obj;
 
     }, new Map());
+  }
+
+  /**
+   * Get a single row as an object of key-value pairs.
+   *
+   * - Each key represents the column header for a single cell value.
+   * - Each value represents the value of the cell.
+   *
+   * @param {String} rowName unique row name
+   */
+  getRowAsObject (rowName) {
+    return objectFromArrays(this.header, this.rows[rowName]);
+  }
+
+  /**
+   *
+   * @param {String} rowName unique row key
+   * @returns {object} tree-like object mapping the multi-index levels to the row
+   */
+  getRowAsTree (rowName) {
+    const row = this.rows[rowName];
+    return this.header.reduce((tree,column,i) => {
+      let split = column.split('*');
+      let group = split[0];
+      let sample = split[1];
+      tree[group]
+        ? (tree[group][sample]
+          ? tree[group][sample].push(row[i])
+          : tree[group][sample] = [row[i]])
+        : tree[group] = {[sample]:[row[i]]};
+      return tree;
+    }, {});
   }
 
   /**
