@@ -206,7 +206,7 @@ export default class GeneBrowser extends Component {
         </div>
 
         <AppModal
-          className="w-11/12 sm:w-3/4 md:w-11/12 2xl:w-1/2"
+          className="flex flex-col w-full h-full md:w-5/6 md:h-5/6 lg:w-3/4 2xl:w-1/2"
           title={ this.state.showGeneDetails }
           showModal={ this.state.showGeneDetails }
           hideModal={ () => this.toggleGeneDetails(false) }
