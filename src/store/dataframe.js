@@ -31,7 +31,6 @@ export class Dataframe {
   /**
    * Get a single row as an array of values.
    * @param {string} rowName unique row name
-   * @returns reutrn the specified row
    */
   getRow (rowName, depth) {
 
@@ -83,19 +82,6 @@ export class Dataframe {
    */
   getColumnByIndex (index, separator) {
     return this.header[index].split(separator);
-  }
-
-  getRowFilter(rowName, expr) {
-    const headerIndeces = this.matchExprToHeader(expr);
-    return headerIndeces.map(i => this.getRow(rowName)[i]);
-  }
-
-  matchExprToHeader(expr) {
-    return this.header.reduce((arr, columnNames, i) => {
-      if (columnNames.includes(expr))
-        arr.push(i);
-      return arr;
-    }, []);
   }
 
   /* MUTATIONS */
