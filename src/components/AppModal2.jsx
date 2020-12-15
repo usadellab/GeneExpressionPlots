@@ -10,24 +10,22 @@ export default class AppModal extends React.Component {
     super();
   }
 
-  hideModal = () => this.setState({ showModal: false })
-
   render () {
 
     return (
       this.props.showModal &&
       <AppOverlay
-        className="shadow-lg rounded-lg bg-white"
+        className={ `shadow-lg rounded-lg bg-white ${ this.props.className ?? '' }`}
         overlayClass="bg-black"
         onClick={ this.props.hideModal }
       >
 
         {/* HEADER */}
         <div
-          className="flex items-center justify-between px-6 pb-2 mt-5 rounded-t text-gray-800"
+          className="flex items-center justify-between p-6 rounded-t text-gray-800"
         >
 
-          <h2 className="uppercase w-full text-center text-xl md:text-2xl font-semibold">
+          <h2 className="uppercase w-full text-center text-base sm:text-xl md:text-2xl font-semibold">
             { this.props.title }
           </h2>
 

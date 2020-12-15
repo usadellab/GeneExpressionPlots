@@ -14,7 +14,7 @@ export default class AppOverlay extends React.Component {
       <>
         {/* CONTAINER */}
         <div
-          className="fixed inset-0 z-40
+          className="fixed z-40 inset-0
                      flex justify-center items-center
                      outline-none focus:outline-none"
         >
