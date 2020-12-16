@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import GroupItem from '../components/GroupItem';
 
-import { store } from '@/store';
+import { dataTable } from '@/store/data-store';
 
 
 @observer
@@ -16,12 +16,14 @@ export default class DataView extends React.Component {
     };
   }
 
-  showGroupView = () => {
-    this.setState({ showGroup: true });
-  }
-
-  hideGroupView = () => {
-    this.setState({ showGroup: false });
+  computeStats = () => {
+    return Object.entries(dataTable.headerObject).map(([ groupName, sample ]) => {
+      return {
+        name: groupName,
+        sampleCount: Object.keys(sample).length,
+        replicateCount: Object.values(sample).reduce((sum,replicates) => sum+=replicates.length,0)
+      };
+    });
   }
 
   render () {
@@ -29,13 +31,12 @@ export default class DataView extends React.Component {
       <div className={ `relative w-full ${this.props.className || ''}` }>
 
         {
-          store.groups.map((group, index) => (
+          this.computeStats().map((group, index) => (
 
             <GroupItem
               className="mt-6 first:mt-0"
               key={ `${group.name}-${index}`}
               group={ group }
-              groupIndex={ index }
             />
 
           ))

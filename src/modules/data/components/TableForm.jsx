@@ -8,16 +8,15 @@ import AppSpinner from '@components/AppSpinner';
 import AppText    from '@components/AppText';
 
 import { readTable } from '@/utils/parser';
+import { dataTable } from '@/store/data-store';
 
 export default class TableForm extends React.Component {
 
   constructor () {
     super();
     this.state = {
-      headerSeparator: '*',
       countUnit: 'raw',
-      captionsColumn: '',
-      //
+      headerSeparator: '*',
       fieldSeparator: ',',
       //
       cancel: false,
@@ -27,12 +26,12 @@ export default class TableForm extends React.Component {
 
   /* INPUT HANDLERS */
 
-  onCaptionColumnChange = (event) => {
-    this.setState({ captionsColumn: event.target.value });
-  }
-
   onCountUnitSelect = (event) => {
     this.setState({ countUnit: event.target.value });
+  }
+
+  onFieldSeparatorChange = (event) => {
+    this.setState({ fieldSeparator: event.target.value });
   }
 
   onHeaderSeparatorChange = (event) => {
@@ -69,10 +68,18 @@ export default class TableForm extends React.Component {
     const reader = new FileReader();
 
     reader.onload = () => {
+
+      // Parse the input file as a table
       const table = readTable(reader.result, {
-        fieldSeparator: '\t'
+        fieldSeparator: this.state.fieldSeparator,
+        rowNameColumn: 0,
       });
-      console.log(table);
+
+      // Load the store from the parsed table
+      dataTable.loadFromObject(table, {
+        multiHeader: this.state.headerSeparator,
+      });
+
     };
 
     reader.onloadend = () => {
@@ -112,11 +119,16 @@ export default class TableForm extends React.Component {
           onChange={ this.onHeaderSeparatorChange }
         />
 
-        <AppText
+        <AppSelect
           className="w-full"
-          label="Captions column"
-          value={ this.state.captionsColumn }
-          onChange={ this.onCaptionColumnChange }
+          placeholder="1..N"
+          label="Field separator"
+          value={ this.state.separator }
+          options={[
+            { label: 'CSV',  value: ','  },
+            { label: 'TAB',  value: '\t' },
+          ]}
+          onChange={ this.onFieldSeparatorChange }
         />
 
         {/* FORM ACTIONS */}
