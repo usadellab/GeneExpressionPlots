@@ -1,13 +1,13 @@
 import { isEmptyObject } from './validation';
 
 /**
- * This recursive reducer builds a tree-like object from a two-dimensional array.
- * For this reducer to success, two conditions must be met:
+ * Recursive reducer that builds a tree-like object from a two-dimensional array.
  *
  * - Each child array is assumed to be a branch of the tree.
- * - Each node in the tree is an object that can have an arbitrary number of child nodes.
+ * - Overlapping branches are supported.
+ * - Each node in the tree is an object with an arbitrary number of child nodes.
  * - The final layer of nodes in the tree will be an array.
- * - Uniqueness of the final layer is not ensured, up to the user to handle this case.
+ * - Uniqueness of the final layer is not enforced.
  *
  * @param {Object<string,any>} tree
  * @param {string[]} branch
@@ -17,7 +17,7 @@ export function buildTreeBranches (tree, branch) {
   const node = branch.shift();
 
   /**
-   * Tail: this is the last node in the branch, which is
+   * (Tail) The last node in the branch. It is
    * always returned with an array value.
    */
   if (branch.length === 1) {
@@ -27,14 +27,14 @@ export function buildTreeBranches (tree, branch) {
   }
 
   /**
-   * Head: this is the first node of the recursively passed
-   * tree, which is always an empty object, to be populated
+   * (Head) The first node of the recursively passed
+   * tree. It is always an empty object, to be populated
    * recursively.
    */
   if (!tree[node]) tree[node] = {};
 
   /**
-   * Finally build the current head with the subtree returned
+   * Build the current head with the subtree returned
    * from the recursive function.
    */
   tree[node] = buildTreeBranches(tree[node], branch);

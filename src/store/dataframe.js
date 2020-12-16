@@ -50,18 +50,14 @@ export class Dataframe {
   }
 
   get colNames () {
-    // return this.header;
-    return this.config.multiHeader
-      ? this.header.map(multiHeader => multiHeader.split(this.config.multiHeader))
-      : this.header;
+    return [ ...this.header ];
   }
 
   /**
    * @return {Object<string,Object<string,string>}
    */
   get headerObject () {
-    /** @type {string[][]} */
-    const branches = Array.from(this.colNames);
+    const branches = Array.from(this.colNames.map(name => name.split(this.config.multiHeader)));
     return branches.reduce(buildTreeBranches, {});
   }
 
@@ -178,4 +174,39 @@ export class Dataframe {
   addRow (rowName, row){
     this.rows[rowName] = row;
   }
+
+  removeColumn (colName) {
+
+    /**
+     * Match the provided column name to an index in the dataframe header.
+     * In multi-column dataframes, this can return multiple indexes.
+     */
+    const matches = this.colNames
+      .reduce((result, colHeader, index ) => {
+
+        // In a multi-header dataframe, the header is an array of headers
+        if (this.config.multiHeader)
+          colHeader = colHeader.split(this.config.multiHeader);
+
+        if (colHeader.includes(colName)) result.push(index);
+
+        return result;
+
+      }, []);
+
+    // Compose a new header array, without the matching columns
+    const cols = this.colNames.filter((name, index) => !matches.includes(index));
+
+    // Compose a new rows object, without the matching columns
+    const rows = Object.entries(this.rows).reduce((newRows, [ rowName, rowValues]) => {
+      const newRow = rowValues.filter((cell, index) => !matches.includes(index));
+      newRows[rowName] = newRow;
+      return newRows;
+    }, {});
+
+    this.header = cols;
+    this.rows = rows;
+
+  }
+
 }
