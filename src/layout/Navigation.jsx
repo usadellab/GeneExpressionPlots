@@ -12,6 +12,7 @@ import {
 import { store }    from '@/store';
 import { observer } from 'mobx-react';
 import { readTable } from '@/utils/parser';
+import { plotStore } from '@/store/plot-store';
 
 
 @observer
@@ -143,7 +144,7 @@ class AppNavigation extends React.Component {
    * Clear the current plots.
    */
   onClearPlotsMenuClick = () => {
-    store.clearPlots();
+    plotStore.clearPlots();
     this.auxChangeRoute('plots');
   };
 
@@ -302,7 +303,7 @@ class AppNavigation extends React.Component {
             component="button"
             icon="trash"
             name="Clear Plots"
-            disabled={ !store.hasPlots }
+            disabled={ !plotStore.hasPlots }
             onClick={ this.onClearPlotsMenuClick }
           />
 

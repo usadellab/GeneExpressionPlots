@@ -2,6 +2,11 @@
 import { dataTable } from '@/store/data-store';
 import { mean, deviation } from 'd3';
 
+
+/**
+ * @typedef {import('../store/plot-store').PlotOptions} PlotOptions
+ */
+
 const colors = [
   '#1f77b4',  // muted blue
   '#ff7f0e',  // safety orange
@@ -57,7 +62,6 @@ function getDefaultLayout(showlegend, countUnit, plotTitle) {
 /**
  * create a single Gene grouped Plot. That can be either single-gene Bar or single-gene individual curves
  * @param {string[]} accessionIds
- * @param {number} plotIndex 
  * @param {PlotOptions} options 
  */
 export function singleGeneGroupedPlot(accessionIds, options) {
@@ -67,20 +71,19 @@ export function singleGeneGroupedPlot(accessionIds, options) {
   let data = createGroupedPlotFromGene(plotData, accessionId, options);
   let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
   
-  return {data, layout, config: options.config, accessions: accessionId, showCaption: options.showCaption};
+  return {data, layout, config: options.config, accessions: accessionId, showCaption: options.showCaption, plotId: options.plotId};
 }
 
 
 /**
  * create a plotly multi gene bar plot
  * @param {string[]} accessionIds 
- * @param {number} plotIndex 
  * @param {PlotOptions} options 
  */
 export function multiGeneBarPlot(accessionIds, options){
   let data = [];
   accessionIds.forEach(accession => {
-    let plotData = dataTable.getRow(accession,2);
+    let plotData = dataTable.getRowAsGroups(accession,1);
     let x = [[],[]];
     let y = [];
     let error_y = [];
@@ -94,13 +97,12 @@ export function multiGeneBarPlot(accessionIds, options){
   });
 
   let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption};
+  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
 }
 
 /**
  * create a plolty multi Gene individual curves plot
  * @param {string[]} accessionIds 
- * @param {number} plotIndex 
  * @param {PlotOptions} options 
  */
 export function multiGeneIndCurvesPlot(accessionIds, options) {
@@ -116,13 +118,12 @@ export function multiGeneIndCurvesPlot(accessionIds, options) {
   });
 
   let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption};
+  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
 }
 
 /**
  * create a plolty stacked line-plot
  * @param {string[]} accessionIds 
- * @param {number} plotIndex 
  * @param {PlotOptions} options 
  */
 export function stackedLinePlot(accessionIds, options) {
@@ -160,17 +161,17 @@ export function stackedLinePlot(accessionIds, options) {
   });
 
   let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption};
+  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
 }
 
 /**
  * creates one "group" of single-gene bar/individual-curves or multi-gene individual curves
  * @param {string[]} accessionIds 
- * @param {number} plotIndex 
  * @param {PlotOptions} options 
  */
 function createGroupedPlotFromGene(plotData, accessionId, options, line, showOnlyFirstLegend = false) {
   let data = [];
+  let type = options.plotType === 'bars' ? 'bar' : 'scatter';
   Object.keys(plotData).forEach((groupName, index) => {
     let x = [[],[]];
     let y = [];
@@ -182,7 +183,7 @@ function createGroupedPlotFromGene(plotData, accessionId, options, line, showOnl
       error_y.push(deviation(plotData[groupName][sampleName]));
     });
     let showlegend = showOnlyFirstLegend ? ( index > 0 ? false : true ) : true;
-    data.push(createTrace(x,y,error_y, accessionId, options.type, showlegend, line));
+    data.push(createTrace(x,y,error_y, accessionId, type, showlegend, line));
   });
   return data;
 }
