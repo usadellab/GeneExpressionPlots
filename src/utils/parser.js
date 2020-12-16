@@ -86,24 +86,33 @@ export function readExpressionTable (table, options) {
 /**
  * Parse a tabular file to its in-memory object representation.
  *
- * @typedef  {Object} readTableOptions Options object for the expression table parser
- * @property {string} fieldSeparator delimiter for each column field
+ * @typedef  {Object}  ReadTableOptions Options object for the expression table parser
+ * @property {string?}  headerSeparator delimiter for multi-header support
+ * @property {string}    fieldSeparator delimiter for each column field
+ * @property {number}     rowNameColumn column used for row names (values must be unique)
  *
  * @param {string} table table as a single string
- * @param {readTableOptions} options parser options
+ * @param {ReadTableOptions} options parser options
  */
 export function readTable (table, options) {
 
   const lines = table.split(/\r?\n|\r/);
 
+  // Extract the table header (first element of lines is removed)
   const header = lines
     .shift()
     .split(options.fieldSeparator)
-    .slice(1);
+    .reduce((array, field, index) => {
+      if (index === options.rowNameColumn) return array;
+      if (options.headerSeparator) field = field.split(options.headerSeparator);
+      array.push(field);
+      return array;
+    }, []);
 
+  // Parse each line as an object of unique row names
   const rows = lines.reduce((acc, line) => {
     const values = line.split(options.fieldSeparator);
-    const key = values.shift();
+    const key = values.splice(options.rowNameColumn, 1);
     Object.assign(acc, { [key]: values });
     return acc;
   }, {});

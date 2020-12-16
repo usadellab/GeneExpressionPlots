@@ -28,13 +28,19 @@ export default class App extends React.Component {
     if (PRELOAD_DATA) {
       const dataResponse = await fetchResource(PRELOAD_DATA, { type: 'text' });
       if (dataResponse) dataTable.loadFromObject(
-        readTable(dataResponse, { fieldSeparator: '\t' })
+        readTable(dataResponse, {
+          fieldSeparator: '\t',
+          rowNameColumn: 0,
+        })
       );
     }
 
     if (PRELOAD_CAPTIONS) {
       const captionsResponse = await fetchResource(PRELOAD_CAPTIONS, { type: 'text' });
-      if (captionsResponse) captions = readTable(captionsResponse, { fieldSeparator: '\t' });
+      if (captionsResponse) captions = readTable(captionsResponse, {
+        fieldSeparator: '\t',
+        rowNameColumn: 0,
+      });
     }
 
     if (PRELOAD_IMAGE) {
