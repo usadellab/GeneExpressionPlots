@@ -3,10 +3,10 @@ import {
 } from 'mobx';
 
 import {
-  computeAveragesAndVariances,
-  createGroupPlot,
-  createMultiGeneBarPlot,
-  createStackedLinePlot
+  singleGeneGroupedPlot,
+  multiGeneIndCurvesPlot,
+  stackedLinePlot,
+  multiGeneBarPlot,
 } from '../utils/plotsHelper';
 
 class PlotStore {
@@ -37,84 +37,68 @@ class PlotStore {
   }
 
   /**
-   *
-   * @param {string[]} accessionIds
-   * @param {boolean} showlegend
-   * @param {string} plotType
+   * 
+   * @param {string[]} accessionIds 
+   * @param {PlotOptions} options 
    */
-  addBarPlot(accessionIds, showlegend, showCaption, plotTitle) {
-    
-    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+  addBarPlot(accessionIds, options) {
 
     if (accessionIds.length === 1) this.plots.push(
-      createGroupPlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        'bar',
-        this.plots.length,
-        plotTitle,
-      )
+      singleGeneGroupedPlot(accessionIds, options)
     );
     else if (accessionIds.length > 1) this.plots.push(
-      createMultiGeneBarPlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        this.plots.length,
-        plotTitle,
-      )
+      multiGeneBarPlot(accessionIds, options)
     );
-
   }
 
-  addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+  /**
+   * 
+   * @param {string[]} accessionIds 
+   * @param {PlotOptions} options 
+   */
+  addIndivualCurvesPlot(accessionIds, options) {
+    if (accessionIds.length === 1) this.plots.push(
+      singleGeneGroupedPlot(accessionIds, options)
+    );
+    else if (accessionIds.length > 1) this.plots.push(
+      multiGeneIndCurvesPlot(accessionIds, options)
+    );
+  }
+
+  /**
+   * 
+   * @param {string[]} accessionIds 
+   * @param {PlotOptions} options 
+   */
+  addStackedCurvePlot(accessionIds, options) {
     this.plots.push(
-      createGroupPlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        'scatter',
-        this.plots.length,
-        plotTitle,
-      )
+      stackedLinePlot(accessionIds, options)
     );
   }
 
-  addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
-    this.plots.push(
-      createStackedLinePlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        this.plots.length,
-        colorBy,
-        plotTitle,
-      )
-    );
-  }
-
-  addPlot(accessionIds, showlegend, showCaption, plotType, colorBy, plotTitle){
-
-    switch (plotType) {
+  /**
+   * 
+   * @typedef  {Object}   PlotOptions
+   * @property {boolean} showlegend
+   * @property {boolean} showCaption
+   * @property {string}  plotType
+   * @property {string}  colorBy
+   * @property {string}  plotTitle
+   * 
+   * @param {Array} accessionIds 
+   * @param {PlotOptions} options 
+   */
+  addPlot(accessionIds, options){
+    options.config = this.config(this.plots.length);
+    switch (options.plotType) {
       case 'bars':
-        this.addBarPlot(accessionIds, showlegend, showCaption, plotTitle);
+        this.addBarPlot(accessionIds, options);
         break;
       case 'individualCurves':
-        this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle);
+        this.addIndivualCurvesPlot(accessionIds, options);
         break;
       case 'stackedCurves':
-        this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle);
+        this.addStackedCurvePlot(accessionIds, options);
         break;
       default:
         break;
@@ -122,4 +106,31 @@ class PlotStore {
   }
 
 
+  /**
+   * constant config object for plotly
+   */
+  config(index){
+    return {
+      responsive: true,
+      toImageButtonOptions: {
+        format: 'svg'
+      },
+      displaylogo: false,
+      modeBarButtonsToAdd: [
+        {
+          name: 'Delete plot',
+          icon: {
+            'width': 21,
+            'height': 21,
+            'path': 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'
+          },
+          click: function() {
+            plotStore.deletePlot(index);
+          }
+        }
+      ]
+    };
+  }
 }
+
+export const plotStore = new PlotStore();

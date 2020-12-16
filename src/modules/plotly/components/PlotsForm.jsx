@@ -8,7 +8,8 @@ import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
 import AppText     from '@components/AppText';
 
-import { store } from '@/store';
+import { store }   from '@/store';
+import {plotStore} from '@/store/plot-store';
 
 import { dataTable } from '@/store/data-store';
 
@@ -16,7 +17,6 @@ export default class PlotsForm extends Component {
 
   constructor() {
     super();
-    console.log(dataTable.rowNames);
     this.state = {
       accessionIds: [ dataTable.rowNames[0] ?? '' ],
       accessionIdsView: dataTable.rowNames.slice(0, 10),
@@ -93,13 +93,14 @@ export default class PlotsForm extends Component {
   onPlotGeneButtonClick = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
-    store.addPlot(
-      this.state.accessionIds,
-      this.state.showlegend,
-      this.state.showCaption,
-      this.state.plotType,
-      this.state.colorBy,
-      this.state.plotTitle,
+    plotStore.addPlot(
+      this.state.accessionIds,{ 
+        showlegend:  this.state.showlegend,
+        showCaption: this.state.showCaption,
+        plotType:    this.state.plotType,
+        colorBy:     this.state.colorBy,
+        plotTitle:   this.state.plotTitle,
+      }
     );
     this.setState({ loading: false });
     this.props.onCancel();
