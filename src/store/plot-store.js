@@ -9,6 +9,18 @@ import {
   multiGeneBarPlot,
 } from '../utils/plotsHelper';
 
+import { nanoid } from 'nanoid';
+
+
+/**
+ * 
+ * @typedef  {Object}   PlotOptions
+ * @property {boolean} showlegend
+ * @property {boolean} showCaption
+ * @property {string}  plotType
+ * @property {string}  colorBy
+ * @property {string}  plotTitle
+ */
 class PlotStore {
   
   plots = [];
@@ -17,7 +29,7 @@ class PlotStore {
     makeAutoObservable(this);
   }
   
-  hasPlots () {
+  get hasPlots () {
     return this.plots.length > 0;
   }
   
@@ -32,7 +44,8 @@ class PlotStore {
    * Delete a plot from the store
    * @param {number} index plot index in the store
    */
-  deletePlot(index){
+  deletePlot(plotId){
+    let index = this.plots.findIndex(plot => plot.plotId === plotId);
     this.plots.splice(index,1);
   }
 
@@ -77,19 +90,12 @@ class PlotStore {
   }
 
   /**
-   * 
-   * @typedef  {Object}   PlotOptions
-   * @property {boolean} showlegend
-   * @property {boolean} showCaption
-   * @property {string}  plotType
-   * @property {string}  colorBy
-   * @property {string}  plotTitle
-   * 
    * @param {Array} accessionIds 
    * @param {PlotOptions} options 
    */
   addPlot(accessionIds, options){
-    options.config = this.config(this.plots.length);
+    options.plotId = nanoid();
+    options.config = this.config(options.plotId);
     switch (options.plotType) {
       case 'bars':
         this.addBarPlot(accessionIds, options);
@@ -109,7 +115,7 @@ class PlotStore {
   /**
    * constant config object for plotly
    */
-  config(index){
+  config(plotId) {
     return {
       responsive: true,
       toImageButtonOptions: {
@@ -124,8 +130,8 @@ class PlotStore {
             'height': 21,
             'path': 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'
           },
-          click: function() {
-            plotStore.deletePlot(index);
+          click: () => {
+            this.deletePlot(plotId);
           }
         }
       ]
