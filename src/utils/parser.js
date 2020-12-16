@@ -1,3 +1,16 @@
+export async function readFile (file) {
+
+  const reader = new FileReader();
+  reader.readAsText(file);
+
+  return new Promise((resolve, reject) => {
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+
+  });
+}
+
 /**
  * Parse a tabular file to its in-memory object representation.
  *
@@ -26,10 +39,13 @@ export function readTable (table, options) {
 
   // Parse each line as an object of unique row names
   const rows = lines.reduce((acc, line) => {
+
+    if (!line) return acc;
+
     const values = line.split(options.fieldSeparator);
     const key = values.splice(options.rowNameColumn, 1);
-    Object.assign(acc, { [key]: values });
-    return acc;
+    return Object.assign(acc, { [key]: values });
+
   }, {});
 
   return {
