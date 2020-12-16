@@ -5,12 +5,12 @@ import {
   observable,
 } from 'mobx';
 
-import {
-  computeAveragesAndVariances,
-  createGroupPlot,
-  createMultiGeneBarPlot,
-  createStackedLinePlot
-} from '../utils/plotsHelper';
+// import {
+//   computeAveragesAndVariances,
+//   createGroupPlot,
+//   createMultiGeneBarPlot,
+//   createStackedLinePlot
+// } from '../utils/plotsHelper';
 
 import { objectFromArrays } from '@/utils/collection';
 
@@ -139,90 +139,90 @@ class DataStore {
     this.image = image;
   }
 
-  /**
-   *
-   * @param {string[]} accessionIds
-   * @param {boolean} showlegend
-   * @param {string} plotType
-   */
-  @action addBarPlot(accessionIds, showlegend, showCaption, plotTitle) {
+  // /**
+  //  *
+  //  * @param {string[]} accessionIds
+  //  * @param {boolean} showlegend
+  //  * @param {string} plotType
+  //  */
+  // @action addBarPlot(accessionIds, showlegend, showCaption, plotTitle) {
 
-    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+  //   let plotData = computeAveragesAndVariances(this.groups, accessionIds);
 
-    if (accessionIds.length === 1) this.plots.push(
-      createGroupPlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        'bar',
-        this.plots.length,
-        plotTitle,
-      )
-    );
-    else if (accessionIds.length > 1) this.plots.push(
-      createMultiGeneBarPlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        this.plots.length,
-        plotTitle,
-      )
-    );
+  //   if (accessionIds.length === 1) this.plots.push(
+  //     createGroupPlot(
+  //       plotData,
+  //       accessionIds,
+  //       showlegend,
+  //       showCaption,
+  //       this.groups[0].countUnit,
+  //       'bar',
+  //       this.plots.length,
+  //       plotTitle,
+  //     )
+  //   );
+  //   else if (accessionIds.length > 1) this.plots.push(
+  //     createMultiGeneBarPlot(
+  //       plotData,
+  //       accessionIds,
+  //       showlegend,
+  //       showCaption,
+  //       this.groups[0].countUnit,
+  //       this.plots.length,
+  //       plotTitle,
+  //     )
+  //   );
 
-  }
+  // }
 
-  @action addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
-    this.plots.push(
-      createGroupPlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        'scatter',
-        this.plots.length,
-        plotTitle,
-      )
-    );
-  }
+  // @action addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle) {
+  //   let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+  //   this.plots.push(
+  //     createGroupPlot(
+  //       plotData,
+  //       accessionIds,
+  //       showlegend,
+  //       showCaption,
+  //       this.groups[0].countUnit,
+  //       'scatter',
+  //       this.plots.length,
+  //       plotTitle,
+  //     )
+  //   );
+  // }
 
-  @action addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle) {
-    let plotData = computeAveragesAndVariances(this.groups, accessionIds);
-    this.plots.push(
-      createStackedLinePlot(
-        plotData,
-        accessionIds,
-        showlegend,
-        showCaption,
-        this.groups[0].countUnit,
-        this.plots.length,
-        colorBy,
-        plotTitle,
-      )
-    );
-  }
+  // @action addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle) {
+  //   let plotData = computeAveragesAndVariances(this.groups, accessionIds);
+  //   this.plots.push(
+  //     createStackedLinePlot(
+  //       plotData,
+  //       accessionIds,
+  //       showlegend,
+  //       showCaption,
+  //       this.groups[0].countUnit,
+  //       this.plots.length,
+  //       colorBy,
+  //       plotTitle,
+  //     )
+  //   );
+  // }
 
-  @action addPlot(accessionIds, showlegend, showCaption, plotType, colorBy, plotTitle){
+  // @action addPlot(accessionIds, showlegend, showCaption, plotType, colorBy, plotTitle){
 
-    switch (plotType) {
-      case 'bars':
-        this.addBarPlot(accessionIds, showlegend, showCaption, plotTitle);
-        break;
-      case 'individualCurves':
-        this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle);
-        break;
-      case 'stackedCurves':
-        this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle);
-        break;
-      default:
-        break;
-    }
-  }
+  //   switch (plotType) {
+  //     case 'bars':
+  //       this.addBarPlot(accessionIds, showlegend, showCaption, plotTitle);
+  //       break;
+  //     case 'individualCurves':
+  //       this.addIndivualCurvesPlot(accessionIds, showlegend, showCaption, plotTitle);
+  //       break;
+  //     case 'stackedCurves':
+  //       this.addStackedCurvePlot(accessionIds, showlegend, showCaption, colorBy, plotTitle);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   /**
    * Add replicates to an existing sample within a group. Adds a new sample/group if it doesn't exist yet
