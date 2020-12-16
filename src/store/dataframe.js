@@ -21,7 +21,7 @@ export class Dataframe {
   rows = {};
 
   /**
-   * @typedef  {Object} DfOptions Dataframe class options
+   * @typedef  {Object} DataframeConfig Dataframe class options
    * @property {string} multiHeader separator for tree-like headers
   **/
   config = {
@@ -34,13 +34,13 @@ export class Dataframe {
 
   /**
    * Load the dataframe with an already parsed table.
-   * @param {TableObject} table
-   * @param {DfOptions} options
+   * @param {TableObject}     table
+   * @param {DataframeConfig} config
    */
-  loadFromObject (table, options) {
+  loadFromObject (table, config) {
+    Object.assign(this.config, config);
     this.header = table.header;
     this.rows = table.rows;
-    Object.assign(this.config, options);
   }
 
   /* COMPUTED */
@@ -165,6 +165,28 @@ export class Dataframe {
   }
 
   /* MUTATIONS */
+
+  /**
+   *
+   * @param {string} header
+   * @param {[string,string][]} rows
+   */
+  addColumn (header, rows) {
+
+    // Append new column header
+    this.header.push(header);
+
+    // Append cell values to each row
+    rows.forEach(([ rowName, cellValue ]) => {
+
+      if (!this.rows[rowName]) {
+        console.warn(`${rowName} is not a known gene accession`);
+        return;
+      }
+
+      this.rows[rowName].push(cellValue);
+    });
+  }
 
   /**
    *
