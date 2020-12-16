@@ -31,7 +31,9 @@ export default class App extends React.Component {
         readTable(dataResponse, {
           fieldSeparator: '\t',
           rowNameColumn: 0,
-        })
+        }), {
+          multiHeader: '*'
+        }
       );
     }
 

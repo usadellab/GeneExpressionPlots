@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { objectFromArrays } from '@/utils/collection';
+import { buildTreeBranches } from '@/utils/reducers';
 
 /**
  * @typedef  {Object<string, string[]>} Row table row
@@ -49,9 +50,19 @@ export class Dataframe {
   }
 
   get colNames () {
+    // return this.header;
     return this.config.multiHeader
       ? this.header.map(multiHeader => multiHeader.split(this.config.multiHeader))
       : this.header;
+  }
+
+  /**
+   * @return {Object<string,Object<string,string>}
+   */
+  get headerObject () {
+    /** @type {string[][]} */
+    const branches = Array.from(this.colNames);
+    return branches.reduce(buildTreeBranches, {});
   }
 
   /* QUERIES */
@@ -127,7 +138,7 @@ export class Dataframe {
   getRowAsTree (rowName) {
     const row = this.rows[rowName];
     return this.header.reduce((tree,column,i) => {
-      let split = column.split('*');
+      let split = column.split(this.config.multiHeader);
       let group = split[0];
       let sample = split[1];
       tree[group]
