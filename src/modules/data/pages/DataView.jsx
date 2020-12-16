@@ -1,7 +1,9 @@
 import React        from 'react';
 import { observer } from 'mobx-react';
 
-import GroupItem from '../components/GroupItem';
+import AppButton from '@components/AppButton';
+import AppIcon   from '@components/AppIcon';
+import GroupCard from '../components/GroupCard';
 
 import { dataTable } from '@/store/data-store';
 
@@ -16,6 +18,8 @@ export default class DataView extends React.Component {
     };
   }
 
+  /* AUXILIARY */
+
   computeStats = () => {
     return Object.entries(dataTable.headerObject).map(([ groupName, sample ]) => {
       return {
@@ -26,6 +30,13 @@ export default class DataView extends React.Component {
     });
   }
 
+  /* ACTIONS */
+
+  onCardDeleteClick = (groupName) => {
+    console.log(groupName);
+    dataTable.removeColumn(groupName);
+  }
+
   render () {
     return (
       <div className={ `relative w-full ${this.props.className || ''}` }>
@@ -33,11 +44,25 @@ export default class DataView extends React.Component {
         {
           this.computeStats().map((group, index) => (
 
-            <GroupItem
+            <GroupCard
               className="mt-6 first:mt-0"
               key={ `${group.name}-${index}`}
               group={ group }
-            />
+            >
+              {
+                <AppButton
+                  className="group p-1 rounded-full"
+                  onClick={ () => this.onCardDeleteClick(group.name) }
+                >
+                  <AppIcon
+                    file="hero-icons"
+                    id="trash"
+                    className="w-6 h-6 group-hover:text-pink-700"
+                  />
+                </AppButton>
+              }
+
+            </GroupCard>
 
           ))
         }
