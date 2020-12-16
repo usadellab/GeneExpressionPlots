@@ -50,18 +50,14 @@ export class Dataframe {
   }
 
   get colNames () {
-    // return this.header;
-    return this.config.multiHeader
-      ? this.header.map(multiHeader => multiHeader.split(this.config.multiHeader))
-      : this.header;
+    return this.header;
   }
 
   /**
    * @return {Object<string,Object<string,string>}
    */
   get headerObject () {
-    /** @type {string[][]} */
-    const branches = Array.from(this.colNames);
+    const branches = Array.from(this.colNames.map(name => name.split(this.config.multiHeader)));
     return branches.reduce(buildTreeBranches, {});
   }
 
@@ -178,4 +174,5 @@ export class Dataframe {
   addRow (rowName, row){
     this.rows[rowName] = row;
   }
+
 }
