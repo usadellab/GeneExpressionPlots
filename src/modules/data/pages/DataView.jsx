@@ -20,7 +20,7 @@ export default class DataView extends React.Component {
 
   /* AUXILIARY */
 
-  computeStats = () => {
+  get dataStats () {
     return Object.entries(dataTable.headerObject).map(([ groupName, sample ]) => {
       return {
         name: groupName,
@@ -42,7 +42,7 @@ export default class DataView extends React.Component {
       <div className={ `relative w-full ${this.props.className || ''}` }>
 
         {
-          this.computeStats().map((group, index) => (
+          this.dataStats.map((group, index) => (
 
             <GroupCard
               className="mt-6 first:mt-0"
