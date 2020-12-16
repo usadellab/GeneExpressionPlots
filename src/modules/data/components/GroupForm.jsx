@@ -1,16 +1,15 @@
 import React from 'react';
 
-import AppButton from '@components/AppButton';
-import AppFile   from '@components/AppFile';
-import AppIcon   from '@components/AppIcon';
-import AppSwitch from '@components/AppSwitch';
-import AppSelect from '@components/AppSelect';
+import AppButton  from '@components/AppButton';
+import AppFile    from '@components/AppFile';
+import AppIcon    from '@components/AppIcon';
+import AppSwitch  from '@components/AppSwitch';
+import AppSelect  from '@components/AppSelect';
 import AppSpinner from '@components/AppSpinner';
-import AppText   from '@components/AppText';
+import AppText    from '@components/AppText';
 
-import { store } from '@/store';
-
-import { parseCsv } from '../../../utils/fileHelper';
+import { readFile, readTable } from '@/utils/parser';
+import { dataTable } from '@/store/data-store';
 
 
 /**
@@ -37,7 +36,7 @@ export default class GroupView extends React.Component {
       accessionColumn: 0,
       countColumn: 0,
       header: true,
-      separator: '',
+      separator: '\t',
       // Component
       cancel: false,
       loading: false,
@@ -51,49 +50,53 @@ export default class GroupView extends React.Component {
    * Submit new or updated group to the store. Navigate to DataView page.
    * @param {React.FormEvent<HTMLInputElement>} event
    */
-  onFormSubmit = async (event) => {
+  onUploadTablesClick = async (event) => {
 
     event.preventDefault();
 
-    const { separator, header, accessionColumn, countColumn } = this.state;
-
     this.setState({ loading: true });
 
-    const files = [ ...event.target.files ];
+    const files = [ ...event.currentTarget.files ];
 
-    // const file = event.target.files[0];
+    for (const file of files) {
 
-    // const reader = new FileReader();
+      const result = await readFile(file);
 
-    // reader.onload = () => console.log(
-    //   // reader.result.length
-    //   'done'
-    // );
+      const table = readTable(result, {
+        fieldSeparator: this.state.separator,
+        rowNameColumn: this.state.accessionColumn,
+      });
 
-    // reader.onprogress = progress => {
+      // If the store is empty, load the dataframe with the first table
+      if (dataTable.colNames.length === 0) {
 
-    //   console.log(progress);
-    // };
+        const rows = Object
+          .entries(table.rows)
+          .reduce((obj, [ rowName, rowCells]) => Object.assign(obj, {
+            [rowName]: [ rowCells[this.state.countColumn-1] ]
+          }), {});
 
-    // reader.onloadend = () => {
+        dataTable.loadFromObject({
+          header: [ `${this.state.groupName}*${this.state.sampleName}*${file.name}` ],
+          rows,
+        }, { multiHeader: '*'});
 
-    //   this.setState({ loading: false });
-    // };
+        continue;
+      }
 
-    // reader.readAsText(file);
+      // Add table as a dataframe column
+      dataTable.addColumn(
+        `${this.state.groupName}*${this.state.sampleName}*${file.name}`,
+        Object
+          .entries(table.rows)
+          .map(([ rowName, rowCells]) => [
+            rowName,
+            rowCells[this.state.countColumn-1]
+          ])
+      );
 
-    let replicates = await Promise.all(
+    }
 
-      files.map((replicate) => parseCsv(replicate, {
-        separator,
-        header,
-        accessionColumn,
-        countColumn,
-      }))
-
-    );
-
-    store.checkAndAddReplicates(this.state, replicates);
     this.setState({ loading: false });
     this.props.onSave();
   }
@@ -182,7 +185,6 @@ export default class GroupView extends React.Component {
             label="separator"
             value={ this.state.separator }
             options={[
-              { label: 'Auto', value: ''   },
               { label: 'TAB',  value: '\t' },
               { label: 'CSV',  value: ','  }
             ]} onChange={ (event) => this.setState({ separator: event.target.value }) }
@@ -228,7 +230,7 @@ export default class GroupView extends React.Component {
           <AppFile
             className="flex justify-center items-center py-2 px-5 primary-blue"
             multiple
-            onChange={ this.onFormSubmit }
+            onChange={ this.onUploadTablesClick }
           >
             {
               this.state.loading
