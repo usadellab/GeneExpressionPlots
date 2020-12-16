@@ -68,9 +68,9 @@ export default class GroupItem extends React.Component {
           <h2 className="text-lg text-gray-800">{ this.props.group.name }</h2>
 
           <div className="sm:flex mt-2" >
-            <GroupItemStat label="Units:" value={ this.props.group.countUnit } />
-            <GroupItemStat className="sm:ml-4" label="Samples:" value={ this.props.group.samples.length } />
-            <GroupItemStat className="sm:ml-4" label="Replicates:" value={ this.groupReplicates } />
+            {/* <GroupItemStat label="Units:" value={ this.props.group.countUnit } /> */}
+            <GroupItemStat className="sm:ml-4" label="Samples:" value={ this.props.group.sampleCount } />
+            <GroupItemStat className="sm:ml-4" label="Replicates:" value={ this.props.group.replicateCount } />
           </div>
 
         </div>
@@ -83,7 +83,7 @@ export default class GroupItem extends React.Component {
             !store.preloaded &&
             <AppButton
               className="group p-1 rounded-full"
-              onClick={ () => this.handleGroupDelete(this.props.groupIndex)}
+              onClick={ () => {} }
             >
               <AppIcon file="hero-icons" id="trash" className="w-6 h-6 group-hover:text-pink-700" />
             </AppButton>
