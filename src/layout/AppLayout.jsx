@@ -3,6 +3,7 @@ import React from 'react';
 import AppModal   from '@components/AppModal2';
 import GroupForm  from '@/modules/data/components/GroupForm';
 import TableForm  from '@/modules/data/components/TableForm';
+import InfoForm   from '@/modules/data/components/InfoForm';
 import PlotsForm  from '@/modules/plotly/components/PlotsForm';
 import TopBar     from './TopBar';
 import Navigation from './Navigation';
@@ -17,6 +18,7 @@ export default class AppLayout extends React.Component {
       showGroupModal: false,
       showPlotsModal: false,
       showTableModal: false,
+      showInfoModal: false
     };
   }
 
@@ -25,11 +27,12 @@ export default class AppLayout extends React.Component {
   onTopBarToggle = () => this.setState(state => ({ showNav: !state.showNav }))
   onNavigationClick = () => this.setState({ showNav: false })
 
+  /* MODALS */
+
   onShowGroupModal = () => this.setState({ showGroupModal: true });
   onShowPlotsModal = () => this.setState({ showPlotsModal: true });
-  onShowTableModal = () => this.setState({ showTableModal: true })
-
-  /* MODALS */
+  onShowTableModal = () => this.setState({ showTableModal: true });
+  onShowInfoModal  = () => this.setState({ showInfoModal: true })
 
   onGroupFormModalHide = () => this.setState({ showGroupModal: false })
   onGroupFormCancel = () => this.setState({ showGroupModal: false })
@@ -41,6 +44,10 @@ export default class AppLayout extends React.Component {
   onTableFormModalHide = () => this.setState({ showTableModal: false })
   onTableFormCancel = () => this.setState({ showTableModal: false })
   onTableFormSave = () => this.setState({ showTableModal: false })
+
+  onInfoFormModalHide = () => this.setState({ showInfoModal: false })
+  onInfoFormCancel = () => this.setState({ showInfoModal: false })
+  onInfoFormSave = () => this.setState({ showInfoModal: false })
 
 
   render () {
@@ -66,6 +73,7 @@ export default class AppLayout extends React.Component {
             showGroupModal={ this.onShowGroupModal }
             showPlotsModal={ this.onShowPlotsModal }
             showTableModal={ this.onShowTableModal }
+            showInfoModal={ this.onShowInfoModal }
             onClick={ this.onNavigationClick }
           />
 
@@ -103,6 +111,21 @@ export default class AppLayout extends React.Component {
               <TableForm
                 onSave={ this.onTableFormSave }
                 onCancel={ this.onTableFormCancel }
+              />
+            </AppModal>
+          }
+
+          {/* INFO TABLE FORM */}
+          {
+            this.state.showInfoModal &&
+            <AppModal
+              title="Add Info Table"
+              showModal={ this.state.showInfoModal }
+              hideModal={ this.onInfoFormModalHide }
+            >
+              <InfoForm
+                onSave={ this.onInfoFormSave }
+                onCancel={ this.onInfoFormCancel }
               />
             </AppModal>
           }
