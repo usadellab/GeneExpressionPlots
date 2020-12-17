@@ -32,74 +32,21 @@ class AppNavigation extends React.Component {
    * Trigger a route change if the current location does not match the current route
    * @param {string} route route name
    */
-  auxChangeRoute = (route) => {
+  changeRoute = (route) => {
     if (this.props.location.pathname !== `/${route}`)
-      this.props.changeRoute(route);
+      this.props.history.push(`/${route}`);
   }
 
   /* DATA MENU EVENTS */
 
-  onClearDataMenuClick = () => {
-    store.clearData();
-    this.auxChangeRoute('data');
-  };
-
-  onExportDataMenuClick = () => {
-
-    const data = {
-      data: store.groups,
-      captions: store.captions,
-      image: store.image,
-    };
-
-    const blob = new Blob([ JSON.stringify(data, null, 2) ], {
-      type: 'application/json'
-    });
-
-    this.setState({ exportUrl: URL.createObjectURL(blob) });
-
-    this.auxChangeRoute('data');
+  onUploadReplicateTableClick = () => {
+    this.props.showGroupModal();
+    this.changeRoute('data');
   }
 
-  onImportDataMenuClick = (event) => {
-
-    this.setState({ loading: true });
-
-    // Get the file ref
-    const file = event.target.files.item(0);
-
-    // Reset file input (allow consecutive uploads of the same file)
-    event.target.value = null;
-
-    // Accept zipped files only
-    if (!file || file.type !== 'application/zip') {
-      console.error(`Invalid file type: ${file.type}`);
-      this.setState({ loading: false });
-      return;
-    }
-
-
-    // Use FileReader API to parse the input file
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      // const { data, captions, image } = JSON.parse(reader.result);
-      // if (data)     store.assignData(data);
-      // if (captions) store.assignCaptions(captions);
-      // if (image)    store.assignImage(image);
-    };
-
-    reader.onloadend = () => {
-      this.setState({ loading: false });
-      this.auxChangeRoute('data');
-    };
-
-    reader.onerror = err => {
-      console.log(err);
-      this.setState({ loading: false });
-    };
-
-    reader.readAsText(file, 'utf-8');
+  onUploadExpressionTableClick = () => {
+    this.props.showTableModal();
+    this.changeRoute('data');
   }
 
   onUploadCaptionsMenuClick = (event) => {
@@ -134,9 +81,72 @@ class AppNavigation extends React.Component {
       console.log(store.captions);
     };
     reader.onerror = err => console.log(err);
-    reader.onloadend = () => this.auxChangeRoute('data');
+    reader.onloadend = () => this.changeRoute('data');
     reader.readAsText(file, 'utf-8');
   }
+
+  onExportDataMenuClick = () => {
+
+    const data = {
+      data: store.groups,
+      captions: store.captions,
+      image: store.image,
+    };
+
+    const blob = new Blob([ JSON.stringify(data, null, 2) ], {
+      type: 'application/json'
+    });
+
+    this.setState({ exportUrl: URL.createObjectURL(blob) });
+
+    this.changeRoute('data');
+  }
+
+  onImportDataMenuClick = (event) => {
+
+    this.setState({ loading: true });
+
+    // Get the file ref
+    const file = event.target.files.item(0);
+
+    // Reset file input (allow consecutive uploads of the same file)
+    event.target.value = null;
+
+    // Accept zipped files only
+    if (!file || file.type !== 'application/zip') {
+      console.error(`Invalid file type: ${file.type}`);
+      this.setState({ loading: false });
+      return;
+    }
+
+
+    // Use FileReader API to parse the input file
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      // const { data, captions, image } = JSON.parse(reader.result);
+      // if (data)     store.assignData(data);
+      // if (captions) store.assignCaptions(captions);
+      // if (image)    store.assignImage(image);
+    };
+
+    reader.onloadend = () => {
+      this.setState({ loading: false });
+      this.changeRoute('data');
+    };
+
+    reader.onerror = err => {
+      console.log(err);
+      this.setState({ loading: false });
+    };
+
+    reader.readAsText(file, 'utf-8');
+  }
+
+  onClearDataMenuClick = () => {
+    store.clearData();
+    this.changeRoute('data');
+  };
 
   /* PLOT MENU EVENTS */
 
@@ -145,7 +155,7 @@ class AppNavigation extends React.Component {
    */
   onClearPlotsMenuClick = () => {
     plotStore.clearPlots();
-    this.auxChangeRoute('plots');
+    this.changeRoute('plots');
   };
 
   /**
@@ -153,7 +163,7 @@ class AppNavigation extends React.Component {
    */
   onClearImageMenuClick = () => {
     store.clearImage();
-    this.auxChangeRoute('plots');
+    this.changeRoute('plots');
   }
 
   /**
@@ -164,18 +174,18 @@ class AppNavigation extends React.Component {
 
     const reader = new FileReader();
     reader.onload = () => store.assignImage(reader.result);
-    reader.onloadend = () => this.auxChangeRoute('plots');
+    reader.onloadend = () => this.changeRoute('plots');
     reader.onerror = (error) => console.error(error);
     reader.readAsDataURL(event.target.files[0]);
 
-    this.auxChangeRoute('plots');
+    this.changeRoute('plots');
   }
 
   /**
    * Show the Plots form modal.
    */
   onNewPlotMenuClick = () => {
-    this.auxChangeRoute('plots');
+    this.changeRoute('plots');
     this.props.showPlotsModal();
   }
 
@@ -222,7 +232,7 @@ class AppNavigation extends React.Component {
               component="button"
               icon="table"
               name="Upload Replicate Table"
-              onClick={ this.props.showGroupModal }
+              onClick={ this.onUploadReplicateTableClick }
             />
           }
 
@@ -232,7 +242,7 @@ class AppNavigation extends React.Component {
               component="button"
               icon="table"
               name="Upload Expression Table"
-              onClick={ this.props.showTableModal }
+              onClick={ this.onUploadExpressionTableClick }
             />
           }
 

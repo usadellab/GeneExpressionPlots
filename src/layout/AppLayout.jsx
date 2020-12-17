@@ -1,5 +1,4 @@
-import React          from 'react';
-import { withRouter } from 'react-router';
+import React from 'react';
 
 import AppModal   from '@components/AppModal2';
 import GroupForm  from '@/modules/data/components/GroupForm';
@@ -9,7 +8,7 @@ import TopBar     from './TopBar';
 import Navigation from './Navigation';
 
 
-class AppLayout extends React.Component {
+export default class AppLayout extends React.Component {
 
   constructor () {
     super();
@@ -20,10 +19,6 @@ class AppLayout extends React.Component {
       showTableModal: false,
     };
   }
-
-  /* AUXILIARY */
-
-  changeRoute = (route) => this.props.history.push(`/${route}`);
 
   /* NAVIGATION */
 
@@ -72,7 +67,6 @@ class AppLayout extends React.Component {
             showPlotsModal={ this.onShowPlotsModal }
             showTableModal={ this.onShowTableModal }
             onClick={ this.onNavigationClick }
-            changeRoute = { this.changeRoute }
           />
 
         </div>
@@ -135,5 +129,3 @@ class AppLayout extends React.Component {
     );
   }
 }
-
-export default withRouter(AppLayout);
