@@ -141,11 +141,14 @@ class AppNavigation extends React.Component {
    */
   onNewImageMenuClick = (event) => {
 
+    const file = event.target.files[0];
+    event.target.value = '';
+
     const reader = new FileReader();
     reader.onload = () => plotStore.loadImage(reader.result);
     reader.onloadend = () => this.changeRoute('plots');
     reader.onerror = (error) => console.error(error);
-    reader.readAsDataURL(event.target.files[0]);
+    reader.readAsDataURL(file);
 
     this.changeRoute('plots');
   }
