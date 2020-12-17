@@ -8,10 +8,9 @@ import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
 import AppText     from '@components/AppText';
 
-import { store }   from '@/store';
 import {plotStore} from '@/store/plot-store';
 
-import { dataTable } from '@/store/data-store';
+import { dataTable , infoTable } from '@/store/data-store';
 
 export default class PlotsForm extends Component {
 
@@ -24,7 +23,7 @@ export default class PlotsForm extends Component {
       plotTitle: '',
       plotType: 'bars',
       showlegend: true,
-      showCaption: store.hasCaptions,
+      showCaption: infoTable.hasData,
       //
       loading: false,
       validForm: true,
@@ -94,7 +93,7 @@ export default class PlotsForm extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     plotStore.addPlot(
-      this.state.accessionIds,{ 
+      this.state.accessionIds,{
         showlegend:  this.state.showlegend,
         showCaption: this.state.showCaption,
         plotType:    this.state.plotType,
@@ -211,7 +210,7 @@ export default class PlotsForm extends Component {
             label="Legend"
           />
           {
-            store.hasCaptions &&
+            infoTable.hasData &&
             <AppSwitch
               className="w-1/2 md:ml-2"
               onChange={ (value) => this.setState({ showCaption: value }) }
