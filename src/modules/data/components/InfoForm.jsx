@@ -74,8 +74,6 @@ export default class InfoForm extends React.Component {
     };
 
     reader.readAsText(file);
-    console.log(infoTable);
-
   }
 
   onCancelButtonClick = () => {

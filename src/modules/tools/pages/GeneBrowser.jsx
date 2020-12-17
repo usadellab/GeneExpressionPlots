@@ -70,8 +70,6 @@ export default class GeneBrowser extends Component {
     // Calculate the number of pages according to the current display options
     const pageMax = Math.ceil(matchingResults.length / this.state.countView) || 1;
 
-    console.log({matchingResults, geneView});
-
     this.setState(({ geneView, pageMax }));
   }
 
@@ -152,7 +150,6 @@ export default class GeneBrowser extends Component {
         count
       }));
     }
-    console.log({selectedGene, selectedGeneCounts});
     this.setState({ selectedGene, selectedGeneCounts });
   }
 

@@ -33,7 +33,6 @@ export default class DataView extends React.Component {
   /* ACTIONS */
 
   onCardDeleteClick = (groupName) => {
-    console.log(groupName);
     dataTable.removeColumn(groupName);
   }
 
