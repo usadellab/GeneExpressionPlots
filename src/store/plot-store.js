@@ -13,7 +13,7 @@ import { nanoid } from 'nanoid';
 
 
 /**
- * 
+ *
  * @typedef  {Object}   PlotOptions
  * @property {boolean} showlegend
  * @property {boolean} showCaption
@@ -22,24 +22,45 @@ import { nanoid } from 'nanoid';
  * @property {string}  plotTitle
  */
 class PlotStore {
-  
+
   plots = [];
-  
+  _image = null;
+
   constructor () {
     makeAutoObservable(this);
   }
-  
+
+  /* IMAGE */
+
+  get hasImage () {
+    return this.image ? true : false;
+  }
+
+  clearImage () {
+    this._image = null;
+  }
+
+  loadImage (image) {
+    this._image = image;
+  }
+
+  get image() {
+    return this._image;
+  }
+
+  /* PLOTS */
+
   get hasPlots () {
     return this.plots.length > 0;
   }
-  
+
   /**
    * Clear the plots array in the store.
    */
   clearPlots () {
     this.plots = [];
   }
-  
+
   /**
    * Delete a plot from the store
    * @param {number} index plot index in the store
@@ -50,9 +71,9 @@ class PlotStore {
   }
 
   /**
-   * 
-   * @param {string[]} accessionIds 
-   * @param {PlotOptions} options 
+   *
+   * @param {string[]} accessionIds
+   * @param {PlotOptions} options
    */
   addBarPlot(accessionIds, options) {
 
@@ -65,9 +86,9 @@ class PlotStore {
   }
 
   /**
-   * 
-   * @param {string[]} accessionIds 
-   * @param {PlotOptions} options 
+   *
+   * @param {string[]} accessionIds
+   * @param {PlotOptions} options
    */
   addIndivualCurvesPlot(accessionIds, options) {
     if (accessionIds.length === 1) this.plots.push(
@@ -79,9 +100,9 @@ class PlotStore {
   }
 
   /**
-   * 
-   * @param {string[]} accessionIds 
-   * @param {PlotOptions} options 
+   *
+   * @param {string[]} accessionIds
+   * @param {PlotOptions} options
    */
   addStackedCurvePlot(accessionIds, options) {
     this.plots.push(
@@ -90,8 +111,8 @@ class PlotStore {
   }
 
   /**
-   * @param {Array} accessionIds 
-   * @param {PlotOptions} options 
+   * @param {Array} accessionIds
+   * @param {PlotOptions} options
    */
   addPlot(accessionIds, options){
     options.plotId = nanoid();
