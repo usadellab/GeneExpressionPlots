@@ -292,7 +292,7 @@ class AppNavigation extends React.Component {
               component="button"
               icon="trash"
               name="Clear Image"
-              disabled={ !settings.hasImage }
+              disabled={ !plotStore.hasImage }
               onClick={ this.onClearImageMenuClick }
             />
           }
