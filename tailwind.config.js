@@ -18,7 +18,8 @@ module.exports = {
   },
   variants: {
     extend: {
-      margin: ['first']
+      backgroundColor: ['odd'],
+      margin: ['first'],
     }
   }
 };

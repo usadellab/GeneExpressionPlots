@@ -8,21 +8,22 @@ import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
 import AppText     from '@components/AppText';
 
-import { store } from '@/store';
+import {plotStore} from '@/store/plot-store';
 
+import { dataTable , infoTable } from '@/store/data-store';
 
 export default class PlotsForm extends Component {
 
   constructor() {
     super();
     this.state = {
-      accessionIds: [ store.accessionIds[0] ?? '' ],
-      accessionIdsView: store.accessionIds.slice(0, 10),
+      accessionIds: [ dataTable.rowNames[0] ?? '' ],
+      accessionIdsView: dataTable.rowNames.slice(0, 10),
       colorBy: 'group',
       plotTitle: '',
       plotType: 'bars',
       showlegend: true,
-      showCaption: store.hasCaptions,
+      showCaption: infoTable.hasData,
       //
       loading: false,
       validForm: true,
@@ -34,14 +35,14 @@ export default class PlotsForm extends Component {
   searchAccessionIds = (accession) => {
 
     // Flag whether the current accession id is valid for submission
-    this.setState({ validForm: store.accessionIds.includes(accession) });
+    this.setState({ validForm: dataTable.rowNames.includes(accession) });
 
     // Update the search window with the accession matching ids
     let accessionIdsView = [];
-    for (let i = 0; i < store.accessionIds.length; i++) {
+    for (let i = 0; i < dataTable.rowNames.length; i++) {
 
-      if (store.accessionIds[i].includes(accession))
-        accessionIdsView.push(store.accessionIds[i]);
+      if (dataTable.rowNames[i].includes(accession))
+        accessionIdsView.push(dataTable.rowNames[i]);
 
       if (accessionIdsView.length >= 10)
         break;
@@ -91,13 +92,14 @@ export default class PlotsForm extends Component {
   onPlotGeneButtonClick = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
-    store.addPlot(
-      this.state.accessionIds,
-      this.state.showlegend,
-      this.state.showCaption,
-      this.state.plotType,
-      this.state.colorBy,
-      this.state.plotTitle,
+    plotStore.addPlot(
+      this.state.accessionIds,{
+        showlegend:  this.state.showlegend,
+        showCaption: this.state.showCaption,
+        plotType:    this.state.plotType,
+        colorBy:     this.state.colorBy,
+        plotTitle:   this.state.plotTitle,
+      }
     );
     this.setState({ loading: false });
     this.props.onCancel();
@@ -208,7 +210,7 @@ export default class PlotsForm extends Component {
             label="Legend"
           />
           {
-            store.hasCaptions &&
+            infoTable.hasData &&
             <AppSwitch
               className="w-1/2 md:ml-2"
               onChange={ (value) => this.setState({ showCaption: value }) }

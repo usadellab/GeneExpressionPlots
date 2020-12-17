@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+
 import { autorun } from 'mobx';
-import { store } from '@/store';
-import { escapeRegExp } from '@/utils/validation';
+import { dataTable, infoTable } from '@/store/data-store';
+import { escapeRegExp } from '@/utils/string';
 
 import AppNumber from '@/components/AppNumber';
 import AppSelect from '@/components/AppSelect';
 import AppText from '@/components/AppText';
+import { isEmptyObject } from '@/utils/validation';
 
 export default class GeneBrowser extends Component {
+
   constructor () {
     super();
     this.state = {
@@ -23,36 +26,39 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
+    // Retrieve gene information matching the search parameters (empty search matches all)
     const regexp = new RegExp( escapeRegExp(this.state.searchId), 'i' );
+    const matchingResults = dataTable.rowNames.reduce((matches, accession) => {
 
-    const accessionIds = store.accessionIds.reduce((array, accessionId) => {
+      // Match text in the accessions ids
+      const accessionMatch = accession.search(regexp) > -1;
 
-      const matchAccesion = accessionId.search(regexp) > -1;
-
-      const description = store.captions[accessionId];
-      const matchCaption = description
-        ? description.search(regexp) > -1
+      // Match text in the info fields
+      const geneInfo = infoTable.getRowAsObject(accession) ?? {};
+      const infoMatch = geneInfo
+        ? Object.values(geneInfo).some(field => field.search(regexp) > -1)
         : false;
 
-      if (matchAccesion || matchCaption) {
-        array.push({
-          accessionId,
-          description,
-        });
-      }
+      // Include in the results if any matches are found
+      if (accessionMatch || infoMatch) matches.push({
+        accession,
+        geneInfo
+      });
 
-      return array;
+      return matches;
+
     }, []);
 
+    // Calculate the current page view
     const countView = parseInt(this.state.countView);
     const start = (this.state.pageOffset-1) * countView;
     const end = this.state.pageOffset * countView;
+    const geneView = matchingResults.slice(start, end);
 
-    const geneView = accessionIds.slice(start, end);
-    const pageMax = Math.ceil(accessionIds.length / this.state.countView) || 1;
+    // Calculate the number of pages according to the current display options
+    const pageMax = Math.ceil(matchingResults.length / this.state.countView) || 1;
 
     this.setState(({ geneView, pageMax }));
-
   }
 
   /* LYFECYCLE */
@@ -159,16 +165,40 @@ export default class GeneBrowser extends Component {
 
         </div>
 
-        <div className="bg-white mt-6 p-6">
+        <div className="bg-white mt-6">
           {
-            this.state.geneView.map(({ accessionId, description }) => (
+            this.state.geneView.map(({ accession, geneInfo }) => (
 
               <div
-                className="py-3"
-                key={ accessionId }
+                className="px-6 py-4 odd:bg-gray-100 hover:bg-yellow-100"
+                key={ accession }
               >
-                <div className="font-bold">{ accessionId }</div>
-                <div className="mx-6">{ description ?? 'No description exists for this gene.' }</div>
+                <div className="font-bold">{ accession }</div>
+                {
+                  isEmptyObject(geneInfo)
+                    ? 'No information available for this gene.'
+                    : (
+                      <div className="flex mt-2 ml-4">
+
+                        <ul className="text-yellow-700">
+                          {
+                            Object.entries(geneInfo).map(([key, value]) => (
+                              <li key={ key }>{ key }</li>
+                            ))
+                          }
+                        </ul>
+
+                        <ul className="ml-5">
+                          {
+                            Object.values(geneInfo).map((value, index) => (
+                              <li key={ index }>{ value }</li>
+                            ))
+                          }
+                        </ul>
+
+                      </div>
+                    )
+                }
               </div>
 
             ))

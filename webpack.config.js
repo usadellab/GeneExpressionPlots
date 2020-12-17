@@ -45,9 +45,7 @@ module.exports = {
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src/'),
-      '@assets': resolve(__dirname, './src/assets/'),
       '@components': resolve(__dirname, './src/components/'),
-      '@store': resolve(__dirname, './src/store/'),
     },
     extensions: ['.js', '.json', '.jsx' ],
   },
@@ -95,10 +93,10 @@ module.exports = {
     new EnvironmentPlugin({
       'NODE_ENV': 'development',
       'BASE_URL': '/',
-      'PRELOAD_CAPTIONS': process.env.PRELOAD_CAPTIONS || null,
-      'PRELOAD_DATA': process.env.PRELOAD_DATA         || null,
-      'PRELOAD_IMAGE': process.env.PRELOAD_IMAGE       || null,
-      'PRELOAD_PLOTS': process.env.PRELOAD_PLOTS       || null,
+      'PRELOAD_DATA': process.env.PRELOAD_DATA   || '',
+      'PRELOAD_IMAGE': process.env.PRELOAD_IMAGE || '',
+      'PRELOAD_INFO': process.env.PRELOAD_INFO   || '',
+      'PRELOAD_PLOTS': process.env.PRELOAD_PLOTS || '',
     }),
 
     // Generate dist/index.html

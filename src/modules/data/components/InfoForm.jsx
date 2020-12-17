@@ -5,18 +5,15 @@ import AppIcon    from '@components/AppIcon';
 import AppFile    from '@components/AppFile';
 import AppSelect  from '@components/AppSelect';
 import AppSpinner from '@components/AppSpinner';
-import AppText    from '@components/AppText';
 
 import { readTable } from '@/utils/parser';
-import { dataTable } from '@/store/data-store';
+import { infoTable } from '@/store/data-store';
 
-export default class TableForm extends React.Component {
+export default class InfoForm extends React.Component {
 
   constructor () {
     super();
     this.state = {
-      countUnit: 'raw',
-      headerSeparator: '*',
       fieldSeparator: ',',
       //
       cancel: false,
@@ -26,18 +23,9 @@ export default class TableForm extends React.Component {
 
   /* INPUT HANDLERS */
 
-  onCountUnitSelect = (event) => {
-    this.setState({ countUnit: event.target.value });
-  }
-
   onFieldSeparatorChange = (event) => {
     this.setState({ fieldSeparator: event.target.value });
   }
-
-  onHeaderSeparatorChange = (event) => {
-    this.setState({ headerSeparator: event.target.value });
-  }
-
   /* ACTION HANDLERS */
 
   /**
@@ -76,9 +64,7 @@ export default class TableForm extends React.Component {
       });
 
       // Load the store from the parsed table
-      dataTable.loadFromObject(table, {
-        multiHeader: this.state.headerSeparator,
-      });
+      infoTable.loadFromObject(table);
 
     };
 
@@ -88,6 +74,7 @@ export default class TableForm extends React.Component {
     };
 
     reader.readAsText(file);
+    console.log(infoTable);
 
   }
 
@@ -99,25 +86,6 @@ export default class TableForm extends React.Component {
   render () {
     return (
       <form className="w-full px-6 flex-auto my-4 text-gray-600 text-lg leading-relaxed">
-
-        <AppSelect
-          className="w-full"
-          label="Count unit"
-          value={ this.state.countUnit }
-          options={[
-            { label: 'Raw',  value: 'raw' },
-            { label: 'RPKM', value: 'rpkm' },
-            { label: 'TPM',  value: 'tpm' }
-          ]}
-          onChange={ this.onCountUnitSelect }
-        />
-
-        <AppText
-          className="w-full"
-          label="Header separator"
-          value={ this.state.headerSeparator }
-          onChange={ this.onHeaderSeparatorChange }
-        />
 
         <AppSelect
           className="w-full"
