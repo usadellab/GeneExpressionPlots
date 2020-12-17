@@ -2,10 +2,10 @@
  *
  * @param {string} keys array of object keys
  * @param {any} values array of object values
- * @return {Object<string, string>}
+ * @return {Map<string, string>|Map<string[],string>}
  */
-export function objectFromArrays (keys, values) {
-  return keys.reduce((object, key, index) => ({ ...object, [key]: values[index]}), {});
+export function mapFromArrays (keys, values) {
+  return keys.reduce((map, key, index) => map.set(key, values[index]), new Map());
 }
 
 /**

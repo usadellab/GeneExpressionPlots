@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { objectFromArrays } from '@/utils/collection';
+import { mapFromArrays } from '@/utils/collection';
 import { buildTreeBranches } from '@/utils/reducers';
 
 /**
@@ -51,6 +51,10 @@ export class Dataframe {
 
   get colNames () {
     return [ ...this.header ];
+  }
+
+  get colGroups () {
+    return this.header.map(groups => groups.split(this.config.multiHeader));
   }
 
   /**
@@ -126,8 +130,11 @@ export class Dataframe {
    *
    * @param {String} rowName unique row name
    */
-  getRowAsObject (rowName) {
-    return objectFromArrays(this.header, this.rows[rowName]);
+  getRowAsMap (rowName, splitGroups = false) {
+    const columns = splitGroups
+      ? this.header.map(groups => groups.split(this.config.multiHeader))
+      : this.header;
+    return mapFromArrays(columns, this.rows[rowName]);
   }
 
   /**
