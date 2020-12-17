@@ -61,6 +61,10 @@ export class Dataframe {
     return branches.reduce(buildTreeBranches, {});
   }
 
+  get hasData () {
+    return this.colNames.length > 0;
+  }
+
   /* QUERIES */
 
   /**
@@ -195,6 +199,11 @@ export class Dataframe {
    */
   addRow (rowName, row){
     this.rows[rowName] = row;
+  }
+
+  clearData () {
+    this.header = [];
+    this.rows = {};
   }
 
   removeColumn (colName) {
