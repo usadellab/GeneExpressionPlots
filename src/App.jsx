@@ -8,7 +8,7 @@ import { fetchResource } from '@/utils/fetch';
 import { readTable } from '@/utils/parser';
 
 import { dataTable, infoTable } from '@/store/data-store';
-// import { plotStore } from './store/plot-store';
+import { plotStore } from './store/plot-store';
 import { settings } from '@/store/settings';
 
 import '@/assets/svg/hero-icons.svg';
@@ -40,10 +40,10 @@ export default class App extends React.Component {
       );
     }
 
-    // if (settings.preloaded.image) {
-    //   const image = await fetchResource(settings.preloaded.image, { type: 'url' });
-    //   if (image) plotStore.loadImage(image);
-    // }
+    if (settings.preloaded.image) {
+      const image = await fetchResource(settings.preloaded.image, { type: 'url' });
+      if (image) plotStore.loadImage(image);
+    }
 
   }
 

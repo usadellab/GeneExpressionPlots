@@ -21,6 +21,7 @@ export async function fetchResource (file, options) {
     if      (options.type === 'blob') payload = await response.blob();
     else if (options.type === 'json') payload = await response.json();
     else if (options.type === 'text') payload = await response.text();
+    else if (options.type === 'url')  payload = await response.url;
     else    throw new Error(`Unsupported read method for ${file}`);
   } catch (error) {
     console.log(error);
