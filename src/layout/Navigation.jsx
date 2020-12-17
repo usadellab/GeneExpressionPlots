@@ -9,10 +9,10 @@ import {
   NavLink,
 } from './NavigationItem';
 
-import { store }    from '@/store';
-import { observer } from 'mobx-react';
-import { readTable } from '@/utils/parser';
+import { observer }  from 'mobx-react';
+import { dataTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
+import { settings }  from '@/store/settings';
 
 
 @observer
@@ -49,103 +49,72 @@ class AppNavigation extends React.Component {
     this.changeRoute('data');
   }
 
-  onUploadCaptionsMenuClick = (event) => {
-
-    // Get the file ref
-    const file = event.target.files.item(0);
-
-    // Reset file input (allow consecutive uploads of the same file)
-    event.target.value = null;
-
-    // Accept tabular types only
-    const validTypes = [
-      'text/tab-separated-values',
-      'text/csv',
-      'text/plain',
-    ];
-
-    if (!file || !validTypes.includes(file.type)) {
-      console.error(`Invalid file type: ${file.type}`);
-      this.setState({ loading: false });
-      return;
-    }
-
-    // Use FileReader API to parse the input file
-    const reader = new FileReader();
-    reader.onload = () => {
-      store.assignCaptions(
-        readTable(reader.result, {
-          fieldSeparator: '\t'
-        })
-      );
-      console.log(store.captions);
-    };
-    reader.onerror = err => console.log(err);
-    reader.onloadend = () => this.changeRoute('data');
-    reader.readAsText(file, 'utf-8');
-  }
-
-  onExportDataMenuClick = () => {
-
-    const data = {
-      data: store.groups,
-      captions: store.captions,
-      image: store.image,
-    };
-
-    const blob = new Blob([ JSON.stringify(data, null, 2) ], {
-      type: 'application/json'
-    });
-
-    this.setState({ exportUrl: URL.createObjectURL(blob) });
-
+  onUploadInfoMenuClick = () => {
+    this.props.showInfoModal();
     this.changeRoute('data');
   }
 
-  onImportDataMenuClick = (event) => {
+  // onExportDataMenuClick = () => {
 
-    this.setState({ loading: true });
+  //   const data = {
+  //     data: store.groups,
+  //     captions: store.captions,
+  //     image: store.image,
+  //   };
 
-    // Get the file ref
-    const file = event.target.files.item(0);
+  //   const blob = new Blob([ JSON.stringify(data, null, 2) ], {
+  //     type: 'application/json'
+  //   });
 
-    // Reset file input (allow consecutive uploads of the same file)
-    event.target.value = null;
+  //   this.setState({ exportUrl: URL.createObjectURL(blob) });
 
-    // Accept zipped files only
-    if (!file || file.type !== 'application/zip') {
-      console.error(`Invalid file type: ${file.type}`);
-      this.setState({ loading: false });
-      return;
-    }
+  //   this.changeRoute('data');
+  // }
+
+  // onImportDataMenuClick = (event) => {
+
+  //   this.setState({ loading: true });
+
+  //   // Get the file ref
+  //   const file = event.target.files.item(0);
+
+  //   // Reset file input (allow consecutive uploads of the same file)
+  //   event.target.value = null;
+
+  //   // Accept zipped files only
+  //   if (!file || file.type !== 'application/zip') {
+  //     console.error(`Invalid file type: ${file.type}`);
+  //     this.setState({ loading: false });
+  //     return;
+  //   }
 
 
-    // Use FileReader API to parse the input file
-    const reader = new FileReader();
+  //   // Use FileReader API to parse the input file
+  //   const reader = new FileReader();
 
-    reader.onload = () => {
-      // const { data, captions, image } = JSON.parse(reader.result);
-      // if (data)     store.assignData(data);
-      // if (captions) store.assignCaptions(captions);
-      // if (image)    store.assignImage(image);
-    };
+  //   reader.onload = () => {
+  //     // const { data, captions, image } = JSON.parse(reader.result);
+  //     // if (data)     store.assignData(data);
+  //     // if (captions) store.assignCaptions(captions);
+  //     // if (image)    store.assignImage(image);
+  //   };
 
-    reader.onloadend = () => {
-      this.setState({ loading: false });
-      this.changeRoute('data');
-    };
+  //   reader.onloadend = () => {
+  //     this.setState({ loading: false });
+  //     this.changeRoute('data');
+  //   };
 
-    reader.onerror = err => {
-      console.log(err);
-      this.setState({ loading: false });
-    };
+  //   reader.onerror = err => {
+  //     console.log(err);
+  //     this.setState({ loading: false });
+  //   };
 
-    reader.readAsText(file, 'utf-8');
-  }
+  //   reader.readAsText(file, 'utf-8');
+  // }
 
   onClearDataMenuClick = () => {
-    store.clearData();
     this.changeRoute('data');
+    dataTable.clearData();
   };
 
   /* PLOT MENU EVENTS */
@@ -162,7 +131,7 @@ class AppNavigation extends React.Component {
    * Clear the current legend image.
    */
   onClearImageMenuClick = () => {
-    store.clearImage();
+    plotStore.clearImage();
     this.changeRoute('plots');
   }
 
@@ -173,7 +142,7 @@ class AppNavigation extends React.Component {
   onNewImageMenuClick = (event) => {
 
     const reader = new FileReader();
-    reader.onload = () => store.assignImage(reader.result);
+    reader.onload = () => plotStore.loadImage(reader.result);
     reader.onloadend = () => this.changeRoute('plots');
     reader.onerror = (error) => console.error(error);
     reader.readAsDataURL(event.target.files[0]);
@@ -207,7 +176,7 @@ class AppNavigation extends React.Component {
       >
         {/* LOADING SPINNER */}
         {
-          (this.state.loading || store.isPreloading) &&
+          (this.state.loading || settings.isPreloading) &&
           <AppOverlay
             className="flex flex-col justify-center items-center rounded-lg py-4 px-6"
             overlayClass="bg-gray-600"
@@ -227,7 +196,7 @@ class AppNavigation extends React.Component {
         <NavGroup className="mt-0" title="Data" to="/data" >
 
           {
-            !store.preloaded &&
+            !settings.preloaded &&
             <NavMenu
               component="button"
               icon="table"
@@ -237,7 +206,7 @@ class AppNavigation extends React.Component {
           }
 
           {
-            !store.preloaded &&
+            !settings.preloaded &&
             <NavMenu
               component="button"
               icon="table"
@@ -247,36 +216,36 @@ class AppNavigation extends React.Component {
           }
 
           {
-            !store.preloaded &&
+            !settings.preloaded &&
             <NavMenu
-              component="file"
+              component="button"
               icon="annotation"
-              name="Upload Captions"
-              onChange={ this.onUploadCaptionsMenuClick }
+              name="Upload Info Table"
+              onClick={ this.onUploadInfoMenuClick }
             />
           }
 
-          <NavMenu
+          {/* <NavMenu
             component="anchor"
             icon="download"
             name="Export Data"
             download="data.json"
             href={ this.state.exportUrl }
             onClick={ this.onExportDataMenuClick }
-          />
+          /> */}
 
-          {
-            !store.preloaded &&
+          {/* {
+            !settings.preloaded &&
             <NavMenu
               component="file"
               icon="upload"
               name="Import Data"
               onChange={ this.onImportDataMenuClick }
             />
-          }
+          } */}
 
           {
-            !store.preloaded &&
+            !settings.preloaded &&
             <NavMenu
               component="button"
               icon="trash"
@@ -294,12 +263,12 @@ class AppNavigation extends React.Component {
             component="button"
             icon="chart-square-bar"
             name="New Plot"
-            // disabled={ !store.hasData }
+            disabled={ !dataTable.hasData }
             onClick={ this.onNewPlotMenuClick }
           />
 
           {
-            !store.preloaded &&
+            !settings.preloaded &&
             <NavMenu
               component="file"
               icon="photograph"
@@ -318,12 +287,12 @@ class AppNavigation extends React.Component {
           />
 
           {
-            !store.preloaded &&
+            !settings.preloaded &&
             <NavMenu
               component="button"
               icon="trash"
               name="Clear Image"
-              disabled={ !store.hasImage }
+              disabled={ !settings.hasImage }
               onClick={ this.onClearImageMenuClick }
             />
           }
@@ -337,7 +306,7 @@ class AppNavigation extends React.Component {
             to="/tools/gene-browser"
             icon="search"
             name="Gene Browser"
-            disabled={ !store.hasData }
+            disabled={ !dataTable.hasData }
             onClick={ () => {} }
           />
 
