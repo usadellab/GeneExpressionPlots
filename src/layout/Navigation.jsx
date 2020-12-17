@@ -196,7 +196,7 @@ class AppNavigation extends React.Component {
         <NavGroup className="mt-0" title="Data" to="/data" >
 
           {
-            !settings.preloaded &&
+            !settings.preloaded.data &&
             <NavMenu
               component="button"
               icon="table"
@@ -206,7 +206,7 @@ class AppNavigation extends React.Component {
           }
 
           {
-            !settings.preloaded &&
+            !settings.preloaded.data &&
             <NavMenu
               component="button"
               icon="table"
@@ -216,7 +216,7 @@ class AppNavigation extends React.Component {
           }
 
           {
-            !settings.preloaded &&
+            !settings.preloaded.info &&
             <NavMenu
               component="button"
               icon="annotation"
@@ -245,7 +245,7 @@ class AppNavigation extends React.Component {
           } */}
 
           {
-            !settings.preloaded &&
+            !settings.preloaded.data &&
             <NavMenu
               component="button"
               icon="trash"
@@ -268,7 +268,7 @@ class AppNavigation extends React.Component {
           />
 
           {
-            !settings.preloaded &&
+            !settings.preloaded.image &&
             <NavMenu
               component="file"
               icon="photograph"
@@ -287,7 +287,7 @@ class AppNavigation extends React.Component {
           />
 
           {
-            !settings.preloaded &&
+            !settings.preloaded.image &&
             <NavMenu
               component="button"
               icon="trash"

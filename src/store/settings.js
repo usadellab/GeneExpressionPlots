@@ -5,14 +5,18 @@ const PRELOAD_DATA = process.env.PRELOAD_DATA;
 const PRELOAD_INFO = process.env.PRELOAD_INFO;
 const PRELOAD_IMAGE = process.env.PRELOAD_IMAGE;
 
-export class Settings {
+class Settings {
 
-  _PRELOADED = {};
+  _PRELOADED = {
+    data: '',
+    info: '',
+    image: '',
+  };
 
   _isPreloading = false;
 
   constructor (preloaded) {
-    this._PRELOADED = preloaded;
+    Object.assign(this._PRELOADED, preloaded);
     makeAutoObservable(this);
   }
 
