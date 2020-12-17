@@ -62,7 +62,7 @@ function getDefaultLayout(showlegend, countUnit, plotTitle) {
 /**
  * create a single Gene grouped Plot. That can be either single-gene Bar or single-gene individual curves
  * @param {string[]} accessionIds
- * @param {PlotOptions} options 
+ * @param {PlotOptions} options
  */
 export function singleGeneGroupedPlot(accessionIds, options) {
   let accessionId = accessionIds[0];
@@ -70,15 +70,15 @@ export function singleGeneGroupedPlot(accessionIds, options) {
 
   let data = createGroupedPlotFromGene(plotData, accessionId, options);
   let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  
-  return {data, layout, config: options.config, accessions: accessionId, showCaption: options.showCaption, plotId: options.plotId};
+
+  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
 }
 
 
 /**
  * create a plotly multi gene bar plot
- * @param {string[]} accessionIds 
- * @param {PlotOptions} options 
+ * @param {string[]} accessionIds
+ * @param {PlotOptions} options
  */
 export function multiGeneBarPlot(accessionIds, options){
   let data = [];
@@ -102,8 +102,8 @@ export function multiGeneBarPlot(accessionIds, options){
 
 /**
  * create a plolty multi Gene individual curves plot
- * @param {string[]} accessionIds 
- * @param {PlotOptions} options 
+ * @param {string[]} accessionIds
+ * @param {PlotOptions} options
  */
 export function multiGeneIndCurvesPlot(accessionIds, options) {
   let data = [];
@@ -123,8 +123,8 @@ export function multiGeneIndCurvesPlot(accessionIds, options) {
 
 /**
  * create a plolty stacked line-plot
- * @param {string[]} accessionIds 
- * @param {PlotOptions} options 
+ * @param {string[]} accessionIds
+ * @param {PlotOptions} options
  */
 export function stackedLinePlot(accessionIds, options) {
   let data = [];
@@ -147,7 +147,7 @@ export function stackedLinePlot(accessionIds, options) {
         marker = {
           symbol: markerStyles[styleIndex]
         };
-        name = `${groupName} - ${accession}`; 
+        name = `${groupName} - ${accession}`;
       }
       options.colorBy === 'group' ? colorIndex++ : styleIndex++;
       Object.keys(plotData[groupName]).forEach(sampleName => {
@@ -166,8 +166,8 @@ export function stackedLinePlot(accessionIds, options) {
 
 /**
  * creates one "group" of single-gene bar/individual-curves or multi-gene individual curves
- * @param {string[]} accessionIds 
- * @param {PlotOptions} options 
+ * @param {string[]} accessionIds
+ * @param {PlotOptions} options
  */
 function createGroupedPlotFromGene(plotData, accessionId, options, line, showOnlyFirstLegend = false) {
   let data = [];
@@ -190,14 +190,14 @@ function createGroupedPlotFromGene(plotData, accessionId, options, line, showOnl
 
 /**
  * create a generic plotly trace
- * @param {array} x 
- * @param {array} y 
- * @param {array} error_y 
- * @param {string} name 
- * @param {string} type 
- * @param {boolean} showlegend 
- * @param {object} line 
- * @param {object} marker 
+ * @param {array} x
+ * @param {array} y
+ * @param {array} error_y
+ * @param {string} name
+ * @param {string} type
+ * @param {boolean} showlegend
+ * @param {object} line
+ * @param {object} marker
  */
 function createTrace(x, y, error_y, name, type, showlegend, line, marker) {
   return {
