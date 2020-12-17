@@ -2,6 +2,7 @@
  *
  * @param {string} keys array of object keys
  * @param {any} values array of object values
+ * @return {Object<string, string>}
  */
 export function objectFromArrays (keys, values) {
   return keys.reduce((object, key, index) => ({ ...object, [key]: values[index]}), {});
