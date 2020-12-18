@@ -204,7 +204,7 @@ export default class GeneBrowser extends Component {
               <div
                 className="group flex px-6 py-4 odd:bg-gray-100 hover:bg-yellow-100"
                 key={ accession }
-                onClick={ () => this.selectGene(accession) }
+                onDoubleClick={ () => this.selectGene(accession) }
               >
                 <div className="w-full">
                   <div className="font-bold">{ accession }</div>
