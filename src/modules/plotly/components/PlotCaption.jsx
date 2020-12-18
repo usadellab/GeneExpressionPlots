@@ -13,8 +13,8 @@ export default class PlotCaption extends React.Component {
                 `flex flex-col py-5 mt-2
                  border-t-2 hover:border-yellow-600
                  hover:bg-yellow-100
-                 ${hoveredGene && hoveredGene !== this.props.accession ? 'opacity-50' : ''}
-                 ${hoveredGene === this.props.accession ? 'bg-yellow-100' : ''}
+                 ${hoveredGene && !hoveredGene.includes(this.props.accession) ? 'opacity-50' : ''}
+                 ${hoveredGene.includes(this.props.accession) ? 'bg-yellow-100' : ''}
                  text-justify text-gray-800 text-sm`
               }
               style={{ borderColor: this.props.color ?? '' }}
@@ -31,7 +31,7 @@ export default class PlotCaption extends React.Component {
 
                 <div>
                   {
-                    Object.keys(this.props.caption).map(colName => (
+                    [ ...this.props.caption.keys() ].map(colName => (
                       <div
                         key={ colName }
                         className="ml-2 py-1 uppercase text-yellow-700"
@@ -44,7 +44,7 @@ export default class PlotCaption extends React.Component {
 
                 <div>
                   {
-                    Object.values(this.props.caption).map((cellValue, index) => (
+                    [ ...this.props.caption.values() ].map((cellValue, index) => (
                       <div key={ index } className="ml-5 py-1">
                         { cellValue }
                       </div>

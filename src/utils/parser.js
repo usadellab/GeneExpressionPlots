@@ -1,111 +1,51 @@
-/**
- * Reads an expression table spec as defined [here](url)
- *
- * @typedef  {Object}  ExpTableOptions Options object for the expression table parser
- * @property {number?}  captionsColumn column index with caption strings
- * @property {string}        countUnit one of raw|rpkm|tpm
- * @property {string}   fieldSeparator delimiter for each column field
- * @property {string}  headerSeparator delimiter for each column header-cell
- *
- * @param {string}            table table as a single string
- * @param {ExpTableOptions} options parser options
- */
-export function readExpressionTable (table, options) {
+export async function readFile (file) {
 
-  const lines = table.split(/\r?\n|\r/);
+  const reader = new FileReader();
+  reader.readAsText(file);
 
-  /**
-   * Extract the header cells containing group, sample, and replicate
-   * information.
-   */
-  const fields = lines
-    .shift()
-    .split(options.fieldSeparator)
-    .slice(1);
+  return new Promise((resolve, reject) => {
 
-  if (options.captionsColumn)
-    fields.splice(options.captionsColumn, 1);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
 
-  const headerArray = fields.map(fields => fields.split(options.headerSeparator));
-
-  /**
-   * Generate the a pseudo-"data" skeleton object, where each value corresponds
-   * to a "group".
-   */
-  const skeleton = headerArray.reduce(
-    (skeleton, [ group, sample, replicateNo ]) => {
-
-      // Create a group if it does not exist
-      if (!skeleton[group]) skeleton[group] = {
-        name: group,
-        countUnit: options.countUnit,
-        samples: [],
-      };
-
-      // Find if there is a matching sample within the group
-      const matchingSample = skeleton[group].samples.find(x => x.name === sample);
-
-      // If sample does not exist, create the sample template
-      if (matchingSample) {
-        matchingSample.replicates[replicateNo] = {};
-        return skeleton;
-      }
-
-      skeleton[group].samples.push({
-        name: sample,
-        xTickValue: undefined,
-        replicates: { [replicateNo]: {} }
-      });
-
-      return skeleton;
-    },
-    {}
-  );
-
-  lines.forEach(line => {
-
-    const counts = line.split(options.fieldSeparator);
-    const accessionId = counts.shift();
-
-    counts.forEach((count, index) => {
-      const [ group, sample, replicateNo ] = headerArray[index];
-      const matchingSample = skeleton[group].samples.find(x => x.name === sample);
-      matchingSample.replicates[replicateNo][accessionId] = count;
-    });
   });
-
-  Object.keys(skeleton).forEach(group => {
-    skeleton[group].samples.forEach(sample => {
-      sample.replicates = Object.values(sample.replicates);
-    });
-  });
-
-  return skeleton;
 }
 
 /**
  * Parse a tabular file to its in-memory object representation.
  *
- * @typedef  {Object} readTableOptions Options object for the expression table parser
- * @property {string} fieldSeparator delimiter for each column field
+ * @typedef  {Object}  ReadTableOptions Options object for the expression table parser
+ * @property {string?}  headerSeparator delimiter for multi-header support
+ * @property {string}    fieldSeparator delimiter for each column field
+ * @property {number}     rowNameColumn column used for row names (values must be unique)
  *
  * @param {string} table table as a single string
- * @param {readTableOptions} options parser options
+ * @param {ReadTableOptions} options parser options
  */
 export function readTable (table, options) {
 
   const lines = table.split(/\r?\n|\r/);
 
+  // Extract the table header (first element of lines is removed)
   const header = lines
     .shift()
     .split(options.fieldSeparator)
-    .slice(1);
+    .reduce((array, field, index) => {
+      if (index === options.rowNameColumn) return array;
+      if (options.headerSeparator) field = field.split(options.headerSeparator);
+      array.push(field);
+      return array;
+    }, []);
 
+  // Parse each line as an object of unique row names
   const rows = lines.reduce((acc, line) => {
+
+    if (!line) return acc;
+
     const values = line.split(options.fieldSeparator);
-    const key = values.shift();
-    Object.assign(acc, { [key]: values });
-    return acc;
+    const key = values.splice(options.rowNameColumn, 1);
+    return Object.assign(acc, { [key]: values });
+
   }, {});
 
   return {

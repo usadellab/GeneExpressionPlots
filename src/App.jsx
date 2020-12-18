@@ -4,15 +4,12 @@ import { HashRouter } from 'react-router-dom';
 import AppRoutes from './App.routes';
 import AppLayout from './layout/AppLayout';
 
-import { store } from '@/store';
-import {
-  PRELOAD_CAPTIONS,
-  PRELOAD_DATA,
-  PRELOAD_IMAGE,
-} from './config/globals.js';
-
 import { fetchResource } from '@/utils/fetch';
 import { readTable } from '@/utils/parser';
+
+import { dataTable, infoTable } from '@/store/data-store';
+import { plotStore } from './store/plot-store';
+import { settings } from '@/store/settings';
 
 import '@/assets/svg/hero-icons.svg';
 
@@ -21,28 +18,33 @@ export default class App extends React.Component {
 
   async componentDidMount () {
 
-    let groups = [];
-    let captions = {};
-    let image = null;
-
-    if (PRELOAD_DATA) {
-      const dataRes = await fetchResource(PRELOAD_DATA, { type: 'json' });
-      if (dataRes?.data) groups = dataRes.data;
-      if (dataRes?.image) image = dataRes.image;
+    if (settings.preloaded.data) {
+      const dataResponse = await fetchResource(settings.preloaded.data, { type: 'text' });
+      if (dataResponse) dataTable.loadFromObject(
+        readTable(dataResponse, {
+          fieldSeparator: '\t',
+          rowNameColumn: 0,
+        }), {
+          multiHeader: '*'
+        }
+      );
     }
 
-    if (PRELOAD_CAPTIONS) {
-      const captionsResponse = await fetchResource(PRELOAD_CAPTIONS, { type: 'text' });
-      if (captionsResponse) captions = readTable(captionsResponse, { fieldSeparator: '\t' });
+    if (settings.preloaded.info) {
+      const infoResponse = await fetchResource(settings.preloaded.info, { type: 'text' });
+      if (infoResponse) infoTable.loadFromObject(
+        readTable(infoResponse, {
+          fieldSeparator: '\t',
+          rowNameColumn: 0,
+        })
+      );
     }
 
-    if (PRELOAD_IMAGE) {
-      image = await fetchResource(PRELOAD_IMAGE, { type: 'url' });
+    if (settings.preloaded.image) {
+      const image = await fetchResource(settings.preloaded.image, { type: 'url' });
+      if (image) plotStore.loadImage(image);
     }
 
-    store.assignCaptions(captions);
-    store.assignImage(image);
-    store.assignData(groups);
   }
 
   render () {

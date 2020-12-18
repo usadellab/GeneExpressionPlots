@@ -1,7 +1,6 @@
 import React from 'react';
-
-import { store } from '@/store';
 import { observer } from 'mobx-react';
+import { plotStore } from '@/store/plot-store';
 
 @observer
 export default class PlotsLayout extends React.Component {
@@ -40,11 +39,11 @@ export default class PlotsLayout extends React.Component {
             Source: https://tailwindcss.com/course/locking-images-to-a-fixed-aspect-ratio
 
           */}
-          {store.image && (
+          {plotStore.image && (
             <div className="flex justify-center items-center m-3 w-full
                             resize-x overflow-auto shadow-outer bg-white"
             >
-              <img src={store.image} />
+              <img src={plotStore.image} />
             </div>
           )}
 

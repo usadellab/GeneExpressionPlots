@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
-import { autorun } from 'mobx';
-import { store } from '@/store';
-import { escapeRegExp } from '@/utils/validation';
 
+import { autorun } from 'mobx';
+import {
+  dataTable,
+  infoTable
+} from '@/store/data-store';
+
+import { escapeRegExp }  from '@/utils/string';
+
+import AppButton from '@/components/AppButton';
+import AppIcon   from '@/components/AppIcon';
+import AppModal  from '@/components/AppModal2';
 import AppNumber from '@/components/AppNumber';
 import AppSelect from '@/components/AppSelect';
-import AppText from '@/components/AppText';
+import AppText   from '@/components/AppText';
+
+import GeneDetails from '../components/GeneDetails';
 
 export default class GeneBrowser extends Component {
+
   constructor () {
     super();
     this.state = {
@@ -16,6 +27,9 @@ export default class GeneBrowser extends Component {
       pageOffset: 1,
       pageMax: 1,
       countView: 20,
+      //
+      selectedGene: '',
+      selectedGeneCounts: [],
     };
   }
 
@@ -23,36 +37,40 @@ export default class GeneBrowser extends Component {
 
   computeGeneView = () => {
 
+    // Retrieve gene information matching the search parameters (empty search matches all)
     const regexp = new RegExp( escapeRegExp(this.state.searchId), 'i' );
+    const matchingResults = dataTable.rowNames.reduce((matches, accession) => {
 
-    const accessionIds = store.accessionIds.reduce((array, accessionId) => {
+      // Match text in the accessions ids
+      const accessionMatch = accession.search(regexp) > -1;
 
-      const matchAccesion = accessionId.search(regexp) > -1;
-
-      const description = store.captions[accessionId];
-      const matchCaption = description
-        ? description.search(regexp) > -1
+      // Match text in the info fields
+      const geneInfo = infoTable.getRowAsMap(accession) ?? new Map();
+      const infoMatch = geneInfo
+        ? Object.values(geneInfo).some(field => field.search(regexp) > -1)
         : false;
 
-      if (matchAccesion || matchCaption) {
-        array.push({
-          accessionId,
-          description,
-        });
-      }
+      // Include in the results if any matches are found
+      if (accessionMatch || infoMatch) matches.push({
+        accession,
+        geneInfo
+      });
 
-      return array;
+      return matches;
+
     }, []);
 
+
+    // Calculate the current page view
     const countView = parseInt(this.state.countView);
     const start = (this.state.pageOffset-1) * countView;
     const end = this.state.pageOffset * countView;
+    const geneView = matchingResults.slice(start, end);
 
-    const geneView = accessionIds.slice(start, end);
-    const pageMax = Math.ceil(accessionIds.length / this.state.countView) || 1;
+    // Calculate the number of pages according to the current display options
+    const pageMax = Math.ceil(matchingResults.length / this.state.countView) || 1;
 
     this.setState(({ geneView, pageMax }));
-
   }
 
   /* LYFECYCLE */
@@ -115,6 +133,26 @@ export default class GeneBrowser extends Component {
 
   }
 
+  /* ACTIONS */
+
+  /**
+   * Toggle the gene details modal visibility.
+   * @param {React.MouseEvent<HTMLDivElement>} event
+   */
+  selectGene = (selectedGene) => {
+    let selectedGeneCounts;
+    if (selectedGene) {
+      const table = dataTable.getRowAsMap(selectedGene, true);
+      selectedGeneCounts = [ ...table.entries() ].map(([ [ group, sample, replicate ], count]) => ({
+        group,
+        sample,
+        replicate,
+        count
+      }));
+    }
+    this.setState({ selectedGene, selectedGeneCounts });
+  }
+
   /* RENDER */
 
   render() {
@@ -159,21 +197,69 @@ export default class GeneBrowser extends Component {
 
         </div>
 
-        <div className="bg-white mt-6 p-6">
+        <div className="bg-white mt-6">
           {
-            this.state.geneView.map(({ accessionId, description }) => (
+            this.state.geneView.map(({ accession, geneInfo }) => (
 
               <div
-                className="py-3"
-                key={ accessionId }
+                className="group flex px-6 py-4 odd:bg-gray-100 hover:bg-yellow-100"
+                key={ accession }
+                onClick={ () => this.selectGene(accession) }
               >
-                <div className="font-bold">{ accessionId }</div>
-                <div className="mx-6">{ description ?? 'No description exists for this gene.' }</div>
+                <div className="w-full">
+                  <div className="font-bold">{ accession }</div>
+                  {
+                    geneInfo.size === 0
+                      ? 'No information available for this gene.'
+                      : (
+                        <div className="flex mt-1 ml-4">
+
+                          <ul className="text-yellow-700">
+                            {
+                              [ ...geneInfo.keys() ].map(key => (
+                                <li key={ key } className="mt-1">{ key }</li>
+                              ))
+                            }
+                          </ul>
+
+                          <ul className="ml-5">
+                            {
+                              [ ...geneInfo.values() ].map((value, index) => (
+                                <li key={ index } className="mt-1">{ value }</li>
+                              ))
+                            }
+                          </ul>
+
+                        </div>
+                      )
+                  }
+                </div>
+
+                <AppButton>
+                  <AppIcon
+                    className="ml-4 w-6 h-6 text-gray-500 invisible group-hover:visible"
+                    file="hero-icons"
+                    id="eye"
+                  />
+                </AppButton>
+
               </div>
 
             ))
           }
         </div>
+
+        {
+          this.state.selectedGene &&
+          <AppModal
+            className="flex flex-col w-full h-full md:w-5/6 md:h-5/6 lg:w-3/4 2xl:w-1/2"
+            title={ this.state.selectedGene }
+            showModal={ this.state.selectedGene }
+            hideModal={ () => this.selectGene() }
+          >
+            <GeneDetails geneCounts={ this.state.selectedGeneCounts } />
+          </AppModal>
+        }
 
       </div>
     );
