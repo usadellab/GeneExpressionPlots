@@ -1,25 +1,62 @@
 import React from 'react';
 
+import { PlotContext } from './PlotlyPlot';
 
 export default class PlotCaption extends React.Component {
   render() {
     return (
-      <figcaption className="px-20 text-justify text-gray-800 text-sm">
-        <div>
-          <span className="font-semibold">{ this.props.accession }</span>
-          {
-            Object.entries(this.props.caption).map(([ key, value ]) => (
+      <PlotContext.Consumer>
+        {
+          ({ hoveredGene }) => (
+            <figcaption
+              className={
+                `flex flex-col py-5 mt-2
+                 border-t-2 hover:border-yellow-600
+                 hover:bg-yellow-100
+                 ${hoveredGene && !hoveredGene.includes(this.props.accession) ? 'opacity-50' : ''}
+                 ${hoveredGene.includes(this.props.accession) ? 'bg-yellow-100' : ''}
+                 text-justify text-gray-800 text-sm`
+              }
+              style={{ borderColor: this.props.color ?? '' }}
+            >
+
               <div
-                key={ `${this.props.accession}-${key}` }
-                className="ml-2"
+                className="font-semibold text-base"
+                style={{ color: this.props.color ?? '' }}
               >
-                <span className="uppercase" > { key } </span>
-                <span className="ml-2" > { value } </span>
+                { this.props.accession }
               </div>
-            ))
-          }
-        </div>
-      </figcaption>
+
+              <div className="flex items-center mt-2">
+
+                <div>
+                  {
+                    [ ...this.props.caption.keys() ].map(colName => (
+                      <div
+                        key={ colName }
+                        className="ml-2 py-1 uppercase text-yellow-700"
+                      >
+                        { colName }
+                      </div>
+                    ))
+                  }
+                </div>
+
+                <div>
+                  {
+                    [ ...this.props.caption.values() ].map((cellValue, index) => (
+                      <div key={ index } className="ml-5 py-1">
+                        { cellValue }
+                      </div>
+                    ))
+                  }
+                </div>
+
+              </div>
+            </figcaption>
+          )
+        }
+      </PlotContext.Consumer>
     );
   }
 }
