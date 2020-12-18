@@ -327,6 +327,13 @@ class AppNavigation extends React.Component {
             href="https://zendro-dev.gitbook.io/geneexpressionplots/documentation/api"
           />
 
+          <NavMenu
+            component="anchor"
+            icon="document-duplicate"
+            name="Example Data"
+            href="https://github.com/usadellab/GeneExpressionPlots/tree/master/examples"
+          />
+
         </NavGroup>
 
       </nav>
