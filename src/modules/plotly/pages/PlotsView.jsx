@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 
 import PlotlyPlot  from '../components/PlotlyPlot';
 import PlotCaption from '../components/PlotCaption';
+import { plotStore } from '@/store/plot-store';
 
 import { plotStore } from '@/store/plot-store';
 import { infoTable } from '@/store/data-store';
@@ -20,7 +21,7 @@ export default class PlotsView extends React.Component {
                      shadow-outer overflow-auto bg-white"
           plot={{ ...plot }}
         >
-          {
+          {/* {
             plot.showCaption &&
             plot.accessions.map((accession, index) => (
               <PlotCaption
@@ -30,7 +31,7 @@ export default class PlotsView extends React.Component {
                 color={ plot.accessions.length > 1  ? colors[index] : null }
               />
             ))
-          }
+          } */}
         </PlotlyPlot>
       ))
     );
