@@ -45,7 +45,10 @@ class AppLayout extends React.Component {
 
   onTableFormModalHide = () => this.setState({ showTableModal: false })
   onTableFormCancel = () => this.setState({ showTableModal: false })
-  onTableFormSave = () => this.setState({ showTableModal: false })
+  onTableFormSave = () => {
+    this.setState({ showTableModal: false });
+    this.changeRoute('data');
+  }
 
 
   render () {

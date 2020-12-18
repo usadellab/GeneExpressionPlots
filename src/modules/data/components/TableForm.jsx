@@ -37,6 +37,10 @@ export default class TableForm extends React.Component {
     this.setState({ countUnit: event.target.value });
   }
 
+  onFieldSeparatorChange = (event) => {
+    this.setState({ fieldSeparator: event.target.value });
+  }
+
   onHeaderSeparatorChange = (event) => {
     this.setState({ headerSeparator: event.target.value });
   }
@@ -111,11 +115,16 @@ export default class TableForm extends React.Component {
           onChange={ this.onHeaderSeparatorChange }
         />
 
-        <AppText
+        <AppSelect
           className="w-full"
-          label="Captions column"
-          value={ this.state.captionsColumn }
-          onChange={ this.onCaptionColumnChange }
+          placeholder="1..N"
+          label="Field separator"
+          value={ this.state.separator }
+          options={[
+            { label: 'CSV',  value: ','  },
+            { label: 'TAB',  value: '\t' },
+          ]}
+          onChange={ this.onFieldSeparatorChange }
         />
 
         {/* FORM ACTIONS */}
