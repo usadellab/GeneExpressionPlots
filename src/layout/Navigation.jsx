@@ -10,11 +10,12 @@ import {
 } from './NavigationItem';
 
 import { observer }  from 'mobx-react';
-import { dataTable } from '@/store/data-store';
+import { dataTable, infoTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
 import { settings }  from '@/store/settings';
 
-
+import JSZip from 'jszip';
+import { readTable } from '@/utils/parser';
 @observer
 class AppNavigation extends React.Component {
 
@@ -54,39 +55,110 @@ class AppNavigation extends React.Component {
     this.changeRoute('data');
   }
 
-  // onExportDataMenuClick = () => {
+  onExportDataMenuClick = () => {
 
-  //   const data = {
-  //     data: store.groups,
-  //     captions: store.captions,
-  //     image: store.image,
-  //   };
+    const data = {
+      expression: dataTable.dataFrametoString('\t'),
+      info: infoTable.hasData ? infoTable.dataFrametoString('\t') : null,
+    };
 
-  //   const blob = new Blob([ JSON.stringify(data, null, 2) ], {
-  //     type: 'application/json'
-  //   });
+    var zip = new JSZip();
 
-  //   this.setState({ exportUrl: URL.createObjectURL(blob) });
 
-  //   this.changeRoute('data');
-  // }
+    // zip.folder('data');
+    console.log(plotStore.image);
+    zip.file('expression_table.txt', data.expression);
+    if (data.info)
+      zip.file('info_table.txt', data.info);
+    if (plotStore.image)
+      zip.file('image.png', plotStore.image.split(',')[1], {base64: true, binary:true});
 
-  // onImportDataMenuClick = (event) => {
+    // zip.file('data.txt', data);
 
-  //   this.setState({ loading: true });
+    
+    zip.generateAsync({type: 'blob'}).then(content => {
+      this.setState({exportUrl: URL.createObjectURL(content)});
+    });
 
-  //   // Get the file ref
-  //   const file = event.target.files.item(0);
 
-  //   // Reset file input (allow consecutive uploads of the same file)
-  //   event.target.value = null;
+    // const data = {
+    //   data: store.groups,
+    //   captions: store.captions,
+    //   image: store.image,
+    // };
 
-  //   // Accept zipped files only
-  //   if (!file || file.type !== 'application/zip') {
-  //     console.error(`Invalid file type: ${file.type}`);
-  //     this.setState({ loading: false });
-  //     return;
-  //   }
+    // const blob = new Blob([ JSON.stringify(data, null, 2) ], {
+    //   type: 'application/json'
+    // });
+
+    // this.setState({ exportUrl: URL.createObjectURL(blob) });
+
+    // this.changeRoute('data');
+  }
+
+  onImportDataMenuClick = (event) => {
+
+    this.setState({ loading: true });
+
+    // Get the file ref
+    const file = event.target.files.item(0);
+    
+    var zip = new JSZip();
+
+    zip.loadAsync(file).then(zip => {
+      Object.keys(zip.files).forEach(fileName => {
+
+        if (fileName.includes('image')){
+          zip.files[fileName].async('base64').then(fileData => {
+            console.log(fileData);
+            fileData = 'data:image/png;base64, ' + fileData;
+            plotStore.loadImage(fileData);
+          });
+        } else {
+          zip.files[fileName].async('string').then(fileData => {
+  
+            if (fileName === 'expression_table.txt') {
+              dataTable.loadFromObject(
+                readTable(fileData, {
+                  fieldSeparator: '\t',
+                  rowNameColumn: 0,
+                }), {
+                  multiHeader: '*'
+                }
+              );
+            } else if (fileName === 'info_table.txt') {
+              infoTable.loadFromObject(
+                readTable(fileData, {
+                  fieldSeparator: '\t',
+                  rowNameColumn: 0,
+                })
+              );
+            }
+          });
+        }
+      
+
+
+      });
+    });
+
+    this.setState({ loading: false });
+
+    // this.setState({ loading: true });
+
+    // // Get the file ref
+    // const file = event.target.files.item(0);
+
+    // // Reset file input (allow consecutive uploads of the same file)
+    // event.target.value = null;
+
+    // // Accept zipped files only
+    // if (!file || file.type !== 'application/zip') {
+    //   console.error(`Invalid file type: ${file.type}`);
+    //   this.setState({ loading: false });
+    //   return;
+    // }
+  }
 
 
   //   // Use FileReader API to parse the input file
@@ -144,8 +216,10 @@ class AppNavigation extends React.Component {
     const file = event.target.files[0];
     event.target.value = '';
 
+
+
     const reader = new FileReader();
-    reader.onload = () => plotStore.loadImage(reader.result);
+    reader.onload = () => {console.log(reader.result);plotStore.loadImage(reader.result);};
     reader.onloadend = () => this.changeRoute('plots');
     reader.onerror = (error) => console.error(error);
     reader.readAsDataURL(file);
@@ -228,24 +302,24 @@ class AppNavigation extends React.Component {
             />
           }
 
-          {/* <NavMenu
+          <NavMenu
             component="anchor"
             icon="download"
             name="Export Data"
-            download="data.json"
+            download="GXP-data.json"
             href={ this.state.exportUrl }
             onClick={ this.onExportDataMenuClick }
-          /> */}
+          />
 
-          {/* {
-            !settings.preloaded &&
+          {
+            !settings.preloaded.data &&
             <NavMenu
               component="file"
               icon="upload"
               name="Import Data"
               onChange={ this.onImportDataMenuClick }
             />
-          } */}
+          }
 
           {
             !settings.preloaded.data &&
