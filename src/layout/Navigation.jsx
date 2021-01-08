@@ -16,6 +16,8 @@ import { settings }  from '@/store/settings';
 
 import JSZip from 'jszip';
 import { readTable } from '@/utils/parser';
+
+import { saveAs } from 'file-saver';
 @observer
 class AppNavigation extends React.Component {
 
@@ -55,45 +57,24 @@ class AppNavigation extends React.Component {
     this.changeRoute('data');
   }
 
-  onExportDataMenuClick = () => {
+  onExportDataMenuClick = async () => {
 
     const data = {
-      expression: dataTable.dataFrametoString('\t'),
-      info: infoTable.hasData ? infoTable.dataFrametoString('\t') : null,
+      expression: dataTable.dataFrametoString(settings.tableSettings.expression_field_sep),
+      info: infoTable.hasData ? infoTable.dataFrametoString(settings.tableSettings.info_field_sep) : null,
     };
 
     var zip = new JSZip();
-
-
-    // zip.folder('data');
-    console.log(plotStore.image);
+    zip.file('GXP_settings.json', JSON.stringify(settings.tableSettings,null,2));
     zip.file('expression_table.txt', data.expression);
     if (data.info)
       zip.file('info_table.txt', data.info);
     if (plotStore.image)
-      zip.file('image.png', plotStore.image.split(',')[1], {base64: true, binary:true});
-
-    // zip.file('data.txt', data);
-
+      zip.file('image.png', plotStore.image.split('base64,')[1], {base64:true});
     
     zip.generateAsync({type: 'blob'}).then(content => {
-      this.setState({exportUrl: URL.createObjectURL(content)});
+      saveAs(content, 'GXP_data.zip');
     });
-
-
-    // const data = {
-    //   data: store.groups,
-    //   captions: store.captions,
-    //   image: store.image,
-    // };
-
-    // const blob = new Blob([ JSON.stringify(data, null, 2) ], {
-    //   type: 'application/json'
-    // });
-
-    // this.setState({ exportUrl: URL.createObjectURL(blob) });
-
-    // this.changeRoute('data');
   }
 
   onImportDataMenuClick = (event) => {
@@ -106,83 +87,50 @@ class AppNavigation extends React.Component {
     var zip = new JSZip();
 
     zip.loadAsync(file).then(zip => {
+      if (zip.files['GXP_settings.json']) {
+        zip.files['GXP_settings.json'].async('string').then(fileData => {
+          settings.loadTableSettings(fileData);
+        });
+      } else {
+        throw new Error('The provided Import does not contain a GXP_settings.json file.');
+      }
+    });
+
+    zip.loadAsync(file).then(zip => {
       Object.keys(zip.files).forEach(fileName => {
 
         if (fileName.includes('image')){
           zip.files[fileName].async('base64').then(fileData => {
-            console.log(fileData);
             fileData = 'data:image/png;base64, ' + fileData;
             plotStore.loadImage(fileData);
           });
         } else {
           zip.files[fileName].async('string').then(fileData => {
-  
+            
             if (fileName === 'expression_table.txt') {
               dataTable.loadFromObject(
                 readTable(fileData, {
-                  fieldSeparator: '\t',
+                  fieldSeparator: settings.tableSettings.expression_field_sep,
                   rowNameColumn: 0,
                 }), {
-                  multiHeader: '*'
+                  multiHeader: settings.tableSettings.expression_header_sep
                 }
               );
             } else if (fileName === 'info_table.txt') {
               infoTable.loadFromObject(
                 readTable(fileData, {
-                  fieldSeparator: '\t',
+                  fieldSeparator: settings.tableSettings.info_field_sep,
                   rowNameColumn: 0,
                 })
               );
             }
           });
         }
-      
-
-
       });
     });
 
     this.setState({ loading: false });
-
-    // this.setState({ loading: true });
-
-    // // Get the file ref
-    // const file = event.target.files.item(0);
-
-    // // Reset file input (allow consecutive uploads of the same file)
-    // event.target.value = null;
-
-    // // Accept zipped files only
-    // if (!file || file.type !== 'application/zip') {
-    //   console.error(`Invalid file type: ${file.type}`);
-    //   this.setState({ loading: false });
-    //   return;
-    // }
   }
-
-
-  //   // Use FileReader API to parse the input file
-  //   const reader = new FileReader();
-
-  //   reader.onload = () => {
-  //     // const { data, captions, image } = JSON.parse(reader.result);
-  //     // if (data)     store.assignData(data);
-  //     // if (captions) store.assignCaptions(captions);
-  //     // if (image)    store.assignImage(image);
-  //   };
-
-  //   reader.onloadend = () => {
-  //     this.setState({ loading: false });
-  //     this.changeRoute('data');
-  //   };
-
-  //   reader.onerror = err => {
-  //     console.log(err);
-  //     this.setState({ loading: false });
-  //   };
-
-  //   reader.readAsText(file, 'utf-8');
-  // }
 
   onClearDataMenuClick = () => {
     this.changeRoute('data');
@@ -219,7 +167,7 @@ class AppNavigation extends React.Component {
 
 
     const reader = new FileReader();
-    reader.onload = () => {console.log(reader.result);plotStore.loadImage(reader.result);};
+    reader.onload = () => plotStore.loadImage(reader.result);
     reader.onloadend = () => this.changeRoute('plots');
     reader.onerror = (error) => console.error(error);
     reader.readAsDataURL(file);
@@ -303,11 +251,11 @@ class AppNavigation extends React.Component {
           }
 
           <NavMenu
-            component="anchor"
+            component="button"
             icon="download"
             name="Export Data"
-            download="GXP-data.json"
-            href={ this.state.exportUrl }
+            // download="GXP-data.json"
+            // href={ this.state.exportUrl }
             onClick={ this.onExportDataMenuClick }
           />
 
