@@ -10,7 +10,8 @@ import AppText    from '@components/AppText';
 
 import { readFile, readTable } from '@/utils/parser';
 import { dataTable } from '@/store/data-store';
-
+import { plotStore } from '@/store/plot-store';
+import { settings } from '@/store/settings';
 
 /**
  * Render a single group as a JSX.Element
@@ -55,6 +56,13 @@ export default class GroupView extends React.Component {
     event.preventDefault();
 
     this.setState({ loading: true });
+
+    // set the countUnit in the plotStore
+    plotStore.loadCountUnit(this.state.countUnit);
+
+    settings.loadTableSettings({
+      unit: this.state.countUnit
+    });
 
     const files = [ ...event.currentTarget.files ];
 

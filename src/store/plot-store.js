@@ -26,8 +26,16 @@ class PlotStore {
   plots = [];
   _image = null;
 
+  countUnit = null;
+
   constructor () {
     makeAutoObservable(this);
+  }
+
+  /* UNIT */
+
+  loadCountUnit(countUnit) {
+    this.countUnit = countUnit;
   }
 
   /* IMAGE */
@@ -115,6 +123,9 @@ class PlotStore {
    * @param {PlotOptions} options
    */
   addPlot(accessionIds, options){
+
+    options.countUnit = this.countUnit;
+
     options.plotId = nanoid();
     options.config = this.config(options.plotId);
     switch (options.plotType) {

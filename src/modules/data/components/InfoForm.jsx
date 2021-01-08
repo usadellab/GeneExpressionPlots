@@ -8,7 +8,7 @@ import AppSpinner from '@components/AppSpinner';
 
 import { readTable } from '@/utils/parser';
 import { infoTable } from '@/store/data-store';
-
+import { settings }  from '@/store/settings';
 export default class InfoForm extends React.Component {
 
   constructor () {
@@ -37,6 +37,10 @@ export default class InfoForm extends React.Component {
     event.preventDefault();
 
     this.setState({ loading: true });
+
+    settings.loadTableSettings({
+      'info_field_sep': this.state.fieldSeparator
+    });
 
     const file = event.target.files[0];
 
