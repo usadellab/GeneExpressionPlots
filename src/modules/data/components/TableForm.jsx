@@ -10,6 +10,9 @@ import AppText    from '@components/AppText';
 import { readTable } from '@/utils/parser';
 import { dataTable } from '@/store/data-store';
 
+import { plotStore } from '@/store/plot-store';
+import { settings }  from '@/store/settings';
+
 export default class TableForm extends React.Component {
 
   constructor () {
@@ -49,6 +52,13 @@ export default class TableForm extends React.Component {
     event.preventDefault();
 
     this.setState({ loading: true });
+
+    plotStore.loadCountUnit(this.state.countUnit);
+    settings.loadTableSettings({
+      'unit': this.state.countUnit,
+      'expression_field_sep': this.state.fieldSeparator,
+      'expression_header_sep': '*',
+    });
 
     const file = event.target.files[0];
 

@@ -247,4 +247,19 @@ export class Dataframe {
 
   }
 
+  dataFrametoString (separator) {
+    let dataframeAsString = 'Gene-ID' + separator;
+
+    dataframeAsString += this.header.join(separator);
+    dataframeAsString += '\n';
+
+    Object.keys(this.rows).forEach(rowName => {
+      dataframeAsString += rowName + separator;
+      dataframeAsString += this.rows[rowName].join(separator);
+      dataframeAsString += '\n';
+    });
+
+    return dataframeAsString;
+  }
+
 }

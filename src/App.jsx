@@ -18,14 +18,23 @@ export default class App extends React.Component {
 
   async componentDidMount () {
 
+    if (settings.preloaded.settings) {
+      const settingsResponse = await fetchResource(settings.preloaded.settings, { type: 'json' });
+      if (settingsResponse) {
+        settings.loadTableSettings(settingsResponse);
+        plotStore.loadCountUnit(settings.tableSettings.unit);
+      }
+      else throw new Error('Please provide a GXP_settings.json file.');
+    }
+
     if (settings.preloaded.data) {
       const dataResponse = await fetchResource(settings.preloaded.data, { type: 'text' });
       if (dataResponse) dataTable.loadFromObject(
         readTable(dataResponse, {
-          fieldSeparator: '\t',
+          fieldSeparator: settings.tableSettings.expression_field_sep,
           rowNameColumn: 0,
         }), {
-          multiHeader: '*'
+          multiHeader: settings.tableSettings.expression_header_sep
         }
       );
     }
@@ -34,7 +43,7 @@ export default class App extends React.Component {
       const infoResponse = await fetchResource(settings.preloaded.info, { type: 'text' });
       if (infoResponse) infoTable.loadFromObject(
         readTable(infoResponse, {
-          fieldSeparator: '\t',
+          fieldSeparator: settings.tableSettings.info_field_sep,
           rowNameColumn: 0,
         })
       );

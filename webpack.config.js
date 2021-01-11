@@ -97,6 +97,7 @@ module.exports = {
       'PRELOAD_IMAGE': process.env.PRELOAD_IMAGE || '',
       'PRELOAD_INFO': process.env.PRELOAD_INFO   || '',
       'PRELOAD_PLOTS': process.env.PRELOAD_PLOTS || '',
+      'PRELOAD_SETTINGS': process.env.PRELOAD_SETTINGS || '',
     }),
 
     // Generate dist/index.html
