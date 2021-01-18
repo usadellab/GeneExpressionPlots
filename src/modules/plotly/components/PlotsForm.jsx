@@ -34,15 +34,18 @@ export default class PlotsForm extends Component {
 
   searchAccessionIds = (accession) => {
 
+    const rowNames = dataTable.rowNames;
+
     // Flag whether the current accession id is valid for submission
-    this.setState({ validForm: dataTable.rowNames.includes(accession) });
+    this.setState({ validForm: rowNames.includes(accession) });
 
     // Update the search window with the accession matching ids
     let accessionIdsView = [];
-    for (let i = 0; i < dataTable.rowNames.length; i++) {
 
-      if (dataTable.rowNames[i].includes(accession))
-        accessionIdsView.push(dataTable.rowNames[i]);
+    for (let i = 0; i < rowNames.length; i++) {
+
+      if (rowNames[i].includes(accession))
+        accessionIdsView.push(rowNames[i]);
 
       if (accessionIdsView.length >= 10)
         break;
