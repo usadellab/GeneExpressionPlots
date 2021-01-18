@@ -77,59 +77,58 @@ class AppNavigation extends React.Component {
     });
   }
 
-  onImportDataMenuClick = (event) => {
-
+  onImportDataMenuClick = async (event) => {
+    
     this.setState({ loading: true });
-
     // Get the file ref
     const file = event.target.files.item(0);
     
-    var zip = new JSZip();
+    const zip = new JSZip();
 
-    zip.loadAsync(file).then(zip => {
-      if (zip.files['GXP_settings.json']) {
-        zip.files['GXP_settings.json'].async('string').then(fileData => {
-          settings.loadTableSettings(fileData);
-        });
-      } else {
-        throw new Error('The provided Import does not contain a GXP_settings.json file.');
+    let zipImport = await zip.loadAsync(file);
+    if (!zipImport.files['GXP_settings.json']) {
+      this.setState({ loading: false });
+      throw new Error('The provided Import does not contain a GXP_settings.json file.');
+    }
+      
+    if (!zipImport.files['expression_table.txt']) {
+      this.setState({ loading: false });
+      throw new Error('The provided Import does not contain an expression_table.txt file.');
+    }
+
+    let tableSettings = await zipImport.files['GXP_settings.json'].async('string');
+    settings.loadTableSettings(tableSettings);
+
+
+    let expressionTable = await zipImport.files['expression_table.txt'].async('string');
+    dataTable.loadFromObject(
+      readTable(expressionTable, {
+        fieldSeparator: settings.tableSettings.expression_field_sep,
+        rowNameColumn: 0,
+      }), {
+        multiHeader: settings.tableSettings.expression_header_sep
       }
-    });
+    );
 
-    zip.loadAsync(file).then(zip => {
-      Object.keys(zip.files).forEach(fileName => {
+    let infoFile = await zipImport.files['info_table.txt'];
+    if (infoFile) {
+      infoTable.loadFromObject(
+        readTable(await infoFile.async('string'), {
+          fieldSeparator: settings.tableSettings.info_field_sep,
+          rowNameColumn: 0,
+        })
+      );
+    }
 
-        if (fileName.includes('image')){
-          zip.files[fileName].async('base64').then(fileData => {
-            fileData = 'data:image/png;base64, ' + fileData;
-            plotStore.loadImage(fileData);
-          });
-        } else {
-          zip.files[fileName].async('string').then(fileData => {
-            
-            if (fileName === 'expression_table.txt') {
-              dataTable.loadFromObject(
-                readTable(fileData, {
-                  fieldSeparator: settings.tableSettings.expression_field_sep,
-                  rowNameColumn: 0,
-                }), {
-                  multiHeader: settings.tableSettings.expression_header_sep
-                }
-              );
-            } else if (fileName === 'info_table.txt') {
-              infoTable.loadFromObject(
-                readTable(fileData, {
-                  fieldSeparator: settings.tableSettings.info_field_sep,
-                  rowNameColumn: 0,
-                })
-              );
-            }
-          });
-        }
-      });
-    });
+    let imageFile = await zipImport.files['image.png'];
+    if (imageFile) {
+      let imgsrc = await imageFile.async('base64');
+      imgsrc = 'data:image/png;base64, ' + imgsrc;
+      plotStore.loadImage(imgsrc);
+    }
 
     this.setState({ loading: false });
+    this.changeRoute('data');
   }
 
   onClearDataMenuClick = () => {
