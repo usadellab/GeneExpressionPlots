@@ -8,16 +8,19 @@ import { mean, deviation } from 'd3';
  */
 
 export const colors = [
-  '#1f77b4',  // muted blue
-  '#ff7f0e',  // safety orange
-  '#2ca02c',  // cooked asparagus green
-  '#d62728',  // brick red
-  '#9467bd',  // muted purple
-  '#8c564b',  // chestnut brown
-  '#e377c2',  // raspberry yogurt pink
-  '#7f7f7f',  // middle gray
-  '#bcbd22',  // curry yellow-green
-  '#17becf'   // blue-teal
+  '#c7566f',
+  '#57bf67',
+  '#845ec9',
+  '#90b83d',
+  '#d3a333', 
+  '#c363ab',
+  '#4a7c38',
+  '#adab63',
+  '#698ccc',
+  '#c94f32',
+  '#826627',
+  '#52b8a4',
+  '#d88e61'
 ];
 
 const lineStyles = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot'];
@@ -55,7 +58,8 @@ function getDefaultLayout(showlegend, countUnit, plotTitle) {
     },
     xaxis: {
       tickangle: 'auto',
-    }
+    },
+    colorway: colors,
   };
 }
 
