@@ -2,7 +2,6 @@
 import { dataTable } from '@/store/data-store';
 import { mean, deviation } from 'd3';
 
-
 /**
  * @typedef {import('../store/plot-store').PlotOptions} PlotOptions
  */
@@ -12,7 +11,7 @@ export const colors = [
   '#57bf67',
   '#845ec9',
   '#90b83d',
-  '#d3a333', 
+  '#d3a333',
   '#c363ab',
   '#4a7c38',
   '#adab63',
@@ -20,12 +19,25 @@ export const colors = [
   '#c94f32',
   '#826627',
   '#52b8a4',
-  '#d88e61'
+  '#d88e61',
 ];
 
-const lineStyles = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot'];
-const markerStyles = ['circle','square','diamond', 'cross', 'triangle-up','pentagon'];
-
+const lineStyles = [
+  'solid',
+  'dot',
+  'dash',
+  'longdash',
+  'dashdot',
+  'longdashdot',
+];
+const markerStyles = [
+  'circle',
+  'square',
+  'diamond',
+  'cross',
+  'triangle-up',
+  'pentagon',
+];
 
 /**
  *
@@ -39,22 +51,21 @@ function getDefaultLayout(showlegend, countUnit, plotTitle) {
       text: plotTitle,
       font: {
         family: 'ABeeZee',
-        size: 24
+        size: 24,
       },
       y: 0.9,
     },
     showlegend,
     legend: {
-      orientation:'h',
+      orientation: 'h',
       x: 0,
-      y: -0.30,
-
+      y: -0.3,
     },
     yaxis: {
-      title:{
-        text: `count [${countUnit}]` // access to the unit needs to be variable
+      title: {
+        text: `count [${countUnit}]`, // access to the unit needs to be variable
       },
-      hoverformat: '.2f'
+      hoverformat: '.2f',
     },
     xaxis: {
       tickangle: 'auto',
@@ -73,22 +84,32 @@ export function singleGeneGroupedPlot(accessionIds, options) {
   let plotData = dataTable.getRowAsTree(accessionId);
 
   let data = createGroupedPlotFromGene(plotData, accessionId, options);
-  let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
+  let layout = getDefaultLayout(
+    options.showlegend,
+    options.countUnit,
+    options.plotTitle
+  );
 
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
+  return {
+    data,
+    layout,
+    config: options.config,
+    accessions: accessionIds,
+    showCaption: options.showCaption,
+    plotId: options.plotId,
+  };
 }
-
 
 /**
  * create a plotly multi gene bar plot
  * @param {string[]} accessionIds
  * @param {PlotOptions} options
  */
-export function multiGeneBarPlot(accessionIds, options){
+export function multiGeneBarPlot(accessionIds, options) {
   let data = [];
-  accessionIds.forEach(accession => {
-    let plotData = dataTable.getRowAsGroups(accession,1);
-    let x = [[],[]];
+  accessionIds.forEach((accession) => {
+    let plotData = dataTable.getRowAsGroups(accession, 1);
+    let x = [[], []];
     let y = [];
     let error_y = [];
     plotData.forEach((value, key) => {
@@ -97,11 +118,22 @@ export function multiGeneBarPlot(accessionIds, options){
       y.push(mean(value));
       error_y.push(deviation(value));
     });
-    data.push(createTrace(x,y,error_y,accession, 'bar', options.showlegend));
+    data.push(createTrace(x, y, error_y, accession, 'bar', options.showlegend));
   });
 
-  let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
+  let layout = getDefaultLayout(
+    options.showlegend,
+    options.countUnit,
+    options.plotTitle
+  );
+  return {
+    data,
+    layout,
+    config: options.config,
+    accessions: accessionIds,
+    showCaption: options.showCaption,
+    plotId: options.plotId,
+  };
 }
 
 /**
@@ -111,18 +143,30 @@ export function multiGeneBarPlot(accessionIds, options){
  */
 export function multiGeneIndCurvesPlot(accessionIds, options) {
   let data = [];
-  accessionIds.forEach((accession,index) => {
+  accessionIds.forEach((accession, index) => {
     const plotData = dataTable.getRowAsTree(accession);
     const line = {
-      color : colors[index],
+      color: colors[index],
     };
     // showLegendCurve = index > 0 ? false : true;
-    data.push(...createGroupedPlotFromGene(plotData, accession, options, line, true));
-
+    data.push(
+      ...createGroupedPlotFromGene(plotData, accession, options, line, true)
+    );
   });
 
-  let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
+  let layout = getDefaultLayout(
+    options.showlegend,
+    options.countUnit,
+    options.plotTitle
+  );
+  return {
+    data,
+    layout,
+    config: options.config,
+    accessions: accessionIds,
+    showCaption: options.showCaption,
+    plotId: options.plotId,
+  };
 }
 
 /**
@@ -136,9 +180,9 @@ export function stackedLinePlot(accessionIds, options) {
   let styleIndex = 0;
   let line = null;
   let marker = null;
-  accessionIds.forEach(accession => {
+  accessionIds.forEach((accession) => {
     let plotData = dataTable.getRowAsTree(accession);
-    Object.keys(plotData).forEach(groupName => {
+    Object.keys(plotData).forEach((groupName) => {
       let name = groupName;
       let x = [];
       let y = [];
@@ -146,26 +190,50 @@ export function stackedLinePlot(accessionIds, options) {
       if (accessionIds.length > 1) {
         line = {
           color: colors[colorIndex],
-          dash: lineStyles[styleIndex]
+          dash: lineStyles[styleIndex],
         };
         marker = {
-          symbol: markerStyles[styleIndex]
+          symbol: markerStyles[styleIndex],
         };
         name = `${groupName} - ${accession}`;
       }
       options.colorBy === 'group' ? colorIndex++ : styleIndex++;
-      Object.keys(plotData[groupName]).forEach(sampleName => {
+      Object.keys(plotData[groupName]).forEach((sampleName) => {
         x.push(sampleName);
         y.push(mean(plotData[groupName][sampleName]));
         error_y.push(deviation(plotData[groupName][sampleName]));
       });
-      data.push(createTrace(x,y,error_y, name, 'scatter', options.showlegend, line, marker));
+      data.push(
+        createTrace(
+          x,
+          y,
+          error_y,
+          name,
+          'scatter',
+          options.showlegend,
+          line,
+          marker
+        )
+      );
     });
-    options.colorBy === 'group' ? (colorIndex = 0, styleIndex++) : (colorIndex++, styleIndex = 0);
+    options.colorBy === 'group'
+      ? ((colorIndex = 0), styleIndex++)
+      : (colorIndex++, (styleIndex = 0));
   });
 
-  let layout = getDefaultLayout(options.showlegend, options.countUnit, options.plotTitle);
-  return {data, layout, config: options.config, accessions: accessionIds, showCaption: options.showCaption, plotId: options.plotId};
+  let layout = getDefaultLayout(
+    options.showlegend,
+    options.countUnit,
+    options.plotTitle
+  );
+  return {
+    data,
+    layout,
+    config: options.config,
+    accessions: accessionIds,
+    showCaption: options.showCaption,
+    plotId: options.plotId,
+  };
 }
 
 /**
@@ -173,21 +241,28 @@ export function stackedLinePlot(accessionIds, options) {
  * @param {string[]} accessionIds
  * @param {PlotOptions} options
  */
-function createGroupedPlotFromGene(plotData, accessionId, options, line, showOnlyFirstLegend = false) {
+function createGroupedPlotFromGene(
+  plotData,
+  accessionId,
+  options,
+  line,
+  showOnlyFirstLegend = false
+) {
   let data = [];
   let type = options.plotType === 'bars' ? 'bar' : 'scatter';
   Object.keys(plotData).forEach((groupName, index) => {
-    let x = [[],[]];
+    let x = [[], []];
     let y = [];
     let error_y = [];
-    Object.keys(plotData[groupName]).forEach(sampleName => {
+    let traceName = showOnlyFirstLegend ? accessionId : groupName;
+    Object.keys(plotData[groupName]).forEach((sampleName) => {
       x[0].push(groupName);
       x[1].push(sampleName);
       y.push(mean(plotData[groupName][sampleName]));
       error_y.push(deviation(plotData[groupName][sampleName]));
     });
-    let showlegend = showOnlyFirstLegend ? ( index > 0 ? false : true ) : true;
-    data.push(createTrace(x,y,error_y, accessionId, type, showlegend, line));
+    let showlegend = showOnlyFirstLegend ? (index > 0 ? false : true) : true;
+    data.push(createTrace(x, y, error_y, traceName, type, showlegend, line));
   });
   return data;
 }
@@ -210,12 +285,12 @@ function createTrace(x, y, error_y, name, type, showlegend, line, marker) {
     error_y: {
       type: 'data',
       array: error_y,
-      visible: true
+      visible: true,
     },
     type,
     name,
     showlegend,
-    ...(line && {line}),
-    ...(marker && {marker})
+    ...(line && { line }),
+    ...(marker && { marker }),
   };
 }
