@@ -1,4 +1,3 @@
-
 import React, { createContext } from 'react';
 import createPlotlyComponent from 'react-plotly.js/factory';
 
@@ -8,16 +7,15 @@ const Plot = createPlotlyComponent(Plotly);
 export const PlotContext = createContext({ hoveredGene: '' });
 
 export default class PlotlyPlot extends React.Component {
-
-  constructor () {
+  constructor() {
     super();
     this.state = {
-      name: ''
+      name: '',
     };
   }
 
-  componentDidMount () {
-    this.resizeObserver = new ResizeObserver(entries => {
+  componentDidMount() {
+    this.resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         window.Plotly.Plots.resize(entry.target);
       }
@@ -25,7 +23,7 @@ export default class PlotlyPlot extends React.Component {
     this.resizeObserver.observe(this.plot.el);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.resizeObserver.unobserve(this.plot.el);
   }
 
@@ -34,25 +32,23 @@ export default class PlotlyPlot extends React.Component {
     if (points.length !== 1 || this.props.plot.accessions.length <= 1) return;
     const name = points[0].fullData.name;
     this.setState({ name });
-  }
+  };
 
   onPlotUnhover = () => {
     this.setState({ name: '' });
-  }
+  };
 
-  render () {
+  render() {
     return (
       <PlotContext.Provider value={{ hoveredGene: this.state.name }}>
-        <figure className={this.props.className} >
+        <figure className={this.props.className}>
           <Plot
-            onHover={ this.onPlotHover }
-            onUnhover={ this.onPlotUnhover }
-            ref={ ref => this.plot = ref }
-            { ...this.props.plot }
+            onHover={this.onPlotHover}
+            onUnhover={this.onPlotUnhover}
+            ref={(ref) => (this.plot = ref)}
+            {...this.props.plot}
           />
-          <div className="flex flex-wrap gap-x-10 mx-20">
-            { this.props.children }
-          </div>
+          {this.props.children}
         </figure>
       </PlotContext.Provider>
     );

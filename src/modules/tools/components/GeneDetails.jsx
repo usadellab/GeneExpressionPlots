@@ -8,7 +8,9 @@ export default class GeneDetails extends Component {
           <div className="px-5 w-4/12">Group</div>
           <div className="px-5 w-3/12">Sample</div>
           <div className="px-5 w-2/12">Replicate</div>
-          <div className="px-5 w-3/12 text-right">Count [raw]</div>
+          <div className="px-5 w-3/12 text-right">
+            Count [{this.props.countUnit}]
+          </div>
         </div>
         {this.props.geneCounts.map(({ group, sample, replicate, count }) => (
           <div
