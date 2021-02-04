@@ -48,7 +48,7 @@ export default class PlotlyPlot extends React.Component {
             ref={(ref) => (this.plot = ref)}
             {...this.props.plot}
           />
-          {this.props.children}
+          <div className="mx-12">{this.props.children}</div>
         </figure>
       </PlotContext.Provider>
     );

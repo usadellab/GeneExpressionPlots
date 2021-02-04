@@ -9,9 +9,12 @@ export default class PlotCaption extends React.Component {
       <PlotContext.Consumer>
         {({ hoveredGene }) => (
           <figcaption
-            className={`flex flex-col py-5 mt-2 mx-8
-                 border-t-2 hover:border-yellow-600
-                 hover:bg-yellow-100
+            className={`
+                 flex py-5
+                 hover:bg-yellow-100 odd:bg-gray-100
+                 text-justify text-gray-800 text-sm ${
+                   this.props.className ?? ''
+                 }
                  ${
                    hoveredGene && !hoveredGene.includes(this.props.accession)
                      ? 'opacity-50'
@@ -22,7 +25,7 @@ export default class PlotCaption extends React.Component {
                      ? 'bg-yellow-100'
                      : ''
                  }
-                 text-justify text-gray-800 text-sm`}
+                 `}
             style={{ borderColor: this.props.color ?? '' }}
           >
             <GeneCard
