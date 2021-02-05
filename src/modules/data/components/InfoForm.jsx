@@ -38,7 +38,7 @@ export default class InfoForm extends React.Component {
 
     this.setState({ loading: true });
 
-    settings.loadTableSettings({
+    settings.loadgxpSettings({
       'info_field_sep': this.state.fieldSeparator
     });
 

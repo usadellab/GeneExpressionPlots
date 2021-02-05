@@ -56,17 +56,17 @@ class AppNavigation extends React.Component {
   onExportDataMenuClick = async () => {
     const data = {
       expression: dataTable.dataFrametoString(
-        settings.tableSettings.expression_field_sep
+        settings.gxpSettings.expression_field_sep
       ),
       info: infoTable.hasData
-        ? infoTable.dataFrametoString(settings.tableSettings.info_field_sep)
+        ? infoTable.dataFrametoString(settings.gxpSettings.info_field_sep)
         : null,
     };
 
     var zip = new JSZip();
     zip.file(
       'GXP_settings.json',
-      JSON.stringify(settings.tableSettings, null, 2)
+      JSON.stringify(settings.gxpSettings, null, 2)
     );
     zip.file('expression_table.txt', data.expression);
     if (data.info) zip.file('info_table.txt', data.info);
@@ -86,7 +86,6 @@ class AppNavigation extends React.Component {
     const file = event.target.files.item(0);
 
     const zip = new JSZip();
-
     let zipImport = await zip.loadAsync(file);
     if (!zipImport.files['GXP_settings.json']) {
       this.setState({ loading: false });
@@ -102,29 +101,40 @@ class AppNavigation extends React.Component {
       );
     }
 
-    let tableSettings = await zipImport.files['GXP_settings.json'].async(
+    let gxpSettings = await zipImport.files['GXP_settings.json'].async(
       'string'
     );
-    settings.loadTableSettings(tableSettings);
+
+    settings.loadgxpSettings(JSON.parse(gxpSettings));
 
     let expressionTable = await zipImport.files['expression_table.txt'].async(
       'string'
     );
     dataTable.loadFromObject(
       readTable(expressionTable, {
-        fieldSeparator: settings.tableSettings.expression_field_sep,
+        fieldSeparator: settings.gxpSettings.expression_field_sep,
         rowNameColumn: 0,
       }),
       {
-        multiHeader: settings.tableSettings.expression_header_sep,
+        multiHeader: settings.gxpSettings.expression_header_sep,
       }
     );
+
+    // set default sample and/or group Order if not defined in the GXP_setting.json
+    if (!settings.gxpSettings.groupOrder || settings.gxpSettings.groupOrder.length === 0) {
+      let groupOrder = dataTable.groupsAsArray;
+      settings.setGroupOrder(groupOrder);
+    }
+    if (!settings.gxpSettings.sampleOrder || settings.gxpSettings.sampleOrder.length === 0) {
+      let sampleOrder = dataTable.samplesAsArray;
+      settings.setSampleOrder(sampleOrder);
+    }
 
     let infoFile = await zipImport.files['info_table.txt'];
     if (infoFile) {
       infoTable.loadFromObject(
         readTable(await infoFile.async('string'), {
-          fieldSeparator: settings.tableSettings.info_field_sep,
+          fieldSeparator: settings.gxpSettings.info_field_sep,
           rowNameColumn: 0,
         })
       );

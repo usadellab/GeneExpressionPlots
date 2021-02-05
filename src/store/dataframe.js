@@ -69,6 +69,18 @@ export class Dataframe {
     return this.colNames.length > 0;
   }
 
+  get groupsAsArray () {
+    return Object.keys(this.headerObject);
+  }
+
+  get samplesAsArray () {
+    let sampleSet = [];
+    Object.values(this.headerObject).forEach((samples) => {
+      sampleSet.push(...Object.keys(samples));
+    });
+    return [...new Set(sampleSet)];
+  }
+
   /* QUERIES */
 
   /**

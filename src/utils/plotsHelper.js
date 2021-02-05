@@ -108,17 +108,21 @@ export function singleGeneGroupedPlot(accessionIds, options) {
 export function multiGeneBarPlot(accessionIds, options) {
   let data = [];
   accessionIds.forEach((accession) => {
-    let plotData = dataTable.getRowAsGroups(accession, 1);
+    let plotData = dataTable.getRowAsTree(accession);
+
     let x = [[], []];
     let y = [];
     let error_y = [];
-    plotData.forEach((value, key) => {
-      x[0].push(key[0]);
-      x[1].push(key[1]);
-      y.push(mean(value));
-      error_y.push(deviation(value));
+    options.groupOrder.forEach((groupName) => {
+      options.sampleOrder.forEach((sampleName) => {
+        x[0].push(groupName);
+        x[1].push(sampleName);
+        y.push(mean(plotData[groupName][sampleName]));
+        error_y.push(deviation(plotData[groupName][sampleName]));
+      });
     });
     data.push(createTrace(x, y, error_y, accession, 'bar', options.showlegend));
+
   });
 
   let layout = getDefaultLayout(
@@ -153,7 +157,6 @@ export function multiGeneIndCurvesPlot(accessionIds, options) {
       ...createGroupedPlotFromGene(plotData, accession, options, line, true)
     );
   });
-
   let layout = getDefaultLayout(
     options.showlegend,
     options.countUnit,
@@ -182,7 +185,7 @@ export function stackedLinePlot(accessionIds, options) {
   let marker = null;
   accessionIds.forEach((accession) => {
     let plotData = dataTable.getRowAsTree(accession);
-    Object.keys(plotData).forEach((groupName) => {
+    options.groupOrder.forEach((groupName, index) => {
       let name = groupName;
       let x = [];
       let y = [];
@@ -198,7 +201,7 @@ export function stackedLinePlot(accessionIds, options) {
         name = `${groupName} - ${accession}`;
       }
       options.colorBy === 'group' ? colorIndex++ : styleIndex++;
-      Object.keys(plotData[groupName]).forEach((sampleName) => {
+      options.sampleOrder.forEach((sampleName) => {
         x.push(sampleName);
         y.push(mean(plotData[groupName][sampleName]));
         error_y.push(deviation(plotData[groupName][sampleName]));
@@ -250,12 +253,12 @@ function createGroupedPlotFromGene(
 ) {
   let data = [];
   let type = options.plotType === 'bars' ? 'bar' : 'scatter';
-  Object.keys(plotData).forEach((groupName, index) => {
+  options.groupOrder.forEach((groupName, index) => {
     let x = [[], []];
     let y = [];
     let error_y = [];
     let traceName = showOnlyFirstLegend ? accessionId : groupName;
-    Object.keys(plotData[groupName]).forEach((sampleName) => {
+    options.sampleOrder.forEach((sampleName) => {
       x[0].push(groupName);
       x[1].push(sampleName);
       y.push(mean(plotData[groupName][sampleName]));

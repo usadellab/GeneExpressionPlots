@@ -54,10 +54,10 @@ export default class TableForm extends React.Component {
     this.setState({ loading: true });
 
     plotStore.loadCountUnit(this.state.countUnit);
-    settings.loadTableSettings({
-      'unit': this.state.countUnit,
-      'expression_field_sep': this.state.fieldSeparator,
-      'expression_header_sep': '*',
+    settings.loadgxpSettings({
+      unit: this.state.countUnit,
+      expression_field_sep: this.state.fieldSeparator,
+      expression_header_sep: '*',
     });
 
     const file = event.target.files[0];
@@ -89,6 +89,11 @@ export default class TableForm extends React.Component {
       dataTable.loadFromObject(table, {
         multiHeader: this.state.headerSeparator,
       });
+      // set default group and sample order in the settings
+      let groupOrder = dataTable.groupsAsArray;
+      let sampleOrder = dataTable.samplesAsArray;
+      settings.setGroupOrder(groupOrder);
+      settings.setSampleOrder(sampleOrder);
 
     };
 
