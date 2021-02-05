@@ -15,11 +15,13 @@ class Settings {
     settings: '',
   };
 
-  _tableSettings = {
-    'unit': '',
-    'expression_field_sep': '\t',
-    'expression_header_sep': '*',
-    'info_field_sep': '\t'
+  _gxpSettings = {
+    unit: '',
+    expression_field_sep: '\t',
+    expression_header_sep: '*',
+    info_field_sep: '\t',
+    groupOrder: [],
+    sampleOrder: [],
   };
 
   _isPreloading = false;
@@ -37,12 +39,20 @@ class Settings {
     return this.preloaded.data && !dataTable.hasData;
   }
   
-  get tableSettings () {
-    return this._tableSettings;
+  get gxpSettings () {
+    return this._gxpSettings;
   }
 
-  loadTableSettings (tableSettings) {
-    Object.assign(this._tableSettings, tableSettings);
+  loadgxpSettings (gxpSettings) {
+    Object.assign(this._gxpSettings, gxpSettings);
+  }
+
+  setGroupOrder (groupOrder) {
+    this._gxpSettings.groupOrder = groupOrder;
+  }
+
+  setSampleOrder (sampleOrder) {
+    this._gxpSettings.sampleOrder = sampleOrder;
   }
 
 }

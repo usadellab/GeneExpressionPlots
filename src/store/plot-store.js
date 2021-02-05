@@ -2,6 +2,8 @@ import {
   makeAutoObservable,
 } from 'mobx';
 
+import { settings } from '@/store/settings';
+
 import {
   singleGeneGroupedPlot,
   multiGeneIndCurvesPlot,
@@ -14,12 +16,14 @@ import { nanoid } from 'nanoid';
 
 /**
  *
- * @typedef  {Object}   PlotOptions
+ * @typedef  {Object}  PlotOptions
  * @property {boolean} showlegend
  * @property {boolean} showCaption
  * @property {string}  plotType
  * @property {string}  colorBy
  * @property {string}  plotTitle
+ * @property {Array}   groupOroder
+ * @property {Array}   sampleOrder
  */
 class PlotStore {
 
@@ -124,10 +128,12 @@ class PlotStore {
    */
   addPlot(accessionIds, options){
 
-    options.countUnit = this.countUnit;
-
+    options.countUnit = settings.gxpSettings.unit;
     options.plotId = nanoid();
     options.config = this.config(options.plotId);
+    options.groupOrder = settings.gxpSettings.groupOrder;
+    options.sampleOrder = settings.gxpSettings.sampleOrder;
+
     switch (options.plotType) {
       case 'bars':
         this.addBarPlot(accessionIds, options);

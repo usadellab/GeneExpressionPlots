@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Build application
-        run: npm run build
+        run: npm run build:ci
 
       - name: Init new repo in dist folder and commit generated files
         run: |
