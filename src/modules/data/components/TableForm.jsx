@@ -54,11 +54,11 @@ export default class TableForm extends React.Component {
     this.setState({ loading: true });
 
     plotStore.loadCountUnit(this.state.countUnit);
-    settings.loadgxpSettings(JSON.stringify({
+    settings.loadgxpSettings({
       unit: this.state.countUnit,
       expression_field_sep: this.state.fieldSeparator,
       expression_header_sep: '*',
-    }));
+    });
 
     const file = event.target.files[0];
 

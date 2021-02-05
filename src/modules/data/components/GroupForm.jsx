@@ -60,9 +60,9 @@ export default class GroupView extends React.Component {
     // set the countUnit in the plotStore
     plotStore.loadCountUnit(this.state.countUnit);
 
-    settings.loadgxpSettings(JSON.stringify({
+    settings.loadgxpSettings({
       unit: this.state.countUnit
-    }));
+    });
 
     const files = [ ...event.currentTarget.files ];
 

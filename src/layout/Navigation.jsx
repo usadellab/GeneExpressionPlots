@@ -104,7 +104,8 @@ class AppNavigation extends React.Component {
     let gxpSettings = await zipImport.files['GXP_settings.json'].async(
       'string'
     );
-    settings.loadgxpSettings(gxpSettings);
+
+    settings.loadgxpSettings(JSON.parse(gxpSettings));
 
     let expressionTable = await zipImport.files['expression_table.txt'].async(
       'string'
@@ -118,7 +119,7 @@ class AppNavigation extends React.Component {
         multiHeader: settings.gxpSettings.expression_header_sep,
       }
     );
-    
+
     // set default sample and/or group Order if not defined in the GXP_setting.json
     if (!settings.gxpSettings.groupOrder || settings.gxpSettings.groupOrder.length === 0) {
       let groupOrder = dataTable.groupsAsArray;

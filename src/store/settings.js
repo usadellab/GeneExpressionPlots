@@ -44,7 +44,7 @@ class Settings {
   }
 
   loadgxpSettings (gxpSettings) {
-    Object.assign(this._gxpSettings, JSON.parse(gxpSettings));
+    Object.assign(this._gxpSettings, gxpSettings);
   }
 
   setGroupOrder (groupOrder) {
