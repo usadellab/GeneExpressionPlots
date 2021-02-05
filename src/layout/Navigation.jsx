@@ -118,11 +118,14 @@ class AppNavigation extends React.Component {
         multiHeader: settings.gxpSettings.expression_header_sep,
       }
     );
+    
     // set default sample and/or group Order if not defined in the GXP_setting.json
-    if (settings.gxpSettings.groupOrder.length === 0) {
+    if (!settings.gxpSettings.groupOrder || settings.gxpSettings.groupOrder.length === 0) {
       let groupOrder = dataTable.groupsAsArray;
-      let sampleOrder = dataTable.samplesAsArray;
       settings.setGroupOrder(groupOrder);
+    }
+    if (!settings.gxpSettings.sampleOrder || settings.gxpSettings.sampleOrder.length === 0) {
+      let sampleOrder = dataTable.samplesAsArray;
       settings.setSampleOrder(sampleOrder);
     }
 
