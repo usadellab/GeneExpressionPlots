@@ -60,7 +60,7 @@ export default class GroupView extends React.Component {
     // set the countUnit in the plotStore
     plotStore.loadCountUnit(this.state.countUnit);
 
-    settings.loadTableSettings({
+    settings.loadgxpSettings({
       unit: this.state.countUnit
     });
 
