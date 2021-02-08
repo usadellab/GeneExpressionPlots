@@ -117,8 +117,11 @@ export function multiGeneBarPlot(accessionIds, options) {
       options.sampleOrder.forEach((sampleName) => {
         x[0].push(groupName);
         x[1].push(sampleName);
-        y.push(mean(plotData[groupName][sampleName]));
-        error_y.push(deviation(plotData[groupName][sampleName]));
+        const groupSamplePlotData = plotData[groupName][sampleName];
+        if (groupSamplePlotData) {
+          y.push(mean(groupSamplePlotData));
+          error_y.push(deviation(groupSamplePlotData));
+        }
       });
     });
     data.push(createTrace(x, y, error_y, accession, 'bar', options.showlegend));
@@ -203,8 +206,11 @@ export function stackedLinePlot(accessionIds, options) {
       options.colorBy === 'group' ? colorIndex++ : styleIndex++;
       options.sampleOrder.forEach((sampleName) => {
         x.push(sampleName);
-        y.push(mean(plotData[groupName][sampleName]));
-        error_y.push(deviation(plotData[groupName][sampleName]));
+        const groupSamplePlotData = plotData[groupName][sampleName];
+        if (groupSamplePlotData) {
+          y.push(mean(groupSamplePlotData));
+          error_y.push(deviation(groupSamplePlotData));
+        }
       });
       data.push(
         createTrace(
@@ -261,8 +267,11 @@ function createGroupedPlotFromGene(
     options.sampleOrder.forEach((sampleName) => {
       x[0].push(groupName);
       x[1].push(sampleName);
-      y.push(mean(plotData[groupName][sampleName]));
-      error_y.push(deviation(plotData[groupName][sampleName]));
+      const groupSamplePlotData = plotData[groupName][sampleName];
+      if (groupSamplePlotData) {
+        y.push(mean(groupSamplePlotData));
+        error_y.push(deviation(groupSamplePlotData));
+      }
     });
     let showlegend = showOnlyFirstLegend ? (index > 0 ? false : true) : true;
     data.push(createTrace(x, y, error_y, traceName, type, showlegend, line));
