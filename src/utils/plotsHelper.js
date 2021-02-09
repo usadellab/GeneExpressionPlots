@@ -115,10 +115,10 @@ export function multiGeneBarPlot(accessionIds, options) {
     let error_y = [];
     options.groupOrder.forEach((groupName) => {
       options.sampleOrder.forEach((sampleName) => {
-        x[0].push(groupName);
-        x[1].push(sampleName);
         const groupSamplePlotData = plotData[groupName][sampleName];
         if (groupSamplePlotData) {
+          x[0].push(groupName);
+          x[1].push(sampleName);
           y.push(mean(groupSamplePlotData));
           error_y.push(deviation(groupSamplePlotData));
         }
@@ -205,9 +205,9 @@ export function stackedLinePlot(accessionIds, options) {
       }
       options.colorBy === 'group' ? colorIndex++ : styleIndex++;
       options.sampleOrder.forEach((sampleName) => {
-        x.push(sampleName);
         const groupSamplePlotData = plotData[groupName][sampleName];
         if (groupSamplePlotData) {
+          x.push(sampleName);
           y.push(mean(groupSamplePlotData));
           error_y.push(deviation(groupSamplePlotData));
         }
@@ -265,10 +265,10 @@ function createGroupedPlotFromGene(
     let error_y = [];
     let traceName = showOnlyFirstLegend ? accessionId : groupName;
     options.sampleOrder.forEach((sampleName) => {
-      x[0].push(groupName);
-      x[1].push(sampleName);
       const groupSamplePlotData = plotData[groupName][sampleName];
       if (groupSamplePlotData) {
+        x[0].push(groupName);
+        x[1].push(sampleName);
         y.push(mean(groupSamplePlotData));
         error_y.push(deviation(groupSamplePlotData));
       }
