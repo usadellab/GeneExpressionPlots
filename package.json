@@ -15,6 +15,7 @@
     "core-js": "^3.6.5",
     "d3": "^6.3.1",
     "file-saver": "^2.0.5",
+    "fishers-exact-test": "^1.0.3",
     "jszip": "^3.5.0",
     "mobx": "^6.0.4",
     "mobx-react": "^7.0.5",
