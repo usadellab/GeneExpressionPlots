@@ -9,6 +9,10 @@ import fishersExactTest from 'fishers-exact-test';
  * @return {Set} The intersection of argument Sets a and b
  */
 export function intersect(a, b) {
+  if (a.constructor.name !== 'Set' || b.constructor.name !== 'Set')
+    throw Error(
+      `Arguments must be of class 'Set', but a is an ${a.constructor.name} and b is an ${b.constructor.name}`
+    )
   let a_arr = [...a]
   return new Set(a_arr.filter(x => b.has(x)))
 }
@@ -104,28 +108,76 @@ export function construct_contingency_table(
 }
 
 /**
+ * Extracts a column by its index from a two dimensional matrix, the
+ * argument `rows`.
+ *
+ * @param {array} rows - A two dimensional matrix as an array of rows,
+ *                       where each row is an array of equal size.
+ * @param {number} col_index - The index of the column to extract,
+ *                             starting with zero for the first column.
+ *
+ * @return {array} The extracted column
+ */
+export function get_column(rows, col_index) {
+  return rows.map(r => r[col_index])
+}
+
+/**
  * Uses Fisher's exact test to assess the alternative hypotheses of over- or
  * underrepresentation of a trait A positive elements among trait B positive
  * elements.
  *
- * @return {object} An object with four keys:
- *  { leftPValue:      0.0013797280926100416,
- *    rightPValue:     0.9999663480953023,
- *    oneTailedPValue: 0.0013797280926100416,
- *    twoTailedPValue: 0.002759456185220083 }
+ * @param {object} {
+ *   dataframe - an instance of class Dataframe
+ *   filter_funk - a function accepting a single argument (rows) from the
+ *                 dataframe and filters those out to be used in the test
+ *   element_col - the index of the column of dataframe.rows in which to find
+ *                 the element identifiers
+ *   trait_A_selector - a function accepting a single argument (rows) from the
+ *                      dataframe that retains those rows that are considered
+ *                      trait A positive
+ *   trait_B_selector - a function accepting a single argument (rows) from the
+ *                      dataframe that retains those rows that are considered
+ *                      trait B positive
+ * }
+ *
+ * @return {object} An object with two fields; see the following example:
+ *  {
+ *    contingency_table: [
+ *      #(pos-A&pos-B), #(neg-A&pos-B),
+ *      #(pos-A&neg-B), #(neg-A&neg-B)
+ *    ], 
+ *    fishers_exact_rest_result: {
+ *      leftPValue:      0.0013797280926100416,
+ *      rightPValue:     0.9999663480953023,
+ *      oneTailedPValue: 0.0013797280926100416,
+ *      twoTailedPValue: 0.002759456185220083
+ *    }
+ *  }
+ *  _Note_, that the `rightPValue` indicates the likelihood that the observed
+ *  values are underrepresented, i.e. in R that would be
+ *  `fish.test(contingency_table, alternative='greater')$p.value`. In other
+ *  words, a `rightPValue` _below_ your significance cutoff indicates
+ *  enrichment of trait A positive elements among trait B positives.
  */
-export function test_for_enrichment(dataframe,
-  trait_A_col, trait_A_filter, trait_A_selector,
-  trait_B_col, trait_B_filter, trait_B_selector) {
-  let trait_A_elemns = trait_A_filter(dataframe.getColumnByIndex(trait_A_col))
-  let trait_B_elemns = trait_B_filter(dataframe.getColumnByIndex(trait_B_col))
-  let trait_A_pos = trait_A_selector(trait_A_elemns)
-  let trait_A_neg = trait_A_elemns.filter(x => !trait_A_pos.contains(x))
-  let trait_B_pos = trait_B_selector(trait_B_elemns)
-  let trait_B_neg = trait_B_elemns.filter(x => !trait_B_pos.contains(x))
-  return fishersExactTest(
-    ...construct_contingency_table(
-      trait_A_pos, trait_A_neg,
-      trait_B_pos, trait_B_neg)
-  )
+export function test_for_enrichment({
+  dataframe,
+  filter_funk,
+  element_col,
+  trait_A_selector,
+  trait_B_selector
+}) {
+  let rows = filter_funk ? filter_funk(dataframe.rows) : dataframe.rows
+  let universe = get_column(rows, element_col)
+  let trait_A_pos = new Set(get_column(trait_A_selector(rows), element_col))
+  let trait_A_neg = new Set(universe.filter(x => !trait_A_pos.has(x)))
+  let trait_B_pos = new Set(get_column(trait_B_selector(rows), element_col))
+  let trait_B_neg = new Set(universe.filter(x => !trait_B_pos.has(x)))
+  let cont_table = construct_contingency_table(
+    trait_A_pos, trait_A_neg,
+    trait_B_pos, trait_B_neg)
+  return {
+    contingency_table: cont_table,
+    fishers_exact_rest_result: fishersExactTest(...cont_table)
+  }
 }

@@ -44,4 +44,30 @@ test('construct_contingency_table validates elements', () => {
 
 test('enrichment is found in test data', () => {
   let d = new Dataframe()
+  let table = {
+    header: ["Gene-ID", "trait-A", "trait-B"],
+    rows: [
+      ['Gene-1', 'a-neg', 'b-neg'],
+      ['Gene-2', 'a-neg', 'b-pos'],
+      ['Gene-3', 'a-pos', 'b-neg'],
+      ['Gene-4', 'a-pos', 'b-neg'],
+      ['Gene-5', 'a-neg', 'b-pos'],
+      ['Gene-6', 'NA', 'NA'],
+      ['Gene-7', 'NA', 'b-pos'],
+      ['Gene-8', 'a-neg', 'NA'],
+    ]
+  }
+  d.loadFromObject(table)
+  console.log(JSON.stringify(d))
+  let filter_funk = (rows) => rows.filter(r => !r.includes('NA'))
+  let trait_A_selector = (rows) => rows.filter(r => r[1] === 'a-pos')
+  let trait_B_selector = (rows) => rows.filter(r => r[2] === 'b-pos')
+  let fish_exact_test_rslt = test_for_enrichment({
+    dataframe: d,
+    filter_funk,
+    trait_A_selector,
+    trait_B_selector,
+    element_col: 0
+  })
+  console.log(JSON.stringify(fish_exact_test_rslt))
 })
