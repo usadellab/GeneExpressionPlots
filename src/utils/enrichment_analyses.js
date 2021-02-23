@@ -12,9 +12,9 @@ export function intersect(a, b) {
   if (a.constructor.name !== 'Set' || b.constructor.name !== 'Set')
     throw Error(
       `Arguments must be of class 'Set', but a is an ${a.constructor.name} and b is an ${b.constructor.name}`
-    )
-  let a_arr = [...a]
-  return new Set(a_arr.filter(x => b.has(x)))
+    );
+  let a_arr = [...a];
+  return new Set(a_arr.filter(x => b.has(x)));
 }
 
 /**
@@ -50,61 +50,61 @@ export function construct_contingency_table(
     intersect(trait_A_neg_elems, trait_B_pos_elems).size,
     intersect(trait_B_neg_elems, trait_A_pos_elems).size,
     intersect(trait_B_neg_elems, trait_A_neg_elems).size
-  ]
+  ];
   // Validate the contingency table - experience shows, this makes a _lot_ of
   // sense:
   if (validate) {
     // Collect validation errors:
-    let errs = []
+    let errs = [];
     // Number of elements in universe must be equal to total sum in cont_table:
-    let total_sum = cont_table.reduce((acc, curr) => acc + curr)
+    let total_sum = cont_table.reduce((acc, curr) => acc + curr);
     let n_elemns = new Set([
       ...trait_A_pos_elems, ...trait_A_neg_elems,
       ...trait_B_pos_elems, ...trait_B_neg_elems
-    ]).size
+    ]).size;
     if (total_sum !== n_elemns) {
       errs.push(
         `Contingency table sums up to ${total_sum}, but universe has (arguments union to a set of) ${n_elemns} elements. This number must be identical.`
-      )
+      );
     }
     // Number of positive A elements must equal sum of first column of
     // cont_table:
-    let first_col_sum = cont_table[0] + cont_table[2]
+    let first_col_sum = cont_table[0] + cont_table[2];
     if (first_col_sum !== trait_A_pos_elems.size) {
       errs.push(
         `${trait_A_pos_elems.size} elements have trait 'A', but contingency table's first column sums to ${first_col_sum}. Numbers must be equal.`
-      )
+      );
     }
     // Number of positive B elements must equal sum of first row of
     // cont_table:
-    let first_row_sum = cont_table[0] + cont_table[1]
+    let first_row_sum = cont_table[0] + cont_table[1];
     if (first_row_sum !== trait_A_pos_elems.size) {
       errs.push(
         `${trait_A_pos_elems.size} elements have trait 'B', but contingency table's first row sums to ${first_row_sum}. Numbers must be equal.`
-      )
+      );
     }
     // Number of negative A elements must equal sum of second column of
     // cont_table:
-    let second_col_sum = cont_table[1] + cont_table[3]
+    let second_col_sum = cont_table[1] + cont_table[3];
     if (second_col_sum !== trait_A_neg_elems.size) {
       errs.push(
         `${trait_A_neg_elems.size} elements have trait 'A', but contingency table's second column sums to ${second_col_sum}. Numbers must be equal.`
-      )
+      );
     }
     // Number of negative B elements must equal sum of second row of
     // cont_table:
-    let second_row_sum = cont_table[2] + cont_table[3]
+    let second_row_sum = cont_table[2] + cont_table[3];
     if (second_row_sum !== trait_A_neg_elems.size) {
       errs.push(
         `${trait_A_neg_elems.size} elements have trait 'B', but contingency table's second row sums to ${second_row_sum}. Numbers must be equal.`
-      )
+      );
     }
     // Any validation errors?
     if (errs.length > 0) {
-      throw Error(errs.join(" "))
+      throw Error(errs.join(' '));
     }
   }
-  return cont_table
+  return cont_table;
 }
 
 /**
@@ -119,7 +119,7 @@ export function construct_contingency_table(
  * @return {array} The extracted column
  */
 export function get_column(rows, col_index) {
-  return rows.map(r => r[col_index])
+  return rows.map(r => r[col_index]);
 }
 
 /**
@@ -147,7 +147,7 @@ export function get_column(rows, col_index) {
  *      #(pos-A&pos-B), #(neg-A&pos-B),
  *      #(pos-A&neg-B), #(neg-A&neg-B)
  *    ], 
- *    fishers_exact_rest_result: {
+ *    fishers_exact_test_result: {
  *      leftPValue:      0.0013797280926100416,
  *      rightPValue:     0.9999663480953023,
  *      oneTailedPValue: 0.0013797280926100416,
@@ -167,17 +167,17 @@ export function test_for_enrichment({
   trait_A_selector,
   trait_B_selector
 }) {
-  let rows = filter_funk ? filter_funk(dataframe.rows) : dataframe.rows
-  let universe = get_column(rows, element_col)
-  let trait_A_pos = new Set(get_column(trait_A_selector(rows), element_col))
-  let trait_A_neg = new Set(universe.filter(x => !trait_A_pos.has(x)))
-  let trait_B_pos = new Set(get_column(trait_B_selector(rows), element_col))
-  let trait_B_neg = new Set(universe.filter(x => !trait_B_pos.has(x)))
+  let rows = filter_funk ? filter_funk(dataframe.rows) : dataframe.rows;
+  let universe = get_column(rows, element_col);
+  let trait_A_pos = new Set(get_column(trait_A_selector(rows), element_col));
+  let trait_A_neg = new Set(universe.filter(x => !trait_A_pos.has(x)));
+  let trait_B_pos = new Set(get_column(trait_B_selector(rows), element_col));
+  let trait_B_neg = new Set(universe.filter(x => !trait_B_pos.has(x)));
   let cont_table = construct_contingency_table(
     trait_A_pos, trait_A_neg,
-    trait_B_pos, trait_B_neg)
+    trait_B_pos, trait_B_neg);
   return {
     contingency_table: cont_table,
-    fishers_exact_rest_result: fishersExactTest(...cont_table)
-  }
+    fishers_exact_test_result: fishersExactTest(...cont_table)
+  };
 }
