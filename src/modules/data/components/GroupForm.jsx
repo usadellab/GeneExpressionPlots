@@ -54,55 +54,71 @@ export default class GroupView extends React.Component {
   onUploadTablesClick = async (event) => {
 
     event.preventDefault();
-
+    
     this.setState({ loading: true });
-
-    // set the countUnit in the plotStore
-    plotStore.loadCountUnit(this.state.countUnit);
-
-    settings.loadgxpSettings({
-      unit: this.state.countUnit
-    });
-
-    const files = [ ...event.currentTarget.files ];
-
-    for (const file of files) {
-
-      const result = await readFile(file);
-
-      const table = readTable(result, {
-        fieldSeparator: this.state.separator,
-        rowNameColumn: this.state.accessionColumn,
+    
+    try {
+      // set the countUnit in the plotStore
+      plotStore.loadCountUnit(this.state.countUnit);
+  
+      settings.loadgxpSettings({
+        unit: this.state.countUnit
       });
-
-      // If the store is empty, load the dataframe with the first table
-      if (dataTable.colNames.length === 0) {
-
-        const rows = Object
-          .entries(table.rows)
-          .reduce((obj, [ rowName, rowCells]) => Object.assign(obj, {
-            [rowName]: [ rowCells[this.state.countColumn-1] ]
-          }), {});
-
-        dataTable.loadFromObject({
-          header: [ `${this.state.groupName}*${this.state.sampleName}*${file.name}` ],
-          rows,
-        }, { multiHeader: '*'});
-
-        continue;
+  
+      const files = [ ...event.currentTarget.files ];
+  
+      // Accept tabular types only
+      const validTypes = [
+        'text/tab-separated-values',
+        'text/csv',
+        'text/plain',
+      ];
+  
+      for (const file of files) {
+  
+        if (!file || !validTypes.includes(file.type)) {
+          this.setState({ loading: false });
+          throw new Error(`Invalid file type: ${file.type}`);
+        }
+  
+        const result = await readFile(file);
+  
+        const table = readTable(result, {
+          fieldSeparator: this.state.separator,
+          rowNameColumn: this.state.accessionColumn,
+        });
+  
+        // If the store is empty, load the dataframe with the first table
+        if (dataTable.colNames.length === 0) {
+  
+          const rows = Object
+            .entries(table.rows)
+            .reduce((obj, [ rowName, rowCells]) => Object.assign(obj, {
+              [rowName]: [ rowCells[this.state.countColumn-1] ]
+            }), {});
+  
+          dataTable.loadFromObject({
+            header: [ `${this.state.groupName}*${this.state.sampleName}*${file.name}` ],
+            rows,
+          }, { multiHeader: '*'});
+  
+          continue;
+        }
+  
+        // Add table as a dataframe column
+        dataTable.addColumn(
+          `${this.state.groupName}*${this.state.sampleName}*${file.name}`,
+          Object
+            .entries(table.rows)
+            .map(([ rowName, rowCells]) => [
+              rowName,
+              rowCells[this.state.countColumn-1]
+            ])
+        );
+  
       }
-
-      // Add table as a dataframe column
-      dataTable.addColumn(
-        `${this.state.groupName}*${this.state.sampleName}*${file.name}`,
-        Object
-          .entries(table.rows)
-          .map(([ rowName, rowCells]) => [
-            rowName,
-            rowCells[this.state.countColumn-1]
-          ])
-      );
-
+    } catch (error) {
+      this.props.onError(error.message);
     }
 
     this.setState({ loading: false });

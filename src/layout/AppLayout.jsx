@@ -1,12 +1,17 @@
 import React from 'react';
 
-import AppModal from '@components/AppModal2';
+import AppModal from '@components/AppModal';
 import GroupForm from '@/modules/data/components/GroupForm';
 import TableForm from '@/modules/data/components/TableForm';
 import InfoForm from '@/modules/data/components/InfoForm';
 import PlotsForm from '@/modules/plotly/components/PlotsForm';
 import TopBar from './TopBar';
 import Navigation from './Navigation';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 export default class AppLayout extends React.Component {
   constructor() {
@@ -48,9 +53,35 @@ export default class AppLayout extends React.Component {
   onInfoFormCancel = () => this.setState({ showInfoModal: false });
   onInfoFormSave = () => this.setState({ showInfoModal: false });
 
+  onErrorToast = (error) => toast.error(error, {
+    position: 'top-right',
+    autoClose: 10000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+
+  toastClassName = () => {
+    const contextClass = {
+      success: 'bg-green-700',
+      error: 'bg-red-700',
+      info: 'bg-blue-700',
+      warning: 'bg-orange-400',
+      default: 'bg-indigo-600',
+      dark: 'bg-white-600 font-gray-300',
+    };
+    
+    return ({ type }) => contextClass[type || 'default'] + 
+    ' flex m-2 p-2 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer';
+  };
+
   render() {
     return (
       <>
+        {/* Error Toasts */}
+        <ToastContainer toastClassName={this.toastClassName()}  bodyClassName={() => 'text-sm font-white font-med block p-3'}/>
         {/* NAVIGATION */}
         <div
           className="relative z-20 py-4 px-3 lg:w-68
@@ -72,6 +103,7 @@ export default class AppLayout extends React.Component {
             showTableModal={this.onShowTableModal}
             showInfoModal={this.onShowInfoModal}
             onClick={this.onNavigationClick}
+            onError={this.onErrorToast}
           />
         </div>
 
@@ -90,6 +122,7 @@ export default class AppLayout extends React.Component {
               <GroupForm
                 onSave={this.onGroupFormSave}
                 onCancel={this.onGroupFormCancel}
+                onError={this.onErrorToast}
               />
             </AppModal>
           )}
@@ -104,6 +137,7 @@ export default class AppLayout extends React.Component {
               <TableForm
                 onSave={this.onTableFormSave}
                 onCancel={this.onTableFormCancel}
+                onError={this.onErrorToast}
               />
             </AppModal>
           )}
@@ -118,6 +152,7 @@ export default class AppLayout extends React.Component {
               <InfoForm
                 onSave={this.onInfoFormSave}
                 onCancel={this.onInfoFormCancel}
+                onError={this.onErrorToast}
               />
             </AppModal>
           )}
