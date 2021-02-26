@@ -8,7 +8,7 @@ import { escapeRegExp } from '@/utils/string';
 
 import AppButton from '@/components/AppButton';
 import AppIcon from '@/components/AppIcon';
-import AppModal from '@/components/AppModal2';
+import AppModal from '@/components/AppModal';
 import AppNumber from '@/components/AppNumber';
 import AppSelect from '@/components/AppSelect';
 import AppText from '@/components/AppText';
