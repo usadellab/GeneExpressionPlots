@@ -53,56 +53,60 @@ export default class TableForm extends React.Component {
 
     this.setState({ loading: true });
 
-    plotStore.loadCountUnit(this.state.countUnit);
-    settings.loadgxpSettings({
-      unit: this.state.countUnit,
-      expression_field_sep: this.state.fieldSeparator,
-      expression_header_sep: '*',
-    });
-
-    const file = event.target.files[0];
-
-    // Accept tabular types only
-    const validTypes = [
-      'text/tab-separated-values',
-      'text/csv',
-      'text/plain',
-    ];
-
-    if (!file || !validTypes.includes(file.type)) {
-      console.error(`Invalid file type: ${file.type}`);
-      this.setState({ loading: false });
-      return;
+    try {
+      
+      plotStore.loadCountUnit(this.state.countUnit);
+      settings.loadgxpSettings({
+        unit: this.state.countUnit,
+        expression_field_sep: this.state.fieldSeparator,
+        expression_header_sep: '*',
+      });
+  
+      const file = event.target.files[0];
+  
+      // Accept tabular types only
+      const validTypes = [
+        'text/tab-separated-values',
+        'text/csv',
+        'text/plain',
+      ];
+  
+      if (!file || !validTypes.includes(file.type)) {
+        this.setState({ loading: false });
+        throw new Error(`Invalid file type: ${file.type}`);
+      }
+  
+      const reader = new FileReader();
+  
+      reader.onload = () => {
+  
+        // Parse the input file as a table
+        const table = readTable(reader.result, {
+          fieldSeparator: this.state.fieldSeparator,
+          rowNameColumn: 0,
+        });
+  
+        // Load the store from the parsed table
+        dataTable.loadFromObject(table, {
+          multiHeader: this.state.headerSeparator,
+        });
+        // set default group and sample order in the settings
+        let groupOrder = dataTable.groupsAsArray;
+        let sampleOrder = dataTable.samplesAsArray;
+        settings.setGroupOrder(groupOrder);
+        settings.setSampleOrder(sampleOrder);
+  
+        reader.onloadend = () => {
+          this.setState({ loading: false });
+          this.props.onSave();
+        };
+    
+        reader.readAsText(file);
+      };
+    } catch (error) {
+      this.props.onError(error.message);
     }
 
-    const reader = new FileReader();
-
-    reader.onload = () => {
-
-      // Parse the input file as a table
-      const table = readTable(reader.result, {
-        fieldSeparator: this.state.fieldSeparator,
-        rowNameColumn: 0,
-      });
-
-      // Load the store from the parsed table
-      dataTable.loadFromObject(table, {
-        multiHeader: this.state.headerSeparator,
-      });
-      // set default group and sample order in the settings
-      let groupOrder = dataTable.groupsAsArray;
-      let sampleOrder = dataTable.samplesAsArray;
-      settings.setGroupOrder(groupOrder);
-      settings.setSampleOrder(sampleOrder);
-
-    };
-
-    reader.onloadend = () => {
-      this.setState({ loading: false });
-      this.props.onSave();
-    };
-
-    reader.readAsText(file);
 
   }
 
