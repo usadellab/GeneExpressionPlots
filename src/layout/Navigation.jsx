@@ -194,6 +194,14 @@ class AppNavigation extends React.Component {
   /**
    * Show the Plots form modal.
    */
+  onNewPcaPlot = () => {
+    this.changeRoute('plots');
+    plotStore.addPcaPlot();
+  };
+
+  /**
+   * Show the Plots form modal.
+   */
   onNewPlotMenuClick = () => {
     this.changeRoute('plots');
     this.props.showPlotsModal();
@@ -290,6 +298,14 @@ class AppNavigation extends React.Component {
             name="New Plot"
             disabled={!dataTable.hasData}
             onClick={this.onNewPlotMenuClick}
+          />
+
+          <NavMenu
+            component="button"
+            icon="chart-square-bar"
+            name="PCA Plot"
+            disabled={!dataTable.hasData}
+            onClick={this.onNewPcaPlot}
           />
 
           {!settings.preloaded.image && (

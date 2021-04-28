@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { mapFromArrays } from '../utils/collection';
 import { buildTreeBranches } from '../utils/reducers';
+import iwanthue from 'iwanthue';
 
 /**
  * @typedef  {Object<string, string[]>} Row table row
@@ -82,6 +83,56 @@ export class Dataframe {
   }
 
   /* QUERIES */
+
+  /**
+   * Transforms the `rows` to a two dimensional array, where the first
+   * dimension are the rows and the second the columns.
+   *
+   * @return {Array} two dimensional array of data points
+   */
+  to2dArray() {
+    return Object.keys(this.rows).map(k => this.rows[k]);
+  }
+
+  /**
+   * Transforms the `rows` to a two dimensional array, where the first
+   * dimension are the columns and the second are the rows.
+   *
+   * @return {Array} two dimensional array of replicates
+   */
+  toTransposed2dArray() {
+    let arr2D = this.to2dArray();
+    return arr2D[0].map((_, colIndex) => arr2D.map(row => row[colIndex]));
+  }
+
+  /**
+   * Assigns each combination of group and sample a unique color and returns an
+   * Array of these colors, one for each replicate (column) in the data.
+   *
+   * @return {Array} an array of color values, one for each replicate.
+   * Replicate belonging to the same group and sample will have the same color.
+   */
+  replicateColorsByGroupAndSample() {
+    let n_groups_samples = Object.keys(this.headerObject).map(groupName =>
+      Object.keys(this.headerObject[groupName]).length).reduce((acc, curr) =>
+      acc + curr, 0);
+    let palette = iwanthue(n_groups_samples);
+    let n_groups = Object.keys(this.headerObject).length
+    let colors = []
+    let offset = 0;
+    for (let group_i = 0; group_i < n_groups; group_i++) {
+      let group_name = Object.keys(this.headerObject)[group_i];
+      let n_samples = Object.keys(this.headerObject[group_name]).length;
+      for (let sample_i = 0; sample_i < n_samples; sample_i++) {
+        let sample_name = Object.keys(this.headerObject[group_name])[sample_i];
+        let color_i = palette[offset + sample_i];
+        let replicates = this.headerObject[group_name][sample_name];
+        colors.push(...replicates.map( r => color_i));
+      }
+      offset += n_samples;
+    }
+    return colors;
+  }
 
   /**
    * Get a single row as an array of values.
