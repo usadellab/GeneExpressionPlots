@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { mapFromArrays } from '@/utils/collection';
-import { buildTreeBranches } from '@/utils/reducers';
+import { mapFromArrays } from '../utils/collection';
+import { buildTreeBranches } from '../utils/reducers';
 
 /**
  * @typedef  {Object<string, string[]>} Row table row
