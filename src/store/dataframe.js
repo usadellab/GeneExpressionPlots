@@ -117,8 +117,8 @@ export class Dataframe {
       Object.keys(this.headerObject[groupName]).length).reduce((acc, curr) =>
       acc + curr, 0);
     let palette = iwanthue(n_groups_samples);
-    let n_groups = Object.keys(this.headerObject).length
-    let colors = []
+    let n_groups = Object.keys(this.headerObject).length;
+    let colors = [];
     let offset = 0;
     for (let group_i = 0; group_i < n_groups; group_i++) {
       let group_name = Object.keys(this.headerObject)[group_i];

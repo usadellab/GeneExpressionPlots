@@ -352,7 +352,7 @@ export function createPcaPlot() {
   }];
 
   let sprintf = (num) => {
-    return (Math.round(num * 1000) / 1000).toFixed(3)
+    return (Math.round(num * 1000) / 1000).toFixed(3);
   };
   let varExpl = pca.getExplainedVariance();
   var layout = {
@@ -372,5 +372,5 @@ export function createPcaPlot() {
   return {
     data,
     layout
-  }
-};
+  };
+}
