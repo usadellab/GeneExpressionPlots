@@ -9,6 +9,7 @@ import {
   multiGeneIndCurvesPlot,
   stackedLinePlot,
   multiGeneBarPlot,
+  createPcaPlot
 } from '../utils/plotsHelper';
 
 import { nanoid } from 'nanoid';
@@ -122,6 +123,15 @@ class PlotStore {
     );
   }
 
+  /**
+   * Nottin
+   */
+  addPcaPlot() {
+    this.plots.push(
+      createPcaPlot()
+    );
+  }
+  
   /**
    * @param {Array} accessionIds
    * @param {PlotOptions} options
