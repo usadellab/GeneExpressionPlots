@@ -7,6 +7,7 @@ import {
   deviation
 } from 'd3';
 import { PCA } from 'ml-pca';
+import { clusterExpressionReplicates } from './heatmap';
 
 /**
  * @typedef {import('../store/plot-store').PlotOptions} PlotOptions
@@ -332,8 +333,6 @@ export function createPcaPlot() {
   // Project the data2dArr into PC coordinate system:
   let projectedData = pca.predict(data2dArr);
 
-  let tmp = dataTable.replicateColorsByGroupAndSample();
-
   // Plot using Plotly.js:
   var data = [{
     x: projectedData.getColumn(0),
@@ -367,6 +366,29 @@ export function createPcaPlot() {
         text: `PC-2 (fraction of variance explained: ~${sprintf(varExpl[1])})`
       }
     }
+  };
+
+  return {
+    data,
+    layout
+  };
+}
+
+export function createHeatmapPlot() {
+  // Do a principal component analysis of the data:
+  let clusterResults = clusterExpressionReplicates(dataTable);
+
+  // Plot using Plotly.js:
+  var data = [{
+    x: dataTable.colNames.reverse(),
+    y: dataTable.colNames.reverse(),
+    z: clusterResults.distanceMatrix,
+    type: 'heatmap',
+    mode: 'markers'
+  }];
+
+  var layout = {
+    title: 'Heatmap of dissimilarities between the replicates',
   };
 
   return {
