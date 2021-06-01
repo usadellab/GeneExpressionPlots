@@ -332,8 +332,6 @@ export function createPcaPlot() {
   // Project the data2dArr into PC coordinate system:
   let projectedData = pca.predict(data2dArr);
 
-  let tmp = dataTable.replicateColorsByGroupAndSample();
-
   // Plot using Plotly.js:
   var data = [{
     x: projectedData.getColumn(0),
