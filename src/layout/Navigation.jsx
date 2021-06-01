@@ -196,7 +196,11 @@ class AppNavigation extends React.Component {
    */
   onNewPcaPlot = () => {
     this.changeRoute('plots');
-    plotStore.addPcaPlot();
+    this.setState({ loading: true});
+    setTimeout(() => {
+      plotStore.addPcaPlot();
+      this.setState({ loading: false });
+    }, 0);
   };
 
   /**
