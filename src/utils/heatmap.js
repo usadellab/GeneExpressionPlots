@@ -3,6 +3,9 @@ import getDistanceMatrix from 'ml-distance-matrix';
 import {
   euclidean
 } from 'ml-distance-euclidean';
+import {
+  v4 as uuidv4
+} from 'uuid';
 
 /**
  * Clusters the gene expression values belonging to the replicates (columns) of
@@ -17,9 +20,9 @@ import {
  * instance of ml-hclust's Cluster class.
  */
 export function clusterExpressionReplicates(dataframe) {
-  let arrOfReplicates = dataframe.toTransposed2dArray();
-  let distanceMatrix = getDistanceMatrix(arrOfReplicates, euclidean)
-  let tree = agnes(distanceMatrix, {
+  const arrOfReplicates = dataframe.toTransposed2dArray();
+  const distanceMatrix = getDistanceMatrix(arrOfReplicates, euclidean)
+  const tree = agnes(distanceMatrix, {
     method: 'ward',
     isDistanceMatrix: true
   });
@@ -38,7 +41,8 @@ export function clusterExpressionReplicates(dataframe) {
  *
  * @param {object} clstr - An instance of ml-hclust's Cluster class
  *
- * @return {array} Returns the indices of the contained dataframe columns.
+ * @return {array} Returns the indices of the contained dataframe columns. The
+ * array can be read as the Newick representation of the tree.
  */
 export function getChildren(clstr) {
   if (clstr.isLeaf) {
@@ -47,5 +51,42 @@ export function getChildren(clstr) {
     return clstr.children.reduce((a, c) => {
       return [...a, getChildren(c)];
     }, []);
+  }
+}
+
+/**
+ * Traverses the argument tree in a recursive approach converting each node to
+ * an object with at most two properties 'name' of type array and 'children'
+ * also of type array.
+ *
+ * @param {object} clstr - An instance of ml-hclust's Cluster class
+ * @param {array} leafNames - An array of names of the leaves, indexed as
+ * indicated by ml-hclust's Cluster.
+ *
+ * @return {object} A tree converted into node with two properties 'name' and
+ * 'children' converted from argument 'clstr'. Each node property is of type
+ * array.
+ */
+export function convertTreeForD3(clstr, leafNames) {
+  if (clstr.isLeaf) {
+    return {
+      name: [leafNames[clstr.index]]
+    }
+  } else {
+    const name = [uuidv4()];
+    const children = clstr.children.map(c => convertTreeForD3(c, leafNames))
+    return {
+      name,
+      children
+    }
+  }
+}
+
+export function convertForD3(clusterExpressionReplicatesResult, leafNames) {
+  const convertedTree = convertTreeForD3(clusterExpressionReplicatesResult.tree, leafNames);
+  return {
+    matrix: clusterExpressionReplicatesResult.distanceMatrix,
+    rowJSON: convertedTree,
+    colJSON: convertedTree
   }
 }

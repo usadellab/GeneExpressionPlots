@@ -1,5 +1,8 @@
 import {
-  clusterExpressionReplicates
+  clusterExpressionReplicates,
+  getChildren,
+  convertTreeForD3,
+  convertForD3
 } from '../src/utils/heatmap';
 import {
   Dataframe
@@ -9,7 +12,7 @@ import {
   euclidean
 } from 'ml-distance-euclidean';
 
-test('enrichment is found in test data', () => {
+test('clustering works', () => {
   let d = new Dataframe();
   let table = {
     header: ['Gene-ID', 'rep-A', 'rep-B', 'rep-C', 'rep-D'],
@@ -25,25 +28,25 @@ test('enrichment is found in test data', () => {
     }
   };
   d.loadFromObject(table);
-  let clustRes = clusterExpressionReplicates(d);
-  //console.log(getDistanceMatrix(d.toTransposed2dArray(), euclidean));
-  //console.log(tree);
-  //console.log(tree.indices());
-  let getChildren = function(clstr) {
-    if (clstr.isLeaf) {
-      return clstr.index
-    } else {
-      return clstr.children.reduce((a, c) => {
-        return [...a, getChildren(c)];
-      }, []);
-    }
-  }
-  clustRes.tree.traverse(x => {
-    if (x.isLeaf) {
-      console.log(`Child: ${x.index}`)
-    } else {
-      console.log(`Node has children: ${getChildren(x)}`)
-    }
-  })
-  expect(true).toStrictEqual(true);
+  const clustRes = clusterExpressionReplicates(d);
+  // console.log(JSON.stringify(clustRes.distanceMatrix));
+
+  const newickTree = getChildren(clustRes.tree);
+  expect(newickTree).toEqual([[[3],[2]],[[1],[0]]]);
+
+  const replicateNames = d.colNames;
+  replicateNames.shift();
+  const plottableTree = convertTreeForD3(clustRes.tree, replicateNames);
+  expect(plottableTree.children.length).toEqual(2);
+  expect(plottableTree.children[0].children.length).toEqual(2);
+  expect(plottableTree.children[1].children.length).toEqual(2);
+  expect(plottableTree.children[0].children[0].name).toEqual(['rep-D']);
+  expect(plottableTree.children[0].children[1].name).toEqual(['rep-C']);
+  expect(plottableTree.children[1].children[0].name).toEqual(['rep-B']);
+  expect(plottableTree.children[1].children[1].name).toEqual(['rep-A']);
+
+  const plottableResult = convertForD3(clustRes, replicateNames);
+  expect(plottableResult).toHaveProperty('matrix');
+  expect(plottableResult).toHaveProperty('rowJSON');
+  expect(plottableResult).toHaveProperty('colJSON');
 });
