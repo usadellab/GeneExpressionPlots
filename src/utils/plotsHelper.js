@@ -8,6 +8,7 @@ import {
 } from 'd3';
 import { PCA } from 'ml-pca';
 import { nanoid } from 'nanoid';
+import { clusterExpressionReplicates } from './heatmap';
 
 /**
  * @typedef {import('../store/plot-store').PlotOptions} PlotOptions
@@ -372,5 +373,28 @@ export function createPcaPlot() {
     data,
     layout,
     plotId: nanoid(),
+  };
+}
+
+export function createHeatmapPlot() {
+  // Do a principal component analysis of the data:
+  let clusterResults = clusterExpressionReplicates(dataTable);
+
+  // Plot using Plotly.js:
+  var data = [{
+    x: dataTable.colNames.reverse(),
+    y: dataTable.colNames.reverse(),
+    z: clusterResults.distanceMatrix,
+    type: 'heatmap',
+    mode: 'markers'
+  }];
+
+  var layout = {
+    title: 'Heatmap of dissimilarities between the replicates',
+  };
+
+  return {
+    data,
+    layout
   };
 }
