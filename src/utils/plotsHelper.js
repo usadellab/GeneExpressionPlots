@@ -7,6 +7,7 @@ import {
   deviation
 } from 'd3';
 import { PCA } from 'ml-pca';
+import { nanoid } from 'nanoid';
 import { clusterExpressionReplicates } from './heatmap';
 
 /**
@@ -332,7 +333,6 @@ export function createPcaPlot() {
   let pca = new PCA(data2dArr);
   // Project the data2dArr into PC coordinate system:
   let projectedData = pca.predict(data2dArr);
-
   // Plot using Plotly.js:
   var data = [{
     x: projectedData.getColumn(0),
@@ -365,12 +365,14 @@ export function createPcaPlot() {
       title: {
         text: `PC-2 (fraction of variance explained: ~${sprintf(varExpl[1])})`
       }
-    }
+    },
+    hovermode: 'closest'
   };
 
   return {
     data,
-    layout
+    layout,
+    plotId: nanoid(),
   };
 }
 

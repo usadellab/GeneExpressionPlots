@@ -29,7 +29,7 @@ export default class PlotlyPlot extends React.Component {
 
   onPlotHover = (plotObject) => {
     const { points } = plotObject;
-    if (points.length !== 1 || this.props.plot.accessions.length <= 1) return;
+    if (points.length !== 1 || this.props.plot.accessions?.length <= 1) return;
     const name = points[0].fullData.name;
     this.setState({ name });
   };

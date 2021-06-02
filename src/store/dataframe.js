@@ -113,24 +113,23 @@ export class Dataframe {
    * Replicate belonging to the same group and sample will have the same color.
    */
   replicateColorsByGroupAndSample() {
+    
     let n_groups_samples = Object.keys(this.headerObject).map(groupName =>
       Object.keys(this.headerObject[groupName]).length).reduce((acc, curr) =>
       acc + curr, 0);
     let palette = iwanthue(n_groups_samples);
-    let n_groups = Object.keys(this.headerObject).length;
-    let colors = [];
-    let offset = 0;
-    for (let group_i = 0; group_i < n_groups; group_i++) {
-      let group_name = Object.keys(this.headerObject)[group_i];
-      let n_samples = Object.keys(this.headerObject[group_name]).length;
-      for (let sample_i = 0; sample_i < n_samples; sample_i++) {
-        let sample_name = Object.keys(this.headerObject[group_name])[sample_i];
-        let color_i = palette[offset + sample_i];
-        let replicates = this.headerObject[group_name][sample_name];
-        colors.push(...replicates.map( r => color_i));
-      }
-      offset += n_samples;
-    }
+    const sampleNamesToIndices = this.colNames.reduce((acc,curr,index) => {
+      const sampleName = curr.split(this.config.multiHeader).slice(0,2).join(this.config.multiHeader);
+      acc[sampleName] ? acc[sampleName].push(index) : acc[sampleName] = [index];
+      return acc;
+    }, {});
+    const colors = Object.keys(sampleNamesToIndices).reduce((acc, curr, index) => {
+      const indeces = sampleNamesToIndices[curr];
+      indeces.map(i => acc[i] = palette[index]);
+      return acc;
+    }, []);
+
+    console.log({colors});
     return colors;
   }
 
