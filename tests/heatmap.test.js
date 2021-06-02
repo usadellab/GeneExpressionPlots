@@ -15,7 +15,7 @@ import {
 test('clustering works', () => {
   let d = new Dataframe();
   let table = {
-    header: ['Gene-ID', 'rep-A', 'rep-B', 'rep-C', 'rep-D'],
+    header: ['rep-A', 'rep-B', 'rep-C', 'rep-D'],
     rows: {
       'Gene-1': ['0.9995255', '1.092261', '1.995518', '2.020559'],
       'Gene-2': ['1.0097479', '1.107543', '2.009799', '2.022110'],
@@ -35,7 +35,6 @@ test('clustering works', () => {
   expect(newickTree).toEqual([[[3],[2]],[[1],[0]]]);
 
   const replicateNames = d.colNames;
-  replicateNames.shift();
   const plottableTree = convertTreeForD3(clustRes.tree, replicateNames);
   expect(plottableTree.children.length).toEqual(2);
   expect(plottableTree.children[0].children.length).toEqual(2);
