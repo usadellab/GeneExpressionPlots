@@ -17,7 +17,7 @@ export default class PlotlyPlot extends React.Component {
   componentDidMount() {
     this.resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        window.Plotly.Plots.resize(entry.target);
+        Plotly.Plots.resize(entry.target);
       }
     });
     this.resizeObserver.observe(this.plot.el);

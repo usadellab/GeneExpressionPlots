@@ -30,18 +30,19 @@ git clone git@github.com:usadellab/GeneExpressionPlots.git
 cd GeneExpressionPlots
 
 # install node modules
-npm install
+yarn install
 
 # start the development server
-npm run serve
+yarn dev
 ```
 
 ### Available Commands
 
 ```sh
-npm run serve   # start development server
-npm run build   # build for production
-npm run lint    # lint code using ESLint
+yarn dev     # start development server
+yarn build   # build for production
+yarn lint    # lint code using ESLint
+yarn test    # run unit tests
 ```
 
 ### Example Data
