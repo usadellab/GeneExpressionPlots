@@ -11,9 +11,6 @@ import { dataTable, infoTable } from '@/store/data-store';
 import { plotStore } from './store/plot-store';
 import { settings } from '@/store/settings';
 
-import '@/assets/svg/hero-icons.svg';
-
-
 export default class App extends React.Component {
 
   async componentDidMount () {
