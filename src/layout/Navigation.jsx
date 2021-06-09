@@ -198,6 +198,26 @@ class AppNavigation extends React.Component {
   };
 
   /**
+   * Show the PCA Plot
+   */
+  onNewHeatmapPlot = () => {
+    this.changeRoute('plots');
+    plotStore.addHeatmapPlot();
+  };
+
+  /**
+   * Show the PCA Plot
+   */
+  onNewPcaPlot = () => {
+    this.changeRoute('plots');
+    this.setState({ loading: true});
+    setTimeout(() => {
+      plotStore.addPcaPlot();
+      this.setState({ loading: false });
+    }, 0);
+  };
+
+  /**
    * Show the Plots form modal.
    */
   onNewPlotMenuClick = () => {
@@ -296,6 +316,22 @@ class AppNavigation extends React.Component {
             name="New Plot"
             disabled={!dataTable.hasData}
             onClick={this.onNewPlotMenuClick}
+          />
+
+          <NavMenu
+            component="button"
+            icon="chart-square-bar"
+            name="PCA Plot"
+            disabled={!dataTable.hasData}
+            onClick={this.onNewPcaPlot}
+          />
+
+          <NavMenu
+            component="button"
+            icon="chart-square-bar"
+            name="Heatmap Plot"
+            disabled={!dataTable.hasData}
+            onClick={this.onNewHeatmapPlot}
           />
 
           {!settings.preloaded.image && (
