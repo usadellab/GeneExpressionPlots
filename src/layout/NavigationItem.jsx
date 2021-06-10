@@ -13,10 +13,10 @@ export class NavLink extends Component {
         aria-disabled={this.props.disabled}
         className={`flex items-center py-2 text-gray-800 text-base capitalize font-bold
            ${
-      this.props.disabled
-        ? 'pointer-events-none opacity-50'
-        : 'hover:text-blue-600'
-      }`}
+             this.props.disabled
+               ? 'pointer-events-none opacity-50'
+               : 'hover:text-blue-600'
+           }`}
         to={this.props.to}
       >
         {this.props.icon && (
@@ -50,10 +50,10 @@ export class NavMenu extends Component {
           className={`flex items-center py-2 cursor-pointer
              text-gray-800 text-base capitalize font-bold
              ${
-      this.props.disabled
-        ? 'opacity-50 cursor-not-allowed'
-        : 'hover:text-blue-600'
-      }`}
+               this.props.disabled
+                 ? 'opacity-50 cursor-not-allowed'
+                 : 'hover:text-blue-600'
+             }`}
           {...this.props}
         >
           {this.props.icon && (

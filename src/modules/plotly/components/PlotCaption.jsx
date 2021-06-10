@@ -13,18 +13,18 @@ export default class PlotCaption extends React.Component {
                  flex py-5
                  hover:bg-yellow-100 odd:bg-gray-100
                  text-justify text-gray-800 text-sm ${
-          this.props.className ?? ''
-          }
+                   this.props.className ?? ''
+                 }
                  ${
-          hoveredGene && !hoveredGene.includes(this.props.accession)
-            ? 'opacity-50'
-            : ''
-          }
+                   hoveredGene && !hoveredGene.includes(this.props.accession)
+                     ? 'opacity-50'
+                     : ''
+                 }
                  ${
-          hoveredGene.includes(this.props.accession)
-            ? 'bg-yellow-100'
-            : ''
-          }
+                   hoveredGene.includes(this.props.accession)
+                     ? 'bg-yellow-100'
+                     : ''
+                 }
                  `}
             style={{ borderColor: this.props.color ?? '' }}
           >

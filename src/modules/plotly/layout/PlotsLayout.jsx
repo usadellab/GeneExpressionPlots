@@ -8,7 +8,7 @@ class PlotsLayout extends React.Component {
       <div className="flex flex-col xl:flex-row max-w-screen">
         {/* MAIN CONTENT: ROUTES */}
 
-        <main className="flex flex-wrap w-full" >
+        <main className="flex flex-wrap w-full">
           {/* PRELOADED IMAGE
 
             This <img/> element is pre-styled to integrate with the existing layout as
@@ -39,10 +39,11 @@ class PlotsLayout extends React.Component {
 
           */}
           {plotStore.image && (
-            <div className="flex justify-center items-center m-3 w-full
-                            resize-x overflow-auto shadow-outer bg-white"
+            <div
+              className="flex justify-center items-center m-3 w-full
+                         resize-x overflow-auto shadow-outer bg-white"
             >
-              <img src={plotStore.image} />
+              <img alt="Plots legend" src={plotStore.image} />
             </div>
           )}
 

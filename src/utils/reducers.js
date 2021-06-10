@@ -12,8 +12,7 @@ import { isEmptyObject } from './validation';
  * @param {Object<string,any>} tree
  * @param {string[]} branch
  */
-export function buildTreeBranches (tree, branch) {
-
+export function buildTreeBranches(tree, branch) {
   const node = branch.shift();
 
   /**
@@ -22,7 +21,7 @@ export function buildTreeBranches (tree, branch) {
    */
   if (branch.length === 1) {
     if (isEmptyObject(tree) || !tree[node]) tree[node] = branch;
-    else tree[node] = [ ...tree[node], ...branch ];
+    else tree[node] = [...tree[node], ...branch];
     return tree;
   }
 
@@ -39,5 +38,4 @@ export function buildTreeBranches (tree, branch) {
    */
   tree[node] = buildTreeBranches(tree[node], branch);
   return tree;
-
 }

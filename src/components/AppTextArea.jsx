@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
-
-export default function AppTextArea (props) {
-
+export default function AppTextArea(props) {
   const { className, ...textAreaProps } = props;
 
-  const [ focus, setFocus ] = useState(false);
-  const [ hover, setHover ] = useState(false);
+  const [focus, setFocus] = useState(false);
+  const [hover, setHover] = useState(false);
 
   // const [ rows, setRows ] = useState(parseInt(textAreaProps.rows) || 3);
 
@@ -45,34 +43,30 @@ export default function AppTextArea (props) {
   return (
     <div className="relative pb-6">
       <label
-        className={
-          `group flex
+        className={`group flex
            rounded border-2 hover:border-gray-400 focus-within:border-blue-500
            bg-gray-100 hover:bg-white
-       ${className}`
-        }
-        onMouseEnter={ () => setHover(true) }
-        onMouseLeave={ () => setHover(false) }
+       ${className}`}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       >
-
         <textarea
           className="py-3 px-4 w-full
                    shadow-inner focus:shadow-none rounded bg-gray-100 text-gray-700 text-sm
                    focus:outline-none focus:bg-white group-hover:bg-white"
-          { ...textAreaProps }
-          onFocus={ () => setFocus(true) }
-          onBlur={ () => setFocus(false) }
+          {...textAreaProps}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
         />
 
         <p
-          className={
-            `absolute bottom-0 w-full px-2 py-1 text-sm font-light
-           ${ focus ? 'text-blue-500' : hover ? 'text-gray-600' : 'text-gray-500' }`
-          }
+          className={`absolute bottom-0 w-full px-2 py-1 text-sm font-light
+           ${
+             focus ? 'text-blue-500' : hover ? 'text-gray-600' : 'text-gray-500'
+           }`}
         >
-          { props.label }
+          {props.label}
         </p>
-
       </label>
     </div>
   );

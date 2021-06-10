@@ -113,10 +113,7 @@ export function multiGeneBarPlot(accessionIds, options) {
   accessionIds.forEach((accession) => {
     let plotData = dataTable.getRowAsTree(accession);
 
-    let x = [
-      [],
-      []
-    ];
+    let x = [[], []];
     let y = [];
     let error_y = [];
     options.groupOrder.forEach((groupName) => {
@@ -131,7 +128,6 @@ export function multiGeneBarPlot(accessionIds, options) {
       });
     });
     data.push(createTrace(x, y, error_y, accession, 'bar', options.showlegend));
-
   });
 
   let layout = getDefaultLayout(
@@ -163,8 +159,7 @@ export function multiGeneIndCurvesPlot(accessionIds, options) {
     };
     // showLegendCurve = index > 0 ? false : true;
     data.push(
-      ...createGroupedPlotFromGene(plotData, accession, options, line,
-        true)
+      ...createGroupedPlotFromGene(plotData, accession, options, line, true)
     );
   });
   let layout = getDefaultLayout(
@@ -195,7 +190,7 @@ export function stackedLinePlot(accessionIds, options) {
   let marker = null;
   accessionIds.forEach((accession) => {
     let plotData = dataTable.getRowAsTree(accession);
-    options.groupOrder.forEach((groupName, index) => {
+    options.groupOrder.forEach((groupName) => {
       let name = groupName;
       let x = [];
       let y = [];
@@ -232,9 +227,9 @@ export function stackedLinePlot(accessionIds, options) {
         )
       );
     });
-    options.colorBy === 'group' ?
-      ((colorIndex = 0), styleIndex++) :
-      (colorIndex++, (styleIndex = 0));
+    options.colorBy === 'group'
+      ? ((colorIndex = 0), styleIndex++)
+      : (colorIndex++, (styleIndex = 0));
   });
 
   let layout = getDefaultLayout(
@@ -267,10 +262,7 @@ function createGroupedPlotFromGene(
   let data = [];
   let type = options.plotType === 'bars' ? 'bar' : 'scatter';
   options.groupOrder.forEach((groupName, index) => {
-    let x = [
-      [],
-      []
-    ];
+    let x = [[], []];
     let y = [];
     let error_y = [];
     let traceName = showOnlyFirstLegend ? accessionId : groupName;
@@ -283,8 +275,7 @@ function createGroupedPlotFromGene(
         error_y.push(deviation(groupSamplePlotData));
       }
     });
-    let showlegend = showOnlyFirstLegend ? (index > 0 ? false : true) :
-      true;
+    let showlegend = showOnlyFirstLegend ? (index > 0 ? false : true) : true;
     data.push(createTrace(x, y, error_y, traceName, type, showlegend, line));
   });
   return data;
@@ -314,10 +305,10 @@ function createTrace(x, y, error_y, name, type, showlegend, line, marker) {
     name,
     showlegend,
     ...(line && {
-      line
+      line,
     }),
     ...(marker && {
-      marker
+      marker,
     }),
   };
 }
@@ -329,21 +320,23 @@ export function createPcaPlot() {
   // Project the data2dArr into PC coordinate system:
   let projectedData = pca.predict(data2dArr);
   // Plot using Plotly.js:
-  var data = [{
-    x: projectedData.getColumn(0),
-    y: projectedData.getColumn(1),
-    type: 'scatter',
-    mode: 'markers',
-    text: dataTable.colNames,
-    textfont: {
-      family: 'Times New Roman'
+  var data = [
+    {
+      x: projectedData.getColumn(0),
+      y: projectedData.getColumn(1),
+      type: 'scatter',
+      mode: 'markers',
+      text: dataTable.colNames,
+      textfont: {
+        family: 'Times New Roman',
+      },
+      textposition: 'bottom center',
+      marker: {
+        size: 12,
+        color: dataTable.replicateColorsByGroupAndSample(),
+      },
     },
-    textposition: 'bottom center',
-    marker: {
-      size: 12,
-      color: dataTable.replicateColorsByGroupAndSample()
-    }
-  }];
+  ];
 
   let sprintf = (num) => {
     return (Math.round(num * 1000) / 1000).toFixed(3);
@@ -353,15 +346,15 @@ export function createPcaPlot() {
     title: 'Principal Component Analysis',
     xaxis: {
       title: {
-        text: `PC-1 (fraction of variance explained: ~${sprintf(varExpl[0])})`
-      }
+        text: `PC-1 (fraction of variance explained: ~${sprintf(varExpl[0])})`,
+      },
     },
     yaxis: {
       title: {
-        text: `PC-2 (fraction of variance explained: ~${sprintf(varExpl[1])})`
-      }
+        text: `PC-2 (fraction of variance explained: ~${sprintf(varExpl[1])})`,
+      },
     },
-    hovermode: 'closest'
+    hovermode: 'closest',
   };
 
   return {
@@ -376,13 +369,15 @@ export function createHeatmapPlot() {
   let clusterResults = clusterExpressionReplicates(dataTable);
 
   // Plot using Plotly.js:
-  var data = [{
-    x: dataTable.colNames.reverse(),
-    y: dataTable.colNames.reverse(),
-    z: clusterResults.distanceMatrix,
-    type: 'heatmap',
-    mode: 'markers'
-  }];
+  var data = [
+    {
+      x: dataTable.colNames.reverse(),
+      y: dataTable.colNames.reverse(),
+      z: clusterResults.distanceMatrix,
+      type: 'heatmap',
+      mode: 'markers',
+    },
+  ];
 
   var layout = {
     title: 'Heatmap of dissimilarities between the replicates',

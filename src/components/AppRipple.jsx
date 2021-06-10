@@ -1,53 +1,46 @@
 import React, { useState, useLayoutEffect } from 'react';
 
-
 /**
  * Clear the ripple from the DOM after the animation is complete.
  * @param {number} rippleCount active ripples in the DOM
  * @param {number} duration ripple duration
  * @param {function} cleanUpFunction callback that removes all ripples
  */
-const useDebouncedRippleCleanUp = (
-  rippleCount, duration, cleanUpFunction
-) => useLayoutEffect(() => {
+const useDebouncedRippleCleanUp = (rippleCount, duration, cleanUpFunction) =>
+  useLayoutEffect(() => {
+    let bounce = null;
 
-  let bounce = null;
-
-  if (rippleCount > 0) {
-
-    clearTimeout(bounce);
-
-    bounce = setTimeout(() => {
-
-      cleanUpFunction();
+    if (rippleCount > 0) {
       clearTimeout(bounce);
 
-    }, duration * 4);
-  }
+      bounce = setTimeout(() => {
+        cleanUpFunction();
+        clearTimeout(bounce);
+      }, duration * 4);
+    }
 
-  return () => clearTimeout(bounce);
+    return () => clearTimeout(bounce);
+  }, [rippleCount, duration, cleanUpFunction]);
 
-}, [ rippleCount, duration, cleanUpFunction ]);
+export default function Ripple({ duration = 100, color = '#e2e8f0' }) {
+  const [rippleArray, setRippleArray] = useState([]);
 
-
-export default function Ripple ({ duration = 100, color = '#e2e8f0' }) {
-
-  const [ rippleArray, setRippleArray ] = useState([]);
-
-  useDebouncedRippleCleanUp(rippleArray.length, duration, () => setRippleArray([]));
+  useDebouncedRippleCleanUp(rippleArray.length, duration, () =>
+    setRippleArray([])
+  );
 
   /**
    * Add a ripple object to the array
    * @param {MouseEvent} event mouse-down event
    */
-  const addRipple = event => {
-
+  const addRipple = (event) => {
     // Get the ripple container dimensions
     const rippleContainer = event.currentTarget.getBoundingClientRect();
 
-    const size = rippleContainer.width > rippleContainer.height
-      ? rippleContainer.width
-      : rippleContainer.height;
+    const size =
+      rippleContainer.width > rippleContainer.height
+        ? rippleContainer.width
+        : rippleContainer.height;
 
     // Create the ripple at the mouse-event origin coordinates
     const x = event.pageX - rippleContainer.x - size / 2 - window.scrollX;
@@ -61,26 +54,25 @@ export default function Ripple ({ duration = 100, color = '#e2e8f0' }) {
 
   return (
     <div
+      aria-hidden
       duration={duration}
       color={color}
       onMouseDown={addRipple}
       className="absolute inset-0"
     >
-      {
-        rippleArray.map((ripple, index) =>
-          <span
-            className='absolute opacity-75 rounded-full ripple-anim'
-            key={'span' + index}
-            style={{
-              top: ripple.y,
-              left: ripple.x,
-              width: ripple.size,
-              height: ripple.size,
-              backgroundColor: color
-            }}
-          />
-        )
-      }
+      {rippleArray.map((ripple, index) => (
+        <span
+          className="absolute opacity-75 rounded-full ripple-anim"
+          key={'span' + index}
+          style={{
+            top: ripple.y,
+            left: ripple.x,
+            width: ripple.size,
+            height: ripple.size,
+            backgroundColor: color,
+          }}
+        />
+      ))}
     </div>
   );
 }
