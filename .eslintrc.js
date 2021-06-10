@@ -79,6 +79,16 @@ module.exports = {
         // No need to import React when using Next.js
         'react/react-in-jsx-scope': 'off',
 
+        '@typescript-eslint/ban-types': [
+          'error',
+          {
+            extendDefaults: true,
+            types: {
+              '{}': false,
+            },
+          },
+        ],
+
         // Warn about unused variables (ignore middle vars)
         '@typescript-eslint/no-unused-vars': [
           'warn',
