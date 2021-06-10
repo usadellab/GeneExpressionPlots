@@ -8,6 +8,8 @@
 
     // module resolution
     "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "jsx": "react",
 
     // paths
     "baseUrl": ".",
@@ -17,5 +19,5 @@
       ]
     },
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

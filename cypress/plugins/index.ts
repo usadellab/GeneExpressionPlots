@@ -9,8 +9,8 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
-// import cypressReact from '@cypress/react/plugins/react-scripts';
-import task from '@cypress/code-coverage/task';
+import codeCoverageTask from '@cypress/code-coverage/task';
+import { startDevServer } from '@cypress/vite-dev-server';
 
 /**
  * This function is called when a project is opened or re-opened (e.g. due to
@@ -19,8 +19,16 @@ import task from '@cypress/code-coverage/task';
  * @param config the resolved cypress config
  */
 const config: Cypress.PluginConfig = (on, config) => {
-  // cypressReact(on, config);
-  task(on, config);
+  on('dev-server:start', async (options) =>
+    startDevServer({
+      options,
+      viteConfig: {
+        configFile: 'vite.config.js',
+      },
+    })
+  );
+
+  codeCoverageTask(on, config);
   return config;
 };
 
