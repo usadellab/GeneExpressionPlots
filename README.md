@@ -39,18 +39,13 @@ yarn dev
 ### Available Commands
 
 ```sh
-yarn dev     # start development server
-yarn build   # build for production
-yarn lint    # lint code using ESLint
-yarn test    # run unit tests
+yarn dev                # start development server
+yarn build   		        # build for production
+yarn lint    		        # lint code using ESLint
+yarn test-components    # run component unit tests
+yarn test-integration   # run integration tests
 ```
 
 ### Example Data
 
-Example files to test the application functionality can be found in the [examples](https://github.com/usadellab/GeneExpressionPlots/tree/master/examples) folder.
-
-- [**`upload_replicate_table.zip`**](https://github.com/usadellab/GeneExpressionPlots/blob/master/examples/upload_replicate_table.zip): raw replicate tables that can be loaded individually or in batches via the **Upload Replicate Table** menu.
-- [**`upload_expression_table.tsv`**](https://github.com/usadellab/GeneExpressionPlots/blob/master/examples/upload_expression_table.tsv): a custom expression table with multi-dimensional headers that can be uploaded via the **Upload Expression Table** menu.
-- [**`upload_captions.json`**](https://github.com/usadellab/GeneExpressionPlots/blob/master/examples/upload_captions.tsv): matching captions data that can be uploaded via the **Upload Captions** menu.
-- [**`new_image.png`**](https://github.com/usadellab/GeneExpressionPlots/blob/master/examples/new_image.png): a custon legend-image that can be uploaded via the **New Image** menu.
-- [**`import_data.json`**](https://github.com/usadellab/GeneExpressionPlots/blob/master/examples/import_data.json): a previously exported JSON file with mock data, captions, and a custon image, that can be imported via the **Import Data** menu.
+Example files to test the application functionality can be found in the [examples](https://github.com/usadellab/GeneExpressionPlots/tree/master/examples) folder. Find more information about these files and how to use them in the [Documentation](https://zendro-dev.gitbook.io/geneexpressionplots/documentation/user-manual#examples).
