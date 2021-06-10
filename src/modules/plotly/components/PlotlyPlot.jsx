@@ -17,7 +17,7 @@ export default class PlotlyPlot extends React.Component {
   componentDidMount() {
     this.resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        window.Plotly.Plots.resize(entry.target);
+        Plotly.Plots.resize(entry.target);
       }
     });
     this.resizeObserver.observe(this.plot.el);
@@ -29,7 +29,7 @@ export default class PlotlyPlot extends React.Component {
 
   onPlotHover = (plotObject) => {
     const { points } = plotObject;
-    if (points.length !== 1 || this.props.plot.accessions.length <= 1) return;
+    if (points.length !== 1 || this.props.plot.accessions?.length <= 1) return;
     const name = points[0].fullData.name;
     this.setState({ name });
   };

@@ -9,6 +9,8 @@ import {
   multiGeneIndCurvesPlot,
   stackedLinePlot,
   multiGeneBarPlot,
+  createPcaPlot,
+  createHeatmapPlot
 } from '../utils/plotsHelper';
 
 import { nanoid } from 'nanoid';
@@ -119,6 +121,26 @@ class PlotStore {
   addStackedCurvePlot(accessionIds, options) {
     this.plots.push(
       stackedLinePlot(accessionIds, options)
+    );
+  }
+
+  /**
+   * Generates a plot visualizing the results of a principal component
+   * analysis.
+   */
+  addPcaPlot() {
+    this.plots.push(
+      createPcaPlot()
+    );
+  }
+  
+  /**
+   * Generates a plot visualizing the results of a principal component
+   * analysis.
+   */
+  addHeatmapPlot() {
+    this.plots.push(
+      createHeatmapPlot()
     );
   }
 

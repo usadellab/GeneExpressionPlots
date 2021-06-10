@@ -15,7 +15,6 @@ import { readTable } from '@/utils/parser';
 
 import { saveAs } from 'file-saver';
 
-@observer
 class AppNavigation extends React.Component {
   constructor() {
     super();
@@ -88,7 +87,7 @@ class AppNavigation extends React.Component {
     const zip = new JSZip();
 
     try {
-      
+
       let zipImport = await zip.loadAsync(file);
       if (!zipImport.files['GXP_settings.json']) {
         this.setState({ loading: false });
@@ -96,20 +95,20 @@ class AppNavigation extends React.Component {
           'The provided Import does not contain a GXP_settings.json file.'
         );
       }
-  
+
       if (!zipImport.files['expression_table.txt']) {
         this.setState({ loading: false });
         throw new Error(
           'The provided Import does not contain an expression_table.txt file.'
         );
       }
-  
+
       let gxpSettings = await zipImport.files['GXP_settings.json'].async(
         'string'
       );
-  
+
       settings.loadgxpSettings(JSON.parse(gxpSettings));
-  
+
       let expressionTable = await zipImport.files['expression_table.txt'].async(
         'string'
       );
@@ -122,7 +121,7 @@ class AppNavigation extends React.Component {
           multiHeader: settings.gxpSettings.expression_header_sep,
         }
       );
-  
+
       // set default sample and/or group Order if not defined in the GXP_setting.json
       if (!settings.gxpSettings.groupOrder || settings.gxpSettings.groupOrder.length === 0) {
         let groupOrder = dataTable.groupsAsArray;
@@ -132,7 +131,7 @@ class AppNavigation extends React.Component {
         let sampleOrder = dataTable.samplesAsArray;
         settings.setSampleOrder(sampleOrder);
       }
-  
+
       let infoFile = await zipImport.files['info_table.txt'];
       if (infoFile) {
         infoTable.loadFromObject(
@@ -142,7 +141,7 @@ class AppNavigation extends React.Component {
           })
         );
       }
-  
+
       let imageFile = await zipImport.files['image.png'];
       if (imageFile) {
         let imgsrc = await imageFile.async('base64');
@@ -195,6 +194,26 @@ class AppNavigation extends React.Component {
     reader.readAsDataURL(file);
 
     this.changeRoute('plots');
+  };
+
+  /**
+   * Show the PCA Plot
+   */
+  onNewHeatmapPlot = () => {
+    this.changeRoute('plots');
+    plotStore.addHeatmapPlot();
+  };
+
+  /**
+   * Show the PCA Plot
+   */
+  onNewPcaPlot = () => {
+    this.changeRoute('plots');
+    this.setState({ loading: true});
+    setTimeout(() => {
+      plotStore.addPcaPlot();
+      this.setState({ loading: false });
+    }, 0);
   };
 
   /**
@@ -298,6 +317,22 @@ class AppNavigation extends React.Component {
             onClick={this.onNewPlotMenuClick}
           />
 
+          <NavMenu
+            component="button"
+            icon="chart-square-bar"
+            name="PCA Plot"
+            disabled={!dataTable.hasData}
+            onClick={this.onNewPcaPlot}
+          />
+
+          <NavMenu
+            component="button"
+            icon="chart-square-bar"
+            name="Heatmap Plot"
+            disabled={!dataTable.hasData}
+            onClick={this.onNewHeatmapPlot}
+          />
+
           {!settings.preloaded.image && (
             <NavMenu
               component="file"
@@ -366,4 +401,4 @@ class AppNavigation extends React.Component {
   }
 }
 
-export default withRouter(AppNavigation);
+export default withRouter(observer(AppNavigation));
