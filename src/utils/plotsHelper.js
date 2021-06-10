@@ -1,11 +1,6 @@
 // import Plotly from 'plotly.js/lib/core';
-import {
-  dataTable
-} from '@/store/data-store';
-import {
-  mean,
-  deviation
-} from 'd3';
+import { dataTable } from '@/store/data-store';
+import { mean, deviation } from 'd3';
 import { PCA } from 'ml-pca';
 import { nanoid } from 'nanoid';
 import { clusterExpressionReplicates } from './heatmap';

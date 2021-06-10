@@ -8,8 +8,7 @@ import AppSelect   from '@components/AppSelect';
 import AppSpinner  from '@components/AppSpinner';
 import AppText     from '@components/AppText';
 
-import {plotStore} from '@/store/plot-store';
-
+import { plotStore } from '@/store/plot-store';
 import { dataTable , infoTable } from '@/store/data-store';
 
 export default class PlotsForm extends Component {
@@ -89,6 +88,24 @@ export default class PlotsForm extends Component {
   }
 
   /**
+   * Update the plot title state.
+   * @param {React.FormEvent<HTMLInputElement>} event text input change event
+   */
+  onPlotTitleChange = (event) => {
+    this.setState({ plotTitle: event.target.value });
+  }
+
+  onSelectPlotTypeChange = (event) => {
+    this.setState({ plotType: event.target.value });
+  }
+
+  onSelectColorByChange = (event) => {
+    this.setState({ colorBy: event.target.value });
+  }
+
+  /* ACTION HANDLERS */
+
+  /**
    * Submit a new plot to the store.
    * @param {React.FormEvent<HTMLButtonElement>} event button click event
    */
@@ -109,21 +126,6 @@ export default class PlotsForm extends Component {
   };
 
 
-  /**
-   * Update the plot title state.
-   * @param {React.FormEvent<HTMLInputElement>} event text input change event
-   */
-  onPlotTitleChange = (event) => {
-    this.setState({ plotTitle: event.target.value });
-  }
-
-  onSelectPlotTypeChange = (event) => {
-    this.setState({ plotType: event.target.value });
-  }
-
-  onSelectColorByChange = (event) => {
-    this.setState({ colorBy: event.target.value });
-  }
 
   render() {
     return (
