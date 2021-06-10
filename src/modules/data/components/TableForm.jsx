@@ -92,13 +92,13 @@ export default class TableForm extends React.Component {
         let sampleOrder = dataTable.samplesAsArray;
         settings.setGroupOrder(groupOrder);
         settings.setSampleOrder(sampleOrder);
-  
-        reader.onloadend = () => {
-          this.setState({ loading: false });
-          this.props.onSave();
-        };
-    
       };
+
+      reader.onloadend = () => {
+        this.setState({ loading: false });
+        this.props.onSave();
+      };
+      
       reader.readAsText(file);
     } catch (error) {
       this.props.onError(error.message);
