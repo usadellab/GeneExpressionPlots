@@ -5,16 +5,15 @@ import iwanthue from 'iwanthue';
 
 /**
  * @typedef  {Object<string, string[]>} Row table row
-**/
+ **/
 
 /**
  * @typedef  {Object} TableObject In-memory representation of a parsed table
  * @property {string[]}   header array of column names
  * @property {Row[]}        rows array of row objects
-**/
+ **/
 
 export class Dataframe {
-
   /** @type {string[]} */
   header = [];
 
@@ -24,12 +23,12 @@ export class Dataframe {
   /**
    * @typedef  {Object} DataframeConfig Dataframe class options
    * @property {string} multiHeader separator for tree-like headers
-  **/
+   **/
   config = {
-    multiHeader: ''
-  }
+    multiHeader: '',
+  };
 
-  constructor () {
+  constructor() {
     makeAutoObservable(this);
   }
 
@@ -38,7 +37,7 @@ export class Dataframe {
    * @param {TableObject}     table
    * @param {DataframeConfig} config
    */
-  loadFromObject (table, config) {
+  loadFromObject(table, config) {
     Object.assign(this.config, config);
     this.header = table.header;
     this.rows = table.rows;
@@ -46,35 +45,37 @@ export class Dataframe {
 
   /* COMPUTED */
 
-  get rowNames () {
+  get rowNames() {
     return Object.keys(this.rows);
   }
 
-  get colNames () {
-    return [ ...this.header ];
+  get colNames() {
+    return [...this.header];
   }
 
-  get colGroups () {
-    return this.header.map(groups => groups.split(this.config.multiHeader));
+  get colGroups() {
+    return this.header.map((groups) => groups.split(this.config.multiHeader));
   }
 
   /**
    * @return {Object<string,Object<string,string>}
    */
-  get headerObject () {
-    const branches = Array.from(this.colNames.map(name => name.split(this.config.multiHeader)));
+  get headerObject() {
+    const branches = Array.from(
+      this.colNames.map((name) => name.split(this.config.multiHeader))
+    );
     return branches.reduce(buildTreeBranches, {});
   }
 
-  get hasData () {
+  get hasData() {
     return this.colNames.length > 0;
   }
 
-  get groupsAsArray () {
+  get groupsAsArray() {
     return Object.keys(this.headerObject);
   }
 
-  get samplesAsArray () {
+  get samplesAsArray() {
     let sampleSet = [];
     Object.values(this.headerObject).forEach((samples) => {
       sampleSet.push(...Object.keys(samples));
@@ -91,7 +92,7 @@ export class Dataframe {
    * @return {Array} two dimensional array of data points
    */
   to2dArray() {
-    return Object.keys(this.rows).map(k => this.rows[k]);
+    return Object.keys(this.rows).map((k) => this.rows[k]);
   }
 
   /**
@@ -102,7 +103,7 @@ export class Dataframe {
    */
   toTransposed2dArray() {
     let arr2D = this.to2dArray();
-    return arr2D[0].map((_, colIndex) => arr2D.map(row => row[colIndex]));
+    return arr2D[0].map((_, colIndex) => arr2D.map((row) => row[colIndex]));
   }
 
   /**
@@ -113,21 +114,28 @@ export class Dataframe {
    * Replicate belonging to the same group and sample will have the same color.
    */
   replicateColorsByGroupAndSample() {
-
-    let n_groups_samples = Object.keys(this.headerObject).map(groupName =>
-      Object.keys(this.headerObject[groupName]).length).reduce((acc, curr) =>
-      acc + curr, 0);
+    let n_groups_samples = Object.keys(this.headerObject)
+      .map((groupName) => Object.keys(this.headerObject[groupName]).length)
+      .reduce((acc, curr) => acc + curr, 0);
     let palette = iwanthue(n_groups_samples);
-    const sampleNamesToIndices = this.colNames.reduce((acc,curr,index) => {
-      const sampleName = curr.split(this.config.multiHeader).slice(0,2).join(this.config.multiHeader);
-      acc[sampleName] ? acc[sampleName].push(index) : acc[sampleName] = [index];
+    const sampleNamesToIndices = this.colNames.reduce((acc, curr, index) => {
+      const sampleName = curr
+        .split(this.config.multiHeader)
+        .slice(0, 2)
+        .join(this.config.multiHeader);
+      acc[sampleName]
+        ? acc[sampleName].push(index)
+        : (acc[sampleName] = [index]);
       return acc;
     }, {});
-    const colors = Object.keys(sampleNamesToIndices).reduce((acc, curr, index) => {
-      const indeces = sampleNamesToIndices[curr];
-      indeces.map(i => acc[i] = palette[index]);
-      return acc;
-    }, []);
+    const colors = Object.keys(sampleNamesToIndices).reduce(
+      (acc, curr, index) => {
+        const indeces = sampleNamesToIndices[curr];
+        indeces.map((i) => (acc[i] = palette[index]));
+        return acc;
+      },
+      []
+    );
 
     return colors;
   }
@@ -136,7 +144,7 @@ export class Dataframe {
    * Get a single row as an array of values.
    * @param {string} rowName unique row name
    */
-  getRow (rowName) {
+  getRow(rowName) {
     return this.rows[rowName];
   }
 
@@ -151,8 +159,7 @@ export class Dataframe {
    * @param {string} rowName unique row name
    * @param {number} groupBy sub-header index
    */
-  getRowAsGroups (rowName, groupBy) {
-
+  getRowAsGroups(rowName, groupBy) {
     if (!this.config.multiHeader) {
       console.error(
         'The groupBy option of getRow is only supported in multi-header dataframes'
@@ -163,14 +170,12 @@ export class Dataframe {
     const memory = {};
 
     return this.rows[rowName].reduce((obj, count, index) => {
-
       const headerSlice = this.header[index]
         .split(this.config.multiHeader)
-        .slice(0, groupBy+1)
+        .slice(0, groupBy + 1)
         .join(this.config.multiHeader);
 
-      if (!memory[headerSlice])
-        memory[headerSlice] = headerSlice.split('*');
+      if (!memory[headerSlice]) memory[headerSlice] = headerSlice.split('*');
 
       const refKey = memory[headerSlice];
 
@@ -179,7 +184,6 @@ export class Dataframe {
       obj.get(memory[headerSlice]).push(count);
 
       return obj;
-
     }, new Map());
   }
 
@@ -191,9 +195,9 @@ export class Dataframe {
    *
    * @param {String} rowName unique row name
    */
-  getRowAsMap (rowName, splitGroups = false) {
+  getRowAsMap(rowName, splitGroups = false) {
     const columns = splitGroups
-      ? this.header.map(groups => groups.split(this.config.multiHeader))
+      ? this.header.map((groups) => groups.split(this.config.multiHeader))
       : this.header;
     return mapFromArrays(columns, this.rows[rowName]);
   }
@@ -203,17 +207,17 @@ export class Dataframe {
    * @param {String} rowName unique row key
    * @returns {object} tree-like object mapping the multi-index levels to the row
    */
-  getRowAsTree (rowName) {
+  getRowAsTree(rowName) {
     const row = this.rows[rowName];
-    return this.header.reduce((tree,column,i) => {
+    return this.header.reduce((tree, column, i) => {
       let split = column.split(this.config.multiHeader);
       let group = split[0];
       let sample = split[1];
       tree[group]
-        ? (tree[group][sample]
+        ? tree[group][sample]
           ? tree[group][sample].push(row[i])
-          : tree[group][sample] = [row[i]])
-        : tree[group] = {[sample]:[row[i]]};
+          : (tree[group][sample] = [row[i]])
+        : (tree[group] = { [sample]: [row[i]] });
       return tree;
     }, {});
   }
@@ -223,8 +227,11 @@ export class Dataframe {
    * @param {array} rowNames unique row name
    * @returns {object} returns the specified rows.
    */
-  getRows (rowNames) {
-    return rowNames.reduce((obj, rowName) => ({ ...obj, [rowName]: this.rows[rowName] }), {});
+  getRows(rowNames) {
+    return rowNames.reduce(
+      (obj, rowName) => ({ ...obj, [rowName]: this.rows[rowName] }),
+      {}
+    );
   }
 
   /**
@@ -232,7 +239,7 @@ export class Dataframe {
    * @param {Number} index
    * @param {String} separator
    */
-  getColumnByIndex (index, separator) {
+  getColumnByIndex(index, separator) {
     return this.header[index].split(separator);
   }
 
@@ -243,14 +250,12 @@ export class Dataframe {
    * @param {string} header
    * @param {[string,string][]} rows
    */
-  addColumn (header, rows) {
-
+  addColumn(header, rows) {
     // Append new column header
     this.header.push(header);
 
     // Append cell values to each row
-    rows.forEach(([ rowName, cellValue ]) => {
-
+    rows.forEach(([rowName, cellValue]) => {
       if (!this.rows[rowName]) {
         console.warn(`${rowName} is not a known gene accession`);
         return;
@@ -265,56 +270,58 @@ export class Dataframe {
    * @param {String} rowName
    * @param {any[]} row
    */
-  addRow (rowName, row){
+  addRow(rowName, row) {
     this.rows[rowName] = row;
   }
 
-  clearData () {
+  clearData() {
     this.header = [];
     this.rows = {};
   }
 
-  removeColumn (colName) {
-
+  removeColumn(colName) {
     /**
      * Match the provided column name to an index in the dataframe header.
      * In multi-column dataframes, this can return multiple indexes.
      */
-    const matches = this.colNames
-      .reduce((result, colHeader, index ) => {
+    const matches = this.colNames.reduce((result, colHeader, index) => {
+      // In a multi-header dataframe, the header is an array of headers
+      if (this.config.multiHeader)
+        colHeader = colHeader.split(this.config.multiHeader);
 
-        // In a multi-header dataframe, the header is an array of headers
-        if (this.config.multiHeader)
-          colHeader = colHeader.split(this.config.multiHeader);
+      if (colHeader.includes(colName)) result.push(index);
 
-        if (colHeader.includes(colName)) result.push(index);
-
-        return result;
-
-      }, []);
+      return result;
+    }, []);
 
     // Compose a new header array, without the matching columns
-    const cols = this.colNames.filter((name, index) => !matches.includes(index));
+    const cols = this.colNames.filter(
+      (name, index) => !matches.includes(index)
+    );
 
     // Compose a new rows object, without the matching columns
-    const rows = Object.entries(this.rows).reduce((newRows, [ rowName, rowValues]) => {
-      const newRow = rowValues.filter((cell, index) => !matches.includes(index));
-      newRows[rowName] = newRow;
-      return newRows;
-    }, {});
+    const rows = Object.entries(this.rows).reduce(
+      (newRows, [rowName, rowValues]) => {
+        const newRow = rowValues.filter(
+          (cell, index) => !matches.includes(index)
+        );
+        newRows[rowName] = newRow;
+        return newRows;
+      },
+      {}
+    );
 
     this.header = cols;
     this.rows = rows;
-
   }
 
-  dataFrametoString (separator) {
+  dataFrametoString(separator) {
     let dataframeAsString = 'Gene-ID' + separator;
 
     dataframeAsString += this.header.join(separator);
     dataframeAsString += '\n';
 
-    Object.keys(this.rows).forEach(rowName => {
+    Object.keys(this.rows).forEach((rowName) => {
       dataframeAsString += rowName + separator;
       dataframeAsString += this.rows[rowName].join(separator);
       dataframeAsString += '\n';
@@ -322,5 +329,4 @@ export class Dataframe {
 
     return dataframeAsString;
   }
-
 }

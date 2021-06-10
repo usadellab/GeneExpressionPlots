@@ -1,13 +1,10 @@
-export async function readFile (file) {
-
+export async function readFile(file) {
   const reader = new FileReader();
   reader.readAsText(file);
 
   return new Promise((resolve, reject) => {
-
     reader.onload = () => resolve(reader.result);
     reader.onerror = () => reject(reader.error);
-
   });
 }
 
@@ -22,8 +19,7 @@ export async function readFile (file) {
  * @param {string} table table as a single string
  * @param {ReadTableOptions} options parser options
  */
-export function readTable (table, options) {
-
+export function readTable(table, options) {
   const lines = table.split(/\r?\n|\r/);
 
   // Extract the table header (first element of lines is removed)
@@ -39,13 +35,11 @@ export function readTable (table, options) {
 
   // Parse each line as an object of unique row names
   const rows = lines.reduce((acc, line) => {
-
     if (!line) return acc;
 
     const values = line.split(options.fieldSeparator);
     const key = values.splice(options.rowNameColumn, 1);
     return Object.assign(acc, { [key]: values });
-
   }, {});
 
   return {

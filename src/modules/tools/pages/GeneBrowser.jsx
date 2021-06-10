@@ -44,8 +44,8 @@ export default class GeneBrowser extends Component {
       const geneInfo = infoTable.getRowAsMap(accession) ?? new Map();
       const infoMatch = geneInfo
         ? Array.from(geneInfo.values()).some(
-          (field) => field.search(regexp) > -1
-        )
+            (field) => field.search(regexp) > -1
+          )
         : false;
 
       // Include in the results if any matches are found

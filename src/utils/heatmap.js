@@ -1,8 +1,6 @@
 import { agnes } from 'ml-hclust';
 import getDistanceMatrix from 'ml-distance-matrix';
-import {
-  euclidean
-} from 'ml-distance-euclidean';
+import { euclidean } from 'ml-distance-euclidean';
 import { nanoid } from 'nanoid';
 
 /**
@@ -22,11 +20,11 @@ export function clusterExpressionReplicates(dataframe) {
   const distanceMatrix = getDistanceMatrix(arrOfReplicates, euclidean);
   const tree = agnes(distanceMatrix, {
     method: 'ward',
-    isDistanceMatrix: true
+    isDistanceMatrix: true,
   });
   return {
     distanceMatrix,
-    tree
+    tree,
   };
 }
 
@@ -68,23 +66,26 @@ export function getChildren(clstr) {
 export function convertTreeForD3(clstr, leafNames) {
   if (clstr.isLeaf) {
     return {
-      name: [leafNames[clstr.index]]
+      name: [leafNames[clstr.index]],
     };
   } else {
     const name = [nanoid()];
-    const children = clstr.children.map(c => convertTreeForD3(c, leafNames));
+    const children = clstr.children.map((c) => convertTreeForD3(c, leafNames));
     return {
       name,
-      children
+      children,
     };
   }
 }
 
 export function convertForD3(clusterExpressionReplicatesResult, leafNames) {
-  const convertedTree = convertTreeForD3(clusterExpressionReplicatesResult.tree, leafNames);
+  const convertedTree = convertTreeForD3(
+    clusterExpressionReplicatesResult.tree,
+    leafNames
+  );
   return {
     matrix: clusterExpressionReplicatesResult.distanceMatrix,
     rowJSON: convertedTree,
-    colJSON: convertedTree
+    colJSON: convertedTree,
   };
 }

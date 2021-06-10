@@ -1,20 +1,21 @@
 import React from 'react';
 
-
 export default class AppSpinner extends React.Component {
-
-  render () {
+  render() {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        className={ `animate-spin ${this.props.className}` }
+        className={`animate-spin ${this.props.className}`}
         fill="none"
       >
         <circle
           className="opacity-25"
-          cx="12" cy="12" r="10"
-          stroke="currentColor" strokeWidth="4"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
         />
         <path
           className="opacity-75"

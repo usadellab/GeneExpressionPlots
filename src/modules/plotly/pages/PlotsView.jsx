@@ -8,27 +8,25 @@ import { plotStore } from '@/store/plot-store';
 import { infoTable } from '@/store/data-store';
 import { colors } from '@/utils/plotsHelper';
 
-function PlotsView () {
-  return (
-    plotStore.plots.map((plot) => (
-      <PlotlyPlot
-        key={plot.plotId}
-        className="relative flex flex-col m-3 py-6 w-full resize-x
+function PlotsView() {
+  return plotStore.plots.map((plot) => (
+    <PlotlyPlot
+      key={plot.plotId}
+      className="relative flex flex-col m-3 py-6 w-full resize-x
                        shadow-outer overflow-auto bg-white"
-        plot={{ ...plot }}
-      >
-        {plot.showCaption &&
-            plot.accessions.map((accession, index) => (
-              <PlotCaption
-                key={`${accession}-${index}`}
-                accession={accession}
-                caption={infoTable.getRowAsMap(accession)}
-                color={plot.accessions.length > 1 ? colors[index] : null}
-              />
-            ))}
-      </PlotlyPlot>
-    ))
-  );
+      plot={{ ...plot }}
+    >
+      {plot.showCaption &&
+        plot.accessions.map((accession, index) => (
+          <PlotCaption
+            key={`${accession}-${index}`}
+            accession={accession}
+            caption={infoTable.getRowAsMap(accession)}
+            color={plot.accessions.length > 1 ? colors[index] : null}
+          />
+        ))}
+    </PlotlyPlot>
+  ));
 }
 
 export default observer(PlotsView);

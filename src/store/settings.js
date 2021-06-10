@@ -7,7 +7,6 @@ const PRELOAD_INFO = import.meta.env.VITE_PRELOAD_INFO;
 const PRELOAD_SETTINGS = import.meta.env.VITE_PRELOAD_SETTINGS;
 
 class Settings {
-
   _PRELOADED = {
     data: '',
     info: '',
@@ -26,35 +25,34 @@ class Settings {
 
   _isPreloading = false;
 
-  constructor (preloaded) {
+  constructor(preloaded) {
     Object.assign(this._PRELOADED, preloaded);
     makeAutoObservable(this);
   }
 
-  get preloaded () {
+  get preloaded() {
     return this._PRELOADED;
   }
 
-  get isPreloading () {
+  get isPreloading() {
     return this.preloaded.data && !dataTable.hasData;
   }
 
-  get gxpSettings () {
+  get gxpSettings() {
     return this._gxpSettings;
   }
 
-  loadgxpSettings (gxpSettings) {
+  loadgxpSettings(gxpSettings) {
     Object.assign(this._gxpSettings, gxpSettings);
   }
 
-  setGroupOrder (groupOrder) {
+  setGroupOrder(groupOrder) {
     this._gxpSettings.groupOrder = groupOrder;
   }
 
-  setSampleOrder (sampleOrder) {
+  setSampleOrder(sampleOrder) {
     this._gxpSettings.sampleOrder = sampleOrder;
   }
-
 }
 
 export const settings = new Settings({

@@ -39,16 +39,19 @@ class AppNavigation extends React.Component {
 
   onUploadReplicateTableClick = () => {
     this.props.showGroupModal();
+    this.props.onClose();
     this.changeRoute('data');
   };
 
   onUploadExpressionTableClick = () => {
     this.props.showTableModal();
+    this.props.onClose();
     this.changeRoute('data');
   };
 
   onUploadInfoMenuClick = () => {
     this.props.showInfoModal();
+    this.props.onClose();
     this.changeRoute('data');
   };
 
@@ -77,6 +80,8 @@ class AppNavigation extends React.Component {
     zip.generateAsync({ type: 'blob' }).then((content) => {
       saveAs(content, 'GXP_data.zip');
     });
+
+    this.props.onClose();
   };
 
   onImportDataMenuClick = async (event) => {
@@ -87,7 +92,6 @@ class AppNavigation extends React.Component {
     const zip = new JSZip();
 
     try {
-
       let zipImport = await zip.loadAsync(file);
       if (!zipImport.files['GXP_settings.json']) {
         this.setState({ loading: false });
@@ -123,11 +127,17 @@ class AppNavigation extends React.Component {
       );
 
       // set default sample and/or group Order if not defined in the GXP_setting.json
-      if (!settings.gxpSettings.groupOrder || settings.gxpSettings.groupOrder.length === 0) {
+      if (
+        !settings.gxpSettings.groupOrder ||
+        settings.gxpSettings.groupOrder.length === 0
+      ) {
         let groupOrder = dataTable.groupsAsArray;
         settings.setGroupOrder(groupOrder);
       }
-      if (!settings.gxpSettings.sampleOrder || settings.gxpSettings.sampleOrder.length === 0) {
+      if (
+        !settings.gxpSettings.sampleOrder ||
+        settings.gxpSettings.sampleOrder.length === 0
+      ) {
         let sampleOrder = dataTable.samplesAsArray;
         settings.setSampleOrder(sampleOrder);
       }
@@ -153,10 +163,12 @@ class AppNavigation extends React.Component {
     }
 
     this.setState({ loading: false });
+    this.props.onClose();
     this.changeRoute('data');
   };
 
   onClearDataMenuClick = () => {
+    this.props.onClose();
     this.changeRoute('data');
     dataTable.clearData();
   };
@@ -168,6 +180,7 @@ class AppNavigation extends React.Component {
    */
   onClearPlotsMenuClick = () => {
     plotStore.clearPlots();
+    this.props.onClose();
     this.changeRoute('plots');
   };
 
@@ -176,6 +189,7 @@ class AppNavigation extends React.Component {
    */
   onClearImageMenuClick = () => {
     plotStore.clearImage();
+    this.props.onClose();
     this.changeRoute('plots');
   };
 
@@ -193,6 +207,7 @@ class AppNavigation extends React.Component {
     reader.onerror = (error) => console.error(error);
     reader.readAsDataURL(file);
 
+    this.props.onClose();
     this.changeRoute('plots');
   };
 
@@ -200,6 +215,7 @@ class AppNavigation extends React.Component {
    * Show the PCA Plot
    */
   onNewHeatmapPlot = () => {
+    this.props.onClose();
     this.changeRoute('plots');
     plotStore.addHeatmapPlot();
   };
@@ -208,8 +224,9 @@ class AppNavigation extends React.Component {
    * Show the PCA Plot
    */
   onNewPcaPlot = () => {
+    this.props.onClose();
     this.changeRoute('plots');
-    this.setState({ loading: true});
+    this.setState({ loading: true });
     setTimeout(() => {
       plotStore.addPcaPlot();
       this.setState({ loading: false });
@@ -220,6 +237,7 @@ class AppNavigation extends React.Component {
    * Show the Plots form modal.
    */
   onNewPlotMenuClick = () => {
+    this.props.onClose();
     this.changeRoute('plots');
     this.props.showPlotsModal();
   };
@@ -235,7 +253,6 @@ class AppNavigation extends React.Component {
            lg:relative lg:flex lg:flex-col
            lg:mt-0 lg:items-stretch lg:shadow-none
            ${this.props.show ? 'visible' : 'hidden'}`}
-        onClick={this.props.onClick}
       >
         {/* LOADING SPINNER */}
         {(this.state.loading || settings.isPreloading) && (

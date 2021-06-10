@@ -2,29 +2,21 @@ import React from 'react';
 
 import AppRipple from './AppRipple';
 
-export default function AppButton (props) {
-
+export default function AppButton(props) {
   const { className, ...buttonProps } = props;
 
   return (
     <button
-      className={
-        `relative overflow-hidden cursor-pointer
+      className={`relative overflow-hidden cursor-pointer
          flex items-center
          rounded focus:outline-none
          font-medium uppercase
-         ${className}`
-      }
-      { ...buttonProps }
+         ${className}`}
+      {...buttonProps}
     >
+      {props.children}
 
-      { props.children }
-
-      {
-        props.disabled ||
-        <AppRipple />
-      }
-
+      {props.disabled || <AppRipple />}
     </button>
   );
 }

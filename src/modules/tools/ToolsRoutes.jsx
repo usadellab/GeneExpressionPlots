@@ -3,13 +3,12 @@ import { Route, Switch } from 'react-router-dom';
 import GeneBrowser from './pages/GeneBrowser';
 import ToolsHome from './pages/ToolsHome';
 
-
 class ToolsRoutes extends Component {
-  render () {
+  render() {
     return (
       <Switch>
-        <Route exact path={ '/tools' } component={ ToolsHome } />
-        <Route path={ '/tools/gene-browser' } component={ GeneBrowser } />
+        <Route exact path={'/tools'} component={ToolsHome} />
+        <Route path={'/tools/gene-browser'} component={GeneBrowser} />
       </Switch>
     );
   }

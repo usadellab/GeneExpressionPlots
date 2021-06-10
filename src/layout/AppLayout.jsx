@@ -11,8 +11,6 @@ import Navigation from './Navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
 export default class AppLayout extends React.Component {
   constructor() {
     super();
@@ -29,7 +27,7 @@ export default class AppLayout extends React.Component {
 
   onTopBarToggle = () =>
     this.setState((state) => ({ showNav: !state.showNav }));
-  onNavigationClick = () => this.setState({ showNav: false });
+  onNavigationClose = () => this.setState({ showNav: false });
 
   /* MODALS */
 
@@ -53,15 +51,16 @@ export default class AppLayout extends React.Component {
   onInfoFormCancel = () => this.setState({ showInfoModal: false });
   onInfoFormSave = () => this.setState({ showInfoModal: false });
 
-  onErrorToast = (error) => toast.error(error, {
-    position: 'top-right',
-    autoClose: 10000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
+  onErrorToast = (error) =>
+    toast.error(error, {
+      position: 'top-right',
+      autoClose: 10000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
   toastClassName = () => {
     const contextClass = {
@@ -72,16 +71,20 @@ export default class AppLayout extends React.Component {
       default: 'bg-indigo-600',
       dark: 'bg-white-600 font-gray-300',
     };
-    
-    return ({ type }) => contextClass[type || 'default'] + 
-    ' flex m-2 p-2 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer';
+
+    return ({ type }) =>
+      contextClass[type || 'default'] +
+      ' flex m-2 p-2 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer';
   };
 
   render() {
     return (
       <>
         {/* Error Toasts */}
-        <ToastContainer toastClassName={this.toastClassName()}  bodyClassName={() => 'text-sm font-white font-med block p-3'}/>
+        <ToastContainer
+          toastClassName={this.toastClassName()}
+          bodyClassName={() => 'text-sm font-white font-med block p-3'}
+        />
         {/* NAVIGATION */}
         <div
           className="relative z-20 py-4 px-3 lg:w-68
@@ -102,7 +105,7 @@ export default class AppLayout extends React.Component {
             showPlotsModal={this.onShowPlotsModal}
             showTableModal={this.onShowTableModal}
             showInfoModal={this.onShowInfoModal}
-            onClick={this.onNavigationClick}
+            onClose={this.onNavigationClose}
             onError={this.onErrorToast}
           />
         </div>

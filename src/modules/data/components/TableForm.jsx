@@ -1,22 +1,21 @@
 import React from 'react';
 
-import AppButton  from '@components/AppButton';
-import AppIcon    from '@components/AppIcon';
-import AppFile    from '@components/AppFile';
-import AppSelect  from '@components/AppSelect';
+import AppButton from '@components/AppButton';
+import AppIcon from '@components/AppIcon';
+import AppFile from '@components/AppFile';
+import AppSelect from '@components/AppSelect';
 import AppSpinner from '@components/AppSpinner';
-import AppText    from '@components/AppText';
+import AppText from '@components/AppText';
 
 import { readTable } from '@/utils/parser';
 import { dataTable } from '@/store/data-store';
 
 import { plotStore } from '@/store/plot-store';
-import { settings }  from '@/store/settings';
+import { settings } from '@/store/settings';
 import AppDatalist from '@/components/AppDatalist';
 
 export default class TableForm extends React.Component {
-
-  constructor () {
+  constructor() {
     super();
     this.state = {
       countUnit: 'Raw',
@@ -32,11 +31,11 @@ export default class TableForm extends React.Component {
 
   onFieldSeparatorChange = (event) => {
     this.setState({ fieldSeparator: event.target.value });
-  }
+  };
 
   onHeaderSeparatorChange = (event) => {
     this.setState({ headerSeparator: event.target.value });
-  }
+  };
 
   /* ACTION HANDLERS */
 
@@ -45,13 +44,11 @@ export default class TableForm extends React.Component {
    * @param {React.FormEvent<HTMLInputElement>} event
    */
   onFormSubmit = async (event) => {
-
     event.preventDefault();
 
     this.setState({ loading: true });
 
     try {
-
       plotStore.loadCountUnit(this.state.countUnit);
       settings.loadgxpSettings({
         unit: this.state.countUnit,
@@ -76,7 +73,6 @@ export default class TableForm extends React.Component {
       const reader = new FileReader();
 
       reader.onload = () => {
-
         // Parse the input file as a table
         const table = readTable(reader.result, {
           fieldSeparator: this.state.fieldSeparator,
@@ -99,7 +95,7 @@ export default class TableForm extends React.Component {
         this.props.onSave();
       };
 
-      reader.onerror = (ev) => {
+      reader.onerror = () => {
         this.props.onError('There was an error while reading the file');
       };
 
@@ -107,77 +103,85 @@ export default class TableForm extends React.Component {
     } catch (error) {
       this.props.onError(error.message);
     }
-  }
+  };
 
   onCancelButtonClick = () => {
     this.setState({ cancel: true });
     this.props.onCancel();
-  }
+  };
 
-  render () {
+  render() {
     return (
       <form className="w-full px-6 flex-auto my-4 text-gray-600 text-lg leading-relaxed">
-
         <AppDatalist
           className="w-full"
           label="Count unit"
-          value={ this.state.countUnit}
-          onChange={(value) => this.setState({countUnit: value}) }
-          onSelect={(value) => this.setState({countUnit: value}) }
+          value={this.state.countUnit}
+          onChange={(value) => this.setState({ countUnit: value })}
+          onSelect={(value) => this.setState({ countUnit: value })}
           onFocus={() => null}
-          options={['Raw', 'TPM', 'FPKM', 'RPKM', 'RPM', 'CPM', 'TMM', 'DESeq', 'GeTMM', 'SCnorm', 'ComBat-Seq']}
-        >
-        </AppDatalist>
+          options={[
+            'Raw',
+            'TPM',
+            'FPKM',
+            'RPKM',
+            'RPM',
+            'CPM',
+            'TMM',
+            'DESeq',
+            'GeTMM',
+            'SCnorm',
+            'ComBat-Seq',
+          ]}
+        ></AppDatalist>
 
         <AppText
           className="w-full"
           label="Header separator"
-          value={ this.state.headerSeparator }
-          onChange={ this.onHeaderSeparatorChange }
+          value={this.state.headerSeparator}
+          onChange={this.onHeaderSeparatorChange}
         />
 
         <AppSelect
           className="w-full"
           placeholder="1..N"
           label="Field separator"
-          value={ this.state.separator }
+          value={this.state.separator}
           options={[
-            { label: 'CSV',  value: ','  },
-            { label: 'TAB',  value: '\t' },
+            { label: 'CSV', value: ',' },
+            { label: 'TAB', value: '\t' },
           ]}
-          onChange={ this.onFieldSeparatorChange }
+          onChange={this.onFieldSeparatorChange}
         />
 
         {/* FORM ACTIONS */}
 
         <div className="flex mt-6 mx-1">
-
           <AppFile
             className="flex justify-center items-center py-2 px-5 primary-blue"
-            onChange={ this.onFormSubmit }
+            onChange={this.onFormSubmit}
           >
-            {
-              this.state.loading
-                ? <AppSpinner className="mr-3 h-6 w-6 text-white" />
-                : <AppIcon file="hero-icons" id="document" className="w-6 h-6 mr-3"/>
-            }
-            {
-              this.state.loading
-                ? 'Uploading'
-                : 'Upload Table'
-            }
+            {this.state.loading ? (
+              <AppSpinner className="mr-3 h-6 w-6 text-white" />
+            ) : (
+              <AppIcon
+                file="hero-icons"
+                id="document"
+                className="w-6 h-6 mr-3"
+              />
+            )}
+            {this.state.loading ? 'Uploading' : 'Upload Table'}
           </AppFile>
 
           <AppButton
             className="ml-3 py-2 px-5 tertiary-pink"
             type="button"
             value="Cancel"
-            onClick={ this.onCancelButtonClick }
+            onClick={this.onCancelButtonClick}
           >
-              Cancel
+            Cancel
           </AppButton>
         </div>
-
       </form>
     );
   }
