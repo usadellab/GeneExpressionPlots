@@ -12,6 +12,7 @@ import { readFile, readTable } from '@/utils/parser';
 import { dataTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
 import { settings } from '@/store/settings';
+import AppDatalist from '@/components/AppDatalist';
 
 /**
  * Render a single group as a JSX.Element
@@ -29,7 +30,7 @@ export default class GroupView extends React.Component {
 
     this.state = {
       groupName: '',
-      countUnit: 'raw',
+      countUnit: 'Raw',
       // Sample
       sampleName: '',
       xTickValue: 0,
@@ -160,17 +161,17 @@ export default class GroupView extends React.Component {
           />
 
           {/* COUNT UNIT */}
-          <AppSelect
-            className="w-full md:w-1/2 md:ml-2"
+          <AppDatalist
+            className="w-full md:w-1/2 md:ml-2" 
             label="Count unit"
-            value={ this.state.countUnit }
-            options={[
-              { label: 'Raw',  value: 'raw' },
-              { label: 'RPKM', value: 'rpkm' },
-              { label: 'TPM',  value: 'tpm' }
-            ]}
-            onChange={ (event) => this.setState({ countUnit: event.target.value }) }
-          />
+            value={ this.state.countUnit}
+            onChange={(value) => this.setState({countUnit: value}) }
+            onSelect={(value) => this.setState({countUnit: value}) }
+            onFocus={() => null}
+            options={['Raw', 'TPM', 'FPKM', 'RPKM', 'RPM', 'CPM', 'TMM', 'DESeq', 'GeTMM', 'SCnorm', 'ComBat-Seq']}
+          >
+          </AppDatalist>
+          
 
         </div>
 

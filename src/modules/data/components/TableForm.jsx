@@ -12,13 +12,14 @@ import { dataTable } from '@/store/data-store';
 
 import { plotStore } from '@/store/plot-store';
 import { settings }  from '@/store/settings';
+import AppDatalist from '@/components/AppDatalist';
 
 export default class TableForm extends React.Component {
 
   constructor () {
     super();
     this.state = {
-      countUnit: 'raw',
+      countUnit: 'Raw',
       headerSeparator: '*',
       fieldSeparator: ',',
       //
@@ -28,10 +29,6 @@ export default class TableForm extends React.Component {
   }
 
   /* INPUT HANDLERS */
-
-  onCountUnitSelect = (event) => {
-    this.setState({ countUnit: event.target.value });
-  }
 
   onFieldSeparatorChange = (event) => {
     this.setState({ fieldSeparator: event.target.value });
@@ -95,19 +92,17 @@ export default class TableForm extends React.Component {
         let sampleOrder = dataTable.samplesAsArray;
         settings.setGroupOrder(groupOrder);
         settings.setSampleOrder(sampleOrder);
-  
-        reader.onloadend = () => {
-          this.setState({ loading: false });
-          this.props.onSave();
-        };
-    
-        reader.readAsText(file);
       };
+
+      reader.onloadend = () => {
+        this.setState({ loading: false });
+        this.props.onSave();
+      };
+      
+      reader.readAsText(file);
     } catch (error) {
       this.props.onError(error.message);
     }
-
-
   }
 
   onCancelButtonClick = () => {
@@ -119,17 +114,16 @@ export default class TableForm extends React.Component {
     return (
       <form className="w-full px-6 flex-auto my-4 text-gray-600 text-lg leading-relaxed">
 
-        <AppSelect
-          className="w-full"
+        <AppDatalist
+          className="w-full" 
           label="Count unit"
-          value={ this.state.countUnit }
-          options={[
-            { label: 'Raw',  value: 'raw' },
-            { label: 'RPKM', value: 'rpkm' },
-            { label: 'TPM',  value: 'tpm' }
-          ]}
-          onChange={ this.onCountUnitSelect }
-        />
+          value={ this.state.countUnit}
+          onChange={(value) => this.setState({countUnit: value}) }
+          onSelect={(value) => this.setState({countUnit: value}) }
+          onFocus={() => null}
+          options={['Raw', 'TPM', 'FPKM', 'RPKM', 'RPM', 'CPM', 'TMM', 'DESeq', 'GeTMM', 'SCnorm', 'ComBat-Seq']}
+        >
+        </AppDatalist>
 
         <AppText
           className="w-full"
