@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["es6", "dom"],
+
+    // type checking
+    "types": ["cypress"],
+
+    // module resolution
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "jsx": "react",
+
+    // paths
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "../src/*"
+      ]
+    },
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
