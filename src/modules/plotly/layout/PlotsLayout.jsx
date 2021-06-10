@@ -2,8 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { plotStore } from '@/store/plot-store';
 
-@observer
-export default class PlotsLayout extends React.Component {
+class PlotsLayout extends React.Component {
   render() {
     return (
       <div className="flex flex-col xl:flex-row max-w-screen">
@@ -54,3 +53,5 @@ export default class PlotsLayout extends React.Component {
     );
   }
 }
+
+export default observer(PlotsLayout);

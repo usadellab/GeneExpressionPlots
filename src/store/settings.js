@@ -1,10 +1,10 @@
 import { makeAutoObservable } from 'mobx';
 import { dataTable } from '@/store/data-store';
 
-const PRELOAD_DATA = process.env.PRELOAD_DATA;
-const PRELOAD_INFO = process.env.PRELOAD_INFO;
-const PRELOAD_IMAGE = process.env.PRELOAD_IMAGE;
-const PRELOAD_SETTINGS = process.env.PRELOAD_SETTINGS;
+const PRELOAD_DATA = import.meta.env.PRELOAD_DATA;
+const PRELOAD_INFO = import.meta.env.PRELOAD_INFO;
+const PRELOAD_IMAGE = import.meta.env.PRELOAD_IMAGE;
+const PRELOAD_SETTINGS = import.meta.env.PRELOAD_SETTINGS;
 
 class Settings {
 
@@ -38,7 +38,7 @@ class Settings {
   get isPreloading () {
     return this.preloaded.data && !dataTable.hasData;
   }
-  
+
   get gxpSettings () {
     return this._gxpSettings;
   }

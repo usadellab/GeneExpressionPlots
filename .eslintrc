@@ -38,6 +38,8 @@
     }
   },
   "ignorePatterns": [
-    "dist"
+    "dist",
+    "public",
+    "index.html"
   ]
 }
