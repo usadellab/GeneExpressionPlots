@@ -6,13 +6,6 @@ const PRELOAD_IMAGE = import.meta.env.VITE_PRELOAD_IMAGE;
 const PRELOAD_INFO = import.meta.env.VITE_PRELOAD_INFO;
 const PRELOAD_SETTINGS = import.meta.env.VITE_PRELOAD_SETTINGS;
 
-console.log({
-  PRELOAD_DATA,
-  PRELOAD_IMAGE,
-  PRELOAD_INFO,
-  PRELOAD_SETTINGS,
-});
-
 class Settings {
 
   _PRELOADED = {
