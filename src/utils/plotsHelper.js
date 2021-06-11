@@ -74,6 +74,7 @@ function getDefaultLayout(showlegend, countUnit, plotTitle) {
       tickangle: 'auto',
     },
     colorway: colors,
+    // autosize: true,
   };
 }
 

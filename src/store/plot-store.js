@@ -160,7 +160,7 @@ class PlotStore {
    */
   config(plotId) {
     return {
-      responsive: true,
+      // responsive: true,
       toImageButtonOptions: {
         format: 'svg',
       },
