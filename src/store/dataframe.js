@@ -4,13 +4,13 @@ import { buildTreeBranches } from '../utils/reducers';
 import iwanthue from 'iwanthue';
 
 /**
- * @typedef  {Object<string, string[]>} Row table row
+ * @typedef  {Object<string, string[]>} Rows table row
  **/
 
 /**
  * @typedef  {Object} TableObject In-memory representation of a parsed table
  * @property {string[]}   header array of column names
- * @property {Row[]}        rows array of row objects
+ * @property {Rows}         rows array of row objects
  **/
 
 export class Dataframe {
@@ -35,7 +35,7 @@ export class Dataframe {
   /**
    * Load the dataframe with an already parsed table.
    * @param {TableObject}     table
-   * @param {DataframeConfig} config
+   * @param {DataframeConfig | undefined} config
    */
   loadFromObject(table, config) {
     Object.assign(this.config, config);
