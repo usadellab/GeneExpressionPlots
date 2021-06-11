@@ -18,10 +18,10 @@ jobs:
           node-version: '12.x'
 
       - name: Install node_modules
-        run: npm install
+        run: yarn install
 
       - name: Build application
-        run: npm run build:ci
+        run: yarn build
 
       - name: Init new repo in dist folder and commit generated files
         run: |
