@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter } from 'react-router-dom';
 
 import AppRoutes from './App.routes';
-import AppLayout from './layout/AppLayout';
+import AppLayout from './layouts/app-layout';
 
 import { fetchResource } from '@/utils/fetch';
 import { readTable } from '@/utils/parser';
