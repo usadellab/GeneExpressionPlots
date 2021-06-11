@@ -1,56 +1,67 @@
 import React, { createContext } from 'react';
-import createPlotlyComponent from 'react-plotly.js/factory';
-
-const Plotly = window.Plotly;
-const Plot = createPlotlyComponent(Plotly);
+import Plot from 'react-plotly.js';
 
 export const PlotContext = createContext({ hoveredGene: '' });
 
-export default class PlotlyPlot extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      name: '',
-    };
-  }
+export default function PlotlyPlot(props) {
+  const [name, setName] = React.useState('');
+  const plotRef = React.useRef(null);
+  const figureRef = React.useRef(null);
+  const timeoutRef = React.useRef(undefined);
 
-  componentDidMount() {
-    this.resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        Plotly.Plots.resize(entry.target);
-      }
+  const [layout, setLayout] = React.useState(props.plot.layout);
+
+  React.useEffect(function resizePlot() {
+    let id;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      clearTimeout(timeoutRef.current);
+      id = setTimeout(() => {
+        setLayout((snapshot) => ({
+          ...snapshot,
+          width: entries[0].target.clientWidth,
+        }));
+      }, 250);
+
+      timeoutRef.current = id;
     });
-    this.resizeObserver.observe(this.plot.el);
-  }
 
-  componentWillUnmount() {
-    this.resizeObserver.unobserve(this.plot.el);
-  }
+    if (figureRef.current) {
+      resizeObserver.observe(figureRef.current);
+    }
 
-  onPlotHover = (plotObject) => {
+    return () => {
+      if (figureRef.current) resizeObserver.unobserve(figureRef.current);
+      if (id) clearTimeout(id);
+    };
+  }, []);
+
+  const onPlotHover = (plotObject) => {
     const { points } = plotObject;
-    if (points.length !== 1 || this.props.plot.accessions?.length <= 1) return;
+    if (points.length !== 1 || props.plot.accessions?.length <= 1) return;
     const name = points[0].fullData.name;
-    this.setState({ name });
+    setName(name);
   };
 
-  onPlotUnhover = () => {
-    this.setState({ name: '' });
+  const onPlotUnhover = () => {
+    setName('');
   };
 
-  render() {
-    return (
-      <PlotContext.Provider value={{ hoveredGene: this.state.name }}>
-        <figure className={this.props.className}>
-          <Plot
-            onHover={this.onPlotHover}
-            onUnhover={this.onPlotUnhover}
-            ref={(ref) => (this.plot = ref)}
-            {...this.props.plot}
-          />
-          <div className="mx-12">{this.props.children}</div>
-        </figure>
-      </PlotContext.Provider>
-    );
-  }
+  return (
+    <PlotContext.Provider value={{ hoveredGene: name }}>
+      <figure
+        ref={(ref) => (figureRef.current = ref)}
+        className={props.className}
+      >
+        <Plot
+          ref={(ref) => (plotRef.current = ref)}
+          {...props.plot}
+          layout={layout}
+          onHover={onPlotHover}
+          onUnhover={onPlotUnhover}
+        />
+        <div className="mx-12">{props.children}</div>
+      </figure>
+    </PlotContext.Provider>
+  );
 }
