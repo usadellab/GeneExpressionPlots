@@ -1,9 +1,9 @@
-import { Dataframe } from '../../../src/store/dataframe';
+import { Dataframe } from '@/store/dataframe';
 import {
   intersect,
   construct_contingency_table,
   test_for_enrichment,
-} from '../../../src/utils/enrichment_analyses';
+} from '@/utils/enrichment_analyses';
 
 describe('Enrichment analysis', function () {
   it('intersect generates the set-intersection of two arrays', () => {

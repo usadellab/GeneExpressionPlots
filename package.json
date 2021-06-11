@@ -31,12 +31,13 @@
     "react-toastify": "^7.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
+    "@babel/core": "^7.14.5",
     "@babel/eslint-parser": "^7.14.4",
     "@babel/preset-react": "^7.13.13",
     "@cypress/code-coverage": "^3.9.6",
     "@cypress/react": "^5.9.1",
     "@cypress/vite-dev-server": "^2.0.0",
+    "@cypress/webpack-preprocessor": "^5.9.0",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
     "@types/react-router-dom": "^5.1.7",
@@ -55,8 +56,10 @@
     "postcss": "^8.1.9",
     "prettier": "^2.3.1",
     "tailwindcss": "^2.0.1",
+    "ts-loader": "^9.2.3",
     "typescript": "^4.3.2",
     "vite": "^2.3.7",
-    "vite-plugin-react-svg": "^0.2.0"
+    "vite-plugin-react-svg": "^0.2.0",
+    "webpack": "^5.38.1"
   }
 }
