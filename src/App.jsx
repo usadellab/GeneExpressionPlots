@@ -21,7 +21,7 @@ export default class App extends React.Component {
       if (settingsResponse) {
         settings.loadgxpSettings(settingsResponse);
         plotStore.loadCountUnit(settings.gxpSettings.unit);
-      } else throw new Error('Please provide a GXP_settings.json file.');
+      }
     }
 
     if (settings.preloaded.data) {
@@ -38,6 +38,13 @@ export default class App extends React.Component {
             multiHeader: settings.gxpSettings.expression_header_sep,
           }
         );
+
+      // If a custom sorting is not provided for groups and samples, use the
+      // table column order.
+      if (settings.gxpSettings.groupOrder.length === 0)
+        settings.setGroupOrder(dataTable.groupsAsArray);
+      if (settings.gxpSettings.sampleOrder.length === 0)
+        settings.setSampleOrder(dataTable.samplesAsArray);
     }
 
     if (settings.preloaded.info) {
