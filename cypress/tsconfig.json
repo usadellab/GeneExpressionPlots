@@ -4,7 +4,7 @@
     "lib": ["es6", "dom"],
 
     // type checking
-    "types": ["cypress"],
+    "types": ["cypress", "@types/node"],
 
     // module resolution
     "esModuleInterop": true,

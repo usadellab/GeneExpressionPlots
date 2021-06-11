@@ -11,6 +11,8 @@
 
 import codeCoverageTask from '@cypress/code-coverage/task';
 import { startDevServer } from '@cypress/vite-dev-server';
+import webpackPreprocessor from '@cypress/webpack-preprocessor';
+import webpackOptions from '../webpack.config';
 
 /**
  * This function is called when a project is opened or re-opened (e.g. due to
@@ -27,6 +29,8 @@ const config: Cypress.PluginConfig = (on, config) => {
       },
     })
   );
+
+  on('file:preprocessor', webpackPreprocessor({ webpackOptions }));
 
   codeCoverageTask(on, config);
   return config;

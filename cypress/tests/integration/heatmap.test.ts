@@ -3,8 +3,8 @@ import {
   getChildren,
   convertTreeForD3,
   convertForD3,
-} from '../../../src/utils/heatmap';
-import { Dataframe } from '../../../src/store/dataframe';
+} from '@/utils/heatmap';
+import { Dataframe } from '@/store/dataframe';
 
 describe('Heatmap analysis', function () {
   it('Can cluster genes by their expression measurement', () => {
