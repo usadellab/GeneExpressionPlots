@@ -8,7 +8,6 @@ export interface TopbarLinkProps {
   href: string;
   icon: IconType;
   text: string;
-  showText?: boolean;
 }
 
 const ToolbarLink: React.FC<TopbarLinkProps> = (props): React.ReactElement => {

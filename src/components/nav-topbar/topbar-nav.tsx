@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, useDisclosure } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import TopbarLink, { TopbarLinkProps } from './topbar-link';
 
 interface TopbarNavProps {
@@ -10,7 +10,6 @@ interface TopbarNavProps {
 }
 
 const TopbarNav: React.FC<TopbarNavProps> = (props): React.ReactElement => {
-  const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <Flex
       justifyContent="space-around"
@@ -21,8 +20,6 @@ const TopbarNav: React.FC<TopbarNavProps> = (props): React.ReactElement => {
       borderColor="orange.600"
       backgroundColor="white"
       shadow="lg"
-      onMouseEnter={onOpen}
-      onMouseLeave={onClose}
     >
       {props.links?.map((link) => (
         <TopbarLink
@@ -30,7 +27,6 @@ const TopbarNav: React.FC<TopbarNavProps> = (props): React.ReactElement => {
           href={link.href}
           icon={link.icon}
           text={link.text}
-          showText={isOpen}
         />
       ))}
       {props.children}
