@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Icon, Text, useBreakpointValue } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
-import SiteLink from './site-link';
+import SiteLink from '@/components/site-link';
 
 export interface TopbarLinkProps {
   href: string;

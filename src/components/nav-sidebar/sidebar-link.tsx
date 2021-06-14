@@ -2,7 +2,7 @@ import React, { ReactElement, useMemo } from 'react';
 import { IconType } from 'react-icons';
 import { useLocation } from 'react-router-dom';
 import { Flex, Icon, Text } from '@chakra-ui/react';
-import SiteLink from './site-link';
+import SiteLink from '@/components/site-link';
 
 export interface SidebarLinkProps {
   href: string;

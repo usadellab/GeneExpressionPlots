@@ -7,7 +7,7 @@ import {
   FaTools,
 } from 'react-icons/fa';
 import { Flex } from '@chakra-ui/react';
-import TopbarNav from './topbar-nav';
+import TopbarNav from '@/components/nav-topbar';
 
 const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
   props
