@@ -10,7 +10,7 @@ const DataPage: React.FC = () => {
       padding={6}
       width="100%"
       __css={{
-        '& a:not(:first-child)': {
+        '& a:not(:first-of-type)': {
           marginTop: '2rem',
         },
       }}
