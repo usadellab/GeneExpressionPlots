@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import DataLayout from '@/layouts/data-layout';
-import DataView from './pages/DataView';
+import DataPage from './data-page';
 
 const DataRoutes: React.FC = () => {
   const { path } = useRouteMatch();
@@ -9,7 +9,7 @@ const DataRoutes: React.FC = () => {
   return (
     <DataLayout>
       <Switch>
-        <Route exact path={path} component={DataView} />
+        <Route exact path={path} component={DataPage} />
       </Switch>
     </DataLayout>
   );
