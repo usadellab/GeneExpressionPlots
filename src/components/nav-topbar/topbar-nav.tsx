@@ -3,6 +3,9 @@ import { Flex, useDisclosure } from '@chakra-ui/react';
 import TopbarLink, { TopbarLinkProps } from './topbar-link';
 
 interface TopbarNavProps {
+  /** @type add a top border accent to the topbar */
+  accent?: boolean;
+  /** @type object with items to be rendered as links */
   links: Omit<TopbarLinkProps, 'showText'>[];
 }
 
@@ -14,7 +17,7 @@ const TopbarNav: React.FC<TopbarNavProps> = (props): React.ReactElement => {
       width="100%"
       paddingY={2}
       paddingX={5}
-      borderTop="8px"
+      borderTop={props.accent ? '8px' : 'none'}
       borderColor="orange.600"
       backgroundColor="white"
       shadow="lg"
