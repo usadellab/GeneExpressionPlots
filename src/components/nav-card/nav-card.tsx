@@ -14,7 +14,7 @@ interface NavCardProps extends SiteLinkProps {
 const MotionFlex = motion<FlexProps>(Flex);
 const MotionBox = motion<BoxProps>(Box);
 
-const NavCard: React.FC<NavCardProps> = ({ label, text, ...props }) => {
+const NavCard: React.FC<NavCardProps> = ({ label, text, icon, ...props }) => {
   return (
     <SiteLink
       {...props}
@@ -37,9 +37,9 @@ const NavCard: React.FC<NavCardProps> = ({ label, text, ...props }) => {
       padding={5}
       width="100%"
     >
-      {props.icon && (
+      {icon && (
         <Icon
-          as={props.icon}
+          as={icon}
           color="gray.600"
           height="1.5rem"
           marginTop="2"
