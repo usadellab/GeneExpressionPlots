@@ -1,16 +1,18 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import DataHome from './modules/data/DataHome';
 import PlotsHome from './modules/plotly/PlotsHome';
 import ToolsModule from './modules/tools/ToolsModule';
+import DataRoutes from './modules/data/data.routes';
 
-export default function AppRoutes() {
+const AppRoutes: React.FC = () => {
   return (
     <Switch>
+      <Route path="/data" component={DataRoutes} />
       <Route path="/plots" component={PlotsHome} />
-      <Route path="/data" component={DataHome} />
       <Route path="/tools" component={ToolsModule} />
     </Switch>
   );
-}
+};
+
+export default AppRoutes;
