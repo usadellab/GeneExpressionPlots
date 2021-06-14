@@ -16,9 +16,6 @@ const DataPage: React.FC = () => {
       }}
     >
       <NavCard
-        _hover={{
-          textDecoration: 'none',
-        }}
         icon={FaFileAlt}
         label="File Browser"
         text={`

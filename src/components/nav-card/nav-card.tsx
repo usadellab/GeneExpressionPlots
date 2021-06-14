@@ -17,8 +17,17 @@ const MotionBox = motion<BoxProps>(Box);
 const NavCard: React.FC<NavCardProps> = ({ label, text, ...props }) => {
   return (
     <SiteLink
+      {...props}
       _focus={{
         outline: 'none',
+        ...props._focus,
+      }}
+      _hover={{
+        borderLeftColor: 'orange.600',
+        borderColor: 'orange.600',
+        boxShadow: 'md',
+        textDecoration: 'none',
+        ...props._hover,
       }}
       display="flex"
       backgroundColor="white"
@@ -27,11 +36,6 @@ const NavCard: React.FC<NavCardProps> = ({ label, text, ...props }) => {
       boxShadow="xs"
       padding={5}
       width="100%"
-      _hover={{
-        borderLeftColor: 'orange.600',
-        boxShadow: 'md',
-      }}
-      {...props}
     >
       {props.icon && (
         <Icon
