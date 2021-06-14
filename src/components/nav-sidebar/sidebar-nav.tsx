@@ -35,6 +35,7 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = ({
           href={link.href}
           icon={link.icon}
           text={link.text}
+          urlMatch={link.urlMatch}
         />
       ))}
       {stackProps.children}

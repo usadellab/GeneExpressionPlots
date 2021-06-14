@@ -21,26 +21,31 @@ const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
             href: '/',
             icon: FaHome,
             text: 'Home',
+            urlMatch: 'exact',
           },
           {
             href: '/data',
             icon: FaDatabase,
             text: 'Data',
+            urlMatch: 'contains',
           },
           {
             href: '/plots',
             icon: FaChartBar,
             text: 'Plots',
+            urlMatch: 'contains',
           },
           {
             href: '/tools',
             icon: FaTools,
             text: 'Tools',
+            urlMatch: 'contains',
           },
           {
             href: '/docs',
             icon: FaInfo,
             text: 'Docs',
+            urlMatch: 'contains',
           },
         ]}
       />

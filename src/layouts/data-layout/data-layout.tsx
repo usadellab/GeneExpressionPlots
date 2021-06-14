@@ -19,7 +19,7 @@ const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
               text: 'Files',
             },
             {
-              href: 'data/factors',
+              href: '/data/factors',
               icon: FaLayerGroup,
               text: 'Factors',
             },

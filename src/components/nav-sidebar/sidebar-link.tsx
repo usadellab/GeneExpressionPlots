@@ -11,15 +11,17 @@ export interface SidebarLinkProps {
   icon: IconType;
   /** @type link text */
   text: string;
+  /** @type pattern matching strategy to apply the active url color */
+  urlMatch?: 'exact' | 'contains';
 }
 
 const SidebarLink: React.FC<SidebarLinkProps> = (props) => {
   const location = useLocation();
 
-  const match = React.useMemo(
-    () => location.pathname.split(/(?=\/)/).includes(props.href),
-    [props.href, location.pathname]
-  );
+  const match =
+    ((props.urlMatch === 'exact' || props.urlMatch === undefined) &&
+      location.pathname === props.href) ||
+    (props.urlMatch === 'contains' && location.pathname.includes(props.href));
 
   return (
     <SiteLink

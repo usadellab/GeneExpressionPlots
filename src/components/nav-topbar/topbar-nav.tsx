@@ -27,6 +27,7 @@ const TopbarNav: React.FC<TopbarNavProps> = (props): React.ReactElement => {
           href={link.href}
           icon={link.icon}
           text={link.text}
+          urlMatch={link.urlMatch}
         />
       ))}
       {props.children}
