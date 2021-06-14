@@ -1,38 +1,43 @@
 import React from 'react';
-import { Stack, useDisclosure } from '@chakra-ui/react';
+import { Stack, StackProps, useDisclosure } from '@chakra-ui/react';
 import SidebarLink, { SidebarLinkProps } from './sidebar-link';
 
-interface SidebarProps {
+interface SidebarProps extends StackProps {
   /** @type add a top border accent to the topbar */
   accent?: boolean;
   /** @type object with items to be rendered as links */
   links?: Omit<SidebarLinkProps, 'showText'>[];
 }
 
-const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
+const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = ({
+  accent,
+  links,
+  ...stackProps
+}) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <Stack
-      boxShadow="xl"
-      height="100vh"
-      position="sticky"
-      top={0}
       backgroundColor="white"
-      borderTop={props.accent ? '8px' : 'none'}
+      borderTop={accent ? '8px' : 'none'}
       borderColor="orange.600"
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
+      overflowX="hidden"
+      transitionProperty="width"
+      transitionDuration="0.2s"
+      transitionTimingFunction="linear forwards"
+      width={isOpen ? stackProps.maxWidth ?? '15rem' : '4.5rem'}
+      {...stackProps}
     >
-      {props.links?.map((link) => (
+      {links?.map((link) => (
         <SidebarLink
           key={link.href}
           href={link.href}
           icon={link.icon}
-          showText={isOpen}
           text={link.text}
         />
       ))}
-      {props.children}
+      {stackProps.children}
     </Stack>
   );
 };

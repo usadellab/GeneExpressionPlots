@@ -1,32 +1,29 @@
-import React, { ReactElement, useMemo } from 'react';
+import React from 'react';
 import { IconType } from 'react-icons';
 import { useLocation } from 'react-router-dom';
 import { Flex, Icon, Text } from '@chakra-ui/react';
 import SiteLink from '@/components/site-link';
 
 export interface SidebarLinkProps {
+  /** @type link url */
   href: string;
+  /** @type link icon */
   icon: IconType;
+  /** @type link text */
   text: string;
-  showText?: boolean;
 }
 
-const SidebarLink: React.FC<SidebarLinkProps> = ({
-  icon,
-  showText,
-  text,
-  href,
-}: SidebarLinkProps): ReactElement => {
+const SidebarLink: React.FC<SidebarLinkProps> = (props) => {
   const location = useLocation();
 
-  const match = useMemo(
-    () => location.pathname.split(/(?=\/)/).includes(href),
-    [href, location.pathname]
+  const match = React.useMemo(
+    () => location.pathname.split(/(?=\/)/).includes(props.href),
+    [props.href, location.pathname]
   );
 
   return (
     <SiteLink
-      to={href}
+      to={props.href}
       textColor={match ? 'orange.600' : 'gray.600'}
       _hover={{
         backgroundColor: 'orange.600',
@@ -36,24 +33,15 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
         outline: 'none',
       }}
     >
-      <Flex
-        paddingX={6}
-        paddingY={4}
-        alignItems="center"
-        overflowX="hidden"
-        transitionProperty="width"
-        transitionDuration="0.2s"
-        transitionTimingFunction="linear forwards"
-        width={showText ? '10rem' : '4.5rem'}
-      >
-        <Icon as={icon} width={6} height={6} />
+      <Flex paddingX={6} paddingY={4} alignItems="center">
+        <Icon as={props.icon} width={6} height={6} />
         <Text
           fontWeight="semibold"
           textTransform="uppercase"
           marginLeft={8}
           fontSize="lg"
         >
-          {text}
+          {props.text}
         </Text>
       </Flex>
     </SiteLink>
