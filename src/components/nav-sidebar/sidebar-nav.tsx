@@ -10,6 +10,9 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <Stack
+      _focusWithin={{
+        width: props.maxWidth ?? '15rem',
+      }}
       backgroundColor="white"
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
