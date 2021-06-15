@@ -20,21 +20,22 @@ const NavCard: React.FC<NavCardProps> = ({ label, text, icon, ...props }) => {
       {...props}
       _focus={{
         outline: 'none',
+        borderLeftColor: 'orange.600',
         ...props._focus,
       }}
       _hover={{
         borderLeftColor: 'orange.600',
-        borderColor: 'orange.600',
         boxShadow: 'md',
         textDecoration: 'none',
         ...props._hover,
       }}
-      display="flex"
       backgroundColor="white"
       borderLeft="4px"
       borderLeftColor="transparent"
       boxShadow="xs"
+      display="flex"
       padding={5}
+      tabIndex={0}
       width="100%"
     >
       {icon && (
