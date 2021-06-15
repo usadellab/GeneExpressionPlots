@@ -29,7 +29,8 @@ const ToolbarLink: React.FC<TopbarLinkProps> = (props): React.ReactElement => {
       <SiteLink
         _focus={{
           outline: 'none',
-          borderY: '2px',
+          backgroundColor: 'gray.100',
+          textColor: 'orange.600',
         }}
         _hover={{
           backgroundColor: 'gray.100',
