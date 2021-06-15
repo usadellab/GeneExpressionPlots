@@ -37,12 +37,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = (props) => {
     >
       <Flex paddingX={6} paddingY={4} alignItems="center">
         <Icon as={props.icon} width={6} height={6} />
-        <Text
-          fontWeight="semibold"
-          textTransform="uppercase"
-          marginLeft={8}
-          fontSize="lg"
-        >
+        <Text fontWeight="semibold" marginLeft={8} fontSize="lg">
           {props.text}
         </Text>
       </Flex>
