@@ -62,6 +62,7 @@
     "prettier": "^2.3.1",
     "tailwindcss": "^2.0.1",
     "ts-loader": "^9.2.3",
+    "type-fest": "^1.2.0",
     "typescript": "^4.3.2",
     "vite": "^2.3.7",
     "vite-plugin-react-svg": "^0.2.0",
