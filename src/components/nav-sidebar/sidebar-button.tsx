@@ -40,8 +40,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = (props) => {
       }}
       _focus={{
         outline: 'none',
-        border: '1px',
-        borderColor: 'orange.600',
+        textColor: 'orange.600',
       }}
       alignItems="center"
       as="button"

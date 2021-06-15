@@ -16,13 +16,13 @@ const InputFile: React.FC<InputFileProps> = ({ icon, text, ...inputProps }) => {
       }}
       _focus={{
         outline: 'none',
-        border: '1px',
-        borderColor: 'orange.600',
+        textColor: 'orange.600',
       }}
       alignItems="center"
       flexWrap="nowrap"
       paddingX={6}
       paddingY={4}
+      tabIndex={0}
       textColor="gray.600"
     >
       <Input type="file" hidden {...inputProps} />
