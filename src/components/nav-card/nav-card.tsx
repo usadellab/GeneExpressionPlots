@@ -49,8 +49,13 @@ const NavCard: React.FC<NavCardProps> = ({ label, text, icon, ...props }) => {
         />
       )}
 
-      <MotionFlex as="section" alignItems="center" whileHover="hover">
-        <Box>
+      <MotionFlex
+        as="section"
+        alignItems="center"
+        flexGrow={1}
+        whileHover="hover"
+      >
+        <Box width="100%">
           <Text as="h1" fontSize="xl" fontWeight="semibold">
             {label}
           </Text>
