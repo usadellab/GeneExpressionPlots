@@ -7,7 +7,7 @@ const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
   props
 ): React.ReactElement => {
   return (
-    <Flex flexGrow={1} backgroundColor="gray.100">
+    <Flex flexGrow={1}>
       <SlideFade initial={{ x: -20 }} animate={{ x: 0 }} exit={{ x: -20 }}>
         <SidebarNav
           boxShadow="xl"
