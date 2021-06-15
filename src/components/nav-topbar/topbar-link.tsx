@@ -26,25 +26,26 @@ const ToolbarLink: React.FC<TopbarLinkProps> = (props): React.ReactElement => {
 
   return (
     <SiteLink
-      to={props.href}
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      paddingY={2}
-      paddingX={4}
-      borderRadius="md"
-      borderTop="2px"
-      borderBottom="2px"
-      borderColor={match ? 'white' : 'transparent'}
-      textColor="white"
+      _focus={{
+        outline: 'none',
+        borderY: '2px',
+      }}
       _hover={{
         backgroundColor: 'gray.100',
         textColor: 'orange.600',
       }}
-      _focus={{
-        outline: 'none',
-      }}
+      alignItems="center"
+      borderRadius="md"
+      borderY="2px"
+      borderColor={match ? 'white' : 'transparent'}
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      paddingY={2}
+      paddingX={4}
+      textColor="white"
+      tabIndex={0}
+      to={props.href}
     >
       <Icon as={props.icon} width={5} height={5} />
       <Text as="span" fontSize={fontSize} fontWeight="semibold">
