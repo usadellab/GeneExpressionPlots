@@ -15,7 +15,6 @@ const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
   return (
     <Flex flexDirection="column" minHeight="100vh" backgroundColor="gray.100">
       <TopbarNav
-        accent
         links={[
           {
             href: '/',

@@ -34,10 +34,13 @@ const ToolbarLink: React.FC<TopbarLinkProps> = (props): React.ReactElement => {
       paddingY={2}
       paddingX={4}
       borderRadius="md"
-      textColor={match ? 'orange.600' : 'gray.600'}
+      borderTop="2px"
+      borderBottom="2px"
+      borderColor={match ? 'white' : 'transparent'}
+      textColor="white"
       _hover={{
-        backgroundColor: 'orange.600',
-        textColor: 'white',
+        backgroundColor: 'gray.100',
+        textColor: 'orange.600',
       }}
       _focus={{
         outline: 'none',
