@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Icon, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Icon, ListItem, Text, useBreakpointValue } from '@chakra-ui/react';
 import { IconType } from 'react-icons';
 import SiteLink from '@/components/site-link';
 
@@ -25,33 +25,35 @@ const ToolbarLink: React.FC<TopbarLinkProps> = (props): React.ReactElement => {
     (props.urlMatch === 'contains' && location.pathname.includes(props.href));
 
   return (
-    <SiteLink
-      _focus={{
-        outline: 'none',
-        borderY: '2px',
-      }}
-      _hover={{
-        backgroundColor: 'gray.100',
-        textColor: 'orange.600',
-      }}
-      alignItems="center"
-      borderRadius="md"
-      borderY="2px"
-      borderColor={match ? 'white' : 'transparent'}
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      paddingY={2}
-      paddingX={4}
-      textColor="white"
-      tabIndex={0}
-      to={props.href}
-    >
-      <Icon as={props.icon} width={5} height={5} />
-      <Text as="span" fontSize={fontSize} fontWeight="semibold">
-        {props.text}
-      </Text>
-    </SiteLink>
+    <ListItem>
+      <SiteLink
+        _focus={{
+          outline: 'none',
+          borderY: '2px',
+        }}
+        _hover={{
+          backgroundColor: 'gray.100',
+          textColor: 'orange.600',
+        }}
+        alignItems="center"
+        borderRadius="md"
+        borderY="2px"
+        borderColor={match ? 'white' : 'transparent'}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        paddingY={2}
+        paddingX={4}
+        textColor="white"
+        tabIndex={0}
+        to={props.href}
+      >
+        <Icon as={props.icon} width={5} height={5} />
+        <Text as="span" fontSize={fontSize} fontWeight="semibold">
+          {props.text}
+        </Text>
+      </SiteLink>
+    </ListItem>
   );
 };
 

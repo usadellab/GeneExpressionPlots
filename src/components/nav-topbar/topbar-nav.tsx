@@ -1,37 +1,24 @@
 import React from 'react';
-import { Flex, FlexProps } from '@chakra-ui/react';
-import TopbarLink, { TopbarLinkProps } from './topbar-link';
+import { Box, BoxProps, UnorderedList } from '@chakra-ui/react';
 
-interface TopbarNavProps extends FlexProps {
-  /** @type object with items to be rendered as links */
-  links: Omit<TopbarLinkProps, 'showText'>[];
-}
-
-const TopbarNav: React.FC<TopbarNavProps> = ({
-  links,
-  ...props
-}): React.ReactElement => {
+const TopbarNav: React.FC<BoxProps> = (props): React.ReactElement => {
   return (
-    <Flex
-      justifyContent="space-around"
-      width="100%"
+    <Box
+      as="nav"
       paddingY={2}
       paddingX={5}
       backgroundColor="orange.600"
       boxShadow="xl"
       {...props}
     >
-      {links?.map((link) => (
-        <TopbarLink
-          key={link.href}
-          href={link.href}
-          icon={link.icon}
-          text={link.text}
-          urlMatch={link.urlMatch}
-        />
-      ))}
-      {props.children}
-    </Flex>
+      <UnorderedList
+        display="flex"
+        justifyContent="space-around"
+        listStyleType="none"
+      >
+        {props.children}
+      </UnorderedList>
+    </Box>
   );
 };
 
