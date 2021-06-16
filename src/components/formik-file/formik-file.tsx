@@ -68,6 +68,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
       as="p"
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
       isRequired={props.isRequired}
+      isReadOnly
     >
       <FormLabel fontWeight="semibold">{label}</FormLabel>
 
@@ -96,6 +97,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
       <Input
         ref={(ref) => (fileInputRef.current = ref)}
         hidden
+        name={`hidden-${field.name}`}
         type="file"
         onChange={setFormikValue}
       />
