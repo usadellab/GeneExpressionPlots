@@ -21,7 +21,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
   name,
   label,
   validate,
-  ...inputProps
+  ...props
 }) => {
   const [field, meta, helpers] = useField({
     name,
@@ -67,6 +67,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
     <FormControl
       as="p"
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
+      isRequired={props.isRequired}
     >
       <FormLabel fontWeight="semibold">{label}</FormLabel>
 
@@ -79,7 +80,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
       <Input
         ref={(ref) => (initialRef ? (initialRef.current = ref) : ref)}
         {...field}
-        {...inputProps}
+        {...props}
         onMouseDown={onMouseDownTriggerInputClick}
         onKeyDown={onKeyDownTriggerInputClick}
         placeholder="Select a file to load"

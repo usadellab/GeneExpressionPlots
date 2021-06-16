@@ -32,6 +32,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
     <FormControl
       as="p"
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
+      isRequired={props.isRequired}
     >
       <FormLabel fontWeight="semibold">{label}</FormLabel>
       <Input
