@@ -10,7 +10,14 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
-import XTableForm from './xtable-form';
+import XTableForm, { XTableFormSubmitHandler } from './xtable-form';
+
+import { dataTable } from '@/store/data-store';
+import { plotStore } from '@/store/plot-store';
+import { settings } from '@/store/settings';
+
+import { readTable } from '@/utils/parser';
+import { unescapeDelimiters } from '@/utils/string';
 
 interface XTableModalProps extends Omit<ModalProps, 'children'> {
   finalFocusRef?: React.RefObject<FocusableElement>;
@@ -21,6 +28,55 @@ interface XTableModalProps extends Omit<ModalProps, 'children'> {
 const ModalXTable: React.FC<XTableModalProps> = (props) => {
   const initialRef = React.useRef<FocusableElement | null>(null);
   const modalSize = useBreakpointValue({ base: 'full', md: 'md' });
+
+  const xTableFormSubmit: XTableFormSubmitHandler = (values, actions) => {
+    plotStore.loadCountUnit(values.countUnit);
+
+    settings.loadgxpSettings({
+      unit: values.countUnit,
+      expression_field_sep: values.columnSep,
+      expression_header_sep: values.headerSep,
+    });
+
+    const file = values.file;
+
+    if (file) {
+      try {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          // Parse the input file as a table
+          const table = readTable(reader.result as string, {
+            fieldSeparator: unescapeDelimiters(values.columnSep),
+            rowNameColumn: 0,
+          });
+
+          // Load the store from the parsed table
+          dataTable.loadFromObject(table, {
+            multiHeader: values.headerSep,
+          });
+
+          // set default group and sample order in the settings
+          settings.setGroupOrder(dataTable.groupsAsArray);
+          settings.setSampleOrder(dataTable.samplesAsArray);
+        };
+
+        reader.onloadend = () => {
+          actions.setSubmitting(false);
+          props.onClose();
+        };
+
+        reader.onerror = () => {
+          console.error('There was an error while reading the file');
+          props.onClose();
+        };
+
+        reader.readAsText(file);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+  };
 
   return (
     <Modal
@@ -40,12 +96,7 @@ const ModalXTable: React.FC<XTableModalProps> = (props) => {
           <XTableForm
             initialRef={initialRef}
             onCancel={props.onClose}
-            onSubmit={(values, actions) => {
-              console.log({ values, actions });
-              setTimeout(() => {
-                actions.setSubmitting(false);
-              }, 2000);
-            }}
+            onSubmit={xTableFormSubmit}
           />
         </ModalBody>
       </ModalContent>
