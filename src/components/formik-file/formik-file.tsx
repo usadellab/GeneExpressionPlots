@@ -68,7 +68,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
       as="p"
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
     >
-      <FormLabel>{label}</FormLabel>
+      <FormLabel fontWeight="semibold">{label}</FormLabel>
 
       {/*
         Visible Read-Only Text Input
