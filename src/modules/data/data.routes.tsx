@@ -1,17 +1,16 @@
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import DataLayout from '@/layouts/data-layout';
-import DataPage from './data-page';
+import DataPage from './data-home';
+import FilesPage from './data-files';
 
 const DataRoutes: React.FC = () => {
   const { path } = useRouteMatch();
 
   return (
-    <DataLayout>
-      <Switch>
-        <Route exact path={path} component={DataPage} />
-      </Switch>
-    </DataLayout>
+    <Switch>
+      <Route exact path={path} component={DataPage} />
+      <Route exact path={path + '/files'} component={FilesPage} />
+    </Switch>
   );
 };
 
