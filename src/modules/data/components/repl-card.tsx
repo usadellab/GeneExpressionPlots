@@ -1,11 +1,22 @@
 import React from 'react';
 import { FaBackspace } from 'react-icons/fa';
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Button, Checkbox, Flex, Text } from '@chakra-ui/react';
 import { dataTable } from '@/store/data-store';
 
-const ReplicateCard: React.FC<{ name: string }> = (props) => {
-  const deleteReplicate = (name: string) => () => {
-    dataTable.removeColumn(name);
+interface ReplicateCardProps {
+  name: string;
+  onSelect?: (name: string, checked: boolean) => void;
+}
+
+const ReplicateCard: React.FC<ReplicateCardProps> = (props) => {
+  const deleteReplicate = (): void => {
+    dataTable.removeColumn(props.name);
+  };
+
+  const selectReplicate: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    if (props.onSelect) props.onSelect(props.name, event.target.checked);
   };
 
   return (
@@ -18,14 +29,17 @@ const ReplicateCard: React.FC<{ name: string }> = (props) => {
       role="group"
       width="100%"
     >
-      <Text fontWeight="semibold">{props.name}</Text>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Text fontWeight="semibold">{props.name}</Text>
+        <Checkbox onChange={selectReplicate} />
+      </Flex>
       <Button
         _groupHover={{
           diplay: 'flex',
         }}
         color="red.600"
         marginTop=".5rem"
-        onClick={deleteReplicate(props.name)}
+        onClick={deleteReplicate}
         rightIcon={<FaBackspace />}
         size="sm"
         variant="ghost"

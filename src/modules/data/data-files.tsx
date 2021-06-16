@@ -28,11 +28,32 @@ const FilesPage: React.FC = () => {
     onClose: onXTableClose,
   } = useDisclosure();
 
+  const [selectedReplicates, setSelectedReplicates] = React.useState<string[]>(
+    []
+  );
+
   const replCardWidth = useBreakpointValue({
     base: '100%',
     lg: '45%',
     xl: '30%',
   });
+
+  const bulkRemoveReplicates = (): void => {
+    if (selectedReplicates.length > 0) {
+      selectedReplicates.forEach((repl) => dataTable.removeColumn(repl));
+      setSelectedReplicates([]);
+    } else {
+      dataTable.clearData();
+    }
+  };
+
+  const updateSelectedReplicates = (name: string, checked: boolean): void => {
+    if (checked) {
+      setSelectedReplicates([...selectedReplicates, name]);
+    } else {
+      setSelectedReplicates(selectedReplicates.filter((repl) => repl !== name));
+    }
+  };
 
   return (
     <Flex flexGrow={1}>
@@ -47,7 +68,15 @@ const FilesPage: React.FC = () => {
             <SidebarButton text="Load Gene Info Table" icon={FaFileAlt} />
             <SidebarFile text="Import GXP Database" icon={FaFileImport} />
             <SidebarButton text="Export GXP Database" icon={FaFileExport} />
-            <SidebarButton text="Remove All Data" icon={FaTrashAlt} />
+            <SidebarButton
+              text={
+                selectedReplicates.length > 0
+                  ? 'Remove selected'
+                  : 'Remove All Data'
+              }
+              icon={FaTrashAlt}
+              onClick={bulkRemoveReplicates}
+            />
           </Sidebar>
         </chakra.div>
       </SlideFade>
@@ -61,7 +90,10 @@ const FilesPage: React.FC = () => {
         <Wrap spacing="1rem" justify="center">
           {dataTable.colNames.map((replicateName) => (
             <WrapItem key={replicateName} width={replCardWidth}>
-              <ReplCard name={replicateName} />
+              <ReplCard
+                name={replicateName}
+                onSelect={updateSelectedReplicates}
+              />
             </WrapItem>
           ))}
         </Wrap>
