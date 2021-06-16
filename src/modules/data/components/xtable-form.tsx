@@ -18,19 +18,25 @@ export interface XTableFormAttributes {
   file?: File | null;
 }
 
+export type XTableFormSubmitHandler = (
+  values: XTableFormAttributes,
+  actions: FormikHelpers<XTableFormAttributes>
+) => void;
+
 export interface XTableFormProps {
   initialRef?: React.MutableRefObject<FocusableElement | null>;
   onCancel?: () => void;
-  onSubmit: (
-    values: XTableFormAttributes,
-    actions: FormikHelpers<XTableFormAttributes>
-  ) => void;
+  onSubmit: XTableFormSubmitHandler;
   children?:
     | React.ReactNode
     | ((formProps: FormikProps<XTableFormAttributes>) => React.ReactNode);
 }
 
 const ModalXTable: React.FC<XTableFormProps> = (props) => {
+  const validateFileInput: FieldValidator = (value: File) => {
+    if (!value) return 'A file input is required';
+  };
+
   const validateSeparator: FieldValidator = (value: string) => {
     let error;
 
@@ -74,15 +80,22 @@ const ModalXTable: React.FC<XTableFormProps> = (props) => {
             name="headerSep"
             label="Header Separator"
             validate={validateSeparator}
+            isRequired
           />
 
           <FormikField
             name="columnSep"
             label="Column Separator"
             validate={validateSeparator}
+            isRequired
           />
 
-          <FormikFile name="file" label="Tabular File" />
+          <FormikFile
+            name="file"
+            label="Tabular File"
+            validate={validateFileInput}
+            isRequired
+          />
 
           {!props.children ? (
             <Flex as="p" paddingY={6} justifyContent="flex-end">
