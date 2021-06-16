@@ -10,6 +10,12 @@ export interface InputFileProps extends InputProps {
 const InputFile: React.FC<InputFileProps> = ({ icon, text, ...inputProps }) => {
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
+  const activateOnMouseDown: React.MouseEventHandler<HTMLLabelElement> = (
+    event
+  ) => {
+    event.preventDefault();
+  };
+
   const activateOnKeyDown: React.KeyboardEventHandler<HTMLLabelElement> = (
     event
   ) => {
@@ -34,6 +40,9 @@ const InputFile: React.FC<InputFileProps> = ({ icon, text, ...inputProps }) => {
       textColor="gray.600"
       onKeyDown={
         activateOnKeyDown as unknown as React.KeyboardEventHandler<HTMLDivElement>
+      }
+      onMouseDown={
+        activateOnMouseDown as unknown as React.MouseEventHandler<HTMLDivElement>
       }
     >
       <Input
