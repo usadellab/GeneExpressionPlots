@@ -27,31 +27,38 @@ const ReplicateCard: React.FC<ReplicateCardProps> = ({
     <Box
       _focus={{
         outline: 'none',
-        border: '1px',
         borderColor: 'orange.600',
       }}
       _focusWithin={{
-        border: '1px',
         borderColor: 'orange.600',
       }}
+      _hover={{
+        borderColor: 'orange.600',
+      }}
+      border="1px"
+      borderColor="transparent"
       as="section"
       backgroundColor="white"
       boxShadow="md"
       maxWidth="container.md"
       padding="1.5rem"
       role="group"
-      tabIndex={0}
       width="100%"
       {...props}
     >
       <Flex alignItems="center" justifyContent="space-between">
         <Text fontWeight="semibold">{name}</Text>
-        <Checkbox onChange={selectReplicate} />
+        <Checkbox
+          aria-label={`Add ${name} to selection`}
+          colorScheme="orange"
+          onChange={selectReplicate}
+        />
       </Flex>
       <Button
         _groupHover={{
           diplay: 'flex',
         }}
+        aria-label={`Delete ${name}`}
         color="red.600"
         marginTop=".5rem"
         onClick={deleteReplicate}
