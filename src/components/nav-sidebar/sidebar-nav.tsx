@@ -22,6 +22,8 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
     <MotionBox
       as="header"
       backgroundColor="white"
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
       // Animation props
       initial={{ x: -20 }}
       animate={{ x: 0 }}
@@ -33,15 +35,15 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
             width: props.maxWidth ?? '15rem',
           }}
           as="section"
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
           overflowX="hidden"
           paddingY="1rem"
           position="sticky"
           transitionProperty="width"
           transitionDuration="0.2s"
           transitionTimingFunction="linear forwards"
-          width={isOpen ? props.maxWidth ?? '15rem' : '4.5rem'}
+          width={
+            isOpen ? props.maxWidth ?? '15rem' : props.minWidth ?? '4.5rem'
+          }
         >
           {props.children}
         </Stack>
