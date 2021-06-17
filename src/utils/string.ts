@@ -11,11 +11,12 @@ export function escapeRegExp(regexpString: string): string {
 }
 
 /**
- * Remove leading backslashes from known string separator characters.
+ * Remove one leading backslash from the string representation of a
+ * separator character.
  *
  * Currently supported characters:
- *  - `\t` (tab)
- *  - `\s` (whitespace)
+ *  - `\\t` (escaped tab)
+ *  - `\\s` (escaped whitespace)
  *
  * @param charString input string to be unescaped
  * @returns the unescaped delimiter
@@ -29,6 +30,29 @@ export function unescapeDelimiters(charString: string): string {
       case '\\s':
         return 's';
 
+      default:
+        return match;
+    }
+  });
+}
+
+/**
+ * Add an additional leading backslash to string separator characters.
+ *
+ * Currently supported characters:
+ *  - `\t` (tab)
+ *  - `\s` (whitespace)
+ *
+ * @param char character to be escaped
+ * @returns the escaped delimiter
+ */
+export function escapeDelimiters(char: string): string {
+  return char.replace(/\t|\s/, (match) => {
+    switch (match) {
+      case '\t':
+        return '\\t';
+      case ' ':
+        return '\\s';
       default:
         return match;
     }

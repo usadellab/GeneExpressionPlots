@@ -1,5 +1,6 @@
 import FormikField from '@/components/formik-field';
 import { settings } from '@/store/settings';
+import { escapeDelimiters } from '@/utils/string';
 import { Box, Flex, Button } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import {
@@ -52,7 +53,7 @@ const ExportGXPForm: React.FC<ExportGXPFormProps> = (props) => {
   return (
     <Formik
       initialValues={{
-        columnSep: settings.gxpSettings.expression_field_sep,
+        columnSep: escapeDelimiters(settings.gxpSettings.expression_field_sep),
         fileName: 'GXP_Database',
       }}
       onSubmit={props.onSubmit}
