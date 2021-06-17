@@ -60,7 +60,7 @@ const ExportGXPForm: React.FC<ExportGXPFormProps> = (props) => {
       {(formProps) => (
         <Box
           as={Form}
-          id="load-xtable"
+          id="export-gxp-db"
           sx={{
             '& p:not(:first-of-type)': {
               marginTop: '1rem',
