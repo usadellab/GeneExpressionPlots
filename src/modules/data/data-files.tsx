@@ -1,3 +1,4 @@
+import JSZip from 'jszip';
 import { observer } from 'mobx-react';
 import React from 'react';
 import {
@@ -17,10 +18,12 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
-import Sidebar, { SidebarButton, SidebarFile } from '@/components/nav-sidebar';
+import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
-import InfoForm, { InfoFormSubmitHandler } from './components/info-form';
 import ReplCard from './components/repl-card';
+
+import DbForm, { DbFormSubmitHandler } from './components/db-form';
+import InfoForm, { InfoFormSubmitHandler } from './components/info-form';
 import XTableForm, { XTableFormSubmitHandler } from './components/xtable-form';
 
 import { dataTable } from '@/store/data-store';
@@ -52,15 +55,15 @@ const FilesPage: React.FC = () => {
 
   /* LOAD EXPRESSION TABLE */
 
+  const refXTableInitialFocus = React.useRef<FocusableElement | null>(null);
+
   const {
-    isOpen: xTableOpen,
+    isOpen: isXTableOpen,
     onOpen: onXTableOpen,
     onClose: onXTableClose,
   } = useDisclosure();
 
-  const xTableInitialFocusRef = React.useRef<FocusableElement | null>(null);
-
-  const xTableFormSubmit: XTableFormSubmitHandler = (values, actions) => {
+  const onXTableFormSubmit: XTableFormSubmitHandler = (values, actions) => {
     plotStore.loadCountUnit(values.countUnit);
 
     settings.loadgxpSettings({
@@ -112,15 +115,15 @@ const FilesPage: React.FC = () => {
 
   /* LOAD GENE-INFO TABLE */
 
+  const refInfoTableInitialFocus = React.useRef<FocusableElement | null>(null);
+
   const {
-    isOpen: infoTableOpen,
+    isOpen: isInfoTableOpen,
     onOpen: onInfoTableOpen,
     onClose: onInfoTableClose,
   } = useDisclosure();
 
-  const infoTableInitialFocusRef = React.useRef<FocusableElement | null>(null);
-
-  const infoTableFormSubmit: InfoFormSubmitHandler = (values, actions) => {
+  const onInfoTableFormSubmit: InfoFormSubmitHandler = (values, actions) => {
     const file = values.file;
 
     if (file) {
@@ -160,6 +163,86 @@ const FilesPage: React.FC = () => {
     }
   };
 
+  /* IMPORT GXP DATABASE */
+
+  const refGXPDbInitialFocus = React.useRef<FocusableElement | null>(null);
+
+  const {
+    isOpen: isGXPDbOpen,
+    onOpen: onGXPDbOpen,
+    onClose: onGXPDbClose,
+  } = useDisclosure();
+
+  const onGXPDbFormSubmit: DbFormSubmitHandler = async (values, actions) => {
+    // Get the file ref
+    const file = values.file;
+
+    if (file) {
+      try {
+        const zip = new JSZip();
+        const zipImport = await zip.loadAsync(file);
+
+        // Unpack and load GXP settings
+        const gxpSettingsPtr = zipImport.files['GXP_settings.json'];
+        const gxpSettingsSrc = await gxpSettingsPtr.async('string');
+        const gxpSettingsJSON = JSON.parse(gxpSettingsSrc);
+        settings.loadgxpSettings(gxpSettingsJSON);
+
+        // Unpack and load the expression table
+        const expressionTablePtr = zipImport.files['expression_table.txt'];
+        const expressionTableSrc = await expressionTablePtr.async('string');
+        const expressionTable = readTable(expressionTableSrc, {
+          fieldSeparator: settings.gxpSettings.expression_field_sep,
+          rowNameColumn: 0,
+        });
+        dataTable.loadFromObject(expressionTable, {
+          multiHeader: settings.gxpSettings.expression_header_sep,
+        });
+
+        // If not defined by the user, set the default GXP database group and
+        // sample order
+        if (
+          !settings.gxpSettings.groupOrder ||
+          settings.gxpSettings.groupOrder.length === 0
+        ) {
+          const groupOrder = dataTable.groupsAsArray;
+          settings.setGroupOrder(groupOrder);
+        }
+        if (
+          !settings.gxpSettings.sampleOrder ||
+          settings.gxpSettings.sampleOrder.length === 0
+        ) {
+          const sampleOrder = dataTable.samplesAsArray;
+          settings.setSampleOrder(sampleOrder);
+        }
+
+        // Unpack and load the gene info file, if it exists
+        const infoFilePtr = zipImport.files['info_table.txt'];
+        if (infoFilePtr) {
+          const geneInfoSrc = await infoFilePtr.async('string');
+          const geneInfoTable = readTable(geneInfoSrc, {
+            fieldSeparator: settings.gxpSettings.info_field_sep,
+            rowNameColumn: 0,
+          });
+          infoTable.loadFromObject(geneInfoTable, null);
+        }
+
+        // Unpack and load the image file, if it exists
+        const imageFilePtr = zipImport.files['image.png'];
+        if (imageFilePtr) {
+          const imgsrc = await imageFilePtr.async('base64');
+          plotStore.loadImage('data:image/png;base64, ' + imgsrc);
+        }
+
+        actions.setSubmitting(false);
+        onGXPDbClose();
+      } catch (error) {
+        actions.setSubmitting(false);
+        console.error(error.message);
+      }
+    }
+  };
+
   /* REMOVE DATA */
 
   const bulkRemoveReplicates = (): void => {
@@ -188,7 +271,11 @@ const FilesPage: React.FC = () => {
               onClick={onInfoTableOpen}
             />
 
-            <SidebarFile text="Import GXP Database" icon={FaFileImport} />
+            <SidebarButton
+              text="Import GXP Database"
+              icon={FaFileImport}
+              onClick={onGXPDbOpen}
+            />
 
             <SidebarButton text="Export GXP Database" icon={FaFileExport} />
 
@@ -224,28 +311,41 @@ const FilesPage: React.FC = () => {
       </Flex>
 
       <FormikModal
-        initialFocusRef={xTableInitialFocusRef}
-        isOpen={xTableOpen}
+        initialFocusRef={refXTableInitialFocus}
+        isOpen={isXTableOpen}
         onClose={onXTableClose}
         title="Load Expression Table"
       >
         <XTableForm
-          initialFocusRef={xTableInitialFocusRef}
+          initialFocusRef={refXTableInitialFocus}
           onCancel={onXTableClose}
-          onSubmit={xTableFormSubmit}
+          onSubmit={onXTableFormSubmit}
         />
       </FormikModal>
 
       <FormikModal
-        initialFocusRef={infoTableInitialFocusRef}
-        isOpen={infoTableOpen}
+        initialFocusRef={refInfoTableInitialFocus}
+        isOpen={isInfoTableOpen}
         onClose={onInfoTableClose}
         title="Load Gene-Info Table"
       >
         <InfoForm
-          initialRef={infoTableInitialFocusRef}
+          initialFocusRef={refInfoTableInitialFocus}
           onCancel={onInfoTableClose}
-          onSubmit={infoTableFormSubmit}
+          onSubmit={onInfoTableFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refGXPDbInitialFocus}
+        isOpen={isGXPDbOpen}
+        onClose={onGXPDbClose}
+        title="Import GXP Database"
+      >
+        <DbForm
+          initialFocusRef={refGXPDbInitialFocus}
+          onCancel={onGXPDbClose}
+          onSubmit={onGXPDbFormSubmit}
         />
       </FormikModal>
     </Flex>
