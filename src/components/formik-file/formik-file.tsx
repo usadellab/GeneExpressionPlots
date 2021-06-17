@@ -97,6 +97,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
       <Input
         ref={(ref) => (fileInputRef.current = ref)}
         hidden
+        id={`hidden-${field.name}`}
         name={`hidden-${field.name}`}
         type="file"
         onChange={setFormikValue}
