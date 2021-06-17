@@ -1,12 +1,10 @@
 import React from 'react';
 import { IconType } from 'react-icons';
-import { Flex, Icon, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Icon, SpaceProps, Text } from '@chakra-ui/react';
 
-export interface SidebarButtonProps {
+export interface SidebarButtonProps extends Omit<FlexProps, 'onClick'> {
   /** @type link icon */
   icon: IconType;
-  /** @type link text */
-  text: string;
   /** @type on activation callback */
   onClick?: <
     T extends
@@ -15,21 +13,31 @@ export interface SidebarButtonProps {
   >(
     event: T
   ) => void;
+  /** @type link text */
+  text: string;
+  /** @type spacing between the icon and text */
+  textGap?: SpaceProps['marginLeft'];
 }
 
-const SidebarButton: React.FC<SidebarButtonProps> = (props) => {
+const SidebarButton: React.FC<SidebarButtonProps> = ({
+  icon,
+  onClick,
+  text,
+  textGap,
+  ...props
+}) => {
   const activateOnMouseDown: React.MouseEventHandler<HTMLButtonElement> = (
     event
   ) => {
     event.preventDefault();
-    if (event.button === 0 && props.onClick) props.onClick(event);
+    if (event.button === 0 && onClick) onClick(event);
   };
 
   const activateOnKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (
     event
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      if (props.onClick) props.onClick(event);
+      if (onClick) onClick(event);
     }
   };
 
@@ -54,10 +62,11 @@ const SidebarButton: React.FC<SidebarButtonProps> = (props) => {
       onMouseDown={
         activateOnMouseDown as unknown as React.MouseEventHandler<HTMLDivElement>
       }
+      {...props}
     >
-      <Icon as={props.icon} width={6} height={6} />
-      <Text fontWeight="semibold" marginLeft={6} whiteSpace="nowrap">
-        {props.text}
+      <Icon as={icon} width={6} height={6} />
+      <Text fontWeight="semibold" marginLeft={textGap ?? 6} whiteSpace="nowrap">
+        {text}
       </Text>
     </Flex>
   );
