@@ -38,6 +38,7 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
           overflowX="hidden"
           paddingY="1rem"
           position="sticky"
+          top={0}
           transitionProperty="width"
           transitionDuration="0.2s"
           transitionTimingFunction="linear forwards"

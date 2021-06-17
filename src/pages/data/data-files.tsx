@@ -317,7 +317,7 @@ const DataFiles: React.FC = () => {
 
   return (
     <Flex as="main" flexGrow={1}>
-      <Sidebar top={0} maxWidth="17rem">
+      <Sidebar maxWidth="17rem">
         <SidebarButton
           text="Load Expression Table"
           icon={FaFile}
