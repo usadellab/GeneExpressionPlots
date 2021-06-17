@@ -11,25 +11,25 @@ import {
 } from 'formik';
 import React from 'react';
 
-export interface DbFormAttributes {
+export interface ImportGXPFormAttributes {
   file?: File | null;
 }
 
-export type DbFormSubmitHandler = (
-  values: DbFormAttributes,
-  actions: FormikHelpers<DbFormAttributes>
+export type ImportGXPFormSubmitHandler = (
+  values: ImportGXPFormAttributes,
+  actions: FormikHelpers<ImportGXPFormAttributes>
 ) => void;
 
-export interface DbFormProps {
+export interface ImportGXPFormProps {
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   onCancel?: () => void;
-  onSubmit: DbFormSubmitHandler;
+  onSubmit: ImportGXPFormSubmitHandler;
   children?:
     | React.ReactNode
-    | ((formProps: FormikProps<DbFormAttributes>) => React.ReactNode);
+    | ((formProps: FormikProps<ImportGXPFormAttributes>) => React.ReactNode);
 }
 
-const DbForm: React.FC<DbFormProps> = (props) => {
+const ImportGXPForm: React.FC<ImportGXPFormProps> = (props) => {
   const validateFileInput: FieldValidator = async (value: File) => {
     if (!value) return 'A file input is required';
 
@@ -58,6 +58,7 @@ const DbForm: React.FC<DbFormProps> = (props) => {
           }}
         >
           <FormikFile
+            initialFocusRef={props.initialFocusRef}
             name="file"
             label="Tabular File"
             validate={validateFileInput}
@@ -76,7 +77,7 @@ const DbForm: React.FC<DbFormProps> = (props) => {
                 type="submit"
                 variant="solid"
               >
-                Load
+                Import
               </Button>
             </Flex>
           ) : typeof props.children === 'function' ? (
@@ -90,4 +91,4 @@ const DbForm: React.FC<DbFormProps> = (props) => {
   );
 };
 
-export default DbForm;
+export default ImportGXPForm;

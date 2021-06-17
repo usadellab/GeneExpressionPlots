@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -22,7 +23,12 @@ import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
 import ReplCard from './components/repl-card';
 
-import DbForm, { DbFormSubmitHandler } from './components/db-form';
+import ExportGXPForm, {
+  ExportGXPFormSubmitHandler,
+} from './components/export-form';
+import ImportGXPForm, {
+  ImportGXPFormSubmitHandler,
+} from './components/import-form';
 import InfoForm, { InfoFormSubmitHandler } from './components/info-form';
 import XTableForm, { XTableFormSubmitHandler } from './components/xtable-form';
 
@@ -165,15 +171,18 @@ const FilesPage: React.FC = () => {
 
   /* IMPORT GXP DATABASE */
 
-  const refGXPDbInitialFocus = React.useRef<FocusableElement | null>(null);
+  const refGXPImportInitialFocus = React.useRef<FocusableElement | null>(null);
 
   const {
-    isOpen: isGXPDbOpen,
-    onOpen: onGXPDbOpen,
-    onClose: onGXPDbClose,
+    isOpen: isGXPImportOpen,
+    onOpen: onGXPImportOpen,
+    onClose: onGXPImportClose,
   } = useDisclosure();
 
-  const onGXPDbFormSubmit: DbFormSubmitHandler = async (values, actions) => {
+  const onGXPImportFormSubmit: ImportGXPFormSubmitHandler = async (
+    values,
+    actions
+  ) => {
     // Get the file ref
     const file = values.file;
 
@@ -235,11 +244,65 @@ const FilesPage: React.FC = () => {
         }
 
         actions.setSubmitting(false);
-        onGXPDbClose();
+        onGXPImportClose();
       } catch (error) {
         actions.setSubmitting(false);
         console.error(error.message);
       }
+    }
+  };
+
+  /* EXPORT GXP DATABASE */
+
+  const refGXPDbExportInitialFocus = React.useRef<FocusableElement | null>(
+    null
+  );
+
+  const {
+    isOpen: isGXPExportOpen,
+    onOpen: onGXPExportOpen,
+    onClose: onGXPExportClose,
+  } = useDisclosure();
+
+  const onGXPExportFormSubmit: ExportGXPFormSubmitHandler = async (
+    values,
+    actions
+  ) => {
+    console.log({ values });
+    try {
+      // Generate source data
+      const geneExpressionSrc = dataTable.dataFrametoString(values.columnSep);
+      const geneInfoSrc = infoTable.hasData
+        ? infoTable.dataFrametoString(settings.gxpSettings.info_field_sep)
+        : null;
+      const imageSrc = plotStore.image?.split('base64,')[1];
+      const gxpSettingsSrc = JSON.stringify(
+        Object.assign({}, settings.gxpSettings, {
+          expression_field_sep: unescapeDelimiters(values.columnSep),
+        }),
+        null,
+        2
+      );
+
+      // Package as a zip file
+      const zip = new JSZip();
+      zip.file('GXP_settings.json', gxpSettingsSrc);
+      zip.file('expression_table.txt', geneExpressionSrc);
+      if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
+      if (imageSrc) zip.file('image.png', imageSrc, { base64: true });
+
+      zip
+        .generateAsync({ type: 'blob' })
+        .then((zipFile) => {
+          saveAs(zipFile, values.fileName + '.zip');
+        })
+        .finally(() => {
+          actions.setSubmitting(false);
+          onGXPExportClose();
+        });
+    } catch (error) {
+      actions.setSubmitting(false);
+      console.error(error);
     }
   };
 
@@ -274,10 +337,14 @@ const FilesPage: React.FC = () => {
             <SidebarButton
               text="Import GXP Database"
               icon={FaFileImport}
-              onClick={onGXPDbOpen}
+              onClick={onGXPImportOpen}
             />
 
-            <SidebarButton text="Export GXP Database" icon={FaFileExport} />
+            <SidebarButton
+              text="Export GXP Database"
+              icon={FaFileExport}
+              onClick={onGXPExportOpen}
+            />
 
             <SidebarButton
               text={
@@ -291,6 +358,7 @@ const FilesPage: React.FC = () => {
           </Sidebar>
         </chakra.div>
       </SlideFade>
+
       <Flex
         as="main"
         alignItems="center"
@@ -337,15 +405,28 @@ const FilesPage: React.FC = () => {
       </FormikModal>
 
       <FormikModal
-        initialFocusRef={refGXPDbInitialFocus}
-        isOpen={isGXPDbOpen}
-        onClose={onGXPDbClose}
+        initialFocusRef={refGXPImportInitialFocus}
+        isOpen={isGXPImportOpen}
+        onClose={onGXPImportClose}
         title="Import GXP Database"
       >
-        <DbForm
-          initialFocusRef={refGXPDbInitialFocus}
-          onCancel={onGXPDbClose}
-          onSubmit={onGXPDbFormSubmit}
+        <ImportGXPForm
+          initialFocusRef={refGXPImportInitialFocus}
+          onCancel={onGXPImportClose}
+          onSubmit={onGXPImportFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refGXPDbExportInitialFocus}
+        isOpen={isGXPExportOpen}
+        onClose={onGXPExportClose}
+        title="Export GXP Database"
+      >
+        <ExportGXPForm
+          initialFocusRef={refGXPDbExportInitialFocus}
+          onCancel={onGXPExportClose}
+          onSubmit={onGXPExportFormSubmit}
         />
       </FormikModal>
     </Flex>
