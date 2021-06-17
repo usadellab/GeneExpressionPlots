@@ -279,18 +279,17 @@ export class Dataframe {
     this.rows = {};
   }
 
-  removeColumn(colName) {
-    // Retrieve the column-to-delete index
-    const colIndex = this.colNames.find((name) => name === colName);
+  removeColumns(...colNames) {
+    // Compose a new header array, without the matching columns
+    const cols = this.colNames.filter((name) => !colNames.includes(name));
 
-    // Compose a new header array, without the matching column
-    const cols = this.colNames.filter((name) => name !== colName);
-
-    // Compose a new rows object, without the matching column
+    // Compose a new rows object, without the matching columns
+    const colIndexes = this.colNames.find((name) => colNames.includes(name));
+    const colSet = new Set(colIndexes);
     const rows = Object.fromEntries(
       Object.entries(this.rows).map(([rowName, rowValues]) => [
         rowName,
-        rowValues.filter((value, index) => index !== colIndex),
+        rowValues.filter((value, index) => !colSet.has(index)),
       ])
     );
 

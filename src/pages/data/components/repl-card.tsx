@@ -14,7 +14,7 @@ const ReplicateCard: React.FC<ReplicateCardProps> = ({
   ...props
 }) => {
   const deleteReplicate = (): void => {
-    dataTable.removeColumn(name);
+    dataTable.removeColumns(name);
   };
 
   const selectReplicate: React.ChangeEventHandler<HTMLInputElement> = (

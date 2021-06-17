@@ -308,7 +308,7 @@ const DataFiles: React.FC = () => {
 
   const bulkRemoveReplicates = (): void => {
     if (selectedReplicates.length > 0) {
-      selectedReplicates.forEach((repl) => dataTable.removeColumn(repl));
+      dataTable.removeColumns(...selectedReplicates);
       setSelectedReplicates([]);
     } else {
       dataTable.clearData();
