@@ -22,7 +22,7 @@ export type InfoFormSubmitHandler = (
 ) => void;
 
 export interface InfoFormProps {
-  initialRef?: React.MutableRefObject<FocusableElement | null>;
+  initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   onCancel?: () => void;
   onSubmit: InfoFormSubmitHandler;
   children?:
@@ -59,7 +59,7 @@ const InfoForm: React.FC<InfoFormProps> = (props) => {
       {(formProps) => (
         <Box
           as={Form}
-          id="load-xtable"
+          id="load-gene-info-table"
           sx={{
             '& p:not(:first-of-type)': {
               marginTop: '1rem',
@@ -67,6 +67,7 @@ const InfoForm: React.FC<InfoFormProps> = (props) => {
           }}
         >
           <FormikField
+            initialFocusRef={props.initialFocusRef}
             name="columnSep"
             label="Column Separator"
             validate={validateSeparator}

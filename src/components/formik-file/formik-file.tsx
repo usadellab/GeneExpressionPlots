@@ -10,14 +10,14 @@ import {
 import { FocusableElement } from '@chakra-ui/utils';
 
 interface FormikFieldProps extends InputProps {
-  initialRef?: React.MutableRefObject<FocusableElement | null>;
+  initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   name: string;
   label: string;
   validate?: FieldValidator;
 }
 
 const FormikField: React.FC<FormikFieldProps> = ({
-  initialRef,
+  initialFocusRef,
   name,
   label,
   validate,
@@ -79,9 +79,9 @@ const FormikField: React.FC<FormikFieldProps> = ({
         - On click, we trigger the click() event of the hidden input below.
       */}
       <Input
-        ref={(ref) => (initialRef ? (initialRef.current = ref) : ref)}
         {...field}
         {...props}
+        ref={(ref) => (initialFocusRef ? (initialFocusRef.current = ref) : ref)}
         onMouseDown={onMouseDownTriggerInputClick}
         onKeyDown={onKeyDownTriggerInputClick}
         placeholder="Select a file to load"

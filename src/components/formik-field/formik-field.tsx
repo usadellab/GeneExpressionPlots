@@ -10,14 +10,14 @@ import {
 import { FocusableElement } from '@chakra-ui/utils';
 
 interface FormikFieldProps extends InputProps {
-  initialRef?: React.MutableRefObject<FocusableElement | null>;
+  initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   name: string;
   label: string;
   validate?: FieldValidator;
 }
 
 const FormikField: React.FC<FormikFieldProps> = ({
-  initialRef,
+  initialFocusRef,
   name,
   label,
   validate,
@@ -36,9 +36,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
     >
       <FormLabel fontWeight="semibold">{label}</FormLabel>
       <Input
-        ref={(inputRef) =>
-          initialRef ? (initialRef.current = inputRef) : inputRef
-        }
+        ref={(ref) => (initialFocusRef ? (initialFocusRef.current = ref) : ref)}
         name={field.name}
         onBlur={field.onBlur}
         onChange={field.onChange}

@@ -73,7 +73,7 @@ const XTableForm: React.FC<XTableFormProps> = (props) => {
           <FormikField
             name="countUnit"
             label="Count Unit"
-            initialRef={props.initialFocusRef}
+            initialFocusRef={props.initialFocusRef}
           />
 
           <FormikField
