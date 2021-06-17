@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import PlotsHome from './modules/plotly/PlotsHome';
 import ToolsModule from './modules/tools/ToolsModule';
-import DataRoutes from './modules/data/data.routes';
+import DataRoutes from './pages/data/data-routes';
 
 const AppRoutes: React.FC = () => {
   return (
