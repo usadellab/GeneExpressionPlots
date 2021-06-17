@@ -24,7 +24,7 @@ export type XTableFormSubmitHandler = (
 ) => void;
 
 export interface XTableFormProps {
-  initialRef?: React.MutableRefObject<FocusableElement | null>;
+  initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   onCancel?: () => void;
   onSubmit: XTableFormSubmitHandler;
   children?:
@@ -32,7 +32,7 @@ export interface XTableFormProps {
     | ((formProps: FormikProps<XTableFormAttributes>) => React.ReactNode);
 }
 
-const ModalXTable: React.FC<XTableFormProps> = (props) => {
+const XTableForm: React.FC<XTableFormProps> = (props) => {
   const validateFileInput: FieldValidator = (value: File) => {
     if (!value) return 'A file input is required';
   };
@@ -73,7 +73,7 @@ const ModalXTable: React.FC<XTableFormProps> = (props) => {
           <FormikField
             name="countUnit"
             label="Count Unit"
-            initialRef={props.initialRef}
+            initialRef={props.initialFocusRef}
           />
 
           <FormikField
@@ -123,7 +123,7 @@ const ModalXTable: React.FC<XTableFormProps> = (props) => {
   );
 };
 
-export default ModalXTable;
+export default XTableForm;
 
 {
   /* <FormControl>

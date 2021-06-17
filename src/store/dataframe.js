@@ -35,7 +35,7 @@ export class Dataframe {
   /**
    * Load the dataframe with an already parsed table.
    * @param {TableObject}     table
-   * @param {DataframeConfig | undefined} config
+   * @param {DataframeConfig | null} config
    */
   loadFromObject(table, config) {
     Object.assign(this.config, config);
