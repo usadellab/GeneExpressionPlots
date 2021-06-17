@@ -10,9 +10,7 @@ import {
   FaTrashAlt,
 } from 'react-icons/fa';
 import {
-  chakra,
   Flex,
-  SlideFade,
   useDisclosure,
   Wrap,
   WrapItem,
@@ -318,46 +316,42 @@ const DataFiles: React.FC = () => {
   };
 
   return (
-    <Flex flexGrow={1}>
-      <SlideFade initial={{ x: -20 }} animate={{ x: 0 }} exit={{ x: -20 }}>
-        <chakra.div boxShadow="xl" height="100%" backgroundColor="white">
-          <Sidebar position="sticky" top={0} maxWidth="17rem" paddingY="1rem">
-            <SidebarButton
-              text="Load Expression Table"
-              icon={FaFile}
-              onClick={onXTableOpen}
-            />
+    <Flex as="main" flexGrow={1}>
+      <Sidebar top={0} maxWidth="17rem">
+        <SidebarButton
+          text="Load Expression Table"
+          icon={FaFile}
+          onClick={onXTableOpen}
+        />
 
-            <SidebarButton
-              text="Load Gene Info Table"
-              icon={FaFileAlt}
-              onClick={onInfoTableOpen}
-            />
+        <SidebarButton
+          text="Load Gene Info Table"
+          icon={FaFileAlt}
+          onClick={onInfoTableOpen}
+        />
 
-            <SidebarButton
-              text="Import GXP Database"
-              icon={FaFileImport}
-              onClick={onGXPImportOpen}
-            />
+        <SidebarButton
+          text="Import GXP Database"
+          icon={FaFileImport}
+          onClick={onGXPImportOpen}
+        />
 
-            <SidebarButton
-              text="Export GXP Database"
-              icon={FaFileExport}
-              onClick={onGXPExportOpen}
-            />
+        <SidebarButton
+          text="Export GXP Database"
+          icon={FaFileExport}
+          onClick={onGXPExportOpen}
+        />
 
-            <SidebarButton
-              text={
-                selectedReplicates.length > 0
-                  ? 'Remove selected'
-                  : 'Remove All Data'
-              }
-              icon={FaTrashAlt}
-              onClick={bulkRemoveReplicates}
-            />
-          </Sidebar>
-        </chakra.div>
-      </SlideFade>
+        <SidebarButton
+          text={
+            selectedReplicates.length > 0
+              ? 'Remove selected'
+              : 'Remove All Data'
+          }
+          icon={FaTrashAlt}
+          onClick={bulkRemoveReplicates}
+        />
+      </Sidebar>
 
       <Flex
         as="main"
@@ -370,6 +364,8 @@ const DataFiles: React.FC = () => {
           {dataTable.colNames.map((replicateName) => (
             <WrapItem key={replicateName} width={replCardWidth}>
               <ReplCard
+                aria-label={replicateName}
+                key={replicateName}
                 name={replicateName}
                 onSelect={updateSelectedReplicates}
               />

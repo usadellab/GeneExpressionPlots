@@ -1,36 +1,51 @@
 import React from 'react';
 import { FaBackspace } from 'react-icons/fa';
-import { Box, Button, Checkbox, Flex, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Button, Checkbox, Flex, Text } from '@chakra-ui/react';
 import { dataTable } from '@/store/data-store';
 
-interface ReplicateCardProps {
+interface ReplicateCardProps extends Omit<BoxProps, 'onSelect'> {
   name: string;
   onSelect?: (name: string, checked: boolean) => void;
 }
 
-const ReplicateCard: React.FC<ReplicateCardProps> = (props) => {
+const ReplicateCard: React.FC<ReplicateCardProps> = ({
+  name,
+  onSelect,
+  ...props
+}) => {
   const deleteReplicate = (): void => {
-    dataTable.removeColumn(props.name);
+    dataTable.removeColumn(name);
   };
 
   const selectReplicate: React.ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
-    if (props.onSelect) props.onSelect(props.name, event.target.checked);
+    if (onSelect) onSelect(name, event.target.checked);
   };
 
   return (
     <Box
+      _focus={{
+        outline: 'none',
+        border: '1px',
+        borderColor: 'orange.600',
+      }}
+      _focusWithin={{
+        border: '1px',
+        borderColor: 'orange.600',
+      }}
       as="section"
       backgroundColor="white"
       boxShadow="md"
       maxWidth="container.md"
       padding="1.5rem"
       role="group"
+      tabIndex={0}
       width="100%"
+      {...props}
     >
       <Flex alignItems="center" justifyContent="space-between">
-        <Text fontWeight="semibold">{props.name}</Text>
+        <Text fontWeight="semibold">{name}</Text>
         <Checkbox onChange={selectReplicate} />
       </Flex>
       <Button

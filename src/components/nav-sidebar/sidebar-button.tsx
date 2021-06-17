@@ -22,7 +22,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = (props) => {
     event
   ) => {
     event.preventDefault();
-    if (props.onClick) props.onClick(event);
+    if (event.button === 0 && props.onClick) props.onClick(event);
   };
 
   const activateOnKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (
