@@ -40,7 +40,7 @@ import { settings } from '@/store/settings';
 import { readTable } from '@/utils/parser';
 import { unescapeDelimiters } from '@/utils/string';
 
-const FilesPage: React.FC = () => {
+const DataFiles: React.FC = () => {
   const replCardWidth = useBreakpointValue({
     base: '100%',
     lg: '45%',
@@ -433,4 +433,4 @@ const FilesPage: React.FC = () => {
   );
 };
 
-export default observer(FilesPage);
+export default observer(DataFiles);

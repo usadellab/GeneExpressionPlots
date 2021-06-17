@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import NavCard from '@/components/nav-card';
 import { FaFileAlt, FaLayerGroup } from 'react-icons/fa';
 
-const DataPage: React.FC = () => {
+const DataHome: React.FC = () => {
   return (
     <Box
       as="main"
@@ -41,4 +41,4 @@ const DataPage: React.FC = () => {
   );
 };
 
-export default DataPage;
+export default DataHome;
