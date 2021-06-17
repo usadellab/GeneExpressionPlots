@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter } from 'react-router-dom';
 
-import AppRoutes from './app.routes';
+import AppRoutes from './app-routes';
 import AppLayout from './layouts/app-layout';
 
 import { fetchResource } from '@/utils/fetch';
