@@ -30,7 +30,7 @@ const TextIcon = (text: string) =>
 const PlotsHome: React.FC = () => {
   return (
     <Flex as="main" flexGrow={1}>
-      <Sidebar top={0} maxWidth="17rem" minWidth="6rem">
+      <Sidebar top={0} maxWidth="17rem" minWidth="6.5rem">
         <SidebarButton
           text="Bar Plot"
           icon={TextIcon('BAR')}
