@@ -105,7 +105,9 @@ const PlotsHome: React.FC = () => {
         initialFocusRef={refBarsFormInitialFocus}
         isOpen={isBarsFormOpen}
         onClose={onBarsFormClose}
+        size="xl"
         title="Bars Plot"
+        scrollBehavior="outside"
       >
         <BarsForm
           initialFocusRef={refBarsFormInitialFocus}
