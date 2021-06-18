@@ -16,21 +16,14 @@ interface FormikModalProps extends Omit<ModalProps, 'children'> {
   title: string;
 }
 
-const FormikModal: React.FC<FormikModalProps> = (props) => {
+const FormikModal: React.FC<FormikModalProps> = ({ title, ...props }) => {
   const modalSize = useBreakpointValue({ base: 'full', md: 'md' });
 
   return (
-    <Modal
-      initialFocusRef={props.initialFocusRef}
-      finalFocusRef={props.finalFocusRef}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      scrollBehavior="inside"
-      size={modalSize}
-    >
+    <Modal scrollBehavior="inside" size={modalSize} {...props}>
       <ModalOverlay />
       <ModalContent margin={modalSize === 'full' ? 0 : undefined}>
-        <ModalHeader>{props.title}</ModalHeader>
+        <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={0}>{props.children}</ModalBody>
       </ModalContent>
