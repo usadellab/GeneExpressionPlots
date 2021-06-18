@@ -5,6 +5,7 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
+  InputGroup,
   InputProps,
   VisuallyHidden,
 } from '@chakra-ui/react';
@@ -13,8 +14,10 @@ import { FocusableElement } from '@chakra-ui/utils';
 interface FormikFieldProps extends InputProps {
   name: string;
   label: string;
+  leftChildren?: React.ReactNode;
   hideLabel?: boolean;
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
+  rightChildren?: React.ReactNode;
   validate?: FieldValidator;
 }
 
@@ -34,7 +37,6 @@ const FormikField: React.FC<FormikFieldProps> = ({
 
   return (
     <FormControl
-      as="p"
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
       isRequired={props.isRequired}
     >
@@ -45,16 +47,22 @@ const FormikField: React.FC<FormikFieldProps> = ({
       ) : (
         <FormLabel fontWeight="semibold">{label}</FormLabel>
       )}
-      <Input
-        ref={(ref) => (initialFocusRef ? (initialFocusRef.current = ref) : ref)}
-        name={field.name}
-        onBlur={field.onBlur}
-        onChange={field.onChange}
-        multiple={field.multiple}
-        value={field.value}
-        {...props}
-      />
-      {children}
+      <InputGroup>
+        {props.leftChildren}
+        <Input
+          ref={(ref) =>
+            initialFocusRef ? (initialFocusRef.current = ref) : ref
+          }
+          name={field.name}
+          onBlur={field.onBlur}
+          onChange={field.onChange}
+          multiple={field.multiple}
+          value={field.value}
+          {...props}
+        />
+        {children}
+        {props.rightChildren}
+      </InputGroup>
       <FormErrorMessage as="span">{meta.error}</FormErrorMessage>
     </FormControl>
   );
