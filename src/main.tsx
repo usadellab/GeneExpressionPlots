@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import App from './app';
 
-// import './css/tailwind.css';
-// import './css/plotly.css';
+import './css/plotly.css';
 
 ReactDOM.render(
   <React.StrictMode>
