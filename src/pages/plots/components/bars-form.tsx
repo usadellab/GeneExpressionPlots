@@ -15,14 +15,16 @@ import {
   Icon,
   IconButton,
   InputRightAddon,
-  Text,
   VisuallyHidden,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
+import FormikSwitch from '@/components/formik-switch';
 
 export interface BarsFormAttributes {
-  plotTitle: string;
   accessions: string[];
+  plotTitle: string;
+  withCaption: boolean;
+  withLegend: boolean;
 }
 
 export type BarsFormSubmitHandler = (
@@ -41,121 +43,158 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
     if (!value) return 'The accession ID cannot be empty';
   };
 
+  const validateLegend: FieldValidator = (value: boolean) => {
+    if (!value) return 'Legend cannot be false';
+  };
+
   return (
     <Formik
-      initialValues={{ plotTitle: '', accessions: [''] }}
+      initialValues={{
+        accessions: [''],
+        plotTitle: '',
+        withCaption: true,
+        withLegend: true,
+      }}
       onSubmit={props.onSubmit}
     >
       {(formProps) => (
-        <Form>
+        <Box as={Form}>
+          <Box as="fieldset">
+            <VisuallyHidden as="legend">
+              Legend and caption switches
+            </VisuallyHidden>
+
+            <Flex as="ul" listStyleType="none">
+              <FormikSwitch
+                controlProps={{
+                  as: 'li',
+                }}
+                color="orange.600"
+                id="plot-legend"
+                label="Legend"
+                name="withLegend"
+                validate={validateLegend}
+              />
+
+              <FormikSwitch
+                controlProps={{
+                  as: 'li',
+                }}
+                color="orange.600"
+                id="plot-caption"
+                label="Caption"
+                name="withCaption"
+                validate={validateLegend}
+              />
+            </Flex>
+          </Box>
+
           <FormikField
+            controlProps={{
+              as: 'p',
+              marginTop: '1rem',
+            }}
+            initialFocusRef={props.initialFocusRef}
             label="Plot Title"
             name="plotTitle"
-            initialFocusRef={props.initialFocusRef}
           />
+
           <FieldArray name="accessions">
             {(helpers) => (
-              <Box as="section">
-                <VisuallyHidden>
-                  <Text as="h1" fontWeight="semibold">
-                    Gene Accessions
-                  </Text>
-                </VisuallyHidden>
+              <Box as="fieldset">
+                <VisuallyHidden as="legend">Gene Accessions</VisuallyHidden>
+
                 {formProps.values.accessions &&
                   formProps.values.accessions.length > 0 &&
                   formProps.values.accessions.map((accession, index) => (
-                    <Flex
-                      alignItems="center"
-                      key={index}
-                      _first={{
+                    <FormikField
+                      controlProps={{
+                        as: 'p',
                         marginTop: '1rem',
                       }}
-                      paddingBottom="1rem"
-                      role="group"
-                    >
-                      <FormikField
-                        groupProps={{
-                          _focusWithin: {
-                            '& > button': {
-                              display: 'inline-flex',
-                            },
+                      groupProps={{
+                        _focusWithin: {
+                          '& > button': {
+                            display: 'inline-flex',
                           },
+                        },
+                      }}
+                      isRequired
+                      key={index}
+                      label={`Gene Accession ${index + 1}`}
+                      name={`accessions.${index}`}
+                      rightChildren={
+                        formProps.values.accessions.length > 1 && (
+                          <InputRightAddon
+                            _focusWithin={{
+                              backgroundColor: 'white',
+                            }}
+                            _hover={{
+                              backgroundColor: 'white',
+                            }}
+                            as="span"
+                            padding={0}
+                          >
+                            <IconButton
+                              _focus={{
+                                color: 'red.600',
+                                outline: 'none',
+                              }}
+                              _groupHover={{
+                                color: 'red.600',
+                              }}
+                              aria-label={`Remove ${accession}`}
+                              color="gray.600"
+                              display="flex"
+                              justifyContent="center"
+                              icon={<FaTrash />}
+                              onClick={() => helpers.remove(index)}
+                              size="md"
+                              variant="unstyled"
+                            />
+                          </InputRightAddon>
+                        )
+                      }
+                      validate={validateAccession}
+                    >
+                      {/* INSERT BUTTON */}
+                      <Box
+                        display="none"
+                        color="gray.500"
+                        _groupFocus={{
+                          display: 'inline-flex',
                         }}
-                        isRequired
-                        label={`Gene Accession ${index + 1}`}
-                        name={`accessions.${index}`}
-                        rightChildren={
-                          formProps.values.accessions.length > 1 && (
-                            <InputRightAddon
-                              _focusWithin={{
-                                backgroundColor: 'white',
-                              }}
-                              _hover={{
-                                backgroundColor: 'white',
-                              }}
-                              padding={0}
-                            >
-                              <IconButton
-                                _focus={{
-                                  color: 'red.600',
-                                  outline: 'none',
-                                }}
-                                _groupHover={{
-                                  color: 'red.600',
-                                }}
-                                aria-label={`Remove ${accession}`}
-                                color="gray.600"
-                                display="flex"
-                                justifyContent="center"
-                                icon={<FaTrash />}
-                                onClick={() => helpers.remove(index)}
-                                size="md"
-                                variant="unstyled"
-                              />
-                            </InputRightAddon>
-                          )
-                        }
-                        validate={validateAccession}
+                        _groupHover={{
+                          display: 'inline-flex',
+                        }}
+                        _focus={{
+                          backgroundColor: 'orange.600',
+                          color: 'white',
+                          outline: 'none',
+                        }}
+                        _hover={{
+                          backgroundColor: 'orange.600',
+                          color: 'white',
+                        }}
+                        alignItems="center"
+                        as="button"
+                        aria-label={`Insert new below`}
+                        backgroundColor="white"
+                        height="1rem"
+                        justifyContent="center"
+                        left="43%"
+                        padding=".75rem"
+                        position="absolute"
+                        rounded="full"
+                        top="28px"
+                        type="button"
+                        width="1rem"
+                        zIndex="popover"
+                        onClick={() => helpers.insert(index + 1, '')}
                       >
-                        {/* INSERT BUTTON */}
-                        <Box
-                          display="none"
-                          color="gray.500"
-                          _groupFocus={{
-                            display: 'inline-flex',
-                          }}
-                          _groupHover={{
-                            display: 'inline-flex',
-                          }}
-                          _focus={{
-                            backgroundColor: 'orange.600',
-                            color: 'white',
-                            outline: 'none',
-                          }}
-                          _hover={{
-                            backgroundColor: 'orange.600',
-                            color: 'white',
-                          }}
-                          alignItems="center"
-                          as="button"
-                          aria-label={`Insert new below`}
-                          backgroundColor="white"
-                          height="1rem"
-                          justifyContent="center"
-                          left="43%"
-                          padding=".75rem"
-                          position="absolute"
-                          rounded="full"
-                          top="28px"
-                          type="button"
-                          width="1rem"
-                          zIndex="popover"
-                          onClick={() => helpers.insert(index + 1, '')}
-                        >
-                          <Icon as={FaPlus} />
-                        </Box>
-                      </FormikField>
-                    </Flex>
+                        <Icon as={FaPlus} />
+                      </Box>
+                    </FormikField>
                   ))}
 
                 <Button
@@ -167,9 +206,10 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
                     backgroundColor: 'orange.100',
                   }}
                   colorScheme="orange"
+                  marginTop="1rem"
                   type="button"
-                  variant="ghost"
                   onClick={() => helpers.push('')}
+                  variant="ghost"
                 >
                   Add New
                 </Button>
@@ -192,7 +232,7 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
               Load
             </Button>
           </Flex>
-        </Form>
+        </Box>
       )}
     </Formik>
   );
