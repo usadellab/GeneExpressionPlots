@@ -43,10 +43,6 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
     if (!value) return 'The accession ID cannot be empty';
   };
 
-  const validateLegend: FieldValidator = (value: boolean) => {
-    if (!value) return 'Legend cannot be false';
-  };
-
   return (
     <Formik
       initialValues={{
@@ -73,7 +69,6 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
                 id="plot-legend"
                 label="Legend"
                 name="withLegend"
-                validate={validateLegend}
               />
 
               <FormikSwitch
@@ -84,7 +79,6 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
                 id="plot-caption"
                 label="Caption"
                 name="withCaption"
-                validate={validateLegend}
               />
             </Flex>
           </Box>
