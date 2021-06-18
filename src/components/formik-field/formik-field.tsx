@@ -2,6 +2,7 @@ import { FieldValidator, useField } from 'formik';
 import React from 'react';
 import {
   FormControl,
+  FormControlProps,
   FormLabel,
   FormErrorMessage,
   Input,
@@ -17,6 +18,7 @@ interface FormikFieldProps extends InputProps {
   label: string;
   leftChildren?: React.ReactNode;
   hideLabel?: boolean;
+  controlProps?: FormControlProps;
   groupProps?: InputGroupProps;
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   rightChildren?: React.ReactNode;
@@ -25,6 +27,7 @@ interface FormikFieldProps extends InputProps {
 
 const FormikField: React.FC<FormikFieldProps> = ({
   children,
+  controlProps,
   groupProps,
   hideLabel,
   initialFocusRef,
@@ -42,6 +45,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
 
   return (
     <FormControl
+      {...controlProps}
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
       isRequired={props.isRequired}
     >
@@ -52,7 +56,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
       ) : (
         <FormLabel fontWeight="semibold">{label}</FormLabel>
       )}
-      <InputGroup {...groupProps}>
+      <InputGroup as="span" {...groupProps}>
         {leftChildren}
         <Input
           ref={(ref) =>
