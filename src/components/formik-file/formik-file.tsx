@@ -6,6 +6,7 @@ import {
   FormErrorMessage,
   Input,
   InputProps,
+  VisuallyHidden,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
@@ -13,13 +14,15 @@ interface FormikFieldProps extends InputProps {
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   name: string;
   label: string;
+  hideLabel?: boolean;
   validate?: FieldValidator;
 }
 
 const FormikField: React.FC<FormikFieldProps> = ({
+  hideLabel,
   initialFocusRef,
-  name,
   label,
+  name,
   validate,
   ...props
 }) => {
@@ -70,7 +73,13 @@ const FormikField: React.FC<FormikFieldProps> = ({
       isRequired={props.isRequired}
       isReadOnly
     >
-      <FormLabel fontWeight="semibold">{label}</FormLabel>
+      {hideLabel ? (
+        <VisuallyHidden>
+          <FormLabel fontWeight="semibold">{label}</FormLabel>
+        </VisuallyHidden>
+      ) : (
+        <FormLabel fontWeight="semibold">{label}</FormLabel>
+      )}
 
       {/*
         Visible Read-Only Text Input
