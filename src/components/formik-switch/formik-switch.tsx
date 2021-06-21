@@ -1,40 +1,36 @@
 import { FieldValidator, useField } from 'formik';
 import React from 'react';
 import {
+  Flex,
   FormControl,
   FormControlProps,
   FormLabel,
   FormErrorMessage,
-  Input,
-  InputGroup,
-  InputGroupProps,
-  InputProps,
+  Switch,
+  SwitchProps,
   VisuallyHidden,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
-interface FormikFieldProps extends InputProps {
+interface FormikSwitchProps extends SwitchProps {
+  id: string;
   name: string;
   label: string;
   leftChildren?: React.ReactNode;
-  hideLabel?: boolean;
   controlProps?: FormControlProps;
-  groupProps?: InputGroupProps;
+  hideLabel?: boolean;
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   rightChildren?: React.ReactNode;
   validate?: FieldValidator;
 }
 
-const FormikField: React.FC<FormikFieldProps> = ({
-  children,
+const FormikSwitch: React.FC<FormikSwitchProps> = ({
+  // children,
   controlProps,
-  groupProps,
   hideLabel,
   initialFocusRef,
   label,
-  leftChildren,
   name,
-  rightChildren,
   validate,
   ...props
 }) => {
@@ -47,34 +43,39 @@ const FormikField: React.FC<FormikFieldProps> = ({
     <FormControl
       {...controlProps}
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
-      isRequired={props.isRequired}
     >
-      {hideLabel ? (
-        <VisuallyHidden>
-          <FormLabel fontWeight="semibold">{label}</FormLabel>
-        </VisuallyHidden>
-      ) : (
-        <FormLabel fontWeight="semibold">{label}</FormLabel>
-      )}
-      <InputGroup as="span" {...groupProps}>
-        {leftChildren}
-        <Input
+      <Flex alignItems="flex-end">
+        <Switch
+          colorScheme="orange"
           ref={(ref) =>
             initialFocusRef ? (initialFocusRef.current = ref) : ref
           }
+          isChecked={field.value}
           name={field.name}
           onBlur={field.onBlur}
           onChange={field.onChange}
-          multiple={field.multiple}
-          value={field.value}
           {...props}
         />
-        {children}
-        {rightChildren}
-      </InputGroup>
+
+        {hideLabel ? (
+          <VisuallyHidden>
+            <FormLabel htmlFor={props.id}>{label}</FormLabel>
+          </VisuallyHidden>
+        ) : (
+          <FormLabel
+            fontWeight="semibold"
+            color="gray.600"
+            htmlFor={props.id}
+            marginBottom={0}
+            marginLeft="1rem"
+          >
+            {label}
+          </FormLabel>
+        )}
+      </Flex>
       <FormErrorMessage as="span">{meta.error}</FormErrorMessage>
     </FormControl>
   );
 };
 
-export default FormikField;
+export default FormikSwitch;
