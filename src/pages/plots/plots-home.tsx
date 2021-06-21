@@ -49,7 +49,7 @@ const PlotsHome: React.FC = () => {
     <Flex as="main" flexGrow={1}>
       <Sidebar top={0} maxWidth="17rem" minWidth="6.5rem">
         <SidebarButton
-          text="Bar Plot"
+          text="Bars Plot"
           icon={TextIcon('BAR')}
           alignItems="baseline"
           onClick={onBarsFormOpen}
