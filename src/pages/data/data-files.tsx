@@ -360,7 +360,7 @@ const DataFiles: React.FC = () => {
         padding="2rem"
         width="100%"
       >
-        <Wrap spacing="1rem" justify="center">
+        <Wrap justify="center" spacing="1rem" width="100%">
           {dataTable.colNames.map((replicateName) => (
             <WrapItem key={replicateName} width={replCardWidth}>
               <ReplCard
