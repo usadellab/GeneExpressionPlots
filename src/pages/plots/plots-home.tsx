@@ -1,15 +1,16 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-import PlotCaption from './components/PlotCaption';
 import SingleGenePlot from './components/singleGenePlot';
 
 import { plotStore } from '@/store/plot-store';
-import { infoTable } from '@/store/data-store';
-import { colors } from '@/utils/plotsHelper';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
-import { Flex, Text } from '@chakra-ui/react';
+import FormikModal from '@/components/formik-modal';
+import { Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { FocusableElement } from '@chakra-ui/utils';
+
+import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
 
 export interface PlotlyOptions {
   showlegend: boolean;
@@ -44,14 +45,28 @@ const handleBarPlotClick = () => {
 };
 
 const PlotsHome: React.FC = () => {
+  /* BARS PLOT */
+  const refBarsFormInitialFocus = React.useRef<FocusableElement | null>(null);
+
+  const {
+    isOpen: isBarsFormOpen,
+    onOpen: onBarsFormOpen,
+    onClose: onBarsFormClose,
+  } = useDisclosure();
+
+  const onBarsFormSubmit: BarsFormSubmitHandler = (values, actions) => {
+    console.log({ values });
+    actions.setSubmitting(false);
+  };
+
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar top={0} maxWidth="17rem" minWidth="6.5rem">
         <SidebarButton
-          text="Bar Plot"
+          text="Bars Plot"
           icon={TextIcon('BAR')}
           alignItems="baseline"
-          onClick={handleBarPlotClick}
+          onClick={onBarsFormOpen}
         />
 
         <SidebarButton
@@ -114,6 +129,21 @@ const PlotsHome: React.FC = () => {
           // );
         })}
       </Flex>
+
+      <FormikModal
+        initialFocusRef={refBarsFormInitialFocus}
+        isOpen={isBarsFormOpen}
+        onClose={onBarsFormClose}
+        size="xl"
+        title="Bars Plot"
+        scrollBehavior="outside"
+      >
+        <BarsForm
+          initialFocusRef={refBarsFormInitialFocus}
+          onCancel={onBarsFormClose}
+          onSubmit={onBarsFormSubmit}
+        />
+      </FormikModal>
     </Flex>
   );
 };
