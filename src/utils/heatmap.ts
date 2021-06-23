@@ -3,6 +3,8 @@ import getDistanceMatrix from 'ml-distance-matrix';
 import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
 
+//#region DATA
+
 type DistanceMethod =
   | 'additiveSymmetric'
   | 'avg'
@@ -80,6 +82,10 @@ export function clusterGeneXMatrix(
   return tree;
 }
 
+//#endregion
+
+//#region VISX PLOT
+
 /**
  * Transform an array of numeric values into a Bins type from '@visx/heatmap'.
  * @param values numeric array to transform
@@ -95,3 +101,5 @@ export function valuesToBins(values: number[], index: number): Bins {
     bins,
   };
 }
+
+//#endregion
