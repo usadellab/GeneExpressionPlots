@@ -23,6 +23,7 @@
     "framer-motion": "^4.1.17",
     "iwanthue": "^1.5.0",
     "jszip": "^3.5.0",
+    "ml-distance": "^3.0.0",
     "ml-hclust": "^3.0.0",
     "ml-pca": "^4.0.2",
     "mobx": "^6.0.4",
