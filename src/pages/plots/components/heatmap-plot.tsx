@@ -151,7 +151,6 @@ const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
           }
         </HeatmapRect>
       </svg>
-      )
     </PlotContainer>
   );
 };
