@@ -5,10 +5,16 @@ import { plotStore } from '@/store/plot-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
-import { Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { Flex, Spinner, Text, useDisclosure } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
+import HeatmapForm, {
+  HeatmapFormSubmitHandler,
+} from './components/heatmap-form';
+
+import HeatmapPlot from './components/heatmap-plot';
+import { GxpHeatmap } from '@/types/plots';
 
 export interface PlotlyOptions {
   showlegend: boolean;
@@ -49,6 +55,23 @@ const PlotsHome: React.FC = () => {
     actions.setSubmitting(false);
   };
 
+  /* HEATMAP PLOT */
+  const refHeatmapFormInitialFocus = React.useRef<FocusableElement | null>(
+    null
+  );
+
+  const {
+    isOpen: isHeatmapFormOpen,
+    onOpen: onHeatmapFormOpen,
+    onClose: onHeatmapFormClose,
+  } = useDisclosure();
+
+  const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
+    actions.setSubmitting(false);
+    onHeatmapFormClose();
+    plotStore.addHeatmapPlot(values.accessions);
+  };
+
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar top={0} maxWidth="17rem" minWidth="6.5rem">
@@ -75,6 +98,7 @@ const PlotsHome: React.FC = () => {
           text="Heatmap Plot"
           icon={TextIcon('HMP')}
           alignItems="baseline"
+          onClick={onHeatmapFormOpen}
         />
 
         <SidebarButton
@@ -86,7 +110,23 @@ const PlotsHome: React.FC = () => {
 
       <Flex as="main" flexWrap="wrap" width="100%">
         {plotStore.plots.map((plot) => {
+          if (plot.isLoading) {
+            return (
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            );
+          }
+
+          const plotProps = plot as GxpHeatmap;
           switch (plot.type) {
+            case 'heatmap': {
+              return <HeatmapPlot {...plotProps} />;
+            }
             default:
               break;
           }
@@ -105,6 +145,21 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refBarsFormInitialFocus}
           onCancel={onBarsFormClose}
           onSubmit={onBarsFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refHeatmapFormInitialFocus}
+        isOpen={isHeatmapFormOpen}
+        onClose={onHeatmapFormClose}
+        size="xl"
+        title="Heatmap Plot"
+        scrollBehavior="outside"
+      >
+        <HeatmapForm
+          initialFocusRef={refHeatmapFormInitialFocus}
+          onCancel={onHeatmapFormClose}
+          onSubmit={onHeatmapFormSubmit}
         />
       </FormikModal>
     </Flex>
