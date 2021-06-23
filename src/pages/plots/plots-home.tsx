@@ -2,17 +2,21 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import { plotStore } from '@/store/plot-store';
-import { infoTable } from '@/store/data-store';
-import { colors } from '@/utils/plotsHelper';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
 import { Flex, Text, useDisclosure } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
-import PlotlyPlot from './components/PlotlyPlot';
-import PlotCaption from './components/PlotCaption';
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
+
+export interface PlotlyOptions {
+  showlegend: boolean;
+  showCaption: boolean;
+  plotType?: string;
+  colorBy?: string;
+  plotTitle: string;
+}
 
 const TextIcon = (text: string) =>
   function IconRenderer(): JSX.Element {
@@ -81,24 +85,12 @@ const PlotsHome: React.FC = () => {
       </Sidebar>
 
       <Flex as="main" flexWrap="wrap" width="100%">
-        {plotStore.plots.map((plot) => (
-          <PlotlyPlot
-            key={plot.plotId}
-            className="relative flex flex-col m-3 py-6 w-full resize-x
-                         shadow-outer overflow-auto bg-white"
-            plot={{ ...plot }}
-          >
-            {plot.showCaption &&
-              plot.accessions.map((accession: string, index: number) => (
-                <PlotCaption
-                  key={`${accession}-${index}`}
-                  accession={accession}
-                  caption={infoTable.getRowAsMap(accession)}
-                  color={plot.accessions.length > 1 ? colors[index] : null}
-                />
-              ))}
-          </PlotlyPlot>
-        ))}
+        {plotStore.plots.map((plot) => {
+          switch (plot.type) {
+            default:
+              break;
+          }
+        })}
       </Flex>
 
       <FormikModal
