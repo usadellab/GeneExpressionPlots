@@ -108,7 +108,6 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
       ref={(ref) => (figureRef.current = ref)}
       as="figure"
       width="100%"
-      maxWidth="95%"
       backgroundColor="white"
       padding={6}
       margin={3}
