@@ -1,41 +1,29 @@
 import { makeAutoObservable } from 'mobx';
 
-import { settings } from '@/store/settings';
+// import { settings } from '@/store/settings';
 
-import {
-  singleGeneGroupedPlot,
-  multiGeneIndCurvesPlot,
-  stackedLinePlot,
-  multiGeneBarPlot,
-  createPcaPlot,
-  createHeatmapPlot,
-  PlotOptions,
-} from '../utils/plotsHelper';
+// import {
+//   singleGeneGroupedPlot,
+//   multiGeneIndCurvesPlot,
+//   stackedLinePlot,
+//   multiGeneBarPlot,
+//   createPcaPlot,
+//   createHeatmapPlot,
+//   PlotOptions,
+// } from '../utils/plotsHelper';
 
-import { nanoid } from 'nanoid';
-import { PlotlyOptions } from '@/pages/plots/plots-home';
+// import { nanoid } from 'nanoid';
+// import { PlotlyOptions } from '@/pages/plots/plots-home';
 
-/**
- *
- * @typedef  {Object}  PlotOptions
- * @property {boolean} showlegend
- * @property {boolean} showCaption
- * @property {string}  plotType
- * @property {string}  colorBy
- * @property {string}  plotTitle
- * @property {Array}   groupOroder
- * @property {Array}   sampleOrder
- */
-
-interface GxpPlot<T = any> {
+interface GxpPlot<T = Record<string, unknown>> {
   key: string;
-  type: string;
+  type: never;
   props: T;
 }
 
 class PlotStore {
   plots: GxpPlot[] = [];
-  _image: any = null;
+  _image: string | null = null;
 
   countUnit: string | null = null;
 
@@ -51,7 +39,7 @@ class PlotStore {
 
   /* IMAGE */
 
-  get hasImage() {
+  get hasImage(): boolean {
     return this.image ? true : false;
   }
 
@@ -59,11 +47,11 @@ class PlotStore {
     this._image = null;
   }
 
-  loadImage(image: any): void {
+  loadImage(image: string): void {
     this._image = image;
   }
 
-  get image() {
+  get image(): string | null {
     return this._image;
   }
 
@@ -85,6 +73,14 @@ class PlotStore {
     this.plots.splice(index, 1);
   }
 
+  // addBarPlot2(accession: string, options: PlotlyOptions): void {
+  //   this.plots.push({
+  //     key: nanoid(),
+  //     type: 'plotly',
+  //     props: { accession, options },
+  //   });
+  // }
+
   // addBarPlot(accessionIds, options) {
   //   if (accessionIds.length === 1)
   //     this.plots.push(singleGeneGroupedPlot(accessionIds, options));
@@ -92,19 +88,11 @@ class PlotStore {
   //     this.plots.push(multiGeneBarPlot(accessionIds, options));
   // }
 
-  addBarPlot2(accession: string, options: PlotlyOptions): void {
-    this.plots.push({
-      key: nanoid(),
-      type: 'plotly',
-      props: { accession, options },
-    });
-  }
-
-  /**
-   *
-   * @param {string[]} accessionIds
-   * @param {PlotOptions} options
-   */
+  // /**
+  //  *
+  //  * @param {string[]} accessionIds
+  //  * @param {PlotOptions} options
+  //  */
   // addIndivualCurvesPlot(accessionIds, options) {
   //   if (accessionIds.length === 1)
   //     this.plots.push(singleGeneGroupedPlot(accessionIds, options));
@@ -112,11 +100,11 @@ class PlotStore {
   //     this.plots.push(multiGeneIndCurvesPlot(accessionIds, options));
   // }
 
-  /**
-   *
-   * @param {string[]} accessionIds
-   * @param {PlotOptions} options
-   */
+  // /**
+  //  *
+  //  * @param {string[]} accessionIds
+  //  * @param {PlotOptions} options
+  //  */
   // addStackedCurvePlot(accessionIds, options) {
   //   this.plots.push(stackedLinePlot(accessionIds, options));
   // }
@@ -137,10 +125,10 @@ class PlotStore {
   //   this.plots.push(createHeatmapPlot());
   // }
 
-  /**
-   * @param {Array} accessionIds
-   * @param {PlotOptions} options
-   */
+  // /**
+  //  * @param {Array} accessionIds
+  //  * @param {PlotOptions} options
+  //  */
   // addPlot(accessionIds, options) {
   //   options.countUnit = settings.gxpSettings.unit;
   //   options.plotId = nanoid();
