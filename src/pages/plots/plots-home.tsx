@@ -1,8 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-import SingleGenePlot from './components/singleGenePlot';
-
 import { plotStore } from '@/store/plot-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
@@ -35,14 +33,6 @@ const TextIcon = (text: string) =>
       </Text>
     );
   };
-
-const handleBarPlotClick = () => {
-  plotStore.addBarPlot2('AT1G10070.1', {
-    showlegend: true,
-    showCaption: false,
-    plotTitle: 'My PLot',
-  } as PlotlyOptions);
-};
 
 const PlotsHome: React.FC = () => {
   /* BARS PLOT */
@@ -97,36 +87,9 @@ const PlotsHome: React.FC = () => {
       <Flex as="main" flexWrap="wrap" width="100%">
         {plotStore.plots.map((plot) => {
           switch (plot.type) {
-            case 'plotly':
-              return (
-                <SingleGenePlot
-                  accession={plot.props.accession}
-                  key={plot.key}
-                  options={plot.props.options}
-                ></SingleGenePlot>
-              );
             default:
               break;
           }
-          // return (
-          // <div key={plot.key}>{JSON.stringify(plot)}</div>
-          // <PlotlyPlot
-          //   key={plot.plotId}
-          //   className="relative flex flex-col m-3 py-6 w-full resize-x
-          //                shadow-outer overflow-auto bg-white"
-          //   plot={{ ...plot }}
-          // >
-          //   {plot.showCaption &&
-          //     plot.accessions.map((accession: string, index: number) => (
-          //       <PlotCaption
-          //         key={`${accession}-${index}`}
-          //         accession={accession}
-          //         caption={infoTable.getRowAsMap(accession)}
-          //         color={plot.accessions.length > 1 ? colors[index] : null}
-          //       />
-          //     ))}
-          // </PlotlyPlot>
-          // );
         })}
       </Flex>
 

@@ -29,7 +29,7 @@ import { PlotlyOptions } from '@/pages/plots/plots-home';
 
 interface GxpPlot<T = any> {
   key: string;
-  type: string;
+  type: never;
   props: T;
 }
 
@@ -91,14 +91,6 @@ class PlotStore {
   //   else if (accessionIds.length > 1)
   //     this.plots.push(multiGeneBarPlot(accessionIds, options));
   // }
-
-  addBarPlot2(accession: string, options: PlotlyOptions): void {
-    this.plots.push({
-      key: nanoid(),
-      type: 'plotly',
-      props: { accession, options },
-    });
-  }
 
   /**
    *
