@@ -74,7 +74,7 @@ const PlotsHome: React.FC = () => {
 
   return (
     <Flex as="main" flexGrow={1}>
-      <Sidebar top={0} maxWidth="17rem" minWidth="6.5rem">
+      <Sidebar maxWidth="17rem" minWidth="6.5rem">
         <SidebarButton
           text="Bars Plot"
           icon={TextIcon('BAR')}
@@ -108,7 +108,13 @@ const PlotsHome: React.FC = () => {
         />
       </Sidebar>
 
-      <Flex as="main" flexWrap="wrap" width="100%">
+      <Flex
+        aria-label="Visualizations"
+        flexWrap="wrap"
+        role="region"
+        width="100%"
+        margin={2}
+      >
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
             return (

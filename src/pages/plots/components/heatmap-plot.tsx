@@ -3,8 +3,8 @@ import { chakra, Flex } from '@chakra-ui/react';
 
 import { HeatmapRect } from '@visx/heatmap';
 import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
-import { ParentSize } from '@visx/responsive';
 import { scaleLinear } from '@visx/scale';
+import { ScaleLinear } from 'd3-scale';
 
 import { GxpHeatmap } from '@/types/plots';
 
@@ -28,22 +28,7 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number {
 const bins = (d: Bins): Bin[] => d.bins;
 const count = (d: Bin): number => d.count;
 
-// export type HeatmapProps = {
-//   width: number;
-//   height: number;
-//   margin?: { top: number; right: number; bottom: number; left: number };
-//   separation?: number;
-//   events?: boolean;
-// };
-
-const defaultMargin = { top: 10, left: 20, right: 20, bottom: 110 };
-
 const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
-  const width = 1000;
-  const height = 1000;
-  const margin = defaultMargin;
-  const separation = 20;
-
   // color
   const colorMin = min(props.binData, (d) => min(bins(d), count));
   const colorMax = max(props.binData, (d) => max(bins(d), count));
@@ -53,84 +38,128 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
     domain: [colorMin, colorMax],
   });
 
-  const opacityScale = scaleLinear<number>({
-    range: [0.1, 1],
-    domain: [colorMin, colorMax],
-  });
+  const figureRef = React.useRef<HTMLDivElement | null>(null);
+  const timeoutRef = React.useRef<number>();
+  const [plotDims, setPlotDims] = React.useState<{
+    binWidth: number;
+    binHeight: number;
+    xScale: ScaleLinear<number, number>;
+    yScale: ScaleLinear<number, number>;
+  }>();
 
-  // bounds
-  const size =
-    width > margin.left + margin.right
-      ? width - margin.left - margin.right - separation
-      : width;
-  const xMax = size / 2;
-  const yMax = height - margin.bottom - margin.top;
+  React.useEffect(
+    function resizePlot() {
+      let timeoutId: number;
 
-  const binWidth = xMax / props.binData.length;
+      const resizeObserver = new ResizeObserver((entries) => {
+        clearTimeout(timeoutRef.current);
+        timeoutId = window.setTimeout(() => {
+          const figureStyle = window.getComputedStyle(entries[0].target, null);
 
-  // position
-  const xScale = scaleLinear<number>({
-    domain: [0, props.binData.length],
-  }).range([0, xMax]);
+          const clientPadding =
+            parseFloat(figureStyle.getPropertyValue('padding')) * 2;
 
-  const yScale = scaleLinear<number>({
-    domain: [0, max(props.binData, (d) => bins(d).length)],
-  }).range([yMax, 0]);
+          // const clientWidth =
+          //   parseFloat(figureStyle.getPropertyValue('width')) - clientPadding;
+          // const clientHeight =
+          //   parseFloat(figureStyle.getPropertyValue('height')) - clientPadding;
+
+          const clientWidth = entries[0].target.clientWidth - clientPadding;
+          const clientHeight = entries[0].target.clientHeight - clientPadding;
+
+          const dataLen = props.binData.length;
+          const binWidth = clientWidth / dataLen;
+          const binHeight = clientHeight / dataLen;
+
+          const xScale = scaleLinear<number>({
+            domain: [0, props.binData.length],
+          }).range([0, clientWidth]);
+
+          const yScale = scaleLinear<number>({
+            domain: [0, props.binData.length],
+            // domain: [0, max(props.binData, (d) => bins(d).length)],
+          }).range([0, clientHeight]);
+
+          setPlotDims({
+            binWidth,
+            binHeight,
+            xScale,
+            yScale,
+          });
+        }, 250);
+
+        timeoutRef.current = timeoutId;
+      });
+
+      if (figureRef.current) {
+        resizeObserver.observe(figureRef.current);
+      }
+
+      return () => {
+        if (figureRef.current) resizeObserver.unobserve(figureRef.current);
+        if (timeoutId) clearTimeout(timeoutId);
+      };
+    },
+    [props.binData.length]
+  );
 
   return (
-    <Flex as={ParentSize} flexGrow={1}>
-      {({ width, height }: { width: number; height: number }) => (
-        <svg width={width} height={height}>
-          <rect
-            x={0}
-            y={0}
-            width={width}
-            height={height}
-            // rx={14}
-            fill={background}
-            // fill="#ffffff00"
-          />
-
-          <HeatmapRect
-            data={props.binData}
-            xScale={(d) => (xScale ? xScale(d) : 0)}
-            yScale={(d) => (yScale ? yScale(d) : 0)}
-            colorScale={colorScale}
-            opacityScale={opacityScale}
-            binWidth={binWidth}
-            binHeight={binWidth}
-            gap={1}
-          >
-            {(heatmap) =>
-              heatmap.map((heatmapData) =>
-                heatmapData.map((data) => (
-                  <chakra.rect
-                    sx={{
-                      '&:hover': {
-                        stroke: 'white',
-                      },
-                    }}
-                    key={`heatmap-rect-${data.row}-${data.column}`}
-                    className="visx-heatmap-rect"
-                    width={data.width}
-                    height={data.height}
-                    x={data.x}
-                    y={data.y}
-                    fill={data.color}
-                    fillOpacity={data.opacity}
-                    onClick={() => {
-                      const fromData =
-                        props.binData[data.column].bins[data.row];
-                      const fromBin = data.bin;
-                      console.log({ fromData, fromBin });
-                    }}
-                  />
-                ))
-              )
-            }
-          </HeatmapRect>
-        </svg>
-      )}
+    <Flex
+      ref={(ref) => (figureRef.current = ref)}
+      as="figure"
+      width="100%"
+      maxWidth="95%"
+      backgroundColor="white"
+      padding={6}
+      margin={3}
+      height={500}
+      resize="horizontal"
+      overflow="hidden"
+      sx={{
+        '&::-webkit-resizer': {
+          border: '1px',
+          background: 'gray.400',
+        },
+      }}
+    >
+      <svg width="100%" height="100%">
+        <HeatmapRect
+          data={props.binData}
+          xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
+          yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
+          colorScale={colorScale}
+          // opacityScale={opacityScale}
+          binWidth={plotDims?.binWidth}
+          binHeight={plotDims?.binHeight}
+          gap={1}
+        >
+          {(heatmap) =>
+            heatmap.map((heatmapData) =>
+              heatmapData.map((data) => (
+                <chakra.rect
+                  sx={{
+                    '&:hover': {
+                      stroke: 'black',
+                    },
+                  }}
+                  key={`heatmap-rect-${data.row}-${data.column}`}
+                  width={data.width}
+                  height={data.height}
+                  x={data.x}
+                  y={data.y}
+                  fill={data.color}
+                  fillOpacity={data.opacity}
+                  onClick={() => {
+                    const fromData = props.binData[data.column].bins[data.row];
+                    const fromBin = data.bin;
+                    console.log({ fromData, fromBin });
+                  }}
+                />
+              ))
+            )
+          }
+        </HeatmapRect>
+      </svg>
     </Flex>
   );
 };
