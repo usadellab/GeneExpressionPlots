@@ -20,7 +20,6 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <MotionBox
-      as="header"
       backgroundColor="white"
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
