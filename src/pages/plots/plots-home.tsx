@@ -113,6 +113,7 @@ const PlotsHome: React.FC = () => {
           if (plot.isLoading) {
             return (
               <Spinner
+                key={plot.key}
                 thickness="4px"
                 speed="0.65s"
                 emptyColor="gray.200"
