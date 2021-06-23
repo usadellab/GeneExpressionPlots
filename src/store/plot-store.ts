@@ -1,4 +1,9 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, action } from 'mobx';
+import { nanoid } from 'nanoid';
+import { GxpPlot, GxpHeatmap } from '@/types/plots';
+
+// Future Workers
+import { createHeatmapPlot } from '@/utils/heatmap';
 
 // import { settings } from '@/store/settings';
 
@@ -14,12 +19,6 @@ import { makeAutoObservable } from 'mobx';
 
 // import { nanoid } from 'nanoid';
 // import { PlotlyOptions } from '@/pages/plots/plots-home';
-
-interface GxpPlot<T = Record<string, unknown>> {
-  key: string;
-  type: never;
-  props: T;
-}
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -71,6 +70,34 @@ class PlotStore {
   deletePlot(key: string): void {
     const index = this.plots.findIndex((plot) => plot.key === key);
     this.plots.splice(index, 1);
+  }
+
+  /**
+   * Add a new gene expression heatmap plot to the store.
+   * @param accessions gene accessions to visualize
+   */
+  addHeatmapPlot(accessions: string[]): void {
+    const key = nanoid();
+    const pendingPlot: GxpPlot = {
+      key,
+      type: 'heatmap',
+      isLoading: true,
+    };
+    const plotIndex = this.plots.push(pendingPlot) - 1;
+
+    createHeatmapPlot(accessions).then(
+      action('addHeatmapPlot', (binData) => {
+        const loadedPlot: GxpHeatmap = {
+          ...this.plots[plotIndex],
+          isLoading: false,
+          binData,
+        };
+
+        if (this.plots[plotIndex].key === key) {
+          this.plots[plotIndex] = loadedPlot;
+        }
+      })
+    );
   }
 
   // addBarPlot(accessionIds, options) {

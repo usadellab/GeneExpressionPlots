@@ -3,7 +3,10 @@ import getDistanceMatrix from 'ml-distance-matrix';
 import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
 
-//#region DATA
+// Once a worker, data will be accessed via IndexedDb
+import { dataTable } from '@/store/data-store';
+
+//#region PRIVATE API
 
 type DistanceMethod =
   | 'additiveSymmetric'
@@ -55,7 +58,7 @@ type DistanceMethod =
  * @param matrix a matrix of gene counts per replicate
  * @returns the computed euclidean distance matrix
  */
-export function computeGeneXDistance(
+function computeGeneXDistance(
   matrix: number[][],
   method: DistanceMethod
 ): number[][] {
@@ -71,7 +74,7 @@ export function computeGeneXDistance(
  * @param method agglomeration method
  * @returns the clustering result in tree format as an instance of ml-hclust's Cluster class
  */
-export function clusterGeneXMatrix(
+function clusterGeneXMatrix(
   matrix: number[][],
   method: AgglomerationMethod
 ): Cluster {
@@ -82,17 +85,13 @@ export function clusterGeneXMatrix(
   return tree;
 }
 
-//#endregion
-
-//#region VISX PLOT
-
 /**
  * Transform an array of numeric values into a Bins type from '@visx/heatmap'.
  * @param values numeric array to transform
  * @param index current bins index
  * @returns the number array transformed as a bin
  */
-export function valuesToBins(values: number[], index: number): Bins {
+function valuesToBins(values: number[], index: number): Bins {
   const bin = index;
   const bins: Bin[] = values.map((count, bin) => ({ bin, count }));
 
@@ -100,6 +99,23 @@ export function valuesToBins(values: number[], index: number): Bins {
     bin,
     bins,
   };
+}
+
+//#endregion
+
+//#region PUBLIC API
+
+export async function createHeatmapPlot(accessions: string[]): Promise<Bins[]> {
+  // Prepare the data from the store
+  const replicateCounts: number[][] = dataTable.toTransposed2dArray();
+
+  // Compute the euclidean distance matrix between each gene
+  const distanceMatrix = computeGeneXDistance(replicateCounts, 'euclidean');
+
+  // Transform results to be consumed by @visx/heatmap
+  const binData = distanceMatrix.map(valuesToBins);
+
+  return binData;
 }
 
 //#endregion
