@@ -1,5 +1,5 @@
 import React from 'react';
-import { chakra, Flex } from '@chakra-ui/react';
+import { chakra, Flex, Spinner } from '@chakra-ui/react';
 
 import { HeatmapRect } from '@visx/heatmap';
 import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
@@ -53,6 +53,8 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
 
       const resizeObserver = new ResizeObserver((entries) => {
         clearTimeout(timeoutRef.current);
+
+        setPlotDims(undefined);
         timeoutId = window.setTimeout(() => {
           const figureStyle = window.getComputedStyle(entries[0].target, null);
 
@@ -86,7 +88,7 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
             xScale,
             yScale,
           });
-        }, 250);
+        }, 100);
 
         timeoutRef.current = timeoutId;
       });
@@ -105,60 +107,75 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
 
   return (
     <Flex
-      ref={(ref) => (figureRef.current = ref)}
       as="figure"
-      width="100%"
+      alignItems="center"
+      justifyContent="center"
       backgroundColor="white"
-      padding={6}
-      margin={3}
       height={500}
-      resize="horizontal"
+      margin={3}
       overflow="hidden"
+      padding={6}
+      ref={(ref) => (figureRef.current = ref)}
+      resize="horizontal"
       sx={{
         '&::-webkit-resizer': {
           border: '1px',
           background: 'gray.400',
         },
       }}
+      width="100%"
     >
-      <svg width="100%" height="100%">
-        <HeatmapRect
-          data={props.binData}
-          xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
-          yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
-          colorScale={colorScale}
-          // opacityScale={opacityScale}
-          binWidth={plotDims?.binWidth}
-          binHeight={plotDims?.binHeight}
-          gap={1}
-        >
-          {(heatmap) =>
-            heatmap.map((heatmapData) =>
-              heatmapData.map((data) => (
-                <chakra.rect
-                  sx={{
-                    '&:hover': {
-                      stroke: 'black',
-                    },
-                  }}
-                  key={`heatmap-rect-${data.row}-${data.column}`}
-                  width={data.width}
-                  height={data.height}
-                  x={data.x}
-                  y={data.y}
-                  fill={data.color}
-                  fillOpacity={data.opacity}
-                  onClick={() => {
-                    const fromData = props.binData[data.column].bins[data.row];
-                    const fromBin = data.bin;
-                    console.log({ fromData, fromBin });
-                  }}
-                />
-              ))
-            )
-          }
-        </HeatmapRect>
-      </svg>
+      {plotDims ? (
+        <svg width="100%" height="100%">
+          <HeatmapRect
+            data={props.binData}
+            xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
+            yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
+            colorScale={colorScale}
+            // opacityScale={opacityScale}
+            binWidth={plotDims?.binWidth}
+            binHeight={plotDims?.binHeight}
+            gap={1}
+          >
+            {(heatmap) =>
+              heatmap.map((heatmapData) =>
+                heatmapData.map((data) => {
+                  return (
+                    <chakra.rect
+                      sx={{
+                        '&:hover': {
+                          stroke: 'black',
+                        },
+                      }}
+                      key={`heatmap-rect-${data.row}-${data.column}`}
+                      width={data.width}
+                      height={data.height}
+                      x={data.x}
+                      y={data.y}
+                      fill={data.color}
+                      fillOpacity={data.opacity}
+                      onClick={() => {
+                        const fromData =
+                          props.binData[data.column].bins[data.row];
+                        const fromBin = data.bin;
+                        console.log({ fromData, fromBin });
+                      }}
+                    />
+                  );
+                })
+              )
+            }
+          </HeatmapRect>
+        </svg>
+      ) : (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      )}
     </Flex>
   );
 };
