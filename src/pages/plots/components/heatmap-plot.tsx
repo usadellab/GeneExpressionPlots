@@ -1,12 +1,12 @@
 import React from 'react';
-import { chakra, Flex, Spinner } from '@chakra-ui/react';
+import { chakra } from '@chakra-ui/react';
 
 import { HeatmapRect } from '@visx/heatmap';
 import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
 import { scaleLinear } from '@visx/scale';
 import { ScaleLinear } from 'd3-scale';
 
-import { GxpHeatmap } from '@/types/plots';
+import PlotContainer from './plot-container';
 
 const gradient0 = '#b4fbde';
 const gradient1 = '#f33d15';
@@ -28,16 +28,16 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number {
 const bins = (d: Bins): Bin[] => d.bins;
 const count = (d: Bin): number => d.count;
 
-const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
+const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
   // color
   const colorMin = min(props.binData, (d) => min(bins(d), count));
   const colorMax = max(props.binData, (d) => max(bins(d), count));
-
   const colorScale = scaleLinear<string>({
     range: [gradient0, gradient1],
     domain: [colorMin, colorMax],
   });
 
+  // dimensions
   const figureRef = React.useRef<HTMLDivElement | null>(null);
   const timeoutRef = React.useRef<number>();
   const [plotDims, setPlotDims] = React.useState<{
@@ -50,9 +50,10 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
   React.useEffect(
     function resizePlot() {
       let timeoutId: number;
+      const internalRef = figureRef.current;
 
       const resizeObserver = new ResizeObserver((entries) => {
-        clearTimeout(timeoutRef.current);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
         setPlotDims(undefined);
         timeoutId = window.setTimeout(() => {
@@ -93,12 +94,13 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
         timeoutRef.current = timeoutId;
       });
 
-      if (figureRef.current) {
-        resizeObserver.observe(figureRef.current);
+      // if (figureRef.current) {
+      if (internalRef) {
+        resizeObserver.observe(internalRef);
       }
 
       return () => {
-        if (figureRef.current) resizeObserver.unobserve(figureRef.current);
+        if (internalRef) resizeObserver.unobserve(internalRef);
         if (timeoutId) clearTimeout(timeoutId);
       };
     },
@@ -106,77 +108,51 @@ const HeatmapPlot: React.FC<GxpHeatmap> = (props) => {
   );
 
   return (
-    <Flex
-      as="figure"
-      alignItems="center"
-      justifyContent="center"
-      backgroundColor="white"
-      height={500}
-      margin={3}
-      overflow="hidden"
-      padding={6}
-      ref={(ref) => (figureRef.current = ref)}
-      resize="horizontal"
-      sx={{
-        '&::-webkit-resizer': {
-          border: '1px',
-          background: 'gray.400',
-        },
-      }}
-      width="100%"
-    >
-      {plotDims ? (
-        <svg width="100%" height="100%">
-          <HeatmapRect
-            data={props.binData}
-            xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
-            yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
-            colorScale={colorScale}
-            // opacityScale={opacityScale}
-            binWidth={plotDims?.binWidth}
-            binHeight={plotDims?.binHeight}
-            gap={1}
-          >
-            {(heatmap) =>
-              heatmap.map((heatmapData) =>
-                heatmapData.map((data) => {
-                  return (
-                    <chakra.rect
-                      sx={{
-                        '&:hover': {
-                          stroke: 'black',
-                        },
-                      }}
-                      key={`heatmap-rect-${data.row}-${data.column}`}
-                      width={data.width}
-                      height={data.height}
-                      x={data.x}
-                      y={data.y}
-                      fill={data.color}
-                      fillOpacity={data.opacity}
-                      onClick={() => {
-                        const fromData =
-                          props.binData[data.column].bins[data.row];
-                        const fromBin = data.bin;
-                        console.log({ fromData, fromBin });
-                      }}
-                    />
-                  );
-                })
-              )
-            }
-          </HeatmapRect>
-        </svg>
-      ) : (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      )}
-    </Flex>
+    <PlotContainer status={plotDims ? 'idle' : 'loading'} figureRef={figureRef}>
+      <svg width="100%" height="100%">
+        <HeatmapRect
+          data={props.binData}
+          xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
+          yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
+          colorScale={colorScale}
+          // opacityScale={opacityScale}
+          binWidth={plotDims?.binWidth}
+          binHeight={plotDims?.binHeight}
+          gap={1}
+        >
+          {(heatmap) =>
+            heatmap.map((heatmapData) =>
+              heatmapData.map((data) => {
+                return (
+                  <chakra.rect
+                    sx={{
+                      '&:hover': {
+                        stroke: 'black',
+                      },
+                    }}
+                    key={`heatmap-rect-${data.row}-${data.column}`}
+                    width={data.width}
+                    height={data.height}
+                    x={data.x}
+                    y={data.y}
+                    fill={data.color}
+                    fillOpacity={data.opacity}
+                    onClick={() => {
+                      const fromData = props.binData
+                        ? props.binData[data.column].bins[data.row]
+                        : undefined;
+                      const fromBin = data.bin;
+                      console.log({ fromData, fromBin });
+                    }}
+                  />
+                );
+              })
+            )
+          }
+        </HeatmapRect>
+      </svg>
+      )
+    </PlotContainer>
   );
 };
 

@@ -14,6 +14,7 @@ import HeatmapForm, {
 } from './components/heatmap-form';
 
 import HeatmapPlot from './components/heatmap-plot';
+import PlotContainer from './components/plot-container';
 import { GxpHeatmap } from '@/types/plots';
 
 export interface PlotlyOptions {
@@ -69,7 +70,7 @@ const PlotsHome: React.FC = () => {
   const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onHeatmapFormClose();
-    plotStore.addHeatmapPlot(values.accessions);
+    setTimeout(() => plotStore.addHeatmapPlot(values.accessions), 10);
   };
 
   return (
@@ -118,21 +119,28 @@ const PlotsHome: React.FC = () => {
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
             return (
-              <Spinner
-                key={plot.key}
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="xl"
-              />
+              <PlotContainer key={plot.key} status="loading">
+                <Spinner
+                  key={`${plot.key}-loading`}
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="xl"
+                />
+              </PlotContainer>
             );
           }
 
-          const plotProps = plot as GxpHeatmap;
+          const heatmapPlot = plot as GxpHeatmap;
           switch (plot.type) {
             case 'heatmap': {
-              return <HeatmapPlot {...plotProps} />;
+              return (
+                <HeatmapPlot
+                  key={heatmapPlot.key}
+                  binData={heatmapPlot.binData}
+                />
+              );
             }
             default:
               break;
