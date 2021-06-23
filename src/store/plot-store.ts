@@ -85,18 +85,22 @@ class PlotStore {
     };
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
-    createHeatmapPlot(accessions).then(
-      action('addHeatmapPlot', (binData) => {
-        const loadedPlot: GxpHeatmap = {
-          ...this.plots[plotIndex],
-          isLoading: false,
-          binData,
-        };
+    setTimeout(
+      () =>
+        createHeatmapPlot(accessions).then(
+          action('addHeatmapPlot', (binData) => {
+            const loadedPlot: GxpHeatmap = {
+              ...this.plots[plotIndex],
+              isLoading: false,
+              binData,
+            };
 
-        if (this.plots[plotIndex].key === key) {
-          this.plots[plotIndex] = loadedPlot;
-        }
-      })
+            if (this.plots[plotIndex].key === key) {
+              this.plots[plotIndex] = loadedPlot;
+            }
+          })
+        ),
+      100
     );
   }
 
