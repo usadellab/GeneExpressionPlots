@@ -66,6 +66,10 @@ class Settings {
     return this._gxpSettings.sampleOrder;
   }
 
+  get unit(): string {
+    return this._gxpSettings.unit;
+  }
+
   loadgxpSettings(gxpSettings: GxpSettings): void {
     Object.assign(this._gxpSettings, gxpSettings);
   }

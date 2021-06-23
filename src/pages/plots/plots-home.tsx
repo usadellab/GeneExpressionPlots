@@ -96,7 +96,7 @@ const PlotsHome: React.FC = () => {
 
       <Flex as="main" flexWrap="wrap" width="100%">
         {plotStore.plots.map((plot) => {
-          switch (plot.implementation) {
+          switch (plot.type) {
             case 'plotly':
               return (
                 <SingleGenePlot

@@ -13,6 +13,7 @@ import {
 } from '../utils/plotsHelper';
 
 import { nanoid } from 'nanoid';
+import { PlotlyOptions } from '@/pages/plots/plots-home';
 
 /**
  *
@@ -28,7 +29,7 @@ import { nanoid } from 'nanoid';
 
 interface GxpPlot<T = any> {
   key: string;
-  implementation: 'plotly';
+  type: string;
   props: T;
 }
 
@@ -91,10 +92,10 @@ class PlotStore {
   //     this.plots.push(multiGeneBarPlot(accessionIds, options));
   // }
 
-  addBarPlot2(accession: string, options: PlotOptions): void {
+  addBarPlot2(accession: string, options: PlotlyOptions): void {
     this.plots.push({
       key: nanoid(),
-      implementation: 'plotly',
+      type: 'plotly',
       props: { accession, options },
     });
   }

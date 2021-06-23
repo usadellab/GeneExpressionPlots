@@ -4,7 +4,7 @@ import { dataTable, infoTable } from '@/store/data-store';
 import { settings } from '@/store/settings';
 
 import { mean, deviation } from 'd3';
-import { PlotData } from 'plotly.js';
+import { Layout, PlotData } from 'plotly.js';
 import { PlotlyPlot } from './PlotlyPlot';
 import PlotCaption from './PlotCaption';
 import { colors } from '@/utils/plotsHelper';
@@ -22,7 +22,34 @@ export default function SingleGeneBarPlot({
   console.log({ accession, options });
   const plotData = dataTable.getRowAsTree(accession) as any;
 
-  const layout = {};
+  console.log({ plotData });
+
+  const layout: Partial<Layout> = {
+    title: {
+      text: options.plotTitle,
+      font: {
+        family: 'ABeeZee',
+        size: 24,
+      },
+      y: 0.9,
+    },
+    showlegend: options.showlegend,
+    legend: {
+      orientation: 'h',
+      x: 0,
+      y: -0.3,
+    },
+    yaxis: {
+      title: {
+        text: `count [${settings.unit}]`, // access to the unit needs to be variable
+      },
+      hoverformat: '.2f',
+    },
+    // xaxis: {
+    //   tickangle: ,
+    // },
+    colorway: colors,
+  };
 
   const data = useMemo(() => {
     const data: Partial<PlotData>[] = [];
