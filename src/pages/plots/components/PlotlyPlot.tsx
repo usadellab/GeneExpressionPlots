@@ -1,30 +1,69 @@
+import { PlotlyOptions } from '@/types/plots';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Config, Layout, PlotData, PlotMouseEvent } from 'plotly.js';
 import React, { createContext } from 'react';
 import Plot from 'react-plotly.js';
+import { settings } from '@/store/settings';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react';
 
-interface PlotlyPlotProps {
-  plot: {
-    data: Partial<PlotData>[];
-    layout: Partial<Layout>;
-    config?: Partial<Config>;
-  };
-  options: {
-    accessions: string[];
-  };
+export interface PlotlyPlotProps {
+  data: Partial<PlotData>[];
+  accessions: string[];
+  options: PlotlyOptions;
 }
+
+export const colors = [
+  '#c7566f',
+  '#57bf67',
+  '#845ec9',
+  '#90b83d',
+  '#d3a333',
+  '#c363ab',
+  '#4a7c38',
+  '#adab63',
+  '#698ccc',
+  '#c94f32',
+  '#826627',
+  '#52b8a4',
+  '#d88e61',
+];
 
 export const PlotContext = createContext({ hoveredGene: '' });
 
-export const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
+const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
   const [name, setName] = React.useState('');
   const plotRef = React.useRef<Plot | null>(null);
   const figureRef = React.useRef<HTMLDivElement | null>(null);
   const timeoutRef = React.useRef<number>();
 
-  const [layout, setLayout] = React.useState(props.plot.layout);
-
-  console.log({ props });
+  const [layout, setLayout] = React.useState<Partial<Layout>>({
+    title: {
+      text: props.options.plotTitle,
+      font: {
+        family: 'ABeeZee',
+        size: 24,
+      },
+      y: 0.9,
+    },
+    showlegend: props.options.showlegend,
+    legend: {
+      orientation: 'h',
+      x: 0,
+      y: -0.3,
+    },
+    yaxis: {
+      title: {
+        text: `count [${settings.unit}]`, // access to the unit needs to be variable
+      },
+      hoverformat: '.2f',
+    },
+    // xaxis: {
+    //   tickangle: ,
+    // },
+    colorway: colors,
+  });
+  console.log({ PPdata: toJS(props.data) });
   React.useEffect(function resizePlot() {
     let id: number;
 
@@ -52,7 +91,7 @@ export const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
 
   const onPlotHover = (plotObject: Readonly<PlotMouseEvent>): void => {
     const { points } = plotObject;
-    if (points.length !== 1 || props.options.accessions?.length <= 1) return;
+    if (points.length !== 1 || props.accessions?.length <= 1) return;
     const name = points[0].data.name;
     setName(name);
   };
@@ -60,6 +99,8 @@ export const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
   const onPlotUnhover = (): void => {
     setName('');
   };
+
+  console.log({ pp: toJS(props.data) });
 
   return (
     <PlotContext.Provider value={{ hoveredGene: name }}>
@@ -78,7 +119,7 @@ export const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
       >
         <Plot
           ref={(ref) => (plotRef.current = ref)}
-          {...props.plot}
+          data={toJS(props.data)}
           layout={layout}
           onHover={onPlotHover}
           onUnhover={onPlotUnhover}
@@ -88,3 +129,5 @@ export const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
     </PlotContext.Provider>
   );
 };
+
+export default observer(PlotlyPlot);
