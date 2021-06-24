@@ -2,15 +2,12 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { chakra } from '@chakra-ui/react';
 
-import {
-  AxisBottom,
-  getStringWidth,
-  Group,
-  HeatmapRect,
-  scaleBand,
-  scaleLinear,
-} from '@visx/visx';
 import { ScaleLinear, ScaleBand } from 'd3-scale';
+import { AxisBottom } from '@visx/axis';
+import { Group } from '@visx/group';
+import { HeatmapRect } from '@visx/heatmap';
+import { scaleBand, scaleLinear } from '@visx/scale';
+import { getStringWidth } from '@visx/text';
 
 import PlotContainer from './plot-container';
 import { HeatmapBins, HeatmapBin } from '@/types/plots';
