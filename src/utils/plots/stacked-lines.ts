@@ -2,7 +2,7 @@ import { mean, deviation } from 'd3';
 
 import { dataTable } from '@/store/data-store';
 import { settings } from '@/store/settings';
-import { MarkerSymbol, PlotData, PlotMarker, ScatterLine } from 'plotly.js';
+import { MarkerSymbol, PlotData } from 'plotly.js';
 import { PlotlyOptions } from '@/types/plots';
 import { colors } from '@/pages/plots/components/PlotlyPlot';
 import { Dash } from 'plotly.js/lib/traces/ohcl';
@@ -72,7 +72,6 @@ const stackedLinesData = (
       ? ((colorIndex = 0), styleIndex++)
       : (colorIndex++, (styleIndex = 0));
   });
-  console.log({ data });
   return data;
 };
 

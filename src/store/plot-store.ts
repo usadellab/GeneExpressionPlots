@@ -3,7 +3,7 @@ import multiGeneBarData from '@/utils/plots/multi-gene-bar';
 import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-lines';
 import singleGeneIndividualLinesData from '@/utils/plots/single-gene-individual-lines';
 import singleGeneBarData from '@/utils/plots/single-gene-bar';
-import { action, makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 // import { settings } from '@/store/settings';
 
@@ -74,7 +74,6 @@ class PlotStore {
 
   addSingleGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
     const data = singleGeneBarData(accessions[0], options);
-    console.log({ data });
     this.plots.push({
       key: nanoid(),
       type: 'plotly',

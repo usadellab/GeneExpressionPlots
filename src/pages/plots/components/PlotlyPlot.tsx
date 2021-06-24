@@ -1,6 +1,6 @@
 import { PlotlyOptions } from '@/types/plots';
-import { Box, Flex } from '@chakra-ui/layout';
-import { Config, Layout, PlotData, PlotMouseEvent } from 'plotly.js';
+import { Flex } from '@chakra-ui/layout';
+import { Layout, PlotData, PlotMouseEvent } from 'plotly.js';
 import React, { createContext } from 'react';
 import Plot from 'react-plotly.js';
 import { settings } from '@/store/settings';

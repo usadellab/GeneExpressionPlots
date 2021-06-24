@@ -70,7 +70,7 @@ class Settings {
     return this._gxpSettings.unit;
   }
 
-  loadgxpSettings(gxpSettings: GxpSettings): void {
+  loadgxpSettings(gxpSettings: Partial<GxpSettings>): void {
     Object.assign(this._gxpSettings, gxpSettings);
   }
 
