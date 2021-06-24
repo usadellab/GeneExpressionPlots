@@ -1,3 +1,8 @@
+import { GxpPlot, PlotlyOptions } from '@/types/plots';
+import multiGeneBarData from '@/utils/plots/multi-gene-bar';
+import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-lines';
+import singleGeneIndividualLinesData from '@/utils/plots/single-gene-individual-lines';
+import singleGeneBarData from '@/utils/plots/single-gene-bar';
 import { makeAutoObservable } from 'mobx';
 
 // import { settings } from '@/store/settings';
@@ -12,17 +17,11 @@ import { makeAutoObservable } from 'mobx';
 //   PlotOptions,
 // } from '../utils/plotsHelper';
 
-// import { nanoid } from 'nanoid';
-// import { PlotlyOptions } from '@/pages/plots/plots-home';
-
-interface GxpPlot<T = Record<string, unknown>> {
-  key: string;
-  type: never;
-  props: T;
-}
+import { nanoid } from 'nanoid';
+import stackedLinesData from '@/utils/plots/stacked-lines';
 
 class PlotStore {
-  plots: GxpPlot[] = [];
+  plots: GxpPlot<unknown>[] = [];
   _image: string | null = null;
 
   countUnit: string | null = null;
@@ -72,6 +71,76 @@ class PlotStore {
     const index = this.plots.findIndex((plot) => plot.key === key);
     this.plots.splice(index, 1);
   }
+
+  addSingleGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
+    const data = singleGeneBarData(accessions[0], options);
+    this.plots.push({
+      key: nanoid(),
+      type: 'plotly',
+      props: { accessions, data, options },
+    });
+  }
+
+  addMultiGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
+    const data = multiGeneBarData(accessions, options);
+    this.plots.push({
+      key: nanoid(),
+      type: 'plotly',
+      props: { accessions, data, options },
+    });
+  }
+
+  addSingleGeneIndividualLinesPlot(
+    accessions: string[],
+    options: PlotlyOptions
+  ): void {
+    const data = singleGeneIndividualLinesData(accessions[0], options);
+    this.plots.push({
+      key: nanoid(),
+      type: 'plotly',
+      props: { accessions, data, options },
+    });
+  }
+
+  addMultiGeneIndividualLinesPlot(
+    accessions: string[],
+    options: PlotlyOptions
+  ): void {
+    const data = multiGeneIndividualLinesData(accessions, options);
+    this.plots.push({
+      key: nanoid(),
+      type: 'plotly',
+      props: { accessions, data, options },
+    });
+  }
+
+  addStackedLinesPlot(accessions: string[], options: PlotlyOptions): void {
+    const data = stackedLinesData(accessions, options);
+    this.plots.push({
+      key: nanoid(),
+      type: 'plotly',
+      props: { accessions, data, options },
+    });
+  }
+
+  // addSingleGeneBarPlot(accession: string, options: PlotlyOptions): void {
+  //   singleGeneBarData(accession, options).then(
+  //     action((data) => {
+  //       this.plots.push({
+  //         key: nanoid(),
+  //         type: 'single-gene-bar',
+  //         props: { accession, data, options },
+  //       });
+  //     })
+  //   );
+  //   // const data = singleGeneBarData(accession, options);
+
+  //   // this.plots.push({
+  //   //   key: nanoid(),
+  //   //   type: 'single-gene-bar',
+  //   //   props: { accession, data, options },
+  //   // });
+  // }
 
   // addBarPlot(accessionIds, options) {
   //   if (accessionIds.length === 1)
