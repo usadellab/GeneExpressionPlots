@@ -134,8 +134,8 @@ const PlotsHome: React.FC = () => {
         />
 
         <SidebarButton
-          text="Curved Lines Plot"
-          icon={TextIcon('CLN')}
+          text="Individual Lines Plot"
+          icon={TextIcon('ILN')}
           alignItems="baseline"
           onClick={onIndividualLinesFormOpen}
         />
