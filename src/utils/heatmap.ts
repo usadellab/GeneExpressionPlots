@@ -1,7 +1,7 @@
 import { distance } from 'ml-distance';
 import getDistanceMatrix from 'ml-distance-matrix';
 import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
-import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
+import { HeatmapBins } from '@/types/plots';
 
 // Once a worker, data will be accessed via IndexedDb
 import { dataTable } from '@/store/data-store';
@@ -86,18 +86,26 @@ function clusterGeneXMatrix(
 }
 
 /**
- * Transform an array of numeric values into a Bins type from '@visx/heatmap'.
+ * Higher-order mapping function to transform an array of numeric values into a
+ * Bins type ready to be consumed by the `HeatmapPlot` component built with the
+ * API of '@visx/heatmap'.
+ * @param replNames
  * @param values numeric array to transform
  * @param index current bins index
  * @returns the number array transformed as a bin
  */
-function valuesToBins(values: number[], index: number): Bins {
-  const bin = index;
-  const bins: Bin[] = values.map((count, bin) => ({ bin, count }));
+function valuesToBins(replNames: string[]) {
+  return (values: number[], index: number): HeatmapBins => {
+    const bin = replNames[index];
+    const bins = values.map((count, accessionIndex) => ({
+      bin: replNames[accessionIndex],
+      count,
+    }));
 
-  return {
-    bin,
-    bins,
+    return {
+      bin,
+      bins,
+    };
   };
 }
 
@@ -105,7 +113,9 @@ function valuesToBins(values: number[], index: number): Bins {
 
 //#region PUBLIC API
 
-export async function createHeatmapPlot(accessions: string[]): Promise<Bins[]> {
+export async function createHeatmapPlot(
+  accessions: string[]
+): Promise<HeatmapBins[]> {
   // Prepare the data from the store
   const replicateCounts: number[][] = dataTable.toTransposed2dArray();
 
@@ -113,7 +123,8 @@ export async function createHeatmapPlot(accessions: string[]): Promise<Bins[]> {
   const distanceMatrix = computeGeneXDistance(replicateCounts, 'euclidean');
 
   // Transform results to be consumed by @visx/heatmap
-  const binData = distanceMatrix.map(valuesToBins);
+  const replNames = dataTable.colNames;
+  const binData = distanceMatrix.map(valuesToBins(replNames));
 
   return binData;
 }

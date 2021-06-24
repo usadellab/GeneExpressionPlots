@@ -15,9 +15,9 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
     <Flex
       as="figure"
       alignItems="center"
-      justifyContent="center"
       backgroundColor="white"
-      height={500}
+      height={900}
+      justifyContent="center"
       margin={3}
       overflow="hidden"
       padding={6}

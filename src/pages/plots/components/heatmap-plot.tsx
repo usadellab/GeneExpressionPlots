@@ -1,12 +1,19 @@
 import React from 'react';
+import { toJS } from 'mobx';
 import { chakra } from '@chakra-ui/react';
 
-import { HeatmapRect } from '@visx/heatmap';
-import { Bin, Bins } from '@visx/mock-data/lib/generators/genBins';
-import { scaleLinear } from '@visx/scale';
-import { ScaleLinear } from 'd3-scale';
+import {
+  AxisBottom,
+  getStringWidth,
+  Group,
+  HeatmapRect,
+  scaleBand,
+  scaleLinear,
+} from '@visx/visx';
+import { ScaleLinear, ScaleBand } from 'd3-scale';
 
 import PlotContainer from './plot-container';
+import { HeatmapBins, HeatmapBin } from '@/types/plots';
 
 const gradient0 = '#b4fbde';
 const gradient1 = '#f33d15';
@@ -25,10 +32,10 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number {
 }
 
 // accessors
-const bins = (d: Bins): Bin[] => d.bins;
-const count = (d: Bin): number => d.count;
+const bins = (d: HeatmapBins): HeatmapBin[] => d.bins;
+const count = (d: HeatmapBin): number => d.count;
 
-const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
+const HeatmapPlot: React.FC<{ binData: HeatmapBins[] }> = (props) => {
   // color
   const colorMin = min(props.binData, (d) => min(bins(d), count));
   const colorMax = max(props.binData, (d) => max(bins(d), count));
@@ -45,6 +52,9 @@ const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
     binHeight: number;
     xScale: ScaleLinear<number, number>;
     yScale: ScaleLinear<number, number>;
+    xMax: number;
+    yMax: number;
+    xAxisScale: ScaleBand<string>;
   }>();
 
   React.useEffect(
@@ -67,8 +77,28 @@ const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
           // const clientHeight =
           //   parseFloat(figureStyle.getPropertyValue('height')) - clientPadding;
 
+          const ticksHeight = props.binData
+            .map((data) =>
+              getStringWidth(data.bin, {
+                'font-size': 14,
+              })
+            )
+            .reduce((previous, current) =>
+              previous === null
+                ? current
+                : current === null
+                ? previous
+                : previous === null && current === null
+                ? 0
+                : Math.max(previous, current)
+            );
+
           const clientWidth = entries[0].target.clientWidth - clientPadding;
-          const clientHeight = entries[0].target.clientHeight - clientPadding;
+          const clientHeight =
+            entries[0].target.clientHeight -
+            clientPadding -
+            (ticksHeight ?? 0) -
+            50;
 
           const dataLen = props.binData.length;
           const binWidth = clientWidth / dataLen;
@@ -76,25 +106,34 @@ const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
 
           const xScale = scaleLinear<number>({
             domain: [0, props.binData.length],
-          }).range([0, clientWidth]);
+            range: [0, clientWidth],
+          });
+
+          const xAxisScale = scaleBand<string>({
+            domain: props.binData.map((data) => data.bin),
+            range: [0, clientWidth],
+          });
 
           const yScale = scaleLinear<number>({
-            domain: [0, props.binData.length],
             // domain: [0, max(props.binData, (d) => bins(d).length)],
-          }).range([0, clientHeight]);
+            domain: [0, props.binData.length],
+            range: [0, clientHeight],
+          });
 
           setPlotDims({
             binWidth,
             binHeight,
             xScale,
             yScale,
+            xMax: clientWidth,
+            yMax: clientHeight,
+            xAxisScale,
           });
         }, 100);
 
         timeoutRef.current = timeoutId;
       });
 
-      // if (figureRef.current) {
       if (internalRef) {
         resizeObserver.observe(internalRef);
       }
@@ -104,53 +143,80 @@ const HeatmapPlot: React.FC<{ binData: Bins[] }> = (props) => {
         if (timeoutId) clearTimeout(timeoutId);
       };
     },
-    [props.binData.length]
+    [props.binData]
   );
 
   return (
-    <PlotContainer status={plotDims ? 'idle' : 'loading'} figureRef={figureRef}>
-      <svg width="100%" height="100%">
-        <HeatmapRect
-          data={props.binData}
-          xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
-          yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
-          colorScale={colorScale}
-          // opacityScale={opacityScale}
-          binWidth={plotDims?.binWidth}
-          binHeight={plotDims?.binHeight}
-          gap={1}
-        >
-          {(heatmap) =>
-            heatmap.map((heatmapData) =>
-              heatmapData.map((data) => {
-                return (
-                  <chakra.rect
-                    sx={{
-                      '&:hover': {
-                        stroke: 'black',
-                      },
-                    }}
-                    key={`heatmap-rect-${data.row}-${data.column}`}
-                    width={data.width}
-                    height={data.height}
-                    x={data.x}
-                    y={data.y}
-                    fill={data.color}
-                    fillOpacity={data.opacity}
-                    onClick={() => {
-                      const fromData = props.binData
-                        ? props.binData[data.column].bins[data.row]
-                        : undefined;
-                      const fromBin = data.bin;
-                      console.log({ fromData, fromBin });
-                    }}
-                  />
-                );
-              })
-            )
-          }
-        </HeatmapRect>
-      </svg>
+    <PlotContainer
+      justifyContent="center"
+      status={plotDims ? 'idle' : 'loading'}
+      figureRef={figureRef}
+    >
+      {plotDims && (
+        <svg width="100%" height="100%">
+          <Group>
+            <HeatmapRect
+              data={props.binData}
+              xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
+              yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
+              colorScale={colorScale}
+              // opacityScale={opacityScale}
+              binWidth={plotDims?.binWidth}
+              binHeight={plotDims?.binHeight}
+              bins={(d: HeatmapBins) => d && d.bins}
+              count={(d: HeatmapBin) => d && d.count}
+              gap={1}
+            >
+              {(heatmap) =>
+                heatmap.map((heatmapData) =>
+                  heatmapData.map((data) => {
+                    return (
+                      <chakra.rect
+                        sx={{
+                          '&:hover': {
+                            stroke: 'black',
+                          },
+                        }}
+                        key={`heatmap-rect-${data.row}-${data.column}`}
+                        width={data.width}
+                        height={data.height}
+                        x={data.x}
+                        y={data.y}
+                        fill={data.color}
+                        fillOpacity={data.opacity}
+                        onClick={() => {
+                          const colName = toJS(props.binData[data.column].bin);
+                          const rowName = toJS(
+                            props.binData[data.column].bins[data.row].bin
+                          );
+                          console.log({
+                            colName,
+                            rowName,
+                            bin: toJS(data.bin),
+                          });
+                        }}
+                      />
+                    );
+                  })
+                )
+              }
+            </HeatmapRect>
+          </Group>
+          <AxisBottom
+            top={plotDims.yMax + 10}
+            scale={plotDims.xAxisScale}
+            numTicks={props.binData.length}
+            tickLabelProps={() => ({
+              angle: 270,
+              dx: 3,
+              lengthAdjust: 'spacing',
+              fill: 'black',
+              fontSize: 14,
+              textAnchor: 'end',
+            })}
+          />
+        </svg>
+      )}
     </PlotContainer>
   );
 };
