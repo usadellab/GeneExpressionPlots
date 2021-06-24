@@ -29,7 +29,7 @@ const singleGeneBarData = (
       y,
       error_y: { type: 'data', array: error_y, visible: true },
       type: 'bar',
-      name: accession,
+      name: groupName,
       showlegend: options.showlegend,
     });
   });

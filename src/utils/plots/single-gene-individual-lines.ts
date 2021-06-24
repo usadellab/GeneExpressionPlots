@@ -30,7 +30,7 @@ const singleGeneIndividualLinesData = (
       y,
       error_y: { type: 'data', array: error_y, visible: true },
       type: 'scatter',
-      name: accession,
+      name: groupName,
       showlegend: options.showlegend,
     });
   });
