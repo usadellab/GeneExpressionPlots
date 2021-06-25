@@ -4,13 +4,11 @@ import { Flex, FlexProps, Spinner } from '@chakra-ui/react';
 interface PlotContainerProps extends FlexProps {
   status: 'idle' | 'loading';
   figureRef?: React.MutableRefObject<HTMLDivElement | null>;
-  title?: string;
 }
 
 const PlotContainer: React.FC<PlotContainerProps> = ({
   status,
   figureRef,
-  title,
   ...props
 }) => {
   return (
@@ -18,10 +16,12 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       as="figure"
       alignItems="center"
       backgroundColor="white"
-      boxShadow="lg"
+      boxShadow="sm"
+      flexDirection="column"
       justifyContent="center"
       margin={3}
       overflow="hidden"
+      height={900}
       padding={6}
       ref={(ref) => (figureRef ? (figureRef.current = ref) : ref)}
       resize="horizontal"
@@ -34,7 +34,6 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       width="100%"
       {...props}
     >
-      {title && <h1>{title}</h1>}
       {status === 'idle' ? (
         props.children
       ) : (
