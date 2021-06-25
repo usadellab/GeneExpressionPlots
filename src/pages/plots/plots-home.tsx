@@ -70,7 +70,7 @@ const PlotsHome: React.FC = () => {
   const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onHeatmapFormClose();
-    setTimeout(() => plotStore.addHeatmapPlot(values.accessions), 10);
+    setTimeout(() => plotStore.addHeatmapPlot(values.replicates), 10);
   };
 
   return (

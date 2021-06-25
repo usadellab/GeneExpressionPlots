@@ -113,17 +113,27 @@ function valuesToBins(replNames: string[]) {
 
 //#region PUBLIC API
 
+interface CreateHeatmapOptions {
+  cluster?: boolean;
+}
+
 export async function createHeatmapPlot(
-  accessions: string[]
+  replicates?: string[],
+  options?: CreateHeatmapOptions
 ): Promise<HeatmapBins[]> {
   // Prepare the data from the store
-  const replicateCounts: number[][] = dataTable.toTransposed2dArray();
+  const replicateCounts: number[][] = dataTable.toTransposed2dArray(replicates);
 
   // Compute the euclidean distance matrix between each gene
   const distanceMatrix = computeGeneXDistance(replicateCounts, 'euclidean');
 
+  if (options?.cluster) {
+    // TODO
+    // clusterGeneXMatrix(distanceMatrix, 'ward');
+  }
+
   // Transform results to be consumed by @visx/heatmap
-  const replNames = dataTable.colNames;
+  const replNames = replicates ?? dataTable.colNames;
   const binData = distanceMatrix.map(valuesToBins(replNames));
 
   return binData;

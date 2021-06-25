@@ -89,10 +89,27 @@ export class Dataframe {
    * Transforms the `rows` to a two dimensional array, where the first
    * dimension are the rows and the second the columns.
    *
+   * @param {string[] | undefined} columns replicate columns to transform
    * @return {Array} two dimensional array of data points
    */
-  to2dArray() {
-    return Object.entries(this.rows).map(([, replCounts]) => replCounts);
+  to2dArray(columns) {
+    /** @type {number[]} */
+    const colIndexes = columns
+      ? columns
+          .map((colName, colIndex) =>
+            columns.includes(colName) ? colIndex : undefined
+          )
+          .filter((colIndex) => colIndex !== undefined)
+      : [];
+
+    const array2d = Object.entries(this.rows).map(([, replCounts]) => {
+      if (columns && colIndexes.length > 0) {
+        return replCounts.filter((count, index) => colIndexes.includes(index));
+      }
+      return replCounts;
+    });
+
+    return array2d;
   }
 
   /**
@@ -150,10 +167,11 @@ export class Dataframe {
    * Transforms the `rows` to a two dimensional array, where the first
    * dimension are the columns and the second are the rows.
    *
+   * @param {string[] | undefined} columns replicate columns to transform
    * @return {Array} two dimensional array of replicates
    */
-  toTransposed2dArray() {
-    let arr2D = this.to2dArray();
+  toTransposed2dArray(columns) {
+    let arr2D = this.to2dArray(columns);
     return arr2D[0].map((_, colIndex) => arr2D.map((row) => row[colIndex]));
   }
 

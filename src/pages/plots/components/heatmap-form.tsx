@@ -3,14 +3,20 @@ import {
   Form,
   FieldArray,
   FieldValidator,
+  FormikErrors,
   FormikHelpers,
 } from 'formik';
 import React from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import FormikField from '@/components/formik-field';
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Box,
   Button,
+  CloseButton,
   Flex,
   Icon,
   IconButton,
@@ -18,14 +24,6 @@ import {
   VisuallyHidden,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
-import FormikSwitch from '@/components/formik-switch';
-
-export interface HeatmapFormAttributes {
-  accessions: string[];
-  plotTitle: string;
-  withCaption: boolean;
-  withLegend: boolean;
-}
 
 export type HeatmapFormSubmitHandler = (
   values: HeatmapFormAttributes,
@@ -38,87 +36,95 @@ export interface HeatmapFormProps {
   onSubmit: HeatmapFormSubmitHandler;
 }
 
+interface HeatmapFormAttributes {
+  replicates: string[];
+  plotTitle: string;
+}
+
+enum HeatmapFormErrors {
+  EMPTY_REPLICATE = 'A replicate field cannot be empty',
+  MIN_REPLICATES = 'At least two replicates must be selected',
+}
+
 const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
-  const validateAccession: FieldValidator = (value: string) => {
-    if (!value) return 'The accession ID cannot be empty';
+  const validateForm = (
+    values: HeatmapFormAttributes
+  ): FormikErrors<HeatmapFormAttributes> | void => {
+    if (values.replicates.length === 1) {
+      return {
+        replicates: [HeatmapFormErrors.MIN_REPLICATES],
+      };
+    }
+  };
+
+  const validateReplicate: FieldValidator = (value: string) => {
+    if (!value) return HeatmapFormErrors.EMPTY_REPLICATE;
   };
 
   return (
-    <Formik
+    <Formik<HeatmapFormAttributes>
       initialValues={{
-        accessions: [''],
+        replicates: [],
         plotTitle: '',
-        withCaption: true,
-        withLegend: true,
       }}
+      validateOnBlur={false}
+      validate={validateForm}
       onSubmit={props.onSubmit}
     >
       {(formProps) => (
-        <Box as={Form}>
-          <Box as="fieldset">
-            <VisuallyHidden as="legend">
-              Legend and caption switches
+        <>
+          {formProps.errors.replicates?.[0] ===
+            HeatmapFormErrors.MIN_REPLICATES && (
+            <VisuallyHidden>
+              <Alert status="error" variant="subtle" alignItems="center">
+                <AlertIcon mr={4} />
+                <Box flex="1">
+                  <AlertTitle fontSize="lg">Errors</AlertTitle>
+                  <AlertDescription display="block">
+                    {HeatmapFormErrors.MIN_REPLICATES}
+                  </AlertDescription>
+                </Box>
+                <CloseButton position="absolute" right="8px" top="8px" />
+              </Alert>
             </VisuallyHidden>
+          )}
 
-            <Flex as="ul" listStyleType="none">
-              <FormikSwitch
-                controlProps={{
-                  as: 'li',
-                }}
-                color="orange.600"
-                id="plot-legend"
-                label="Legend"
-                name="withLegend"
-              />
+          <Box as={Form}>
+            <FormikField
+              controlProps={{
+                as: 'p',
+                marginTop: '1rem',
+              }}
+              initialFocusRef={props.initialFocusRef}
+              label="Plot Title"
+              name="plotTitle"
+            />
 
-              <FormikSwitch
-                controlProps={{
-                  as: 'li',
-                }}
-                color="orange.600"
-                id="plot-caption"
-                label="Caption"
-                name="withCaption"
-              />
-            </Flex>
-          </Box>
+            <FieldArray name="replicates">
+              {(helpers) => (
+                <Box as="fieldset">
+                  <VisuallyHidden as="legend">Replicates</VisuallyHidden>
 
-          <FormikField
-            controlProps={{
-              as: 'p',
-              marginTop: '1rem',
-            }}
-            initialFocusRef={props.initialFocusRef}
-            label="Plot Title"
-            name="plotTitle"
-          />
-
-          <FieldArray name="accessions">
-            {(helpers) => (
-              <Box as="fieldset">
-                <VisuallyHidden as="legend">Gene Accessions</VisuallyHidden>
-
-                {formProps.values.accessions &&
-                  formProps.values.accessions.length > 0 &&
-                  formProps.values.accessions.map((accession, index) => (
-                    <FormikField
-                      controlProps={{
-                        as: 'p',
-                        marginTop: '1rem',
-                      }}
-                      groupProps={{
-                        _focusWithin: {
-                          '& > button': {
-                            display: 'inline-flex',
+                  {formProps.values.replicates.length > 0 &&
+                    formProps.values.replicates.map((accession, index) => (
+                      <FormikField
+                        controlProps={{
+                          as: 'p',
+                          marginTop: '1rem',
+                        }}
+                        groupProps={{
+                          _focusWithin: {
+                            '& > button': {
+                              display: 'inline-flex',
+                            },
                           },
-                        },
-                      }}
-                      isRequired
-                      key={index}
-                      label={`Gene Accession ${index + 1}`}
-                      name={`accessions.${index}`}
-                      rightChildren={
-                        formProps.values.accessions.length > 1 && (
+                        }}
+                        isRequired
+                        key={index}
+                        label={`Replicate ${index + 1}`}
+                        name={`replicates.${index}`}
+                        rightChildren={
+                          // REMOVE BUTTON
                           <InputRightAddon
                             _focusWithin={{
                               backgroundColor: 'white',
@@ -147,86 +153,100 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                               variant="unstyled"
                             />
                           </InputRightAddon>
-                        )
-                      }
-                      validate={validateAccession}
-                    >
-                      {/* INSERT BUTTON */}
-                      <Box
-                        display="none"
-                        color="gray.500"
-                        _groupFocus={{
-                          display: 'inline-flex',
-                        }}
-                        _groupHover={{
-                          display: 'inline-flex',
-                        }}
-                        _focus={{
-                          backgroundColor: 'orange.600',
-                          color: 'white',
-                          outline: 'none',
-                        }}
-                        _hover={{
-                          backgroundColor: 'orange.600',
-                          color: 'white',
-                        }}
-                        alignItems="center"
-                        as="button"
-                        aria-label={`Insert new below`}
-                        backgroundColor="white"
-                        height="1rem"
-                        justifyContent="center"
-                        left="43%"
-                        padding=".75rem"
-                        position="absolute"
-                        rounded="full"
-                        top="28px"
-                        type="button"
-                        width="1rem"
-                        zIndex="popover"
-                        onClick={() => helpers.insert(index + 1, '')}
+                        }
+                        validate={validateReplicate}
                       >
-                        <Icon as={FaPlus} />
-                      </Box>
-                    </FormikField>
-                  ))}
+                        {/* INSERT BUTTON */}
+                        <Box
+                          display="none"
+                          color="gray.500"
+                          _groupFocus={{
+                            display: 'inline-flex',
+                          }}
+                          _groupHover={{
+                            display: 'inline-flex',
+                          }}
+                          _focus={{
+                            backgroundColor: 'orange.600',
+                            color: 'white',
+                            outline: 'none',
+                          }}
+                          _hover={{
+                            backgroundColor: 'orange.600',
+                            color: 'white',
+                          }}
+                          alignItems="center"
+                          as="button"
+                          aria-label={`Insert new below`}
+                          backgroundColor="white"
+                          height="1rem"
+                          justifyContent="center"
+                          left="43%"
+                          padding=".75rem"
+                          position="absolute"
+                          rounded="full"
+                          top="28px"
+                          type="button"
+                          width="1rem"
+                          zIndex="popover"
+                          onClick={() => helpers.insert(index + 1, '')}
+                        >
+                          <Icon as={FaPlus} />
+                        </Box>
+                      </FormikField>
+                    ))}
 
-                <Button
-                  _focus={{
-                    outline: 'none',
-                    backgroundColor: 'orange.100',
-                  }}
-                  _hover={{
-                    backgroundColor: 'orange.100',
-                  }}
-                  colorScheme="orange"
-                  marginTop="1rem"
-                  type="button"
-                  onClick={() => helpers.push('')}
-                  variant="ghost"
-                >
-                  Add New
-                </Button>
-              </Box>
-            )}
-          </FieldArray>
+                  {/* ADD NEW BUTTON */}
+                  <Button
+                    _focus={{
+                      outline: 'none',
+                      backgroundColor: 'orange.100',
+                    }}
+                    _hover={{
+                      backgroundColor: 'orange.100',
+                    }}
+                    colorScheme="orange"
+                    marginTop="1rem"
+                    type="button"
+                    onClick={() => {
+                      if (formProps.values.replicates.length === 0) {
+                        helpers.push('');
+                        helpers.push('');
+                      } else {
+                        helpers.push('');
+                      }
+                    }}
+                    variant="ghost"
+                  >
+                    {formProps.values.replicates.length === 0
+                      ? 'Optional: Select Replicates'
+                      : 'Add Another Replicate'}
+                  </Button>
+                </Box>
+              )}
+            </FieldArray>
 
-          <Flex as="p" paddingY={6} justifyContent="flex-end">
-            <Button onClick={props.onCancel} colorScheme="red" variant="ghost">
-              Cancel
-            </Button>
+            <Flex as="p" paddingY={6} justifyContent="flex-end">
+              <Button
+                onClick={props.onCancel}
+                colorScheme="red"
+                variant="ghost"
+              >
+                Cancel
+              </Button>
 
-            <Button
-              colorScheme="orange"
-              isLoading={formProps.isSubmitting}
-              marginLeft=".5rem"
-              type="submit"
-              variant="solid"
-            >
-              Load
-            </Button>
-          </Flex>
-        </Box>
+              <Button
+                colorScheme="orange"
+                isLoading={formProps.isSubmitting}
+                marginLeft=".5rem"
+                type="submit"
+                variant="solid"
+              >
+                Load
+              </Button>
+            </Flex>
+          </Box>
+        </>
       )}
     </Formik>
   );
