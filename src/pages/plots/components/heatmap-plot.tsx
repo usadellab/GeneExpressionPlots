@@ -85,7 +85,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const clientPaddingX = clientPaddingRight + clientPaddingLeft;
           const clientPaddingY = clientPaddingTop + clientPaddingBottom;
 
-          const ticksHeight = props.binData
+          const tickLabelHeight = props.binData
             .map((data) =>
               getStringWidth(data.bin, {
                 'font-size': 14,
@@ -105,8 +105,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const clientHeight =
             entries[0].target.clientHeight -
             clientPaddingY -
-            (ticksHeight ?? 0) -
-            50;
+            (tickLabelHeight ?? 0) -
+            10; // Tick line height
 
           const dataLen = props.binData.length;
           const binWidth = clientWidth / dataLen;
