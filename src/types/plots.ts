@@ -11,7 +11,6 @@ export interface GxpPlot {
  * - `binData`: the rows of the heatmap matrix
  */
 export interface GxpHeatmap extends GxpPlot {
-  // binData: Bins[];
   binData: HeatmapBins[];
 }
 

@@ -106,15 +106,15 @@ const HeatmapPlot: React.FC<{ binData: HeatmapBins[] }> = (props) => {
             range: [0, clientWidth],
           });
 
-          const xAxisScale = scaleBand<string>({
-            domain: props.binData.map((data) => data.bin),
-            range: [0, clientWidth],
-          });
-
           const yScale = scaleLinear<number>({
             // domain: [0, max(props.binData, (d) => bins(d).length)],
             domain: [0, props.binData.length],
             range: [0, clientHeight],
+          });
+
+          const xAxisScale = scaleBand<string>({
+            domain: props.binData.map((data) => data.bin),
+            range: [0, clientWidth],
           });
 
           setPlotDims({
