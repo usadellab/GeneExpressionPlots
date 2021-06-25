@@ -55,7 +55,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
   });
   React.useEffect(function resizePlot() {
     let id: number;
-    let figureRefValue: HTMLDivElement | null = null;
+    const internalRef = figureRef.current;
     const resizeObserver = new ResizeObserver((entries) => {
       clearTimeout(timeoutRef.current);
       id = window.setTimeout(() => {
@@ -70,11 +70,10 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
 
     if (figureRef.current) {
       resizeObserver.observe(figureRef.current);
-      figureRefValue = figureRef.current;
     }
 
     return () => {
-      if (figureRefValue) resizeObserver.unobserve(figureRefValue);
+      if (internalRef) resizeObserver.unobserve(internalRef);
       if (id) clearTimeout(id);
     };
   }, []);
