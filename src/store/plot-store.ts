@@ -74,9 +74,9 @@ class PlotStore {
 
   /**
    * Add a new gene expression heatmap plot to the store.
-   * @param accessions gene accessions to visualize
+   * @param replicates gene accessions to visualize
    */
-  addHeatmapPlot(accessions: string[]): void {
+  addHeatmapPlot(replicates?: string[]): void {
     const key = nanoid();
     const pendingPlot: GxpPlot = {
       key,
@@ -87,7 +87,7 @@ class PlotStore {
 
     setTimeout(
       () =>
-        createHeatmapPlot(accessions).then(
+        createHeatmapPlot({ replicates }).then(
           action('addHeatmapPlot', (binData) => {
             const loadedPlot: GxpHeatmap = {
               ...this.plots[plotIndex],

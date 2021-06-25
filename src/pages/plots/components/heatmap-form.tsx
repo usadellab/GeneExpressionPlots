@@ -43,7 +43,7 @@ interface HeatmapFormAttributes {
 
 enum HeatmapFormErrors {
   EMPTY_REPLICATE = 'A replicate field cannot be empty',
-  MIN_REPLICATES = 'At least two replicates must be selected',
+  MIN_OPTIONAL_REPLICATES = 'At least two replicates must be selected',
 }
 
 const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
@@ -52,7 +52,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
   ): FormikErrors<HeatmapFormAttributes> | void => {
     if (values.replicates.length === 1) {
       return {
-        replicates: [HeatmapFormErrors.MIN_REPLICATES],
+        replicates: [HeatmapFormErrors.MIN_OPTIONAL_REPLICATES],
       };
     }
   };
@@ -74,14 +74,14 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
       {(formProps) => (
         <>
           {formProps.errors.replicates?.[0] ===
-            HeatmapFormErrors.MIN_REPLICATES && (
+            HeatmapFormErrors.MIN_OPTIONAL_REPLICATES && (
             <VisuallyHidden>
               <Alert status="error" variant="subtle" alignItems="center">
                 <AlertIcon mr={4} />
                 <Box flex="1">
                   <AlertTitle fontSize="lg">Errors</AlertTitle>
                   <AlertDescription display="block">
-                    {HeatmapFormErrors.MIN_REPLICATES}
+                    {HeatmapFormErrors.MIN_OPTIONAL_REPLICATES}
                   </AlertDescription>
                 </Box>
                 <CloseButton position="absolute" right="8px" top="8px" />

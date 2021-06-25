@@ -94,13 +94,14 @@ export class Dataframe {
    */
   to2dArray(columns) {
     /** @type {number[]} */
-    const colIndexes = columns
-      ? columns
-          .map((colName, colIndex) =>
-            columns.includes(colName) ? colIndex : undefined
-          )
-          .filter((colIndex) => colIndex !== undefined)
-      : [];
+    const colIndexes =
+      columns && columns.length > 0
+        ? columns
+            .map((colName, colIndex) =>
+              columns.includes(colName) ? colIndex : undefined
+            )
+            .filter((colIndex) => colIndex !== undefined)
+        : [];
 
     const array2d = Object.entries(this.rows).map(([, replCounts]) => {
       if (columns && colIndexes.length > 0) {
