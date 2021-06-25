@@ -70,15 +70,22 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
         timeoutId = window.setTimeout(() => {
           const figureStyle = window.getComputedStyle(entries[0].target, null);
 
-          const clientPadding =
-            parseFloat(figureStyle.getPropertyValue('padding')) * 2;
+          const clientPaddingTop = parseFloat(
+            figureStyle.getPropertyValue('padding-top')
+          );
+          const clientPaddingBottom = parseFloat(
+            figureStyle.getPropertyValue('padding-bottom')
+          );
+          const clientPaddingLeft = parseFloat(
+            figureStyle.getPropertyValue('padding-left')
+          );
+          const clientPaddingRight = parseFloat(
+            figureStyle.getPropertyValue('padding-right')
+          );
+          const clientPaddingX = clientPaddingRight + clientPaddingLeft;
+          const clientPaddingY = clientPaddingTop + clientPaddingBottom;
 
-          // const clientWidth =
-          //   parseFloat(figureStyle.getPropertyValue('width')) - clientPadding;
-          // const clientHeight =
-          //   parseFloat(figureStyle.getPropertyValue('height')) - clientPadding;
-
-          const ticksHeight = props.binData
+          const tickLabelHeight = props.binData
             .map((data) =>
               getStringWidth(data.bin, {
                 'font-size': 14,
@@ -94,12 +101,12 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 : Math.max(previous, current)
             );
 
-          const clientWidth = entries[0].target.clientWidth - clientPadding;
+          const clientWidth = entries[0].target.clientWidth - clientPaddingX;
           const clientHeight =
             entries[0].target.clientHeight -
-            clientPadding -
-            (ticksHeight ?? 0) -
-            50;
+            clientPaddingY -
+            (tickLabelHeight ?? 0) -
+            10; // Tick line height
 
           const dataLen = props.binData.length;
           const binWidth = clientWidth / dataLen;

@@ -190,6 +190,7 @@ const PlotsHome: React.FC = () => {
         role="region"
         width="100%"
         margin={2}
+        overflow="hidden"
       >
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {

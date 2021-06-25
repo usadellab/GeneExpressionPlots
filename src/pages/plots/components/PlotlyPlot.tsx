@@ -1,4 +1,3 @@
-import { Flex } from '@chakra-ui/layout';
 import { Layout, PlotMouseEvent } from 'plotly.js';
 import React, { createContext } from 'react';
 import Plot from 'react-plotly.js';
@@ -6,6 +5,8 @@ import { PlotData } from 'plotly.js';
 import { settings } from '@/store/settings';
 import { observer } from 'mobx-react';
 import { GxpPlotly, PlotlyOptions } from '@/types/plots';
+import PlotContainer from './plot-container';
+import { Box } from '@chakra-ui/react';
 
 export const colors = [
   '#c7566f',
@@ -41,8 +42,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
     title: {
       text: props.options.plotTitle,
       font: {
-        family: 'ABeeZee',
-        size: 24,
+        size: 20,
       },
       y: 0.9,
     },
@@ -58,14 +58,11 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
       },
       hoverformat: '.2f',
     },
-    // xaxis: {
-    //   tickangle: ,
-    // },
     colorway: colors,
   });
   React.useEffect(function resizePlot() {
     let id: number;
-
+    const internalRef = figureRef.current;
     const resizeObserver = new ResizeObserver((entries) => {
       clearTimeout(timeoutRef.current);
       id = window.setTimeout(() => {
@@ -78,12 +75,12 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
       timeoutRef.current = id;
     });
 
-    if (figureRef.current) {
-      resizeObserver.observe(figureRef.current);
+    if (internalRef) {
+      resizeObserver.observe(internalRef);
     }
 
     return () => {
-      if (figureRef.current) resizeObserver.unobserve(figureRef.current);
+      if (internalRef) resizeObserver.unobserve(internalRef);
       if (id) clearTimeout(id);
     };
   }, []);
@@ -101,19 +98,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
 
   return (
     <PlotContext.Provider value={{ hoveredGene: name }}>
-      <Flex
-        as="figure"
-        ref={(ref) => (figureRef.current = ref)}
-        position="relative"
-        direction="column"
-        boxShadow="lg"
-        bg="white"
-        overflow="auto"
-        resize="horizontal"
-        width="full"
-        m="3"
-        py="6"
-      >
+      <PlotContainer status="idle" figureRef={figureRef}>
         <Plot
           ref={(ref) => (plotRef.current = ref)}
           data={props.data}
@@ -121,8 +106,10 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
           onHover={onPlotHover}
           onUnhover={onPlotUnhover}
         />
-        <div className="mx-12">{props.children}</div>
-      </Flex>
+        <Box marginX="12" width="full" overflow="auto">
+          {props.children}
+        </Box>
+      </PlotContainer>
     </PlotContext.Provider>
   );
 };
