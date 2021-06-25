@@ -68,8 +68,8 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
       timeoutRef.current = id;
     });
 
-    if (figureRef.current) {
-      resizeObserver.observe(figureRef.current);
+    if (internalRef) {
+      resizeObserver.observe(internalRef);
     }
 
     return () => {
