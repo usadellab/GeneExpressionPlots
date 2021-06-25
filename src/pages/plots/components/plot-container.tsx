@@ -21,7 +21,7 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       justifyContent="center"
       margin={3}
       overflow="hidden"
-      height={900}
+      height={800}
       padding={6}
       ref={(ref) => (figureRef ? (figureRef.current = ref) : ref)}
       resize="horizontal"
