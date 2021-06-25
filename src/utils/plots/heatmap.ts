@@ -122,7 +122,7 @@ export async function createHeatmapPlot(
   options?: CreateHeatmapOptions
 ): Promise<HeatmapBins[]> {
   // Prepare the data from the store
-  const replicateCounts: number[][] = dataTable.toTransposed2dArray(
+  const replicateCounts: number[][] = dataTable.toArrayOfColumns(
     options?.replicates
   );
 
