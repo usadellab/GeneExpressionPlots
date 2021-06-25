@@ -70,13 +70,20 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
         timeoutId = window.setTimeout(() => {
           const figureStyle = window.getComputedStyle(entries[0].target, null);
 
-          const clientPadding =
-            parseFloat(figureStyle.getPropertyValue('padding')) * 2;
-
-          // const clientWidth =
-          //   parseFloat(figureStyle.getPropertyValue('width')) - clientPadding;
-          // const clientHeight =
-          //   parseFloat(figureStyle.getPropertyValue('height')) - clientPadding;
+          const clientPaddingTop = parseFloat(
+            figureStyle.getPropertyValue('padding-top')
+          );
+          const clientPaddingBottom = parseFloat(
+            figureStyle.getPropertyValue('padding-bottom')
+          );
+          const clientPaddingLeft = parseFloat(
+            figureStyle.getPropertyValue('padding-left')
+          );
+          const clientPaddingRight = parseFloat(
+            figureStyle.getPropertyValue('padding-right')
+          );
+          const clientPaddingX = clientPaddingRight + clientPaddingLeft;
+          const clientPaddingY = clientPaddingTop + clientPaddingBottom;
 
           const ticksHeight = props.binData
             .map((data) =>
@@ -94,10 +101,10 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 : Math.max(previous, current)
             );
 
-          const clientWidth = entries[0].target.clientWidth - clientPadding;
+          const clientWidth = entries[0].target.clientWidth - clientPaddingX;
           const clientHeight =
             entries[0].target.clientHeight -
-            clientPadding -
+            clientPaddingY -
             (ticksHeight ?? 0) -
             50;
 
