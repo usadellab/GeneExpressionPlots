@@ -32,7 +32,11 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number {
 const bins = (d: HeatmapBins): HeatmapBin[] => d.bins;
 const count = (d: HeatmapBin): number => d.count;
 
-const HeatmapPlot: React.FC<{ binData: HeatmapBins[] }> = (props) => {
+interface HeatmapPlotProps {
+  binData: HeatmapBins[];
+}
+
+const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
   // color
   const colorMin = min(props.binData, (d) => min(bins(d), count));
   const colorMax = max(props.binData, (d) => max(bins(d), count));

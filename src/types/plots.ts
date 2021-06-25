@@ -1,10 +1,14 @@
-export type PlotType = 'heatmap';
+import { PlotData } from 'plotly.js';
+
+export type PlotType = 'heatmap' | 'plotly';
 
 export interface GxpPlot {
   key: string;
   type: PlotType;
   isLoading: boolean;
 }
+
+//#region Heatmap
 
 /**
  * Interface describing the expected properties of the HeatmapPlot component.
@@ -33,3 +37,23 @@ export interface HeatmapBin {
   bin: string;
   count: number;
 }
+
+//#endregion
+
+//#region Plotly Plots
+
+export interface PlotlyOptions {
+  showlegend: boolean;
+  showCaption: boolean;
+  plotType?: 'bar' | 'scatter';
+  colorBy?: string;
+  plotTitle: string;
+}
+
+export interface GxpPlotly extends GxpPlot {
+  data: Partial<PlotData>[];
+  accessions: string[];
+  options: PlotlyOptions;
+}
+
+//#endregion

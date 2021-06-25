@@ -1,24 +1,14 @@
 import { makeAutoObservable, action } from 'mobx';
 import { nanoid } from 'nanoid';
-import { GxpPlot, GxpHeatmap } from '@/types/plots';
+import { GxpHeatmap, GxpPlot, PlotlyOptions, GxpPlotly } from '@/types/plots';
 
 // Future Workers
-import { createHeatmapPlot } from '@/utils/heatmap';
-
-// import { settings } from '@/store/settings';
-
-// import {
-//   singleGeneGroupedPlot,
-//   multiGeneIndCurvesPlot,
-//   stackedLinePlot,
-//   multiGeneBarPlot,
-//   createPcaPlot,
-//   createHeatmapPlot,
-//   PlotOptions,
-// } from '../utils/plotsHelper';
-
-// import { nanoid } from 'nanoid';
-// import { PlotlyOptions } from '@/pages/plots/plots-home';
+import { createHeatmapPlot } from '@/utils/plots/heatmap';
+import multiGeneBarData from '@/utils/plots/multi-gene-bar';
+import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-lines';
+import singleGeneIndividualLinesData from '@/utils/plots/single-gene-individual-lines';
+import singleGeneBarData from '@/utils/plots/single-gene-bar';
+import stackedLinesData from '@/utils/plots/stacked-lines';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -104,33 +94,76 @@ class PlotStore {
     );
   }
 
-  // addBarPlot(accessionIds, options) {
-  //   if (accessionIds.length === 1)
-  //     this.plots.push(singleGeneGroupedPlot(accessionIds, options));
-  //   else if (accessionIds.length > 1)
-  //     this.plots.push(multiGeneBarPlot(accessionIds, options));
-  // }
+  addSingleGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
+    const data = singleGeneBarData(accessions[0], options);
+    const singleGeneBarPlot: GxpPlotly = {
+      key: nanoid(),
+      type: 'plotly',
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(singleGeneBarPlot);
+  }
 
-  // /**
-  //  *
-  //  * @param {string[]} accessionIds
-  //  * @param {PlotOptions} options
-  //  */
-  // addIndivualCurvesPlot(accessionIds, options) {
-  //   if (accessionIds.length === 1)
-  //     this.plots.push(singleGeneGroupedPlot(accessionIds, options));
-  //   else if (accessionIds.length > 1)
-  //     this.plots.push(multiGeneIndCurvesPlot(accessionIds, options));
-  // }
+  addMultiGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
+    const data = multiGeneBarData(accessions, options);
+    const multiGeneBarPlot: GxpPlotly = {
+      key: nanoid(),
+      type: 'plotly',
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(multiGeneBarPlot);
+  }
 
-  // /**
-  //  *
-  //  * @param {string[]} accessionIds
-  //  * @param {PlotOptions} options
-  //  */
-  // addStackedCurvePlot(accessionIds, options) {
-  //   this.plots.push(stackedLinePlot(accessionIds, options));
-  // }
+  addSingleGeneIndividualLinesPlot(
+    accessions: string[],
+    options: PlotlyOptions
+  ): void {
+    const data = singleGeneIndividualLinesData(accessions[0], options);
+    const singleGeneIndividualLines: GxpPlotly = {
+      key: nanoid(),
+      type: 'plotly',
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(singleGeneIndividualLines);
+  }
+
+  addMultiGeneIndividualLinesPlot(
+    accessions: string[],
+    options: PlotlyOptions
+  ): void {
+    const data = multiGeneIndividualLinesData(accessions, options);
+    const multiGeneIndividualLines: GxpPlotly = {
+      key: nanoid(),
+      type: 'plotly',
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(multiGeneIndividualLines);
+  }
+
+  addStackedLinesPlot(accessions: string[], options: PlotlyOptions): void {
+    const data = stackedLinesData(accessions, options);
+    const stackedLines: GxpPlotly = {
+      key: nanoid(),
+      type: 'plotly',
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(stackedLines);
+  }
 
   /**
    * Generates a plot visualizing the results of a principal component
@@ -138,40 +171,6 @@ class PlotStore {
    */
   // addPcaPlot() {
   //   this.plots.push(createPcaPlot());
-  // }
-
-  /**
-   * Generates a plot visualizing the results of a principal component
-   * analysis.
-   */
-  // addHeatmapPlot() {
-  //   this.plots.push(createHeatmapPlot());
-  // }
-
-  // /**
-  //  * @param {Array} accessionIds
-  //  * @param {PlotOptions} options
-  //  */
-  // addPlot(accessionIds, options) {
-  //   options.countUnit = settings.gxpSettings.unit;
-  //   options.plotId = nanoid();
-  //   options.config = this.config(options.plotId);
-  //   options.groupOrder = settings.gxpSettings.groupOrder;
-  //   options.sampleOrder = settings.gxpSettings.sampleOrder;
-
-  //   switch (options.plotType) {
-  //     case 'bars':
-  //       this.addBarPlot(accessionIds, options);
-  //       break;
-  //     case 'individualCurves':
-  //       this.addIndivualCurvesPlot(accessionIds, options);
-  //       break;
-  //     case 'stackedCurves':
-  //       this.addStackedCurvePlot(accessionIds, options);
-  //       break;
-  //     default:
-  //       break;
-  //   }
   // }
 
   /**

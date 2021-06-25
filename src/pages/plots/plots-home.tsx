@@ -2,28 +2,29 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import { plotStore } from '@/store/plot-store';
+import { infoTable } from '@/store/data-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
 import { Flex, Spinner, Text, useDisclosure } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
+import { GxpHeatmap, PlotlyOptions, GxpPlotly } from '@/types/plots';
+
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
 import HeatmapForm, {
   HeatmapFormSubmitHandler,
 } from './components/heatmap-form';
-
 import HeatmapPlot from './components/heatmap-plot';
 import PlotContainer from './components/plot-container';
-import { GxpHeatmap } from '@/types/plots';
-
-export interface PlotlyOptions {
-  showlegend: boolean;
-  showCaption: boolean;
-  plotType?: string;
-  colorBy?: string;
-  plotTitle: string;
-}
+import PlotlyPlot, { colors } from './components/PlotlyPlot';
+import IndividualLinesForm, {
+  IndividualLinesFormSubmitHandler,
+} from './components/individual-lines-form';
+import StackedLinesForm, {
+  StackedLinesFormSubmitHandler,
+} from './components/stacked-lines-form';
+import PlotCaption from './components/PlotCaption';
 
 const TextIcon = (text: string) =>
   function IconRenderer(): JSX.Element {
@@ -52,8 +53,80 @@ const PlotsHome: React.FC = () => {
   } = useDisclosure();
 
   const onBarsFormSubmit: BarsFormSubmitHandler = (values, actions) => {
-    console.log({ values });
+    if (values.accessions.length === 1) {
+      plotStore.addSingleGeneBarPlot(values.accessions, {
+        showlegend: values.withLegend,
+        showCaption: values.withCaption,
+        plotTitle: values.plotTitle,
+      } as PlotlyOptions);
+    } else {
+      plotStore.addMultiGeneBarPlot(values.accessions, {
+        showlegend: values.withLegend,
+        showCaption: values.withCaption,
+        plotTitle: values.plotTitle,
+      });
+    }
+
     actions.setSubmitting(false);
+    onBarsFormClose();
+  };
+
+  /* INDIVIDUAL LINES */
+  const refIndividualLinesFormInitialFocus =
+    React.useRef<FocusableElement | null>(null);
+
+  const {
+    isOpen: isIndividualLinesFormOpen,
+    onOpen: onIndividualLinesFormOpen,
+    onClose: onIndividualLinesFormClose,
+  } = useDisclosure();
+
+  const onIndividualLinesFormSubmit: IndividualLinesFormSubmitHandler = (
+    values,
+    actions
+  ) => {
+    if (values.accessions.length === 1) {
+      plotStore.addSingleGeneIndividualLinesPlot(values.accessions, {
+        showlegend: values.withLegend,
+        showCaption: values.withCaption,
+        plotTitle: values.plotTitle,
+      } as PlotlyOptions);
+    } else {
+      plotStore.addMultiGeneIndividualLinesPlot(values.accessions, {
+        showlegend: values.withLegend,
+        showCaption: values.withCaption,
+        plotTitle: values.plotTitle,
+      });
+    }
+
+    actions.setSubmitting(false);
+    onIndividualLinesFormClose();
+  };
+
+  /* Stacked Lines */
+  const refStackedLinesFormInitialFocus = React.useRef<FocusableElement | null>(
+    null
+  );
+
+  const {
+    isOpen: isStackedLinesFormOpen,
+    onOpen: onStackedLinesFormOpen,
+    onClose: onStackedLinesFormClose,
+  } = useDisclosure();
+
+  const onStackedLinesFormSubmit: StackedLinesFormSubmitHandler = (
+    values,
+    actions
+  ) => {
+    plotStore.addStackedLinesPlot(values.accessions, {
+      showlegend: values.withLegend,
+      showCaption: values.withCaption,
+      plotTitle: values.plotTitle,
+      colorBy: 'group',
+    } as PlotlyOptions);
+
+    actions.setSubmitting(false);
+    onStackedLinesFormClose();
   };
 
   /* HEATMAP PLOT */
@@ -84,15 +157,17 @@ const PlotsHome: React.FC = () => {
         />
 
         <SidebarButton
-          text="Curved Lines Plot"
-          icon={TextIcon('CLN')}
+          text="Individual Lines Plot"
+          icon={TextIcon('ILN')}
           alignItems="baseline"
+          onClick={onIndividualLinesFormOpen}
         />
 
         <SidebarButton
           text="Stacked Lines Plot"
           icon={TextIcon('SLN')}
           alignItems="baseline"
+          onClick={onStackedLinesFormOpen}
         />
 
         <SidebarButton
@@ -142,6 +217,28 @@ const PlotsHome: React.FC = () => {
                 />
               );
             }
+
+            case 'plotly': {
+              const plotlyPlot = plot as GxpPlotly;
+
+              return (
+                <PlotlyPlot {...plotlyPlot}>
+                  {plotlyPlot.options.showCaption &&
+                    plotlyPlot.accessions.map((accession, index) => (
+                      <PlotCaption
+                        key={`${accession}-${index}`}
+                        accession={accession}
+                        caption={infoTable.getRowAsMap(accession)}
+                        color={
+                          plotlyPlot.accessions.length > 1
+                            ? colors[index]
+                            : undefined
+                        }
+                      />
+                    ))}
+                </PlotlyPlot>
+              );
+            }
             default:
               break;
           }
@@ -175,6 +272,36 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refHeatmapFormInitialFocus}
           onCancel={onHeatmapFormClose}
           onSubmit={onHeatmapFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refIndividualLinesFormInitialFocus}
+        isOpen={isIndividualLinesFormOpen}
+        onClose={onIndividualLinesFormClose}
+        size="xl"
+        title="Individual Lines Plot"
+        scrollBehavior="outside"
+      >
+        <IndividualLinesForm
+          initialFocusRef={refIndividualLinesFormInitialFocus}
+          onCancel={onIndividualLinesFormClose}
+          onSubmit={onIndividualLinesFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refStackedLinesFormInitialFocus}
+        isOpen={isStackedLinesFormOpen}
+        onClose={onStackedLinesFormClose}
+        size="xl"
+        title="Stacked Lines Plot"
+        scrollBehavior="outside"
+      >
+        <StackedLinesForm
+          initialFocusRef={refStackedLinesFormInitialFocus}
+          onCancel={onStackedLinesFormClose}
+          onSubmit={onStackedLinesFormSubmit}
         />
       </FormikModal>
     </Flex>
