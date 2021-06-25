@@ -19,7 +19,6 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       alignItems="center"
       backgroundColor="white"
       boxShadow="lg"
-      direction="column"
       justifyContent="center"
       margin={3}
       overflow="hidden"
@@ -32,7 +31,7 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
           background: 'gray.400',
         },
       }}
-      width="full"
+      width="100%"
       {...props}
     >
       {title && <h1>{title}</h1>}

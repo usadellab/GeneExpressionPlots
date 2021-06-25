@@ -96,6 +96,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
         status="idle"
         figureRef={figureRef}
         title={props.options.plotTitle}
+        direction="column"
       >
         <Plot
           ref={(ref) => (plotRef.current = ref)}
