@@ -89,20 +89,90 @@ export class Dataframe {
    * Transforms the `rows` to a two dimensional array, where the first
    * dimension are the rows and the second the columns.
    *
+   * @param {string[] | undefined} columns replicate columns to transform
    * @return {Array} two dimensional array of data points
    */
-  to2dArray() {
-    return Object.keys(this.rows).map((k) => this.rows[k]);
+  to2dArray(columns) {
+    /** @type {number[]} */
+    const colIndexes =
+      columns && columns.length > 0
+        ? columns
+            .map((colName, colIndex) =>
+              columns.includes(colName) ? colIndex : undefined
+            )
+            .filter((colIndex) => colIndex !== undefined)
+        : [];
+
+    const array2d = Object.entries(this.rows).map(([, replCounts]) => {
+      if (columns && colIndexes.length > 0) {
+        return replCounts.filter((count, index) => colIndexes.includes(index));
+      }
+      return replCounts;
+    });
+
+    return array2d;
+  }
+
+  /**
+   * Parse the dataframe as an array of either gene accession or replicate bins.
+   *
+   * A bin is a structure in which each gene accession (or replicate) is mapped
+   * to an array of replicates (or gene accessions) and the expression count
+   * for that replicate (or accession).
+   *
+   * Without arguments, the function returns a collection of accessions mapped
+   * to replicate bins.
+   *
+   * If the dataframe is transposed, the resulting structure will be mapping
+   * replicates to accession bins.
+   *
+   * - The `bin` property of each element is always the name of the accession or
+   * replicate item.
+   * - The `count` property always corresponds to the gene expression count for
+   *   a given accession and replicate combination.
+   *
+   * @param {boolean | undefined} transpose create replicate bins
+   * @returns {Array<{ bin: string; bins: Array<{ bin: string; count: number }> }>}
+   * The gene accession or replicate bins.
+   */
+  toBins(transpose = false) {
+    let bins;
+    bins = Object.entries(this.rows).map(([accessionId, replCounts]) => {
+      return {
+        bin: accessionId,
+        bins: replCounts.map((count, index) => ({
+          bin: this.colNames[index],
+          count: parseFloat(count),
+        })),
+      };
+    });
+
+    if (transpose) {
+      bins = this.colNames.map((replicate, replicateIndex) => {
+        const accessionBins = bins.map(({ accessionId, replCounts }) => ({
+          bin: accessionId,
+          count: replCounts[replicateIndex].count,
+        }));
+
+        return {
+          bin: replicate,
+          bins: accessionBins,
+        };
+      });
+    }
+
+    return bins;
   }
 
   /**
    * Transforms the `rows` to a two dimensional array, where the first
    * dimension are the columns and the second are the rows.
    *
+   * @param {string[] | undefined} columns replicate columns to transform
    * @return {Array} two dimensional array of replicates
    */
-  toTransposed2dArray() {
-    let arr2D = this.to2dArray();
+  toTransposed2dArray(columns) {
+    let arr2D = this.to2dArray(columns);
     return arr2D[0].map((_, colIndex) => arr2D.map((row) => row[colIndex]));
   }
 

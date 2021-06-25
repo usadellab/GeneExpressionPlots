@@ -354,13 +354,18 @@ const DataFiles: React.FC = () => {
       </Sidebar>
 
       <Flex
-        as="main"
         alignItems="center"
         flexDirection="column"
         padding="2rem"
         width="100%"
       >
-        <Wrap justify="center" spacing="1rem" width="100%">
+        <Wrap
+          role="region"
+          aria-label="Loaded replicates"
+          justify="center"
+          spacing="1rem"
+          width="100%"
+        >
           {dataTable.colNames.map((replicateName) => (
             <WrapItem key={replicateName} width={replCardWidth}>
               <ReplCard

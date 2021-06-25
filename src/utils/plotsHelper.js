@@ -3,7 +3,7 @@ import { dataTable } from '@/store/data-store';
 import { mean, deviation } from 'd3';
 import { PCA } from 'ml-pca';
 import { nanoid } from 'nanoid';
-import { clusterExpressionReplicates } from './heatmap';
+import { clusterExpressionReplicates } from './plots/heatmap';
 
 /**
  * @typedef {import('../store/plot-store').PlotOptions} PlotOptions

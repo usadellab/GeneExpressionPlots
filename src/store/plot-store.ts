@@ -1,27 +1,17 @@
-import { GxpPlot, PlotlyOptions } from '@/types/plots';
+import { makeAutoObservable, action } from 'mobx';
+import { nanoid } from 'nanoid';
+import { GxpHeatmap, GxpPlot, PlotlyOptions, GxpPlotly } from '@/types/plots';
+
+// Future Workers
+import { createHeatmapPlot } from '@/utils/plots/heatmap';
 import multiGeneBarData from '@/utils/plots/multi-gene-bar';
 import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-lines';
 import singleGeneIndividualLinesData from '@/utils/plots/single-gene-individual-lines';
 import singleGeneBarData from '@/utils/plots/single-gene-bar';
-import { makeAutoObservable } from 'mobx';
-
-// import { settings } from '@/store/settings';
-
-// import {
-//   singleGeneGroupedPlot,
-//   multiGeneIndCurvesPlot,
-//   stackedLinePlot,
-//   multiGeneBarPlot,
-//   createPcaPlot,
-//   createHeatmapPlot,
-//   PlotOptions,
-// } from '../utils/plotsHelper';
-
-import { nanoid } from 'nanoid';
 import stackedLinesData from '@/utils/plots/stacked-lines';
 
 class PlotStore {
-  plots: GxpPlot<unknown>[] = [];
+  plots: GxpPlot[] = [];
   _image: string | null = null;
 
   countUnit: string | null = null;
@@ -72,22 +62,62 @@ class PlotStore {
     this.plots.splice(index, 1);
   }
 
+  /**
+   * Add a new gene expression heatmap plot to the store.
+   * @param replicates gene accessions to visualize
+   */
+  addHeatmapPlot(replicates?: string[]): void {
+    const key = nanoid();
+    const pendingPlot: GxpPlot = {
+      key,
+      type: 'heatmap',
+      isLoading: true,
+    };
+    const plotIndex = this.plots.push(pendingPlot) - 1;
+
+    setTimeout(
+      () =>
+        createHeatmapPlot({ replicates }).then(
+          action('addHeatmapPlot', (binData) => {
+            const loadedPlot: GxpHeatmap = {
+              ...this.plots[plotIndex],
+              isLoading: false,
+              binData,
+            };
+
+            if (this.plots[plotIndex].key === key) {
+              this.plots[plotIndex] = loadedPlot;
+            }
+          })
+        ),
+      100
+    );
+  }
+
   addSingleGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
     const data = singleGeneBarData(accessions[0], options);
-    this.plots.push({
+    const singleGeneBarPlot: GxpPlotly = {
       key: nanoid(),
       type: 'plotly',
-      props: { accessions, data, options },
-    });
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(singleGeneBarPlot);
   }
 
   addMultiGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
     const data = multiGeneBarData(accessions, options);
-    this.plots.push({
+    const multiGeneBarPlot: GxpPlotly = {
       key: nanoid(),
       type: 'plotly',
-      props: { accessions, data, options },
-    });
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(multiGeneBarPlot);
   }
 
   addSingleGeneIndividualLinesPlot(
@@ -95,11 +125,15 @@ class PlotStore {
     options: PlotlyOptions
   ): void {
     const data = singleGeneIndividualLinesData(accessions[0], options);
-    this.plots.push({
+    const singleGeneIndividualLines: GxpPlotly = {
       key: nanoid(),
       type: 'plotly',
-      props: { accessions, data, options },
-    });
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(singleGeneIndividualLines);
   }
 
   addMultiGeneIndividualLinesPlot(
@@ -107,68 +141,29 @@ class PlotStore {
     options: PlotlyOptions
   ): void {
     const data = multiGeneIndividualLinesData(accessions, options);
-    this.plots.push({
+    const multiGeneIndividualLines: GxpPlotly = {
       key: nanoid(),
       type: 'plotly',
-      props: { accessions, data, options },
-    });
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(multiGeneIndividualLines);
   }
 
   addStackedLinesPlot(accessions: string[], options: PlotlyOptions): void {
     const data = stackedLinesData(accessions, options);
-    this.plots.push({
+    const stackedLines: GxpPlotly = {
       key: nanoid(),
       type: 'plotly',
-      props: { accessions, data, options },
-    });
+      isLoading: false,
+      accessions,
+      data,
+      options,
+    };
+    this.plots.push(stackedLines);
   }
-
-  // addSingleGeneBarPlot(accession: string, options: PlotlyOptions): void {
-  //   singleGeneBarData(accession, options).then(
-  //     action((data) => {
-  //       this.plots.push({
-  //         key: nanoid(),
-  //         type: 'single-gene-bar',
-  //         props: { accession, data, options },
-  //       });
-  //     })
-  //   );
-  //   // const data = singleGeneBarData(accession, options);
-
-  //   // this.plots.push({
-  //   //   key: nanoid(),
-  //   //   type: 'single-gene-bar',
-  //   //   props: { accession, data, options },
-  //   // });
-  // }
-
-  // addBarPlot(accessionIds, options) {
-  //   if (accessionIds.length === 1)
-  //     this.plots.push(singleGeneGroupedPlot(accessionIds, options));
-  //   else if (accessionIds.length > 1)
-  //     this.plots.push(multiGeneBarPlot(accessionIds, options));
-  // }
-
-  // /**
-  //  *
-  //  * @param {string[]} accessionIds
-  //  * @param {PlotOptions} options
-  //  */
-  // addIndivualCurvesPlot(accessionIds, options) {
-  //   if (accessionIds.length === 1)
-  //     this.plots.push(singleGeneGroupedPlot(accessionIds, options));
-  //   else if (accessionIds.length > 1)
-  //     this.plots.push(multiGeneIndCurvesPlot(accessionIds, options));
-  // }
-
-  // /**
-  //  *
-  //  * @param {string[]} accessionIds
-  //  * @param {PlotOptions} options
-  //  */
-  // addStackedCurvePlot(accessionIds, options) {
-  //   this.plots.push(stackedLinePlot(accessionIds, options));
-  // }
 
   /**
    * Generates a plot visualizing the results of a principal component
@@ -176,40 +171,6 @@ class PlotStore {
    */
   // addPcaPlot() {
   //   this.plots.push(createPcaPlot());
-  // }
-
-  /**
-   * Generates a plot visualizing the results of a principal component
-   * analysis.
-   */
-  // addHeatmapPlot() {
-  //   this.plots.push(createHeatmapPlot());
-  // }
-
-  // /**
-  //  * @param {Array} accessionIds
-  //  * @param {PlotOptions} options
-  //  */
-  // addPlot(accessionIds, options) {
-  //   options.countUnit = settings.gxpSettings.unit;
-  //   options.plotId = nanoid();
-  //   options.config = this.config(options.plotId);
-  //   options.groupOrder = settings.gxpSettings.groupOrder;
-  //   options.sampleOrder = settings.gxpSettings.sampleOrder;
-
-  //   switch (options.plotType) {
-  //     case 'bars':
-  //       this.addBarPlot(accessionIds, options);
-  //       break;
-  //     case 'individualCurves':
-  //       this.addIndivualCurvesPlot(accessionIds, options);
-  //       break;
-  //     case 'stackedCurves':
-  //       this.addStackedCurvePlot(accessionIds, options);
-  //       break;
-  //     default:
-  //       break;
-  //   }
   // }
 
   /**

@@ -6,12 +6,18 @@ import { infoTable } from '@/store/data-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
-import { Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { Flex, Spinner, Text, useDisclosure } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
+import { GxpHeatmap, PlotlyOptions, GxpPlotly } from '@/types/plots';
+
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
-import { GxpPlot, PlotlyOptions } from '@/types/plots';
-import PlotlyPlot, { colors, PlotlyPlotProps } from './components/PlotlyPlot';
+import HeatmapForm, {
+  HeatmapFormSubmitHandler,
+} from './components/heatmap-form';
+import HeatmapPlot from './components/heatmap-plot';
+import PlotContainer from './components/plot-container';
+import PlotlyPlot, { colors } from './components/PlotlyPlot';
 import IndividualLinesForm, {
   IndividualLinesFormSubmitHandler,
 } from './components/individual-lines-form';
@@ -123,9 +129,26 @@ const PlotsHome: React.FC = () => {
     onStackedLinesFormClose();
   };
 
+  /* HEATMAP PLOT */
+  const refHeatmapFormInitialFocus = React.useRef<FocusableElement | null>(
+    null
+  );
+
+  const {
+    isOpen: isHeatmapFormOpen,
+    onOpen: onHeatmapFormOpen,
+    onClose: onHeatmapFormClose,
+  } = useDisclosure();
+
+  const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
+    actions.setSubmitting(false);
+    onHeatmapFormClose();
+    setTimeout(() => plotStore.addHeatmapPlot(values.replicates), 10);
+  };
+
   return (
     <Flex as="main" flexGrow={1}>
-      <Sidebar top={0} maxWidth="17rem" minWidth="6.5rem">
+      <Sidebar maxWidth="17rem" minWidth="6.5rem">
         <SidebarButton
           text="Bars Plot"
           icon={TextIcon('BAR')}
@@ -151,6 +174,7 @@ const PlotsHome: React.FC = () => {
           text="Heatmap Plot"
           icon={TextIcon('HMP')}
           alignItems="baseline"
+          onClick={onHeatmapFormOpen}
         />
 
         <SidebarButton
@@ -160,27 +184,53 @@ const PlotsHome: React.FC = () => {
         />
       </Sidebar>
 
-      <Flex as="main" flexWrap="wrap" width="100%">
+      <Flex
+        aria-label="Visualizations"
+        flexWrap="wrap"
+        role="region"
+        width="100%"
+        margin={2}
+      >
         {plotStore.plots.map((plot) => {
+          if (plot.isLoading) {
+            return (
+              <PlotContainer key={plot.key} status="loading">
+                <Spinner
+                  key={`${plot.key}-loading`}
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="xl"
+                />
+              </PlotContainer>
+            );
+          }
+
+          const heatmapPlot = plot as GxpHeatmap;
           switch (plot.type) {
-            case 'plotly': {
-              const _plot = plot as GxpPlot<PlotlyPlotProps>;
-              console.log({ props: _plot.props });
+            case 'heatmap': {
               return (
-                <PlotlyPlot
-                  key={_plot.key}
-                  data={_plot.props.data}
-                  accessions={_plot.props.accessions}
-                  options={_plot.props.options}
-                >
-                  {_plot.props.options.showCaption &&
-                    _plot.props.accessions.map((accession, index) => (
+                <HeatmapPlot
+                  key={heatmapPlot.key}
+                  binData={heatmapPlot.binData}
+                />
+              );
+            }
+
+            case 'plotly': {
+              const plotlyPlot = plot as GxpPlotly;
+
+              return (
+                <PlotlyPlot {...plotlyPlot}>
+                  {plotlyPlot.options.showCaption &&
+                    plotlyPlot.accessions.map((accession, index) => (
                       <PlotCaption
                         key={`${accession}-${index}`}
                         accession={accession}
                         caption={infoTable.getRowAsMap(accession)}
                         color={
-                          _plot.props.accessions.length > 1
+                          plotlyPlot.accessions.length > 1
                             ? colors[index]
                             : undefined
                         }
@@ -207,6 +257,21 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refBarsFormInitialFocus}
           onCancel={onBarsFormClose}
           onSubmit={onBarsFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refHeatmapFormInitialFocus}
+        isOpen={isHeatmapFormOpen}
+        onClose={onHeatmapFormClose}
+        size="xl"
+        title="Heatmap Plot"
+        scrollBehavior="outside"
+      >
+        <HeatmapForm
+          initialFocusRef={refHeatmapFormInitialFocus}
+          onCancel={onHeatmapFormClose}
+          onSubmit={onHeatmapFormSubmit}
         />
       </FormikModal>
 

@@ -1,17 +1,11 @@
-import { PlotlyOptions } from '@/types/plots';
 import { Flex } from '@chakra-ui/layout';
-import { Layout, PlotData, PlotMouseEvent } from 'plotly.js';
+import { Layout, PlotMouseEvent } from 'plotly.js';
 import React, { createContext } from 'react';
 import Plot from 'react-plotly.js';
+import { PlotData } from 'plotly.js';
 import { settings } from '@/store/settings';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-
-export interface PlotlyPlotProps {
-  data: Partial<PlotData>[];
-  accessions: string[];
-  options: PlotlyOptions;
-}
+import { GxpPlotly, PlotlyOptions } from '@/types/plots';
 
 export const colors = [
   '#c7566f',
@@ -31,7 +25,13 @@ export const colors = [
 
 export const PlotContext = createContext({ hoveredGene: '' });
 
-const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
+export interface PlotlyPlotProps {
+  data: Partial<PlotData>[];
+  accessions: string[];
+  options: PlotlyOptions;
+}
+
+const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
   const [name, setName] = React.useState('');
   const plotRef = React.useRef<Plot | null>(null);
   const figureRef = React.useRef<HTMLDivElement | null>(null);
@@ -63,7 +63,6 @@ const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
     // },
     colorway: colors,
   });
-  console.log({ PPdata: toJS(props.data) });
   React.useEffect(function resizePlot() {
     let id: number;
 
@@ -100,8 +99,6 @@ const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
     setName('');
   };
 
-  console.log({ pp: toJS(props.data) });
-
   return (
     <PlotContext.Provider value={{ hoveredGene: name }}>
       <Flex
@@ -119,7 +116,7 @@ const PlotlyPlot: React.FC<PlotlyPlotProps> = (props) => {
       >
         <Plot
           ref={(ref) => (plotRef.current = ref)}
-          data={toJS(props.data)}
+          data={props.data}
           layout={layout}
           onHover={onPlotHover}
           onUnhover={onPlotUnhover}
