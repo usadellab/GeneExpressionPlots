@@ -39,6 +39,13 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
   const timeoutRef = React.useRef<number>();
 
   const [layout, setLayout] = React.useState<Partial<Layout>>({
+    title: {
+      text: props.options.plotTitle,
+      font: {
+        size: 20,
+      },
+      y: 0.9,
+    },
     showlegend: props.options.showlegend,
     legend: {
       orientation: 'h',
@@ -91,12 +98,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
 
   return (
     <PlotContext.Provider value={{ hoveredGene: name }}>
-      <PlotContainer
-        status="idle"
-        figureRef={figureRef}
-        title={props.options.plotTitle}
-        direction="column"
-      >
+      <PlotContainer status="idle" figureRef={figureRef}>
         <Plot
           ref={(ref) => (plotRef.current = ref)}
           data={props.data}
@@ -104,7 +106,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
           onHover={onPlotHover}
           onUnhover={onPlotUnhover}
         />
-        <Box marginX="12" width="full">
+        <Box marginX="12" width="full" overflow="auto">
           {props.children}
         </Box>
       </PlotContainer>
