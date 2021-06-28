@@ -1,6 +1,12 @@
 import { makeAutoObservable, action } from 'mobx';
 import { nanoid } from 'nanoid';
-import { GxpHeatmap, GxpPlot, PlotlyOptions, GxpPlotly } from '@/types/plots';
+import {
+  GxpHeatmap,
+  GxpPlot,
+  PlotlyOptions,
+  GxpPlotly,
+  GxpPCA,
+} from '@/types/plots';
 
 // Future Workers
 import { createHeatmapPlot } from '@/utils/plots/heatmap';
@@ -9,6 +15,7 @@ import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-li
 import singleGeneIndividualLinesData from '@/utils/plots/single-gene-individual-lines';
 import singleGeneBarData from '@/utils/plots/single-gene-bar';
 import stackedLinesData from '@/utils/plots/stacked-lines';
+import pcaData from '@/utils/plots/pca';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -83,6 +90,34 @@ class PlotStore {
               ...this.plots[plotIndex],
               isLoading: false,
               binData,
+            };
+
+            if (this.plots[plotIndex].key === key) {
+              this.plots[plotIndex] = loadedPlot;
+            }
+          })
+        ),
+      100
+    );
+  }
+
+  addPCAPlot(title?: string): void {
+    const key = nanoid();
+    const pendingPlot: GxpPlot = {
+      key,
+      type: 'pca',
+      isLoading: true,
+    };
+    const plotIndex = this.plots.push(pendingPlot) - 1;
+
+    setTimeout(
+      () =>
+        pcaData(title).then(
+          action('addPCAPlot', (pcaData) => {
+            const loadedPlot: GxpPCA = {
+              ...this.plots[plotIndex],
+              ...pcaData,
+              isLoading: false,
             };
 
             if (this.plots[plotIndex].key === key) {

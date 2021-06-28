@@ -16,10 +16,12 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       as="figure"
       alignItems="center"
       backgroundColor="white"
-      height={900}
+      boxShadow="sm"
+      flexDirection="column"
       justifyContent="center"
       margin={3}
       overflow="hidden"
+      height={800}
       padding={6}
       ref={(ref) => (figureRef ? (figureRef.current = ref) : ref)}
       resize="horizontal"

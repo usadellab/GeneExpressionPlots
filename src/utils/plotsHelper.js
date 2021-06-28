@@ -316,7 +316,7 @@ function createTrace(x, y, error_y, name, type, showlegend, line, marker) {
 
 export function createPcaPlot() {
   // Do a principal component analysis of the data:
-  let data2dArr = dataTable.toTransposed2dArray();
+  let data2dArr = dataTable.toArrayOfColumns();
   let pca = new PCA(data2dArr);
   // Project the data2dArr into PC coordinate system:
   let projectedData = pca.predict(data2dArr);
@@ -334,7 +334,7 @@ export function createPcaPlot() {
       textposition: 'bottom center',
       marker: {
         size: 12,
-        color: dataTable.replicateColorsByGroupAndSample(),
+        color: dataTable.getSubheaderColors(),
       },
     },
   ];

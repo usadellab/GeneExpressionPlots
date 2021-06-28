@@ -1,6 +1,7 @@
 .js-plotly-plot .plotly .modebar {
-  @apply flex justify-center;
-  @apply w-full;
+  display: flex;
+  justify-content: center;
+  width: 100%
 }
 
 /* .js-plotly-plot .plotly .modebar--hover > :not(.watermark) {
@@ -8,5 +9,5 @@
 } */
 
 .js-plotly-plot .plotly .modebar-group {
-  @apply flex;
+  display: flex;
 }

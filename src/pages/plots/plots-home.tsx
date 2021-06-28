@@ -9,7 +9,7 @@ import FormikModal from '@/components/formik-modal';
 import { Flex, Spinner, Text, useDisclosure } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
-import { GxpHeatmap, PlotlyOptions, GxpPlotly } from '@/types/plots';
+import { GxpHeatmap, PlotlyOptions, GxpPlotly, GxpPCA } from '@/types/plots';
 
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
 import HeatmapForm, {
@@ -18,6 +18,7 @@ import HeatmapForm, {
 import HeatmapPlot from './components/heatmap-plot';
 import PlotContainer from './components/plot-container';
 import PlotlyPlot, { colors } from './components/PlotlyPlot';
+import PCAPlot from './components/pca-plot';
 import IndividualLinesForm, {
   IndividualLinesFormSubmitHandler,
 } from './components/individual-lines-form';
@@ -25,6 +26,7 @@ import StackedLinesForm, {
   StackedLinesFormSubmitHandler,
 } from './components/stacked-lines-form';
 import PlotCaption from './components/PlotCaption';
+import PCAForm, { PCAFormSubmitHandler } from './components/pca-form';
 
 const TextIcon = (text: string) =>
   function IconRenderer(): JSX.Element {
@@ -146,6 +148,22 @@ const PlotsHome: React.FC = () => {
     setTimeout(() => plotStore.addHeatmapPlot(values.replicates), 10);
   };
 
+  /* PCA PLOT */
+
+  const refPCAFormInitialFocus = React.useRef<FocusableElement | null>(null);
+
+  const {
+    isOpen: isPCAFormOpen,
+    onOpen: onPCAFormOpen,
+    onClose: onPCAFormClose,
+  } = useDisclosure();
+
+  const onPCAFormSubmit: PCAFormSubmitHandler = (values, actions) => {
+    actions.setSubmitting(false);
+    onPCAFormClose();
+    setTimeout(() => plotStore.addPCAPlot(values.plotTitle), 10);
+  };
+
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar maxWidth="17rem" minWidth="6.5rem">
@@ -181,6 +199,7 @@ const PlotsHome: React.FC = () => {
           text="PCA Plot"
           icon={TextIcon('PCA')}
           alignItems="baseline"
+          onClick={onPCAFormOpen}
         />
       </Sidebar>
 
@@ -190,6 +209,7 @@ const PlotsHome: React.FC = () => {
         role="region"
         width="100%"
         margin={2}
+        overflow="hidden"
       >
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
@@ -207,9 +227,9 @@ const PlotsHome: React.FC = () => {
             );
           }
 
-          const heatmapPlot = plot as GxpHeatmap;
           switch (plot.type) {
             case 'heatmap': {
+              const heatmapPlot = plot as GxpHeatmap;
               return (
                 <HeatmapPlot
                   key={heatmapPlot.key}
@@ -220,7 +240,6 @@ const PlotsHome: React.FC = () => {
 
             case 'plotly': {
               const plotlyPlot = plot as GxpPlotly;
-
               return (
                 <PlotlyPlot {...plotlyPlot}>
                   {plotlyPlot.options.showCaption &&
@@ -237,6 +256,17 @@ const PlotsHome: React.FC = () => {
                       />
                     ))}
                 </PlotlyPlot>
+              );
+            }
+
+            case 'pca': {
+              const pcaPlot = plot as GxpPCA;
+              return (
+                <PCAPlot
+                  key={pcaPlot.key}
+                  data={pcaPlot.data}
+                  layout={pcaPlot.layout}
+                />
               );
             }
             default:
@@ -257,21 +287,6 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refBarsFormInitialFocus}
           onCancel={onBarsFormClose}
           onSubmit={onBarsFormSubmit}
-        />
-      </FormikModal>
-
-      <FormikModal
-        initialFocusRef={refHeatmapFormInitialFocus}
-        isOpen={isHeatmapFormOpen}
-        onClose={onHeatmapFormClose}
-        size="xl"
-        title="Heatmap Plot"
-        scrollBehavior="outside"
-      >
-        <HeatmapForm
-          initialFocusRef={refHeatmapFormInitialFocus}
-          onCancel={onHeatmapFormClose}
-          onSubmit={onHeatmapFormSubmit}
         />
       </FormikModal>
 
@@ -302,6 +317,36 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refStackedLinesFormInitialFocus}
           onCancel={onStackedLinesFormClose}
           onSubmit={onStackedLinesFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refHeatmapFormInitialFocus}
+        isOpen={isHeatmapFormOpen}
+        onClose={onHeatmapFormClose}
+        size="xl"
+        title="Heatmap Plot"
+        scrollBehavior="outside"
+      >
+        <HeatmapForm
+          initialFocusRef={refHeatmapFormInitialFocus}
+          onCancel={onHeatmapFormClose}
+          onSubmit={onHeatmapFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refPCAFormInitialFocus}
+        isOpen={isPCAFormOpen}
+        onClose={onPCAFormClose}
+        size="xl"
+        title="PCA Plot"
+        scrollBehavior="outside"
+      >
+        <PCAForm
+          initialFocusRef={refPCAFormInitialFocus}
+          onCancel={onPCAFormClose}
+          onSubmit={onPCAFormSubmit}
         />
       </FormikModal>
     </Flex>
