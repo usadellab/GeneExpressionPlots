@@ -58,6 +58,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
       },
       hoverformat: '.2f',
     },
+    autosize: true,
     colorway: colors,
   });
   React.useEffect(function resizePlot() {
@@ -105,8 +106,9 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
           layout={layout}
           onHover={onPlotHover}
           onUnhover={onPlotUnhover}
+          style={{ width: '100%', height: '100%' }}
         />
-        <Box marginX="12" width="full" overflow="auto">
+        <Box marginX="12" width="full" overflow="auto" flexShrink={1.3}>
           {props.children}
         </Box>
       </PlotContainer>
