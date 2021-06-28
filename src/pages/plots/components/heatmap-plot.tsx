@@ -7,7 +7,7 @@ import { AxisBottom } from '@visx/axis';
 import { Group } from '@visx/group';
 import { HeatmapRect } from '@visx/heatmap';
 import { scaleBand, scaleLinear } from '@visx/scale';
-import { getStringWidth } from '@visx/text';
+import { getStringWidth, Text } from '@visx/text';
 
 import PlotContainer from './plot-container';
 import { HeatmapBins, HeatmapBin } from '@/types/plots';
@@ -34,6 +34,7 @@ const count = (d: HeatmapBin): number => d.count;
 
 interface HeatmapPlotProps {
   binData: HeatmapBins[];
+  plotTitle?: string;
 }
 
 const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
@@ -57,6 +58,9 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
     yMax: number;
     xAxisScale: ScaleBand<string>;
   }>();
+
+  // title
+  const titleHeight = props.plotTitle ? 30 : 0;
 
   React.useEffect(
     function resizePlot() {
@@ -106,7 +110,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             entries[0].target.clientHeight -
             clientPaddingY -
             (tickLabelHeight ?? 0) -
-            10; // Tick line height
+            10 -
+            titleHeight; // Tick line height
 
           const dataLen = props.binData.length;
           const binWidth = clientWidth / dataLen;
@@ -151,7 +156,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
         if (timeoutId) clearTimeout(timeoutId);
       };
     },
-    [props.binData]
+    [props.binData, titleHeight]
   );
 
   return (
@@ -163,10 +168,22 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       {plotDims && (
         <svg width="100%" height="100%">
           <Group>
+            <Text
+              x={plotDims.xMax / 2}
+              y={15}
+              textAnchor="middle"
+              fontSize={20}
+            >
+              {props.plotTitle}
+            </Text>
+          </Group>
+          <Group>
             <HeatmapRect
               data={props.binData}
               xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
-              yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
+              yScale={(d) =>
+                plotDims?.yScale ? plotDims.yScale(d) + titleHeight : 0
+              }
               colorScale={colorScale}
               // opacityScale={opacityScale}
               binWidth={plotDims?.binWidth}
@@ -211,7 +228,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             </HeatmapRect>
           </Group>
           <AxisBottom
-            top={plotDims.yMax + 10}
+            top={plotDims.yMax + 10 + titleHeight}
             scale={plotDims.xAxisScale}
             numTicks={props.binData.length}
             tickLabelProps={() => ({

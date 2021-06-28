@@ -16,6 +16,7 @@ export interface GxpPlot {
  */
 export interface GxpHeatmap extends GxpPlot {
   binData: HeatmapBins[];
+  plotTitle?: string;
 }
 
 /**
