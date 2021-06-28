@@ -146,7 +146,7 @@ const DataFiles: React.FC = () => {
           });
 
           // Load the store from the parsed table
-          infoTable.loadFromObject(table, null);
+          infoTable.loadFromObject(table);
         };
 
         reader.onloadend = () => {
@@ -231,7 +231,7 @@ const DataFiles: React.FC = () => {
             fieldSeparator: settings.gxpSettings.info_field_sep,
             rowNameColumn: 0,
           });
-          infoTable.loadFromObject(geneInfoTable, null);
+          infoTable.loadFromObject(geneInfoTable);
         }
 
         // Unpack and load the image file, if it exists
@@ -269,9 +269,9 @@ const DataFiles: React.FC = () => {
     console.log({ values });
     try {
       // Generate source data
-      const geneExpressionSrc = dataTable.dataFrametoString(values.columnSep);
+      const geneExpressionSrc = dataTable.toString(values.columnSep);
       const geneInfoSrc = infoTable.hasData
-        ? infoTable.dataFrametoString(settings.gxpSettings.info_field_sep)
+        ? infoTable.toString(settings.gxpSettings.info_field_sep)
         : null;
       const imageSrc = plotStore.image?.split('base64,')[1];
       const gxpSettingsSrc = JSON.stringify(

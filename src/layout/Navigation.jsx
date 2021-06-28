@@ -57,11 +57,9 @@ class AppNavigation extends React.Component {
 
   onExportDataMenuClick = async () => {
     const data = {
-      expression: dataTable.dataFrametoString(
-        settings.gxpSettings.expression_field_sep
-      ),
+      expression: dataTable.toString(settings.gxpSettings.expression_field_sep),
       info: infoTable.hasData
-        ? infoTable.dataFrametoString(settings.gxpSettings.info_field_sep)
+        ? infoTable.toString(settings.gxpSettings.info_field_sep)
         : null,
     };
 
