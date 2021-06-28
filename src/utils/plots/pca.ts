@@ -13,7 +13,7 @@ const pcaData = async (
   data: Partial<PlotData>[];
   layout: Partial<Layout>;
 }> => {
-  const data2dArr = dataTable.toTransposed2dArray(undefined);
+  const data2dArr = dataTable.toArrayOfColumns();
   const pca = new PCA(data2dArr);
   // Project the data2dArr into PC coordinate system:
   const projectedData = pca.predict(data2dArr);
@@ -31,7 +31,7 @@ const pcaData = async (
       textposition: 'bottom center',
       marker: {
         size: 12,
-        color: dataTable.replicateColorsByGroupAndSample(),
+        color: dataTable.getSubheaderColors(2),
       },
     },
   ];
