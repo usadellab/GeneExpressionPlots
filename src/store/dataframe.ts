@@ -256,8 +256,11 @@ export class Dataframe {
    * @return the two dimensional array of column expression counts
    */
   toArrayOfColumns(filterByColumn: string[] = []): number[][] {
-    const arr2d = this.toArrayOfRows(filterByColumn);
-    return arr2d[0].map((_, colIndex) => arr2d.map((row) => row[colIndex]));
+    const arrayOfRows = this.toArrayOfRows(filterByColumn);
+    const arrayOfCols = arrayOfRows[0].map((_, colIndex) =>
+      arrayOfRows.map((row) => row[colIndex])
+    );
+    return arrayOfCols;
   }
 
   /**
