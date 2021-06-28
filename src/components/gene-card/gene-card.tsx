@@ -4,15 +4,10 @@ import React from 'react';
 interface GeneCardProps {
   color?: string;
   accession: string;
-  geneInfo: Map<string, string> | Map<string[], string>;
+  geneInfo: Map<string, string>;
 }
 
-export default function GeneCard({
-  color,
-  accession,
-  geneInfo,
-  ...props
-}: GeneCardProps) {
+const GeneCard: React.FC<GeneCardProps> = ({ color, accession, geneInfo }) => {
   return (
     <Box as="div" px="2">
       <Flex alignItems="center" mb="4">
@@ -41,4 +36,6 @@ export default function GeneCard({
         : 'No information available for this gene.'}
     </Box>
   );
-}
+};
+
+export default GeneCard;

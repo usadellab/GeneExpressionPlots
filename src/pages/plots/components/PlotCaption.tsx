@@ -1,13 +1,13 @@
 import React from 'react';
 
-import GeneCard from '@/components/cards/GeneCard';
+import GeneCard from '@/components/gene-card';
 import { PlotContext } from './PlotlyPlot';
 import { Flex } from '@chakra-ui/layout';
 
 interface PlotCaptionProps {
   accession: string;
   color?: string;
-  caption: Map<string, string> | Map<string[], string>;
+  caption: Map<string, string>;
 }
 
 const PlotCaption: React.FC<PlotCaptionProps> = (props) => {
