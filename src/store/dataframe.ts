@@ -54,17 +54,24 @@ export class Dataframe {
   /* COMPUTED PROPS */
 
   /**
-   * Get an array of row names.
-   */
-  get rowNames(): string[] {
-    return Object.keys(this.rows);
-  }
-
-  /**
    * Get an array of column names.
    */
   get colNames(): string[] {
     return [...this.header];
+  }
+
+  /**
+   * Get an array of group names.
+   */
+  get groupsAsArray(): string[] {
+    return Object.keys(this.headerObject);
+  }
+
+  /**
+   * Get whether the dataframe contains data.
+   */
+  get hasData(): boolean {
+    return this.colNames.length > 0;
   }
 
   /**
@@ -78,17 +85,10 @@ export class Dataframe {
   }
 
   /**
-   * Get whether the dataframe contains data.
+   * Get an array of row names.
    */
-  get hasData(): boolean {
-    return this.colNames.length > 0;
-  }
-
-  /**
-   * Get an array of group names.
-   */
-  get groupsAsArray(): string[] {
-    return Object.keys(this.headerObject);
+  get rowNames(): string[] {
+    return Object.keys(this.rows);
   }
 
   /**
