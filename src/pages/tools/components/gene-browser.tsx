@@ -78,10 +78,13 @@ const GeneBrowser: React.FC = () => {
 
   /* LYFECYCLE */
 
-  React.useEffect(() => {
-    const pageView = computeGeneView('', 20, 1);
-    setPageView(pageView);
-  }, [computeGeneView]);
+  React.useEffect(
+    function loadInitialGeneView() {
+      const pageView = computeGeneView('', 20, 1);
+      setPageView(pageView);
+    },
+    [computeGeneView]
+  );
 
   /* EVENTS */
 
