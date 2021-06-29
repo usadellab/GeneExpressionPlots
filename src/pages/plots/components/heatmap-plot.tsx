@@ -11,7 +11,7 @@ import { getStringWidth, Text } from '@visx/text';
 import { useTooltipInPortal, useTooltip } from '@visx/tooltip';
 
 import PlotContainer from './plot-container';
-import { HeatmapBins, HeatmapBin } from '@/types/plots';
+import { HeatmapBins, HeatmapBin, GxpHeatmap } from '@/types/plots';
 import { RectCell } from '@visx/heatmap/lib/heatmaps/HeatmapRect';
 
 const gradient0 = '#b4fbde';
@@ -34,10 +34,7 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number {
 const bins = (d: HeatmapBins): HeatmapBin[] => d.bins;
 const count = (d: HeatmapBin): number => d.count;
 
-interface HeatmapPlotProps {
-  binData: HeatmapBins[];
-  plotTitle?: string;
-}
+type HeatmapPlotProps = GxpHeatmap;
 
 const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
   // tooltip
