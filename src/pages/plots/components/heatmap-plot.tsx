@@ -127,8 +127,9 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 : Math.max(previous, current)
             );
 
-          const clientWidth = entries[0].target.clientWidth - clientPaddingX;
-          const clientHeight =
+          // plot
+          const plotBoundsX = entries[0].target.clientWidth - clientPaddingX;
+          const plotBoundsY =
             entries[0].target.clientHeight -
             clientPaddingY -
             (tickLabelHeight ?? 0) -
@@ -136,23 +137,23 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             titleHeight * 2;
 
           const dataLen = props.binData.length;
-          const binWidth = clientWidth / dataLen;
-          const binHeight = clientHeight / dataLen;
+          const binWidth = plotBoundsX / dataLen;
+          const binHeight = plotBoundsY / dataLen;
 
           const xScale = scaleLinear<number>({
             domain: [0, props.binData.length],
-            range: [0, clientWidth],
+            range: [0, plotBoundsX],
           });
 
           const yScale = scaleLinear<number>({
             // domain: [0, max(props.binData, (d) => bins(d).length)],
             domain: [0, props.binData.length],
-            range: [0, clientHeight],
+            range: [0, plotBoundsY],
           });
 
           const xAxisScale = scaleBand<string>({
             domain: props.binData.map((data) => data.bin),
-            range: [0, clientWidth],
+            range: [0, plotBoundsX],
           });
 
           setPlotDims({
@@ -160,8 +161,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             binHeight,
             xScale,
             yScale,
-            xMax: clientWidth,
-            yMax: clientHeight,
+            xMax: plotBoundsX,
+            yMax: plotBoundsY,
             xAxisScale,
             tickLineHeight,
             titleHeight,
