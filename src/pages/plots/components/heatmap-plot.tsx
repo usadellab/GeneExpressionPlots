@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 import { chakra, Text as ChakraText } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand } from 'd3-scale';
-import { AxisBottom } from '@visx/axis';
+import { AxisBottom, AxisLeft } from '@visx/axis';
 import { Group } from '@visx/group';
 import { HeatmapRect } from '@visx/heatmap';
 import { scaleBand, scaleLinear } from '@visx/scale';
@@ -70,13 +70,15 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
   const [plotDims, setPlotDims] = React.useState<{
     binWidth: number;
     binHeight: number;
-    xScale: ScaleLinear<number, number>;
-    yScale: ScaleLinear<number, number>;
+    xScalePlot: ScaleLinear<number, number>;
+    yScalePlot: ScaleLinear<number, number>;
+    yScaleAxis: ScaleBand<string>;
     xMax: number;
     yMax: number;
-    xAxisScale: ScaleBand<string>;
+    xScaleAxis: ScaleBand<string>;
     titleHeight: number;
-    tickLineHeight: number;
+    tickLineSize: number;
+    tickLabelSize: number;
   }>();
 
   React.useEffect(
@@ -110,62 +112,75 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const titleHeight = props.plotTitle ? 30 : 0;
 
           // ticks
-          const tickLineHeight = 10;
-          const tickLabelHeight = props.binData
-            .map((data) =>
-              getStringWidth(data.bin, {
-                'font-size': 14,
-              })
-            )
-            .reduce((previous, current) =>
-              previous === null
-                ? current
-                : current === null
-                ? previous
-                : previous === null && current === null
-                ? 0
-                : Math.max(previous, current)
-            );
+          const tickLineSize = 10;
+          const tickLabelSize =
+            props.binData
+              .map((data) =>
+                getStringWidth(data.bin, {
+                  'font-size': 12,
+                })
+              )
+              .reduce((previous, current) =>
+                previous === null
+                  ? current
+                  : current === null
+                  ? previous
+                  : previous === null && current === null
+                  ? 0
+                  : Math.max(previous, current)
+              ) ?? 0;
 
           // plot
-          const plotBoundsX = entries[0].target.clientWidth - clientPaddingX;
+          const plotBoundsX =
+            entries[0].target.clientWidth -
+            clientPaddingX -
+            tickLineSize -
+            (tickLabelSize ?? 0);
+
           const plotBoundsY =
             entries[0].target.clientHeight -
             clientPaddingY -
-            (tickLabelHeight ?? 0) -
-            tickLineHeight -
+            (tickLabelSize ?? 0) -
+            tickLineSize -
             titleHeight * 2;
 
           const dataLen = props.binData.length;
           const binWidth = plotBoundsX / dataLen;
           const binHeight = plotBoundsY / dataLen;
 
-          const xScale = scaleLinear<number>({
+          const xScalePlot = scaleLinear<number>({
             domain: [0, props.binData.length],
             range: [0, plotBoundsX],
           });
 
-          const yScale = scaleLinear<number>({
+          const yScalePlot = scaleLinear<number>({
             // domain: [0, max(props.binData, (d) => bins(d).length)],
             domain: [0, props.binData.length],
             range: [0, plotBoundsY],
           });
 
-          const xAxisScale = scaleBand<string>({
+          const xScaleAxis = scaleBand<string>({
             domain: props.binData.map((data) => data.bin),
             range: [0, plotBoundsX],
+          });
+
+          const yScaleAxis = scaleBand<string>({
+            domain: props.binData.map((data) => data.bin),
+            range: [0, plotBoundsY],
           });
 
           setPlotDims({
             binWidth,
             binHeight,
-            xScale,
-            yScale,
+            tickLineSize,
+            titleHeight,
+            tickLabelSize,
+            xScaleAxis,
+            xScalePlot,
+            yScaleAxis,
+            yScalePlot,
             xMax: plotBoundsX,
             yMax: plotBoundsY,
-            xAxisScale,
-            tickLineHeight,
-            titleHeight,
           });
         }, 100);
 
@@ -193,7 +208,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
     >
       {plotDims && (
         <svg width="100%" height="100%" ref={containerRef}>
-          <Group>
+          <Group left={plotDims.tickLabelSize + plotDims.tickLineSize}>
             <Text
               x={plotDims.xMax / 2}
               y={15}
@@ -203,11 +218,18 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               {props.plotTitle}
             </Text>
           </Group>
-          <Group top={plotDims.titleHeight}>
+          <Group
+            top={plotDims.titleHeight}
+            left={plotDims.tickLabelSize + plotDims.tickLineSize}
+          >
             <HeatmapRect
               data={props.binData}
-              xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
-              yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
+              xScale={(d) =>
+                plotDims?.xScalePlot ? plotDims.xScalePlot(d) : 0
+              }
+              yScale={(d) =>
+                plotDims?.yScalePlot ? plotDims.yScalePlot(d) : 0
+              }
               colorScale={colorScale}
               // opacityScale={opacityScale}
               binWidth={plotDims?.binWidth}
@@ -254,16 +276,29 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               }
             </HeatmapRect>
           </Group>
+          <AxisLeft
+            top={plotDims.titleHeight}
+            left={plotDims.tickLabelSize - plotDims.tickLineSize + 10}
+            numTicks={props.binData.length}
+            tickLabelProps={() => ({
+              lengthAdjust: 'spacing',
+              fontSize: 10,
+              textAnchor: 'end',
+              dy: 3,
+              dx: -3,
+            })}
+            scale={plotDims.yScaleAxis}
+          />
           <AxisBottom
-            top={plotDims.titleHeight + plotDims.yMax + plotDims.tickLineHeight}
-            scale={plotDims.xAxisScale}
+            top={plotDims.titleHeight + plotDims.yMax + plotDims.tickLineSize}
+            left={plotDims.tickLabelSize + plotDims.tickLineSize}
+            scale={plotDims.xScaleAxis}
             numTicks={props.binData.length}
             tickLabelProps={() => ({
               angle: 270,
               dx: 3,
               lengthAdjust: 'spacing',
-              fill: 'black',
-              fontSize: 14,
+              fontSize: 10,
               textAnchor: 'end',
             })}
           />
