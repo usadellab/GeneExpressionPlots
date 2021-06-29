@@ -85,11 +85,12 @@ class PlotStore {
     setTimeout(
       () =>
         createHeatmapPlot({ replicates }).then(
-          action('addHeatmapPlot', (binData) => {
+          action('addHeatmapPlot', (heatmapData) => {
             const loadedPlot: GxpHeatmap = {
               ...this.plots[plotIndex],
               isLoading: false,
-              binData,
+              binData: heatmapData.bins,
+              tree: heatmapData.tree,
               plotTitle,
             };
 

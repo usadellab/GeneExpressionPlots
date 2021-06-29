@@ -1,7 +1,8 @@
 import { distance } from 'ml-distance';
 import getDistanceMatrix from 'ml-distance-matrix';
 import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
-import { HeatmapBins } from '@/types/plots';
+import { nanoid } from 'nanoid';
+import { ClusterTree, HeatmapBins } from '@/types/plots';
 
 // Once a worker, data will be accessed via IndexedDb
 import { dataTable } from '@/store/data-store';
@@ -109,38 +110,70 @@ function valuesToBins(replNames: string[]) {
   };
 }
 
-//#endregion
+/**
+ * Traverses the argument tree in a recursive approach converting each node to
+ * an object with at most two properties 'name' of type array and 'children'
+ * also of type array.
+ *
+ * @param clstr an instance ml-hclust Cluster object
+ * @param leafNames array of original leaf names
+ * @returns the cluster tree represenation
+ */
+export function clusterToTree(
+  clstr: Cluster,
+  leafNames: string[]
+): ClusterTree {
+  if (clstr.isLeaf) {
+    return {
+      name: leafNames[clstr.index],
+    };
+  } else {
+    const name = nanoid();
+    const children = clstr.children.map((c) => clusterToTree(c, leafNames));
+    return {
+      name,
+      children,
+    };
+  }
+}
+
+//#endregin
 
 //#region PUBLIC API
 
 interface CreateHeatmapOptions {
   replicates?: string[];
-  cluster?: boolean;
 }
 
 export async function createHeatmapPlot(
   options?: CreateHeatmapOptions
-): Promise<HeatmapBins[]> {
+): Promise<{
+  bins: HeatmapBins[];
+  tree: ClusterTree;
+}> {
   // Prepare the data from the store
   const replicateCounts: number[][] = dataTable.toArrayOfColumns(
     options?.replicates
   );
 
+  const replicateNames = options?.replicates?.length
+    ? options.replicates
+    : dataTable.colNames;
+
   // Compute the euclidean distance matrix between each gene
   const distanceMatrix = computeGeneXDistance(replicateCounts, 'euclidean');
 
-  if (options?.cluster) {
-    // TODO
-    // clusterGeneXMatrix(distanceMatrix, 'ward');
-  }
+  // Cluster the gene matrix
+  const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
+  const tree = clusterToTree(cluster, replicateNames);
 
   // Transform results to be consumed by @visx/heatmap
-  const replNames = options?.replicates?.length
-    ? options.replicates
-    : dataTable.colNames;
-  const binData = distanceMatrix.map(valuesToBins(replNames));
+  const bins = distanceMatrix.map(valuesToBins(replicateNames));
 
-  return binData;
+  return {
+    bins,
+    tree,
+  };
 }
 
 //#endregion

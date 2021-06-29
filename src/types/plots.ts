@@ -15,8 +15,14 @@ export interface GxpPlot {
  * - `binData`: the rows of the heatmap matrix
  */
 export interface GxpHeatmap extends GxpPlot {
+  tree: ClusterTree;
   binData: HeatmapBins[];
   plotTitle?: string;
+}
+
+export interface ClusterTree {
+  name: string;
+  children?: ClusterTree[];
 }
 
 /**
