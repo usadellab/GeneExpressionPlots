@@ -196,13 +196,11 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               {props.plotTitle}
             </Text>
           </Group>
-          <Group>
+          <Group top={titleHeight}>
             <HeatmapRect
               data={props.binData}
               xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
-              yScale={(d) =>
-                plotDims?.yScale ? plotDims.yScale(d) + titleHeight : 0
-              }
+              yScale={(d) => (plotDims?.yScale ? plotDims.yScale(d) : 0)}
               colorScale={colorScale}
               // opacityScale={opacityScale}
               binWidth={plotDims?.binWidth}
