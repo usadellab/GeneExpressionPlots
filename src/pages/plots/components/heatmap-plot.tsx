@@ -75,10 +75,9 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
     xMax: number;
     yMax: number;
     xAxisScale: ScaleBand<string>;
+    titleHeight: number;
+    tickLineHeight: number;
   }>();
-
-  // title
-  const titleHeight = props.plotTitle ? 30 : 0;
 
   React.useEffect(
     function resizePlot() {
@@ -107,6 +106,11 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const clientPaddingX = clientPaddingRight + clientPaddingLeft;
           const clientPaddingY = clientPaddingTop + clientPaddingBottom;
 
+          // title
+          const titleHeight = props.plotTitle ? 30 : 0;
+
+          // ticks
+          const tickLineHeight = 10;
           const tickLabelHeight = props.binData
             .map((data) =>
               getStringWidth(data.bin, {
@@ -128,8 +132,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             entries[0].target.clientHeight -
             clientPaddingY -
             (tickLabelHeight ?? 0) -
-            10 - // Tick line height
-            titleHeight;
+            tickLineHeight -
+            titleHeight * 2;
 
           const dataLen = props.binData.length;
           const binWidth = clientWidth / dataLen;
@@ -159,6 +163,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             xMax: clientWidth,
             yMax: clientHeight,
             xAxisScale,
+            tickLineHeight,
+            titleHeight,
           });
         }, 100);
 
@@ -174,7 +180,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
         if (timeoutId) clearTimeout(timeoutId);
       };
     },
-    [props.binData, titleHeight]
+    [props.binData, props.plotTitle]
   );
 
   return (
@@ -196,7 +202,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               {props.plotTitle}
             </Text>
           </Group>
-          <Group top={titleHeight}>
+          <Group top={plotDims.titleHeight}>
             <HeatmapRect
               data={props.binData}
               xScale={(d) => (plotDims?.xScale ? plotDims.xScale(d) : 0)}
@@ -248,7 +254,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             </HeatmapRect>
           </Group>
           <AxisBottom
-            top={plotDims.yMax + 10 + titleHeight}
+            top={plotDims.titleHeight + plotDims.yMax + plotDims.tickLineHeight}
             scale={plotDims.xAxisScale}
             numTicks={props.binData.length}
             tickLabelProps={() => ({
@@ -264,17 +270,30 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       )}
       {tooltipOpen && tooltipData && (
         <TooltipInPortal left={tooltipLeft} top={tooltipTop}>
-          <ChakraText fontWeight="semibold">
-            {`Column: ${props.binData[tooltipData.column].bin}`}
-          </ChakraText>
-          <ChakraText fontWeight="semibold">
-            {`Row: ${
-              props.binData[tooltipData.column].bins[tooltipData.row].bin
-            }`}
-          </ChakraText>
-          <ChakraText fontWeight="semibold">
-            {`Distance: ${tooltipData.count?.toFixed(2)}`}
-          </ChakraText>
+          <p>
+            <ChakraText as="span" fontWeight="semibold">
+              Column
+            </ChakraText>
+            <ChakraText as="span" ml={1}>
+              {props.binData[tooltipData.column].bin}
+            </ChakraText>
+          </p>
+          <p>
+            <ChakraText as="span" fontWeight="semibold">
+              Row
+            </ChakraText>
+            <ChakraText as="span" ml={1}>
+              {props.binData[tooltipData.column].bins[tooltipData.row].bin}
+            </ChakraText>
+          </p>
+          <p>
+            <ChakraText as="span" fontWeight="semibold">
+              Distance
+            </ChakraText>
+            <ChakraText as="span" ml={1}>
+              {tooltipData.count?.toFixed(2)}
+            </ChakraText>
+          </p>
         </TooltipInPortal>
       )}
     </PlotContainer>
