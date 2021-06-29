@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  Box,
   Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,6 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -55,6 +56,8 @@ const GeneBrowser: React.FC = () => {
     pageMax: 1,
   });
 
+  const [pageLoading, setPageLoading] = React.useState(true);
+
   const computePageView = React.useCallback(
     (accessionId: string, countView: number, pageNum: number): PageView => {
       // Retrieve gene information matching the search parameters (empty search matches all)
@@ -99,13 +102,16 @@ const GeneBrowser: React.FC = () => {
 
   React.useEffect(
     function loadInitialGeneView() {
+      setPageLoading(true);
       const pageView = computePageView('', 20, 1);
       setPageView(pageView);
+      setPageLoading(false);
     },
     [computePageView]
   );
 
   const onBrowserFormSubmit: BrowserFormSubmitHandler = (values, actions) => {
+    setPageLoading(true);
     const pageView = computePageView(
       values.accessionId,
       values.countView,
@@ -115,10 +121,16 @@ const GeneBrowser: React.FC = () => {
     setPageView(pageView);
 
     actions.setSubmitting(false);
+    setPageLoading(false);
   };
 
   return (
-    <Box backgroundColor="white" padding={6}>
+    <Flex
+      flexDirection="column"
+      backgroundColor="white"
+      flexGrow={1}
+      padding={6}
+    >
       <GeneBrowserForm
         alignItems="start"
         flexDirection={{ base: 'column', md: 'row' }}
@@ -127,31 +139,45 @@ const GeneBrowser: React.FC = () => {
         pageMax={pageView.pageMax}
       />
 
-      {pageView.geneCards.map(({ accession, geneInfo }) => (
-        <GeneCard
-          _first={{
-            marginTop: 5,
-          }}
-          _even={{
-            backgroundColor: 'orange.50',
-          }}
-          _hover={{
-            backgroundColor: 'orange.100',
-            cursor: 'pointer',
-          }}
-          _focus={{
-            outline: '1px solid',
-            outlineColor: 'orange.600',
-            backgroundColor: 'orange.100',
-          }}
-          accession={accession}
-          geneInfo={geneInfo}
-          key={accession}
-          padding={5}
-          tabIndex={0}
-          onDoubleClick={showGeneDetails(accession)}
-        />
-      ))}
+      {pageLoading ? (
+        <Flex
+          width="100%"
+          flexGrow={1}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Spinner size="xl" />
+        </Flex>
+      ) : (
+        pageView.geneCards.map(({ accession, geneInfo }) => (
+          <GeneCard
+            _first={{
+              marginTop: 5,
+            }}
+            _even={{
+              backgroundColor: 'orange.50',
+            }}
+            _hover={{
+              backgroundColor: 'orange.100',
+              cursor: 'pointer',
+            }}
+            _focus={{
+              outline: 'none',
+              border: '1px solid',
+              borderColor: 'orange.600',
+              backgroundColor: 'orange.100',
+            }}
+            accession={accession}
+            border="1px solid"
+            borderColor="transparent"
+            geneInfo={geneInfo}
+            key={accession}
+            padding={5}
+            tabIndex={0}
+            onDoubleClick={showGeneDetails(accession)}
+          />
+        ))
+      )}
 
       <Modal
         isOpen={isGeneDetailsOpen}
@@ -175,7 +201,7 @@ const GeneBrowser: React.FC = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Flex>
   );
 };
 
