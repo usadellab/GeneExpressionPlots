@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GeneCard from '@/components/cards/GeneCard';
+import GeneCard from '@/components/gene-card';
 import { PlotContext } from './PlotlyPlot';
 
 export default class PlotCaption extends React.Component {
