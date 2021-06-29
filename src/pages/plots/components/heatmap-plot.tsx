@@ -40,6 +40,7 @@ interface HeatmapPlotProps {
 }
 
 const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
+  // tooltip
   const {
     tooltipData,
     tooltipLeft,
