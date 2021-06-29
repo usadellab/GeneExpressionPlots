@@ -28,7 +28,6 @@ const GeneDetails: React.FC<GeneDetailsProps> = (props) => {
 
   return (
     <Table variant="striped" colorScheme="orange">
-      {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
       <TableCaption>
         Expression count per replicate file found for this accession
       </TableCaption>
