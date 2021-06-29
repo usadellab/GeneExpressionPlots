@@ -19,7 +19,7 @@ export interface BrowserFormProps extends Omit<FlexProps, 'onSubmit'> {
 }
 
 export interface BrowserFormAttributes {
-  accessionId: string;
+  searchText: string;
   countView: number;
   pageNum: number;
 }
@@ -57,7 +57,7 @@ const GeneBrowserForm: React.FC<BrowserFormProps> = ({
   return (
     <Formik<BrowserFormAttributes>
       initialValues={{
-        accessionId: '',
+        searchText: '',
         countView: 20,
         pageNum: 1,
       }}
@@ -72,7 +72,7 @@ const GeneBrowserForm: React.FC<BrowserFormProps> = ({
               marginLeft: 2,
             }}
             initialFocusRef={initialFocusRef}
-            label="Search accession"
+            label="Search in accessions"
             leftChildren={
               <InputLeftAddon
                 _focusWithin={{
@@ -104,7 +104,7 @@ const GeneBrowserForm: React.FC<BrowserFormProps> = ({
                 />
               </InputLeftAddon>
             }
-            name="accessionId"
+            name="searchText"
           />
 
           <FormikNumber

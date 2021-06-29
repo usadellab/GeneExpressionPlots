@@ -113,7 +113,7 @@ const GeneBrowser: React.FC = () => {
   const onBrowserFormSubmit: BrowserFormSubmitHandler = (values, actions) => {
     setPageLoading(true);
     const pageView = computePageView(
-      values.accessionId,
+      values.searchText,
       values.countView,
       values.pageNum
     );
