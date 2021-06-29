@@ -112,16 +112,18 @@ const GeneBrowser: React.FC = () => {
 
   const onBrowserFormSubmit: BrowserFormSubmitHandler = (values, actions) => {
     setPageLoading(true);
-    const pageView = computePageView(
-      values.searchText,
-      values.countView,
-      values.pageNum
-    );
 
-    setPageView(pageView);
+    setTimeout(() => {
+      const pageView = computePageView(
+        values.searchText,
+        values.countView,
+        values.pageNum
+      );
+      setPageView(pageView);
 
-    actions.setSubmitting(false);
-    setPageLoading(false);
+      actions.setSubmitting(false);
+      setPageLoading(false);
+    }, 10);
   };
 
   return (
