@@ -34,7 +34,7 @@ interface PageView {
 const GeneBrowser: React.FC = () => {
   /* GENE DETAILS TABLE */
 
-  const modalSize = useBreakpointValue({ base: 'full', md: 'xl', lg: '2xl' });
+  const modalSize = useBreakpointValue({ base: 'full', md: '3xl', lg: '6xl' });
 
   const {
     isOpen: isGeneDetailsOpen,
@@ -191,7 +191,11 @@ const GeneBrowser: React.FC = () => {
         size={modalSize}
       >
         <ModalOverlay />
-        <ModalContent margin={0} overflow="auto" rounded="none">
+        <ModalContent
+          margin={modalSize === 'full' ? 0 : undefined}
+          overflow="auto"
+          rounded="none"
+        >
           <ModalHeader color="orange.600">
             {refGeneDetailsAccession.current}
           </ModalHeader>
