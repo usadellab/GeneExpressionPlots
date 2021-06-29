@@ -175,6 +175,12 @@ const GeneBrowser: React.FC = () => {
             padding={5}
             tabIndex={0}
             onDoubleClick={showGeneDetails(accession)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                showGeneDetails(accession)();
+              }
+            }}
           />
         ))
       )}
