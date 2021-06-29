@@ -73,7 +73,7 @@ class PlotStore {
    * Add a new gene expression heatmap plot to the store.
    * @param replicates gene accessions to visualize
    */
-  addHeatmapPlot(replicates?: string[]): void {
+  addHeatmapPlot(plotTitle?: string, replicates?: string[]): void {
     const key = nanoid();
     const pendingPlot: GxpPlot = {
       key,
@@ -90,6 +90,7 @@ class PlotStore {
               ...this.plots[plotIndex],
               isLoading: false,
               binData,
+              plotTitle,
             };
 
             if (this.plots[plotIndex].key === key) {
@@ -101,7 +102,7 @@ class PlotStore {
     );
   }
 
-  addPCAPlot(title?: string): void {
+  addPCAPlot(plotTitle?: string): void {
     const key = nanoid();
     const pendingPlot: GxpPlot = {
       key,
@@ -112,7 +113,7 @@ class PlotStore {
 
     setTimeout(
       () =>
-        pcaData(title).then(
+        pcaData(plotTitle).then(
           action('addPCAPlot', (pcaData) => {
             const loadedPlot: GxpPCA = {
               ...this.plots[plotIndex],

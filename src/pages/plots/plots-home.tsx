@@ -145,7 +145,10 @@ const PlotsHome: React.FC = () => {
   const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onHeatmapFormClose();
-    setTimeout(() => plotStore.addHeatmapPlot(values.replicates), 10);
+    setTimeout(
+      () => plotStore.addHeatmapPlot(values.plotTitle, values.replicates),
+      10
+    );
   };
 
   /* PCA PLOT */
@@ -234,6 +237,7 @@ const PlotsHome: React.FC = () => {
                 <HeatmapPlot
                   key={heatmapPlot.key}
                   binData={heatmapPlot.binData}
+                  plotTitle={heatmapPlot.plotTitle}
                 />
               );
             }
