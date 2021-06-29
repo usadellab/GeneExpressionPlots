@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  ThemingProps,
   useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -34,7 +35,10 @@ interface PageView {
 const GeneBrowser: React.FC = () => {
   /* GENE DETAILS TABLE */
 
-  const modalSize = useBreakpointValue({ base: 'full', md: '3xl', lg: '6xl' });
+  const modalSize = useBreakpointValue<ThemingProps<'Modal'>['size']>({
+    base: 'full',
+    lg: '6xl',
+  });
 
   const {
     isOpen: isGeneDetailsOpen,
