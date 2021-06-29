@@ -7,6 +7,7 @@ import {
 } from 'formik';
 import React from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
+import { FocusableElement } from '@chakra-ui/utils';
 import FormikField from '@/components/formik-field';
 import {
   Box,
@@ -17,8 +18,8 @@ import {
   InputRightAddon,
   VisuallyHidden,
 } from '@chakra-ui/react';
-import { FocusableElement } from '@chakra-ui/utils';
 import FormikSwitch from '@/components/formik-switch';
+import FormikAccession from '@/components/formik-accession';
 
 export interface BarsFormAttributes {
   accessions: string[];
@@ -101,7 +102,7 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
                 {formProps.values.accessions &&
                   formProps.values.accessions.length > 0 &&
                   formProps.values.accessions.map((accession, index) => (
-                    <FormikField
+                    <FormikAccession
                       controlProps={{
                         as: 'p',
                         marginTop: '1rem',
@@ -188,7 +189,7 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
                       >
                         <Icon as={FaPlus} />
                       </Box>
-                    </FormikField>
+                    </FormikAccession>
                   ))}
 
                 <Button

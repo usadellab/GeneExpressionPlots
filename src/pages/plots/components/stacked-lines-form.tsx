@@ -7,6 +7,7 @@ import {
 } from 'formik';
 import React from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
+import FormikAccession from '@/components/formik-accession';
 import FormikField from '@/components/formik-field';
 import {
   Box,
@@ -101,7 +102,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
                 {formProps.values.accessions &&
                   formProps.values.accessions.length > 0 &&
                   formProps.values.accessions.map((accession, index) => (
-                    <FormikField
+                    <FormikAccession
                       controlProps={{
                         as: 'p',
                         marginTop: '1rem',
@@ -188,7 +189,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
                       >
                         <Icon as={FaPlus} />
                       </Box>
-                    </FormikField>
+                    </FormikAccession>
                   ))}
 
                 <Button
