@@ -27,12 +27,18 @@ const GeneDetails: React.FC<GeneDetailsProps> = (props) => {
   ]);
 
   return (
-    <Table variant="striped" colorScheme="orange">
+    <Table colorScheme="orange" variant="striped">
       <TableCaption>
         Expression count per replicate file found for this accession
       </TableCaption>
       <Thead>
-        <Tr>
+        <Tr
+          sx={{
+            '& > th': {
+              fontSize: 14,
+            },
+          }}
+        >
           <Th>Group</Th>
           <Th>Sample</Th>
           <Th>Replicate</Th>
