@@ -1,6 +1,6 @@
 import React from 'react';
 import { toJS } from 'mobx';
-import { chakra } from '@chakra-ui/react';
+import { chakra, Text as ChakraText } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand } from 'd3-scale';
 import { AxisBottom } from '@visx/axis';
@@ -8,9 +8,11 @@ import { Group } from '@visx/group';
 import { HeatmapRect } from '@visx/heatmap';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import { getStringWidth, Text } from '@visx/text';
+import { useTooltipInPortal, useTooltip } from '@visx/tooltip';
 
 import PlotContainer from './plot-container';
 import { HeatmapBins, HeatmapBin } from '@/types/plots';
+import { RectCell } from '@visx/heatmap/lib/heatmaps/HeatmapRect';
 
 const gradient0 = '#b4fbde';
 const gradient1 = '#f33d15';
@@ -38,6 +40,21 @@ interface HeatmapPlotProps {
 }
 
 const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
+  const {
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    showTooltip,
+    hideTooltip,
+  } = useTooltip<RectCell<HeatmapBins, HeatmapBin>>();
+  const { containerRef, TooltipInPortal } = useTooltipInPortal({
+    // use TooltipWithBounds
+    detectBounds: true,
+    // when tooltip containers are scrolled, this will correctly update the Tooltip position
+    scroll: true,
+  });
+
   // color
   const colorMin = min(props.binData, (d) => min(bins(d), count));
   const colorMax = max(props.binData, (d) => max(bins(d), count));
@@ -110,8 +127,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             entries[0].target.clientHeight -
             clientPaddingY -
             (tickLabelHeight ?? 0) -
-            10 -
-            titleHeight; // Tick line height
+            10 - // Tick line height
+            titleHeight;
 
           const dataLen = props.binData.length;
           const binWidth = clientWidth / dataLen;
@@ -164,9 +181,10 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       justifyContent="center"
       status={plotDims ? 'idle' : 'loading'}
       figureRef={figureRef}
+      position="relative"
     >
       {plotDims && (
-        <svg width="100%" height="100%">
+        <svg width="100%" height="100%" ref={containerRef}>
           <Group>
             <Text
               x={plotDims.xMax / 2}
@@ -197,11 +215,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                   heatmapData.map((data) => {
                     return (
                       <chakra.rect
-                        sx={{
-                          '&:hover': {
-                            stroke: 'black',
-                          },
-                        }}
                         key={`heatmap-rect-${data.row}-${data.column}`}
                         width={data.width}
                         height={data.height}
@@ -209,6 +222,14 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                         y={data.y}
                         fill={data.color}
                         fillOpacity={data.opacity}
+                        onMouseOver={() => {
+                          showTooltip({
+                            tooltipData: data,
+                            tooltipTop: data.y,
+                            tooltipLeft: data.x,
+                          });
+                        }}
+                        onMouseOut={hideTooltip}
                         onClick={() => {
                           const colName = toJS(props.binData[data.column].bin);
                           const rowName = toJS(
@@ -241,6 +262,21 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             })}
           />
         </svg>
+      )}
+      {tooltipOpen && tooltipData && (
+        <TooltipInPortal left={tooltipLeft} top={tooltipTop}>
+          <ChakraText fontWeight="semibold">
+            {`Column: ${props.binData[tooltipData.column].bin}`}
+          </ChakraText>
+          <ChakraText fontWeight="semibold">
+            {`Row: ${
+              props.binData[tooltipData.column].bins[tooltipData.row].bin
+            }`}
+          </ChakraText>
+          <ChakraText fontWeight="semibold">
+            {`Distance: ${tooltipData.count?.toFixed(2)}`}
+          </ChakraText>
+        </TooltipInPortal>
       )}
     </PlotContainer>
   );
