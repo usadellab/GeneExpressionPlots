@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaBurn, FaChartBar, FaChartLine } from 'react-icons/fa';
+import { FaBurn, FaChartBar, FaChartLine, FaTrashAlt } from 'react-icons/fa';
 import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
 import { observer } from 'mobx-react';
@@ -156,6 +156,10 @@ const PlotsHome: React.FC = () => {
 
   /* ACTIONS */
 
+  const onDeletePlots = (): void => {
+    plotStore.clearPlots();
+  };
+
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar
@@ -195,6 +199,12 @@ const PlotsHome: React.FC = () => {
           text="PCA Plot"
           icon={MdBubbleChart}
           onClick={onPCAFormOpen}
+        />
+
+        <SidebarButton
+          text="Remove plots"
+          icon={FaTrashAlt}
+          onClick={onDeletePlots}
         />
       </Sidebar>
 
