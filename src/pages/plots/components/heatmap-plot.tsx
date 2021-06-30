@@ -137,7 +137,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               ...props.binData.map((data) => data.bin.length) // get the length of the longest label
             ) * 6; // multiply by a sensible amount to get a cross browser consisten value in pixels
 
-          console.log({ tickLabelSize });
           // plot
           const plotBoundsX =
             entries[0].target.clientWidth -
@@ -326,17 +325,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                           });
                         }}
                         onMouseOut={hideTooltip}
-                        onClick={() => {
-                          const colName = toJS(props.binData[data.column].bin);
-                          const rowName = toJS(
-                            props.binData[data.column].bins[data.row].bin
-                          );
-                          console.log({
-                            colName,
-                            rowName,
-                            bin: toJS(data.bin),
-                          });
-                        }}
                       />
                     );
                   })

@@ -266,7 +266,6 @@ const DataFiles: React.FC = () => {
     values,
     actions
   ) => {
-    console.log({ values });
     try {
       // Generate source data
       const geneExpressionSrc = dataTable.toString(values.columnSep);
