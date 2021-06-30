@@ -25,8 +25,8 @@ import {
   HierarchyPointNode,
 } from '@visx/hierarchy/lib/types';
 
-const gradient0 = '#b4fbde';
-const gradient1 = '#f33d15';
+const gradient0 = '#f33d15';
+const gradient1 = '#b4fbde';
 // const gradient0 = '#77312f';
 // const gradient1 = '#f33d15';
 // const cool1 = '#122549';
