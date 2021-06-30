@@ -166,43 +166,39 @@ const PlotsHome: React.FC = () => {
         background="white"
         marginTop={5}
         minWidth="4.5rem"
-        maxWidth="17rem"
+        maxWidth="14rem"
         position="fixed"
         boxShadow="2xl"
         zIndex="popover"
       >
-        <SidebarButton
-          text="Bars Plot"
-          icon={FaChartBar}
-          onClick={onBarsFormOpen}
-        />
+        <SidebarButton text="Bars" icon={FaChartBar} onClick={onBarsFormOpen} />
 
         <SidebarButton
-          text="Individual Lines Plot"
+          text="Individual Lines"
           icon={FaChartLine}
           onClick={onIndividualLinesFormOpen}
         />
 
         <SidebarButton
-          text="Stacked Lines Plot"
+          text="Stacked Lines"
           icon={FcLineChart}
           onClick={onStackedLinesFormOpen}
         />
 
         <SidebarButton
-          text="Heatmap Plot"
+          text="Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
         />
 
         <SidebarButton
-          text="PCA Plot"
+          text="PCA"
           icon={MdBubbleChart}
           onClick={onPCAFormOpen}
         />
 
         <SidebarButton
-          text="Remove plots"
+          text="Remove All"
           icon={FaTrashAlt}
           onClick={onDeletePlots}
         />
