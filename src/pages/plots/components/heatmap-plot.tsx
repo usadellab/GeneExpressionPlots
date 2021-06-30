@@ -217,10 +217,10 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       status={plotDims ? 'idle' : 'loading'}
       figureRef={figureRef}
       position="relative"
-      height={1200}
+      height={1080}
     >
       {plotDims && (
-        <svg width="100%" height="100%" ref={containerRef}>
+        <svg className="main-svg" width="100%" height="100%" ref={containerRef}>
           <Group>
             <Text
               x={plotDims.xMax / 2 + plotDims.tickLabelSize}
@@ -305,7 +305,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 heatmap.map((heatmapData) =>
                   heatmapData.map((data) => {
                     return (
-                      <chakra.rect
+                      <rect
                         key={`heatmap-rect-${data.row}-${data.column}`}
                         width={data.width}
                         height={data.height}
