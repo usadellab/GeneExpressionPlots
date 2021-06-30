@@ -317,7 +317,11 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                         onMouseOver={() => {
                           showTooltip({
                             tooltipData: data,
-                            tooltipTop: data.y,
+                            tooltipTop:
+                              data.y +
+                              plotDims.titleHeight +
+                              plotDims.treeBoundsY +
+                              plotDims.tickLabelSize,
                             tooltipLeft: data.x,
                           });
                         }}
