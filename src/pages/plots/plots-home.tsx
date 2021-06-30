@@ -1,4 +1,7 @@
 import React from 'react';
+import { FaBurn, FaChartBar, FaChartLine } from 'react-icons/fa';
+import { FcLineChart } from 'react-icons/fc';
+import { MdBubbleChart } from 'react-icons/md';
 import { observer } from 'mobx-react';
 
 import { plotStore } from '@/store/plot-store';
@@ -6,7 +9,7 @@ import { infoTable } from '@/store/data-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
-import { Flex, Spinner, Text, useDisclosure } from '@chakra-ui/react';
+import { Flex, Spinner, useDisclosure } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
 import { GxpHeatmap, PlotlyOptions, GxpPlotly, GxpPCA } from '@/types/plots';
@@ -27,22 +30,6 @@ import StackedLinesForm, {
 } from './components/stacked-lines-form';
 import PlotCaption from './components/PlotCaption';
 import PCAForm, { PCAFormSubmitHandler } from './components/pca-form';
-
-const TextIcon = (text: string) =>
-  function IconRenderer(): JSX.Element {
-    return (
-      <Text
-        border="1px"
-        flexShrink={0}
-        fontSize="sm"
-        fontWeight="bold"
-        padding=".25rem"
-        width="3.5rem"
-      >
-        {text}
-      </Text>
-    );
-  };
 
 const PlotsHome: React.FC = () => {
   /* BARS PLOT */
@@ -167,41 +154,46 @@ const PlotsHome: React.FC = () => {
     setTimeout(() => plotStore.addPCAPlot(values.plotTitle), 10);
   };
 
+  /* ACTIONS */
+
   return (
     <Flex as="main" flexGrow={1}>
-      <Sidebar maxWidth="17rem" minWidth="6.5rem">
+      <Sidebar
+        background="white"
+        marginTop={5}
+        minWidth="4.5rem"
+        maxWidth="17rem"
+        position="fixed"
+        boxShadow="2xl"
+        zIndex="popover"
+      >
         <SidebarButton
           text="Bars Plot"
-          icon={TextIcon('BAR')}
-          alignItems="baseline"
+          icon={FaChartBar}
           onClick={onBarsFormOpen}
         />
 
         <SidebarButton
           text="Individual Lines Plot"
-          icon={TextIcon('ILN')}
-          alignItems="baseline"
+          icon={FaChartLine}
           onClick={onIndividualLinesFormOpen}
         />
 
         <SidebarButton
           text="Stacked Lines Plot"
-          icon={TextIcon('SLN')}
-          alignItems="baseline"
+          icon={FcLineChart}
           onClick={onStackedLinesFormOpen}
         />
 
         <SidebarButton
           text="Heatmap Plot"
-          icon={TextIcon('HMP')}
-          alignItems="baseline"
+          icon={FaBurn}
           onClick={onHeatmapFormOpen}
         />
 
         <SidebarButton
           text="PCA Plot"
-          icon={TextIcon('PCA')}
-          alignItems="baseline"
+          icon={MdBubbleChart}
           onClick={onPCAFormOpen}
         />
       </Sidebar>
@@ -212,6 +204,7 @@ const PlotsHome: React.FC = () => {
         role="region"
         width="100%"
         margin={2}
+        marginLeft={20}
         overflow="hidden"
       >
         {plotStore.plots.map((plot) => {
