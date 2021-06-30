@@ -233,13 +233,7 @@ const PlotsHome: React.FC = () => {
           switch (plot.type) {
             case 'heatmap': {
               const heatmapPlot = plot as GxpHeatmap;
-              return (
-                <HeatmapPlot
-                  key={heatmapPlot.key}
-                  binData={heatmapPlot.binData}
-                  plotTitle={heatmapPlot.plotTitle}
-                />
-              );
+              return <HeatmapPlot {...heatmapPlot} />;
             }
 
             case 'plotly': {

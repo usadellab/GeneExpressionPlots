@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { toJS } from 'mobx';
 import { chakra, Text as ChakraText } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand } from 'd3-scale';
-import { AxisBottom, AxisLeft } from '@visx/axis';
+import { AxisLeft } from '@visx/axis';
 import { Group } from '@visx/group';
 import { HeatmapRect } from '@visx/heatmap';
+import { Cluster, hierarchy } from '@visx/hierarchy';
 import { scaleBand, scaleLinear } from '@visx/scale';
-import { getStringWidth, Text } from '@visx/text';
+import { Text } from '@visx/text';
 import { useTooltipInPortal, useTooltip } from '@visx/tooltip';
+import { LinkVerticalStep } from '@visx/shape';
 
 import PlotContainer from './plot-container';
-import { HeatmapBins, HeatmapBin } from '@/types/plots';
+import {
+  HeatmapBins,
+  HeatmapBin,
+  GxpHeatmap,
+  ClusterTree,
+} from '@/types/plots';
 import { RectCell } from '@visx/heatmap/lib/heatmaps/HeatmapRect';
+import {
+  HierarchyPointLink,
+  HierarchyPointNode,
+} from '@visx/hierarchy/lib/types';
 
-const gradient0 = '#b4fbde';
-const gradient1 = '#f33d15';
+const gradient0 = '#f33d15';
+const gradient1 = '#b4fbde';
 // const gradient0 = '#77312f';
 // const gradient1 = '#f33d15';
 // const cool1 = '#122549';
@@ -34,10 +45,7 @@ function min<Datum>(data: Datum[], value: (d: Datum) => number): number {
 const bins = (d: HeatmapBins): HeatmapBin[] => d.bins;
 const count = (d: HeatmapBin): number => d.count;
 
-interface HeatmapPlotProps {
-  binData: HeatmapBins[];
-  plotTitle?: string;
-}
+type HeatmapPlotProps = GxpHeatmap;
 
 const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
   // tooltip
@@ -79,7 +87,14 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
     titleHeight: number;
     tickLineSize: number;
     tickLabelSize: number;
+    treeBoundsY: number;
+    heatmapBoundsY: number;
   }>();
+
+  const treeData = useMemo(
+    () => hierarchy<ClusterTree>(props.tree),
+    [props.tree]
+  );
 
   React.useEffect(
     function resizePlot() {
@@ -113,23 +128,16 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
 
           // ticks
           const tickLineSize = 10;
-          const tickLabelSize =
-            props.binData
-              .map((data) =>
-                getStringWidth(data.bin, {
-                  'font-size': 12,
-                })
-              )
-              .reduce((previous, current) =>
-                previous === null
-                  ? current
-                  : current === null
-                  ? previous
-                  : previous === null && current === null
-                  ? 0
-                  : Math.max(previous, current)
-              ) ?? 0;
 
+          // This is a approximate workaround for calculating the size needed for the labels.
+          // Optimally we would get the actual width of the text in pixels using e.g
+          // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/dimension/getTextDimension.ts
+          const tickLabelSize =
+            Math.max(
+              ...props.binData.map((data) => data.bin.length) // get the length of the longest label
+            ) * 6; // multiply by a sensible amount to get a cross browser consisten value in pixels
+
+          console.log({ tickLabelSize });
           // plot
           const plotBoundsX =
             entries[0].target.clientWidth -
@@ -144,9 +152,12 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             tickLineSize -
             titleHeight * 2;
 
+          const treeBoundsY = plotBoundsY / 6;
+          const heatmapBoundsY = plotBoundsY - treeBoundsY;
+
           const dataLen = props.binData.length;
           const binWidth = plotBoundsX / dataLen;
-          const binHeight = plotBoundsY / dataLen;
+          const binHeight = heatmapBoundsY / dataLen;
 
           const xScalePlot = scaleLinear<number>({
             domain: [0, props.binData.length],
@@ -156,7 +167,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const yScalePlot = scaleLinear<number>({
             // domain: [0, max(props.binData, (d) => bins(d).length)],
             domain: [0, props.binData.length],
-            range: [0, plotBoundsY],
+            range: [0, heatmapBoundsY],
           });
 
           const xScaleAxis = scaleBand<string>({
@@ -165,8 +176,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           });
 
           const yScaleAxis = scaleBand<string>({
-            domain: props.binData.map((data) => data.bin),
-            range: [0, plotBoundsY],
+            domain: props.binData[0].bins.map((data) => data.bin),
+            range: [0, heatmapBoundsY],
           });
 
           setPlotDims({
@@ -181,6 +192,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             yScalePlot,
             xMax: plotBoundsX,
             yMax: plotBoundsY,
+            treeBoundsY,
+            heatmapBoundsY,
           });
         }, 100);
 
@@ -205,12 +218,13 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       status={plotDims ? 'idle' : 'loading'}
       figureRef={figureRef}
       position="relative"
+      height={1200}
     >
       {plotDims && (
         <svg width="100%" height="100%" ref={containerRef}>
-          <Group left={plotDims.tickLabelSize + plotDims.tickLineSize}>
+          <Group>
             <Text
-              x={plotDims.xMax / 2}
+              x={plotDims.xMax / 2 + plotDims.tickLabelSize}
               y={15}
               textAnchor="middle"
               fontSize={20}
@@ -220,6 +234,56 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           </Group>
           <Group
             top={plotDims.titleHeight}
+            left={plotDims.tickLabelSize + plotDims.tickLineSize}
+          >
+            <Cluster<ClusterTree>
+              root={treeData}
+              size={[plotDims.xMax, plotDims.treeBoundsY]}
+              separation={() => {
+                return 5;
+              }}
+            >
+              {(cluster) => (
+                <Group>
+                  {cluster.links().map((link, i) => (
+                    <LinkVerticalStep<
+                      HierarchyPointLink<ClusterTree>,
+                      HierarchyPointNode<ClusterTree>
+                    >
+                      key={`cluster-link-${i}`}
+                      data={link}
+                      stroke="black"
+                      strokeWidth="1"
+                      fill="none"
+                      percent={0}
+                    />
+                  ))}
+                  {cluster.descendants().map((node, i) => (
+                    <Group top={node.y} left={node.x} key={`cluster-node-${i}`}>
+                      {!node.children && (
+                        <Text
+                          dy={10}
+                          fontSize={10}
+                          fontFamily="Arial"
+                          textAnchor="end"
+                          angle={270}
+                          dx={4}
+                        >
+                          {node.data.name}
+                        </Text>
+                      )}
+                    </Group>
+                  ))}
+                </Group>
+              )}
+            </Cluster>
+          </Group>
+          <Group
+            top={
+              plotDims.titleHeight +
+              plotDims.treeBoundsY +
+              plotDims.tickLabelSize
+            }
             left={plotDims.tickLabelSize + plotDims.tickLineSize}
           >
             <HeatmapRect
@@ -253,7 +317,11 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                         onMouseOver={() => {
                           showTooltip({
                             tooltipData: data,
-                            tooltipTop: data.y,
+                            tooltipTop:
+                              data.y +
+                              plotDims.titleHeight +
+                              plotDims.treeBoundsY +
+                              plotDims.tickLabelSize,
                             tooltipLeft: data.x,
                           });
                         }}
@@ -275,33 +343,19 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 )
               }
             </HeatmapRect>
+            <AxisLeft
+              left={-10}
+              numTicks={props.binData.length}
+              tickLabelProps={() => ({
+                lengthAdjust: 'spacing',
+                fontSize: 10,
+                textAnchor: 'end',
+                dy: 3,
+                dx: -3,
+              })}
+              scale={plotDims.yScaleAxis}
+            />
           </Group>
-          <AxisLeft
-            top={plotDims.titleHeight}
-            left={plotDims.tickLabelSize - plotDims.tickLineSize + 10}
-            numTicks={props.binData.length}
-            tickLabelProps={() => ({
-              lengthAdjust: 'spacing',
-              fontSize: 10,
-              textAnchor: 'end',
-              dy: 3,
-              dx: -3,
-            })}
-            scale={plotDims.yScaleAxis}
-          />
-          <AxisBottom
-            top={plotDims.titleHeight + plotDims.yMax + plotDims.tickLineSize}
-            left={plotDims.tickLabelSize + plotDims.tickLineSize}
-            scale={plotDims.xScaleAxis}
-            numTicks={props.binData.length}
-            tickLabelProps={() => ({
-              angle: 270,
-              dx: 3,
-              lengthAdjust: 'spacing',
-              fontSize: 10,
-              textAnchor: 'end',
-            })}
-          />
         </svg>
       )}
       {tooltipOpen && tooltipData && (
