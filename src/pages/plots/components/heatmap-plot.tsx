@@ -3,12 +3,12 @@ import { toJS } from 'mobx';
 import { chakra, Text as ChakraText } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand } from 'd3-scale';
-import { AxisBottom, AxisLeft } from '@visx/axis';
+import { AxisLeft } from '@visx/axis';
 import { Group } from '@visx/group';
 import { HeatmapRect } from '@visx/heatmap';
 import { Cluster, hierarchy } from '@visx/hierarchy';
 import { scaleBand, scaleLinear } from '@visx/scale';
-import { getStringWidth, Text } from '@visx/text';
+import { Text } from '@visx/text';
 import { useTooltipInPortal, useTooltip } from '@visx/tooltip';
 import { LinkVerticalStep } from '@visx/shape';
 
