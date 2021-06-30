@@ -90,16 +90,31 @@ function clusterGeneXMatrix(
  * Higher-order mapping function to transform an array of numeric values into a
  * Bins type ready to be consumed by the `HeatmapPlot` component built with the
  * API of '@visx/heatmap'.
- * @param rowNames
  * @param values numeric array to transform
  * @param index current bins index
  * @returns the number array transformed as a bin
  */
-function matrixToBins(colNames: string[], rowNames: string[]) {
+type BinsMapFunction = (values: number[], index: number) => HeatmapBins;
+/**
+ * Higher-order mapping function to transform an array of numeric values into a
+ * Bins type ready to be consumed by the `HeatmapPlot` component built with the
+ * API of '@visx/heatmap'.
+ * @param srcNames source matrix column and row names
+ */
+function matrixToBins(srcNames: string[]): BinsMapFunction;
+/**
+ * Higher-order mapping function to transform an array of numeric values into a
+ * Bins type ready to be consumed by the `HeatmapPlot` component built with the
+ * API of '@visx/heatmap'.
+ * @param colNames source matrix column names
+ * @param rowNames source matrix row names
+ */
+function matrixToBins(colNames: string[], rowNames: string[]): BinsMapFunction;
+function matrixToBins(colNames: string[], rowNames?: string[]) {
   return (values: number[], index: number): HeatmapBins => {
     const bin = colNames[index];
     const bins = values.map((count, accessionIndex) => ({
-      bin: rowNames[accessionIndex],
+      bin: rowNames ? rowNames[accessionIndex] : colNames[accessionIndex],
       count,
     }));
 
@@ -111,10 +126,8 @@ function matrixToBins(colNames: string[], rowNames: string[]) {
 }
 
 /**
- * Traverses the argument tree in a recursive approach converting each node to
- * an object with at most two properties 'name' of type array and 'children'
- * also of type array.
- *
+ * Traverse the argument tree in a recursive approach converting each node to
+ * an object of nodes and children.
  * @param cluster an instance ml-hclust Cluster object
  * @param leafNames array of original leaf names
  * @returns the cluster tree represenation
@@ -138,43 +151,82 @@ export function clusterToTree(
 }
 
 /**
+ * Get source indexes of the clustered tree leave nodes.
+ * @param cluster an instance of ml-hclust's Cluster class
+ * @returns an array with the cluster tree leaves
+ */
+function getTreeLeaves(cluster: Cluster): number[];
+/**
  * Get the names of the clustered tree leave nodes.
  * @param cluster an instance of ml-hclust's Cluster class
  * @param srcNames node names in pre-clustering order
  * @returns an array with the cluster tree leaves
  */
-function getTreeLeaves(cluster: Cluster, srcNames: string[]): string[] {
+function getTreeLeaves(
+  cluster: Cluster,
+  srcNames: string[]
+): Record<string, number>;
+function getTreeLeaves(
+  cluster: Cluster,
+  srcNames?: string[]
+): number[] | Record<string, number> {
   if (cluster.isLeaf) {
-    return [srcNames[cluster.index]];
+    return srcNames
+      ? { [srcNames[cluster.index]]: cluster.index }
+      : [cluster.index];
   } else {
-    const index = cluster.children.reduce((accumulator, clusterChild) => {
-      const leaves = getTreeLeaves(clusterChild, srcNames);
-      accumulator.push(...leaves);
-      return accumulator;
-    }, [] as string[]);
-
-    return index;
+    if (srcNames) {
+      const index = cluster.children.reduce((accumulator, clusterChild) => {
+        const leaves = getTreeLeaves(clusterChild, srcNames);
+        return { ...accumulator, ...leaves };
+      }, {} as Record<string, number>);
+      return index;
+    } else {
+      const index = cluster.children.reduce((accumulator, clusterChild) => {
+        const leaves = getTreeLeaves(clusterChild);
+        accumulator.push(...leaves);
+        return accumulator;
+      }, [] as number[]);
+      return index;
+    }
   }
 }
 
 /**
- * Sort a given matrix columns to match the cluster leaves order.
- * @param matrix source distance matrix
- * @param cluster clustered matrix as an instance of ml-hclust's Cluster
+ * Sort a numeric matrix according to a new order of columns and rows.
+ * @param matrix matrix to be sorted
+ * @param sortIndex new indexes for rows and columns
  * @returns the sorted matrix
  */
-function sortClusteredMatrix(matrix: number[][], cluster: Cluster): number[][] {
-  if (cluster.isLeaf) {
-    return [matrix[cluster.index]];
-  } else {
-    const index = cluster.children.reduce((accumulator, clusterChild) => {
-      const matrixCol = sortClusteredMatrix(matrix, clusterChild);
-      accumulator.push(...matrixCol);
-      return accumulator;
-    }, [] as number[][]);
-
-    return index;
-  }
+function sortClusteredMatrix(
+  matrix: number[][],
+  sortIndex: number[]
+): number[][];
+/**
+ * Sort a numeric matrix according to a new order of columns and rows.
+ * @param matrix  matrix to be sorted
+ * @param colOrder new index order for the columns
+ * @param rowsOrder new index order for the rows
+ * @returns the sorted matrix
+ */
+function sortClusteredMatrix(
+  matrix: number[][],
+  colOrder: number[],
+  rowsOrder: number[]
+): number[][];
+function sortClusteredMatrix(
+  matrix: number[][],
+  colsOrder: number[],
+  rowOrder?: number[]
+): number[][] {
+  const sortedMatrix = colsOrder.map((colIndex) => {
+    const matrixCol = matrix[colIndex];
+    const sortedCol = rowOrder
+      ? rowOrder.map((rowIndex) => matrixCol[rowIndex])
+      : colsOrder.map((rowIndex) => matrixCol[rowIndex]);
+    return sortedCol;
+  });
+  return sortedMatrix;
 }
 
 //#endregin
@@ -195,7 +247,6 @@ export async function createHeatmapPlot(
   const replicateCounts: number[][] = dataTable.toArrayOfColumns(
     options?.replicates
   );
-
   const srcReplicateNames = options?.replicates?.length
     ? options.replicates
     : dataTable.colNames;
@@ -207,12 +258,15 @@ export async function createHeatmapPlot(
   const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
   const tree = clusterToTree(cluster, srcReplicateNames);
 
-  // Sort the matrix and transform the data to be consumed by @visx/heatmap
-  const sortedReplicateNames = getTreeLeaves(cluster, srcReplicateNames);
-  const sortedMatrix = sortClusteredMatrix(distanceMatrix, cluster);
-  const bins = sortedMatrix.map(
-    matrixToBins(sortedReplicateNames, srcReplicateNames)
+  // Sort the matrix according to the cluster tree
+  const sortedCols = getTreeLeaves(cluster, srcReplicateNames);
+  const sortedMatrix = sortClusteredMatrix(
+    distanceMatrix,
+    Object.values(sortedCols)
   );
+
+  // Transform the matrix data to be consumed by @visx/heatmap
+  const bins = sortedMatrix.map(matrixToBins(Object.keys(sortedCols)));
 
   return {
     bins,
