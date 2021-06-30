@@ -128,23 +128,16 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
 
           // ticks
           const tickLineSize = 10;
-          const tickLabelSize =
-            props.binData
-              .map((data) =>
-                getStringWidth(data.bin, {
-                  'font-size': 10,
-                })
-              )
-              .reduce((previous, current) =>
-                previous === null
-                  ? current
-                  : current === null
-                  ? previous
-                  : previous === null && current === null
-                  ? 0
-                  : Math.max(previous, current)
-              ) ?? 0;
 
+          // This is a approximate workaround for calculating the size needed for the labels.
+          // Optimally we would get the actual width of the text in pixels using e.g
+          // https://github.com/apache-superset/superset-ui/blob/master/packages/superset-ui-core/src/dimension/getTextDimension.ts
+          const tickLabelSize =
+            Math.max(
+              ...props.binData.map((data) => data.bin.length) // get the length of the longest label
+            ) * 6; // multiply by a sensible amount to get a cross browser consisten value in pixels
+
+          console.log({ tickLabelSize });
           // plot
           const plotBoundsX =
             entries[0].target.clientWidth -
@@ -358,18 +351,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               })}
               scale={plotDims.yScaleAxis}
             />
-            {/* <AxisBottom
-              top={plotDims.titleHeight + plotDims.yMax + plotDims.tickLineSize}
-              scale={plotDims.xScaleAxis}
-              numTicks={props.binData.length}
-              tickLabelProps={() => ({
-                angle: 270,
-                dx: 3,
-                lengthAdjust: 'spacing',
-                fontSize: 10,
-                textAnchor: 'end',
-              })}
-            /> */}
           </Group>
         </svg>
       )}
