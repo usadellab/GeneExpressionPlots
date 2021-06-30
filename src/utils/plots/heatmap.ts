@@ -95,7 +95,7 @@ function clusterGeneXMatrix(
  * @param index current bins index
  * @returns the number array transformed as a bin
  */
-function valuesToBins(replNames: string[]) {
+function matrixToBins(replNames: string[]) {
   return (values: number[], index: number): HeatmapBins => {
     const bin = replNames[index];
     const bins = values.map((count, accessionIndex) => ({
@@ -115,25 +115,65 @@ function valuesToBins(replNames: string[]) {
  * an object with at most two properties 'name' of type array and 'children'
  * also of type array.
  *
- * @param clstr an instance ml-hclust Cluster object
+ * @param cluster an instance ml-hclust Cluster object
  * @param leafNames array of original leaf names
  * @returns the cluster tree represenation
  */
 export function clusterToTree(
-  clstr: Cluster,
+  cluster: Cluster,
   leafNames: string[]
 ): ClusterTree {
-  if (clstr.isLeaf) {
+  if (cluster.isLeaf) {
     return {
-      name: leafNames[clstr.index],
+      name: leafNames[cluster.index],
     };
   } else {
     const name = nanoid();
-    const children = clstr.children.map((c) => clusterToTree(c, leafNames));
+    const children = cluster.children.map((c) => clusterToTree(c, leafNames));
     return {
       name,
       children,
     };
+  }
+}
+
+/**
+ * Get the names of the clustered tree leave nodes.
+ * @param cluster an instance of ml-hclust's Cluster class
+ * @param srcNames node names in pre-clustering order
+ * @returns an array with the cluster tree leaves
+ */
+function getTreeLeaves(cluster: Cluster, srcNames: string[]): string[] {
+  if (cluster.isLeaf) {
+    return [srcNames[cluster.index]];
+  } else {
+    const index = cluster.children.reduce((accumulator, clusterChild) => {
+      const leaves = getTreeLeaves(clusterChild, srcNames);
+      accumulator.push(...leaves);
+      return accumulator;
+    }, [] as string[]);
+
+    return index;
+  }
+}
+
+/**
+ * Sort a given matrix columns to match the cluster leaves order.
+ * @param matrix source distance matrix
+ * @param cluster clustered matrix as an instance of ml-hclust's Cluster
+ * @returns the sorted matrix
+ */
+function sortClusteredMatrix(matrix: number[][], cluster: Cluster): number[][] {
+  if (cluster.isLeaf) {
+    return [matrix[cluster.index]];
+  } else {
+    const index = cluster.children.reduce((accumulator, clusterChild) => {
+      const matrixCol = sortClusteredMatrix(matrix, clusterChild);
+      accumulator.push(...matrixCol);
+      return accumulator;
+    }, [] as number[][]);
+
+    return index;
   }
 }
 
@@ -167,8 +207,9 @@ export async function createHeatmapPlot(
   const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
   const tree = clusterToTree(cluster, replicateNames);
 
-  // Transform results to be consumed by @visx/heatmap
-  const bins = distanceMatrix.map(valuesToBins(replicateNames));
+  // Sort the matrix and transform the data to be consumed by @visx/heatmap
+  const sortedMatrix = sortClusteredMatrix(distanceMatrix, cluster);
+  const bins = sortedMatrix.map(matrixToBins(replicateNames));
 
   return {
     bins,
