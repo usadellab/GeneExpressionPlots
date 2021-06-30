@@ -90,16 +90,16 @@ function clusterGeneXMatrix(
  * Higher-order mapping function to transform an array of numeric values into a
  * Bins type ready to be consumed by the `HeatmapPlot` component built with the
  * API of '@visx/heatmap'.
- * @param replNames
+ * @param rowNames
  * @param values numeric array to transform
  * @param index current bins index
  * @returns the number array transformed as a bin
  */
-function matrixToBins(replNames: string[]) {
+function matrixToBins(colNames: string[], rowNames: string[]) {
   return (values: number[], index: number): HeatmapBins => {
-    const bin = replNames[index];
+    const bin = colNames[index];
     const bins = values.map((count, accessionIndex) => ({
-      bin: replNames[accessionIndex],
+      bin: rowNames[accessionIndex],
       count,
     }));
 
@@ -196,7 +196,7 @@ export async function createHeatmapPlot(
     options?.replicates
   );
 
-  const replicateNames = options?.replicates?.length
+  const srcReplicateNames = options?.replicates?.length
     ? options.replicates
     : dataTable.colNames;
 
@@ -205,11 +205,14 @@ export async function createHeatmapPlot(
 
   // Cluster the gene matrix
   const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
-  const tree = clusterToTree(cluster, replicateNames);
+  const tree = clusterToTree(cluster, srcReplicateNames);
 
   // Sort the matrix and transform the data to be consumed by @visx/heatmap
+  const sortedReplicateNames = getTreeLeaves(cluster, srcReplicateNames);
   const sortedMatrix = sortClusteredMatrix(distanceMatrix, cluster);
-  const bins = sortedMatrix.map(matrixToBins(replicateNames));
+  const bins = sortedMatrix.map(
+    matrixToBins(sortedReplicateNames, srcReplicateNames)
+  );
 
   return {
     bins,

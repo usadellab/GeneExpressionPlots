@@ -176,7 +176,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           });
 
           const yScaleAxis = scaleBand<string>({
-            domain: props.binData.map((data) => data.bin),
+            domain: props.binData[0].bins.map((data) => data.bin),
             range: [0, heatmapBoundsY],
           });
 
