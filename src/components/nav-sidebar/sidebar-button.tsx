@@ -3,6 +3,8 @@ import { IconType } from 'react-icons';
 import { Flex, FlexProps, Icon, SpaceProps, Text } from '@chakra-ui/react';
 
 export interface SidebarButtonProps extends Omit<FlexProps, 'onClick'> {
+  /** @type whether the button is disabled */
+  disabled?: boolean;
   /** @type link icon */
   icon: IconType;
   /** @type on activation callback */
@@ -52,6 +54,9 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
       }}
       alignItems="center"
       as="button"
+      _disabled={{
+        color: 'gray.400',
+      }}
       flexWrap="nowrap"
       paddingX={6}
       paddingY={4}
