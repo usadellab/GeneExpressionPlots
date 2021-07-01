@@ -3,14 +3,22 @@ import { FaBurn, FaChartBar, FaChartLine, FaTrashAlt } from 'react-icons/fa';
 import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
 import { observer } from 'mobx-react';
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Flex,
+  Spinner,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { FocusableElement } from '@chakra-ui/utils';
 
 import { dataTable, infoTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
-import { Flex, Spinner, useDisclosure } from '@chakra-ui/react';
-import { FocusableElement } from '@chakra-ui/utils';
 
 import { GxpHeatmap, PlotlyOptions, GxpPlotly, GxpPCA } from '@/types/plots';
 
@@ -226,6 +234,29 @@ const PlotsHome: React.FC = () => {
         marginLeft={20}
         overflow="hidden"
       >
+        {noDataAvailable && (
+          <Alert
+            alignItems="center"
+            flexDirection="column"
+            minHeight="16rem"
+            justifyContent="center"
+            marginLeft={3}
+            marginTop={3}
+            status="warning"
+            textAlign="center"
+            variant="subtle"
+          >
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              No data has been loaded
+            </AlertTitle>
+            <AlertDescription maxWidth="xl">
+              It seems no data has been loaded into the application yet. You can
+              load data from various formats in the Data section of the toolbar
+              above.
+            </AlertDescription>
+          </Alert>
+        )}
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
             return (
