@@ -56,6 +56,7 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
         withLegend: true,
       }}
       onSubmit={props.onSubmit}
+      validateOnBlur={false}
     >
       {(formProps) => (
         <Box as={Form}>

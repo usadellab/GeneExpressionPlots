@@ -56,6 +56,7 @@ const IndividualLinesForm: React.FC<IndividualLinesFormProps> = (props) => {
         withLegend: true,
       }}
       onSubmit={props.onSubmit}
+      validateOnBlur={false}
     >
       {(formProps) => (
         <Box as={Form}>
