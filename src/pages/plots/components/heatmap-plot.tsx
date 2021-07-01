@@ -217,7 +217,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       status={plotDims ? 'idle' : 'loading'}
       figureRef={figureRef}
       position="relative"
-      height={1080}
+      height={1200}
+      plotType="heatmap"
     >
       {plotDims && (
         <svg className="main-svg" width="100%" height="100%" ref={containerRef}>
