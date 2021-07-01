@@ -64,8 +64,8 @@ class PlotStore {
     this.plots = [];
   }
 
-  deletePlot(key: string): void {
-    const index = this.plots.findIndex((plot) => plot.key === key);
+  deletePlot(id: string): void {
+    const index = this.plots.findIndex((plot) => plot.id === id);
     this.plots.splice(index, 1);
   }
 
@@ -74,9 +74,9 @@ class PlotStore {
    * @param replicates gene accessions to visualize
    */
   addHeatmapPlot(plotTitle?: string, replicates?: string[]): void {
-    const key = nanoid();
+    const id = nanoid();
     const pendingPlot: GxpPlot = {
-      key,
+      id,
       type: 'heatmap',
       isLoading: true,
     };
@@ -94,7 +94,7 @@ class PlotStore {
               plotTitle,
             };
 
-            if (this.plots[plotIndex].key === key) {
+            if (this.plots[plotIndex].id === id) {
               this.plots[plotIndex] = loadedPlot;
             }
           })
@@ -104,9 +104,9 @@ class PlotStore {
   }
 
   addPCAPlot(plotTitle?: string): void {
-    const key = nanoid();
+    const id = nanoid();
     const pendingPlot: GxpPlot = {
-      key,
+      id,
       type: 'pca',
       isLoading: true,
     };
@@ -122,7 +122,7 @@ class PlotStore {
               isLoading: false,
             };
 
-            if (this.plots[plotIndex].key === key) {
+            if (this.plots[plotIndex].id === id) {
               this.plots[plotIndex] = loadedPlot;
             }
           })
@@ -134,7 +134,7 @@ class PlotStore {
   addSingleGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
     const data = singleGeneBarData(accessions[0], options);
     const singleGeneBarPlot: GxpPlotly = {
-      key: nanoid(),
+      id: nanoid(),
       type: 'plotly',
       isLoading: false,
       accessions,
@@ -147,7 +147,7 @@ class PlotStore {
   addMultiGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
     const data = multiGeneBarData(accessions, options);
     const multiGeneBarPlot: GxpPlotly = {
-      key: nanoid(),
+      id: nanoid(),
       type: 'plotly',
       isLoading: false,
       accessions,
@@ -163,7 +163,7 @@ class PlotStore {
   ): void {
     const data = singleGeneIndividualLinesData(accessions[0], options);
     const singleGeneIndividualLines: GxpPlotly = {
-      key: nanoid(),
+      id: nanoid(),
       type: 'plotly',
       isLoading: false,
       accessions,
@@ -179,7 +179,7 @@ class PlotStore {
   ): void {
     const data = multiGeneIndividualLinesData(accessions, options);
     const multiGeneIndividualLines: GxpPlotly = {
-      key: nanoid(),
+      id: nanoid(),
       type: 'plotly',
       isLoading: false,
       accessions,
@@ -192,7 +192,7 @@ class PlotStore {
   addStackedLinesPlot(accessions: string[], options: PlotlyOptions): void {
     const data = stackedLinesData(accessions, options);
     const stackedLines: GxpPlotly = {
-      key: nanoid(),
+      id: nanoid(),
       type: 'plotly',
       isLoading: false,
       accessions,
@@ -201,40 +201,6 @@ class PlotStore {
     };
     this.plots.push(stackedLines);
   }
-
-  /**
-   * Generates a plot visualizing the results of a principal component
-   * analysis.
-   */
-  // addPcaPlot() {
-  //   this.plots.push(createPcaPlot());
-  // }
-
-  /**
-   * constant config object for plotly
-   */
-  // config(plotId) {
-  //   return {
-  //     // responsive: true,
-  //     toImageButtonOptions: {
-  //       format: 'svg',
-  //     },
-  //     displaylogo: false,
-  //     modeBarButtonsToAdd: [
-  //       {
-  //         name: 'Delete plot',
-  //         icon: {
-  //           width: 21,
-  //           height: 21,
-  //           path: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z',
-  //         },
-  //         click: () => {
-  //           this.deletePlot(plotId);
-  //         },
-  //       },
-  //     ],
-  //   };
-  // }
 }
 
 export const plotStore = new PlotStore();

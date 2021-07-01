@@ -261,9 +261,9 @@ const PlotsHome: React.FC = () => {
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
             return (
-              <PlotContainer key={plot.key} status="loading">
+              <PlotContainer key={plot.id} status="loading" id={plot.id}>
                 <Spinner
-                  key={`${plot.key}-loading`}
+                  key={`${plot.id}-loading`}
                   thickness="4px"
                   speed="0.65s"
                   emptyColor="gray.200"
@@ -277,13 +277,13 @@ const PlotsHome: React.FC = () => {
           switch (plot.type) {
             case 'heatmap': {
               const heatmapPlot = plot as GxpHeatmap;
-              return <HeatmapPlot {...heatmapPlot} />;
+              return <HeatmapPlot {...heatmapPlot} key={heatmapPlot.id} />;
             }
 
             case 'plotly': {
               const plotlyPlot = plot as GxpPlotly;
               return (
-                <PlotlyPlot {...plotlyPlot}>
+                <PlotlyPlot {...plotlyPlot} key={plotlyPlot.id}>
                   {plotlyPlot.options.showCaption &&
                     plotlyPlot.accessions.map((accession, index) => (
                       <PlotCaption
@@ -303,13 +303,7 @@ const PlotsHome: React.FC = () => {
 
             case 'pca': {
               const pcaPlot = plot as GxpPCA;
-              return (
-                <PCAPlot
-                  key={pcaPlot.key}
-                  data={pcaPlot.data}
-                  layout={pcaPlot.layout}
-                />
-              );
+              return <PCAPlot key={pcaPlot.id} {...pcaPlot} />;
             }
             default:
               break;

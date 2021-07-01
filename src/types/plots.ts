@@ -3,7 +3,7 @@ import { Layout, PlotData } from 'plotly.js';
 export type PlotType = 'heatmap' | 'pca' | 'plotly';
 
 export interface GxpPlot {
-  key: string;
+  id: string;
   type: PlotType;
   isLoading: boolean;
 }
