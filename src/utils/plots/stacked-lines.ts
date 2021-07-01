@@ -4,7 +4,7 @@ import { dataTable } from '@/store/data-store';
 import { settings } from '@/store/settings';
 import { MarkerSymbol, PlotData } from 'plotly.js';
 import { PlotlyOptions } from '@/types/plots';
-import { colors } from '@/pages/plots/components/PlotlyPlot';
+import { colors } from '@/pages/plots/components/plotly-plot';
 import { Dash } from 'plotly.js/lib/traces/ohcl';
 
 const lineStyles: Dash[] = [

@@ -28,7 +28,7 @@ import HeatmapForm, {
 } from './components/heatmap-form';
 import HeatmapPlot from './components/heatmap-plot';
 import PlotContainer from './components/plot-container';
-import PlotlyPlot, { colors } from './components/PlotlyPlot';
+import PlotlyPlot, { colors } from './components/plotly-plot';
 import PCAPlot from './components/pca-plot';
 import IndividualLinesForm, {
   IndividualLinesFormSubmitHandler,
@@ -36,7 +36,7 @@ import IndividualLinesForm, {
 import StackedLinesForm, {
   StackedLinesFormSubmitHandler,
 } from './components/stacked-lines-form';
-import PlotCaption from './components/PlotCaption';
+import PlotCaption from './components/plot-caption';
 import PCAForm, { PCAFormSubmitHandler } from './components/pca-form';
 
 const PlotsHome: React.FC = () => {
