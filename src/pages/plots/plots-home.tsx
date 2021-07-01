@@ -180,7 +180,7 @@ const PlotsHome: React.FC = () => {
         maxWidth="14rem"
         position="fixed"
         boxShadow="2xl"
-        zIndex="popover"
+        zIndex="overlay"
       >
         <SidebarButton
           text="Bars"
