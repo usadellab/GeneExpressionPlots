@@ -258,13 +258,7 @@ const PlotsHome: React.FC = () => {
 
             case 'pca': {
               const pcaPlot = plot as GxpPCA;
-              return (
-                <PCAPlot
-                  key={pcaPlot.id}
-                  data={pcaPlot.data}
-                  layout={pcaPlot.layout}
-                />
-              );
+              return <PCAPlot key={pcaPlot.id} {...pcaPlot} />;
             }
             default:
               break;
