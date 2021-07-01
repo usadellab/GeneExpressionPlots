@@ -58,7 +58,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
         color: 'gray.400',
       }}
       flexWrap="nowrap"
-      paddingX={6}
+      paddingX={5}
       paddingY={4}
       textColor="gray.600"
       onKeyDown={
