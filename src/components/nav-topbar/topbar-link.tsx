@@ -50,7 +50,12 @@ const ToolbarLink: React.FC<TopbarLinkProps> = (props): React.ReactElement => {
         to={props.href}
       >
         <Icon as={props.icon} width={5} height={5} />
-        <Text as="span" fontSize={fontSize} fontWeight="semibold">
+        <Text
+          as="span"
+          fontSize={fontSize}
+          fontWeight="semibold"
+          userSelect="none"
+        >
           {props.text}
         </Text>
       </SiteLink>
