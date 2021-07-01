@@ -4,8 +4,8 @@ import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
 import { observer } from 'mobx-react';
 
+import { dataTable, infoTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
-import { infoTable } from '@/store/data-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
@@ -160,6 +160,9 @@ const PlotsHome: React.FC = () => {
     plotStore.clearPlots();
   };
 
+  const noDataAvailable = !dataTable.hasData;
+  const noPlotsAvailable = !plotStore.hasPlots;
+
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar
@@ -171,36 +174,46 @@ const PlotsHome: React.FC = () => {
         boxShadow="2xl"
         zIndex="popover"
       >
-        <SidebarButton text="Bars" icon={FaChartBar} onClick={onBarsFormOpen} />
+        <SidebarButton
+          text="Bars"
+          icon={FaChartBar}
+          onClick={onBarsFormOpen}
+          disabled={noDataAvailable}
+        />
 
         <SidebarButton
           text="Individual Lines"
           icon={FaChartLine}
           onClick={onIndividualLinesFormOpen}
+          disabled={noDataAvailable}
         />
 
         <SidebarButton
           text="Stacked Lines"
           icon={FcLineChart}
           onClick={onStackedLinesFormOpen}
+          disabled={noDataAvailable}
         />
 
         <SidebarButton
           text="Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
+          disabled={noDataAvailable}
         />
 
         <SidebarButton
           text="PCA"
           icon={MdBubbleChart}
           onClick={onPCAFormOpen}
+          disabled={noDataAvailable}
         />
 
         <SidebarButton
           text="Remove All"
           icon={FaTrashAlt}
           onClick={onDeletePlots}
+          disabled={noDataAvailable || noPlotsAvailable}
         />
       </Sidebar>
 
