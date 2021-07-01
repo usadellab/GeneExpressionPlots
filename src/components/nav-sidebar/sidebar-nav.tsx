@@ -28,13 +28,14 @@ const SidebarNav: React.FC<React.PropsWithChildren<SidebarProps>> = (props) => {
       animate={{ x: 0 }}
       exit={{ x: -20 }}
     >
-      <Box role="region" aria-label="Sidebar actions" boxShadow="xl" {...props}>
+      <Box aria-label="Sidebar actions" boxShadow="xl" role="region" {...props}>
         <Stack
           _focusWithin={{
             width: props.maxWidth ?? '15rem',
           }}
           as="section"
           overflowX="hidden"
+          paddingX={1}
           paddingY="1rem"
           position="sticky"
           top={0}

@@ -3,14 +3,22 @@ import { FaBurn, FaChartBar, FaChartLine, FaTrashAlt } from 'react-icons/fa';
 import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
 import { observer } from 'mobx-react';
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Flex,
+  Spinner,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { FocusableElement } from '@chakra-ui/utils';
 
+import { dataTable, infoTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
-import { infoTable } from '@/store/data-store';
 
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
-import { Flex, Spinner, useDisclosure } from '@chakra-ui/react';
-import { FocusableElement } from '@chakra-ui/utils';
 
 import { GxpHeatmap, PlotlyOptions, GxpPlotly, GxpPCA } from '@/types/plots';
 
@@ -160,6 +168,9 @@ const PlotsHome: React.FC = () => {
     plotStore.clearPlots();
   };
 
+  const dataAvailable = dataTable.hasData;
+  const plotsAvailable = plotStore.hasPlots;
+
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar
@@ -169,38 +180,48 @@ const PlotsHome: React.FC = () => {
         maxWidth="14rem"
         position="fixed"
         boxShadow="2xl"
-        zIndex="popover"
+        zIndex="overlay"
       >
-        <SidebarButton text="Bars" icon={FaChartBar} onClick={onBarsFormOpen} />
+        <SidebarButton
+          text="Bars"
+          icon={FaChartBar}
+          onClick={onBarsFormOpen}
+          disabled={!dataAvailable}
+        />
 
         <SidebarButton
           text="Individual Lines"
           icon={FaChartLine}
           onClick={onIndividualLinesFormOpen}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Stacked Lines"
           icon={FcLineChart}
           onClick={onStackedLinesFormOpen}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="PCA"
           icon={MdBubbleChart}
           onClick={onPCAFormOpen}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Remove All"
           icon={FaTrashAlt}
           onClick={onDeletePlots}
+          disabled={!plotsAvailable}
         />
       </Sidebar>
 
@@ -213,6 +234,30 @@ const PlotsHome: React.FC = () => {
         marginLeft={20}
         overflow="hidden"
       >
+        {!dataAvailable && (
+          <Alert
+            alignItems="center"
+            flexDirection="column"
+            minHeight="16rem"
+            maxHeight="20rem"
+            justifyContent="center"
+            marginLeft={3}
+            marginTop={3}
+            status="warning"
+            textAlign="center"
+            variant="subtle"
+          >
+            <AlertIcon boxSize="3rem" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              No data has been loaded
+            </AlertTitle>
+            <AlertDescription maxWidth="xl">
+              It seems no data has been loaded into the application yet. You can
+              load data from various formats in the Data section of the toolbar
+              above.
+            </AlertDescription>
+          </Alert>
+        )}
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
             return (

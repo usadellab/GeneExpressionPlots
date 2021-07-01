@@ -1,5 +1,9 @@
 import React from 'react';
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Button,
   Flex,
   Modal,
@@ -130,6 +134,8 @@ const GeneBrowser: React.FC = () => {
     }, 10);
   };
 
+  const dataAvailable = dataTable.hasData;
+
   return (
     <Flex
       flexDirection="column"
@@ -145,7 +151,30 @@ const GeneBrowser: React.FC = () => {
         pageMax={pageView.pageMax}
       />
 
-      {pageLoading ? (
+      {!dataAvailable ? (
+        <Alert
+          alignItems="center"
+          flexDirection="column"
+          minHeight="16rem"
+          maxHeight="20rem"
+          justifyContent="center"
+          marginLeft={3}
+          marginTop={3}
+          status="warning"
+          textAlign="center"
+          variant="subtle"
+        >
+          <AlertIcon boxSize="3rem" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            No data has been loaded
+          </AlertTitle>
+          <AlertDescription maxWidth="xl">
+            It seems no data has been loaded into the application yet. You can
+            load data from various formats in the Data section of the toolbar
+            above.
+          </AlertDescription>
+        </Alert>
+      ) : pageLoading ? (
         <Flex
           width="100%"
           flexGrow={1}
