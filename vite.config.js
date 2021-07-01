@@ -5,6 +5,7 @@ import reactSvgPlugin from 'vite-plugin-react-svg';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/GeneExpressionPlots/',
   plugins: [reactRefresh(), reactSvgPlugin()],
   resolve: {
     alias: {
