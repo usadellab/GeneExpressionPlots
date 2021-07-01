@@ -124,7 +124,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
 
   return (
     <PlotContext.Provider value={{ hoveredGene: name }}>
-      <PlotContainer status="idle" figureRef={figureRef}>
+      <PlotContainer status="idle" figureRef={figureRef} id={props.id}>
         <Plot
           ref={(ref) => (plotRef.current = ref)}
           data={props.data}
