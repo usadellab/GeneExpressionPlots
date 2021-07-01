@@ -305,6 +305,8 @@ const DataFiles: React.FC = () => {
 
   /* REMOVE DATA */
 
+  const dataAvailable = dataTable.hasData;
+
   const bulkRemoveReplicates = (): void => {
     if (selectedReplicates.length > 0) {
       dataTable.removeColumns(...selectedReplicates);
@@ -349,6 +351,7 @@ const DataFiles: React.FC = () => {
           }
           icon={FaTrashAlt}
           onClick={bulkRemoveReplicates}
+          disabled={!dataAvailable}
         />
       </Sidebar>
 
