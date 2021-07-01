@@ -19,7 +19,7 @@ const DataHome: React.FC = () => {
         icon={FaBookReader}
         label="User Manual"
         text={`
-          The user manual contains detailed information on how to to load data
+          The user manual contains detailed information on how to load data
           and create new plots. All the data loaded in the application is kept
           private to your browser tab and will never be uploaded to the
           internet.
