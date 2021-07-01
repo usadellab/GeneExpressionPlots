@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GeneCard from '@/components/gene-card';
-import { PlotContext } from './PlotlyPlot';
+import { PlotContext } from './plotly-plot';
 import { Flex } from '@chakra-ui/layout';
 
 interface PlotCaptionProps {

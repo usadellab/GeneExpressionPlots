@@ -4,7 +4,7 @@ import { dataTable } from '@/store/data-store';
 import { settings } from '@/store/settings';
 import { PlotData } from 'plotly.js';
 import { PlotlyOptions } from '@/types/plots';
-import { colors } from '@/pages/plots/components/PlotlyPlot';
+import { colors } from '@/pages/plots/components/plotly-plot';
 
 const multiGeneIndividualLinesData = (
   accessions: string[],
