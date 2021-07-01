@@ -221,7 +221,7 @@ const PlotsHome: React.FC = () => {
           text="Remove All"
           icon={FaTrashAlt}
           onClick={onDeletePlots}
-          disabled={noDataAvailable || noPlotsAvailable}
+          disabled={noPlotsAvailable}
         />
       </Sidebar>
 
