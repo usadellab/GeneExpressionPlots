@@ -68,12 +68,12 @@ const DataFiles: React.FC = () => {
   } = useDisclosure();
 
   const onXTableFormSubmit: XTableFormSubmitHandler = (values, actions) => {
-    plotStore.loadCountUnit(values.countUnit);
+    plotStore.loadCountUnit(unescapeDelimiters(values.countUnit));
 
     settings.loadgxpSettings({
       unit: values.countUnit,
-      expression_field_sep: values.columnSep,
-      expression_header_sep: values.headerSep,
+      expression_field_sep: unescapeDelimiters(values.columnSep),
+      expression_header_sep: unescapeDelimiters(values.headerSep),
     });
 
     const file = values.file;
@@ -133,7 +133,7 @@ const DataFiles: React.FC = () => {
     if (file) {
       try {
         settings.loadgxpSettings({
-          info_field_sep: values.columnSep,
+          info_field_sep: unescapeDelimiters(values.columnSep),
         });
 
         const reader = new FileReader();
@@ -141,7 +141,7 @@ const DataFiles: React.FC = () => {
         reader.onload = () => {
           // Parse the input file as a table
           const table = readTable(reader.result as string, {
-            fieldSeparator: values.columnSep,
+            fieldSeparator: unescapeDelimiters(values.columnSep),
             rowNameColumn: 0,
           });
 
@@ -268,7 +268,9 @@ const DataFiles: React.FC = () => {
   ) => {
     try {
       // Generate source data
-      const geneExpressionSrc = dataTable.toString(values.columnSep);
+      const geneExpressionSrc = dataTable.toString(
+        unescapeDelimiters(values.columnSep)
+      );
       const geneInfoSrc = infoTable.hasData
         ? infoTable.toString(settings.gxpSettings.info_field_sep)
         : null;
