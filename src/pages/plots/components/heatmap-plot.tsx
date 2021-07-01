@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { toJS } from 'mobx';
-import { chakra, Text as ChakraText } from '@chakra-ui/react';
+import { Text as ChakraText } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand } from 'd3-scale';
 import { AxisLeft } from '@visx/axis';
@@ -219,6 +218,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       position="relative"
       height={1200}
       plotType="heatmap"
+      id={props.id}
     >
       {plotDims && (
         <svg className="main-svg" width="100%" height="100%" ref={containerRef}>

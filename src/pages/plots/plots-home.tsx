@@ -216,7 +216,7 @@ const PlotsHome: React.FC = () => {
         {plotStore.plots.map((plot) => {
           if (plot.isLoading) {
             return (
-              <PlotContainer key={plot.id} status="loading">
+              <PlotContainer key={plot.id} status="loading" id={plot.id}>
                 <Spinner
                   key={`${plot.id}-loading`}
                   thickness="4px"

@@ -3,11 +3,13 @@ import { FaDownload, FaTrashAlt } from 'react-icons/fa';
 import { Box, Flex, FlexProps, IconButton, Spinner } from '@chakra-ui/react';
 import { getSVGString } from '@/utils/svg';
 import { PlotType } from '@/types/plots';
+import { plotStore } from '@/store/plot-store';
 
 interface PlotContainerProps extends FlexProps {
   status: 'idle' | 'loading';
   figureRef?: React.MutableRefObject<HTMLDivElement | null>;
   plotType?: PlotType;
+  id: string;
 }
 
 const PlotContainer: React.FC<PlotContainerProps> = ({
@@ -16,13 +18,16 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
   plotType,
   ...props
 }) => {
-  const handleDownloadSVG: React.MouseEventHandler<HTMLButtonElement> =
-    (): void => {
-      const svg = figureRef?.current?.getElementsByClassName('main-svg')[0];
-      const svgString = svg ? getSVGString(svg) : '';
-      const blob = new Blob([svgString], { type: 'image/svg+xml' });
-      saveAs(blob, 'plot.svg');
-    };
+  const handleDownloadSVG: React.MouseEventHandler<HTMLButtonElement> = () => {
+    const svg = figureRef?.current?.getElementsByClassName('main-svg')[0];
+    const svgString = svg ? getSVGString(svg) : '';
+    const blob = new Blob([svgString], { type: 'image/svg+xml' });
+    saveAs(blob, 'plot.svg');
+  };
+
+  const handleDeletePlot: React.MouseEventHandler<HTMLButtonElement> = () => {
+    plotStore.deletePlot(props.id);
+  };
 
   return (
     <Flex
@@ -121,6 +126,7 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
                 marginLeft={2}
                 size="lg"
                 variant="outline"
+                onClick={handleDeletePlot}
                 visibility="hidden"
               />
             </Box>
