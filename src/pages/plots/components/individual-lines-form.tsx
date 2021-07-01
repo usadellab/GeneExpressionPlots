@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikSwitch from '@/components/formik-switch';
+import { dataTable } from '@/store/data-store';
 
 export interface IndividualLinesAttributes {
   accessions: string[];
@@ -41,6 +42,8 @@ export interface IndividualLinesFormProps {
 
 const IndividualLinesForm: React.FC<IndividualLinesFormProps> = (props) => {
   const validateAccession: FieldValidator = (value: string) => {
+    const row = dataTable.getRow(value);
+    if (!row) return 'The accession ID does not exist';
     if (!value) return 'The accession ID cannot be empty';
   };
 
@@ -53,6 +56,7 @@ const IndividualLinesForm: React.FC<IndividualLinesFormProps> = (props) => {
         withLegend: true,
       }}
       onSubmit={props.onSubmit}
+      validateOnBlur={false}
     >
       {(formProps) => (
         <Box as={Form}>
