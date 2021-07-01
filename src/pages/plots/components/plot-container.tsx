@@ -18,12 +18,10 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
 }) => {
   const handleDownloadSVG: React.MouseEventHandler<HTMLButtonElement> =
     (): void => {
-      if (plotType === 'heatmap') {
-        const svg = figureRef?.current?.getElementsByClassName('main-svg')[0];
-        const svgString = svg ? getSVGString(svg) : '';
-        const blob = new Blob([svgString], { type: 'image/svg+xml' });
-        saveAs(blob, 'plot.svg');
-      }
+      const svg = figureRef?.current?.getElementsByClassName('main-svg')[0];
+      const svgString = svg ? getSVGString(svg) : '';
+      const blob = new Blob([svgString], { type: 'image/svg+xml' });
+      saveAs(blob, 'plot.svg');
     };
 
   return (
@@ -61,71 +59,72 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
     >
       {status === 'idle' ? (
         <>
-          <Box
-            _focusWithin={{
-              '& button': {
-                visibility: 'visible',
-              },
-            }}
-            aria-label="Plot actions"
-            as="section"
-            left={5}
-            position="absolute"
-            top={5}
-          >
-            <IconButton
-              _focus={{
-                border: '1px solid',
-                borderColor: 'orange.600',
-                color: 'orange.600',
-                outline: 'none',
-                visibility: 'visible',
+          {plotType === 'heatmap' && (
+            <Box
+              _focusWithin={{
+                '& button': {
+                  visibility: 'visible',
+                },
               }}
-              _groupFocus={{
-                visibility: 'visible',
-              }}
-              _groupHover={{
-                visibility: 'visible',
-              }}
-              _hover={{
-                color: 'orange.600',
-              }}
-              aria-label="Download plot"
-              color="gray.600"
-              icon={<FaDownload />}
-              variant="outline"
-              size="lg"
-              onClick={handleDownloadSVG}
-              visibility="hidden"
-            />
+              aria-label="Plot actions"
+              as="section"
+              left={5}
+              position="absolute"
+              top={5}
+            >
+              <IconButton
+                _focus={{
+                  border: '1px solid',
+                  borderColor: 'orange.600',
+                  color: 'orange.600',
+                  outline: 'none',
+                  visibility: 'visible',
+                }}
+                _groupFocus={{
+                  visibility: 'visible',
+                }}
+                _groupHover={{
+                  visibility: 'visible',
+                }}
+                _hover={{
+                  color: 'orange.600',
+                }}
+                aria-label="Download plot"
+                color="gray.600"
+                icon={<FaDownload />}
+                variant="outline"
+                size="lg"
+                onClick={handleDownloadSVG}
+                visibility="hidden"
+              />
 
-            <IconButton
-              _focus={{
-                border: '1px solid',
-                borderColor: 'orange.600',
-                color: 'orange.600',
-                outline: 'none',
-                visibility: 'visible',
-              }}
-              _groupFocus={{
-                visibility: 'visible',
-              }}
-              _groupHover={{
-                visibility: 'visible',
-              }}
-              _hover={{
-                color: 'orange.600',
-              }}
-              aria-label="Delete plot"
-              color="gray.600"
-              icon={<FaTrashAlt />}
-              marginLeft={2}
-              size="lg"
-              variant="outline"
-              visibility="hidden"
-            />
-          </Box>
-
+              <IconButton
+                _focus={{
+                  border: '1px solid',
+                  borderColor: 'orange.600',
+                  color: 'orange.600',
+                  outline: 'none',
+                  visibility: 'visible',
+                }}
+                _groupFocus={{
+                  visibility: 'visible',
+                }}
+                _groupHover={{
+                  visibility: 'visible',
+                }}
+                _hover={{
+                  color: 'orange.600',
+                }}
+                aria-label="Delete plot"
+                color="gray.600"
+                icon={<FaTrashAlt />}
+                marginLeft={2}
+                size="lg"
+                variant="outline"
+                visibility="hidden"
+              />
+            </Box>
+          )}
           {props.children}
         </>
       ) : (
