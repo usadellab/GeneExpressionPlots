@@ -168,8 +168,8 @@ const PlotsHome: React.FC = () => {
     plotStore.clearPlots();
   };
 
-  const noDataAvailable = !dataTable.hasData;
-  const noPlotsAvailable = !plotStore.hasPlots;
+  const dataAvailable = dataTable.hasData;
+  const plotsAvailable = plotStore.hasPlots;
 
   return (
     <Flex as="main" flexGrow={1}>
@@ -186,42 +186,42 @@ const PlotsHome: React.FC = () => {
           text="Bars"
           icon={FaChartBar}
           onClick={onBarsFormOpen}
-          disabled={noDataAvailable}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Individual Lines"
           icon={FaChartLine}
           onClick={onIndividualLinesFormOpen}
-          disabled={noDataAvailable}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Stacked Lines"
           icon={FcLineChart}
           onClick={onStackedLinesFormOpen}
-          disabled={noDataAvailable}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
-          disabled={noDataAvailable}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="PCA"
           icon={MdBubbleChart}
           onClick={onPCAFormOpen}
-          disabled={noDataAvailable}
+          disabled={!dataAvailable}
         />
 
         <SidebarButton
           text="Remove All"
           icon={FaTrashAlt}
           onClick={onDeletePlots}
-          disabled={noPlotsAvailable}
+          disabled={!plotsAvailable}
         />
       </Sidebar>
 
@@ -234,11 +234,12 @@ const PlotsHome: React.FC = () => {
         marginLeft={20}
         overflow="hidden"
       >
-        {noDataAvailable && (
+        {!dataAvailable && (
           <Alert
             alignItems="center"
             flexDirection="column"
             minHeight="16rem"
+            maxHeight="20rem"
             justifyContent="center"
             marginLeft={3}
             marginTop={3}
@@ -246,7 +247,7 @@ const PlotsHome: React.FC = () => {
             textAlign="center"
             variant="subtle"
           >
-            <AlertIcon boxSize="40px" mr={0} />
+            <AlertIcon boxSize="3rem" mr={0} />
             <AlertTitle mt={4} mb={1} fontSize="lg">
               No data has been loaded
             </AlertTitle>
