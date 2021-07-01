@@ -1,4 +1,4 @@
-import { Layout, PlotMouseEvent } from 'plotly.js';
+import { Config, Layout, PlotMouseEvent } from 'plotly.js';
 import React, { createContext } from 'react';
 import Plot from 'react-plotly.js';
 import { PlotData } from 'plotly.js';
@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import { GxpPlotly, PlotlyOptions } from '@/types/plots';
 import PlotContainer from './plot-container';
 import { Box } from '@chakra-ui/react';
+// import { plotStore } from '@/store/plot-store';
 
 export const colors = [
   '#c7566f',
@@ -61,6 +62,30 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
     autosize: true,
     colorway: colors,
   });
+
+  const config: Partial<Config> = {
+    // responsive: true,
+    toImageButtonOptions: {
+      format: 'svg',
+      filename: 'plot',
+    },
+    displaylogo: false,
+    // modeBarButtonsToAdd: [
+    //   {
+    //     title: 'Delete plot',
+    //     name: 'Delete plot',
+    //     icon: {
+    //       width: 21,
+    //       height: 21,
+    //       path: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z',
+    //     },
+    //     click: () => {
+    //       plotStore.deletePlot(props.key);
+    //     },
+    //   },
+    // ],
+  };
+
   React.useEffect(function resizePlot() {
     let id: number;
     const internalRef = figureRef.current;
@@ -104,6 +129,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
           ref={(ref) => (plotRef.current = ref)}
           data={props.data}
           layout={layout}
+          config={config}
           onHover={onPlotHover}
           onUnhover={onPlotUnhover}
           style={{ width: '100%', height: '100%' }}
