@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import FormikSwitch from '@/components/formik-switch';
 import FormikAccession from '@/components/formik-accession';
+import { dataTable } from '@/store/data-store';
 
 export interface BarsFormAttributes {
   accessions: string[];
@@ -41,6 +42,8 @@ export interface BarsFormProps {
 
 const BarsForm: React.FC<BarsFormProps> = (props) => {
   const validateAccession: FieldValidator = (value: string) => {
+    const row = dataTable.getRow(value);
+    if (!row) return 'The accession ID does not exist';
     if (!value) return 'The accession ID cannot be empty';
   };
 

@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikSwitch from '@/components/formik-switch';
+import { dataTable } from '@/store/data-store';
 
 export interface StackedLinesAttributes {
   accessions: string[];
@@ -41,6 +42,8 @@ export interface StackedLinesFormProps {
 
 const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
   const validateAccession: FieldValidator = (value: string) => {
+    const row = dataTable.getRow(value);
+    if (!row) return 'The accession ID does not exist';
     if (!value) return 'The accession ID cannot be empty';
   };
 
