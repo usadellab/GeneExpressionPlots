@@ -63,7 +63,7 @@ const PCAPlot: React.FC<GxpPCA> = (props) => {
   }, []);
 
   return (
-    <PlotContainer status="idle" figureRef={figureRef}>
+    <PlotContainer status="idle" figureRef={figureRef} id={props.id}>
       <Plot
         ref={(ref) => (plotRef.current = ref)}
         data={props.data}
