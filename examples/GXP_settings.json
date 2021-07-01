@@ -1,6 +1,0 @@
-{
-  "unit": "TPM",
-  "expression_field_sep": "\t",
-  "expression_header_sep": "*",
-  "info_field_sep": "\t"
-}

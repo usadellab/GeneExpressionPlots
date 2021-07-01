@@ -1,3 +1,11 @@
+# env
+*.local
+
+# build
+dist/
 node_modules
 package-lock.json
-dist/
+
+# testing
+.nyc_output
+coverage
