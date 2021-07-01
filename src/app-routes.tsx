@@ -8,6 +8,7 @@ import ToolsRoutes from './pages/tools/tools-routes';
 const AppRoutes: React.FC = () => {
   return (
     <Switch>
+      <Route exact path="/" component={DataRoutes} />
       <Route path="/data" component={DataRoutes} />
       <Route path="/plots" component={PlotsRoutes} />
       <Route path="/tools" component={ToolsRoutes} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   FaChartBar,
-  FaHome,
+  // FaHome,
   FaInfo,
   FaDatabase,
   FaTools,
@@ -15,7 +15,7 @@ const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
   return (
     <Flex flexDirection="column" minHeight="100vh" backgroundColor="gray.100">
       <TopbarNav>
-        <TopbarLink href="/" icon={FaHome} text="Home" urlMatch="exact" />
+        {/* <TopbarLink href="/" icon={FaHome} text="Home" urlMatch="exact" /> */}
         <TopbarLink
           href="/data"
           icon={FaDatabase}
