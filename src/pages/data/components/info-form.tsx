@@ -55,6 +55,7 @@ const InfoForm: React.FC<InfoFormProps> = (props) => {
         columnSep: '\\t',
       }}
       onSubmit={props.onSubmit}
+      validateOnBlur={false}
     >
       {(formProps) => (
         <Box

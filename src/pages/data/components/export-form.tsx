@@ -57,6 +57,7 @@ const ExportGXPForm: React.FC<ExportGXPFormProps> = (props) => {
         fileName: 'GXP_Database',
       }}
       onSubmit={props.onSubmit}
+      validateOnBlur={false}
     >
       {(formProps) => (
         <Box

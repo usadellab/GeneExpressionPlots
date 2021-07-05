@@ -59,6 +59,7 @@ const XTableForm: React.FC<XTableFormProps> = (props) => {
         columnSep: '\\t',
       }}
       onSubmit={props.onSubmit}
+      validateOnBlur={false}
     >
       {(formProps) => (
         <Box
