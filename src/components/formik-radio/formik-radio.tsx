@@ -5,9 +5,6 @@ import {
   FormControlProps,
   FormLabel,
   FormErrorMessage,
-  Input,
-  InputGroup,
-  InputGroupProps,
   InputProps,
   VisuallyHidden,
   Radio,
@@ -15,7 +12,12 @@ import {
   UseRadioGroupProps,
   Stack,
 } from '@chakra-ui/react';
-import { FocusableElement } from '@chakra-ui/utils';
+
+interface RadioField {
+  label: string;
+  value: string;
+  disabled: boolean;
+}
 
 interface FormikRadioProps extends InputProps {
   name: string;
@@ -23,6 +25,7 @@ interface FormikRadioProps extends InputProps {
   hideLabel?: boolean;
   controlProps?: FormControlProps;
   validate?: FieldValidator;
+  options: RadioField[];
 }
 
 const FormikRadio: React.FC<FormikRadioProps> = ({
@@ -39,11 +42,8 @@ const FormikRadio: React.FC<FormikRadioProps> = ({
   });
 
   const handleOnChange: UseRadioGroupProps['onChange'] = (nextValue) => {
-    console.log({ nextValue });
     helpers.setValue(nextValue);
   };
-
-  console.log({ field, meta });
 
   return (
     <FormControl
@@ -64,12 +64,16 @@ const FormikRadio: React.FC<FormikRadioProps> = ({
         onChange={handleOnChange}
       >
         <Stack direction="row">
-          <Radio value="group" colorScheme="orange">
-            Group
-          </Radio>
-          <Radio value="accession" colorScheme="orange">
-            Accession
-          </Radio>
+          {props.options.map((option, index) => (
+            <Radio
+              colorScheme="orange"
+              key={`${option.label}-${index}`}
+              value={option.value}
+              isDisabled={option.disabled}
+            >
+              {option.label}
+            </Radio>
+          ))}
         </Stack>
       </RadioGroup>
       <FormErrorMessage as="span">{meta.error}</FormErrorMessage>
