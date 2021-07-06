@@ -115,7 +115,6 @@ const PlotsHome: React.FC = () => {
     values,
     actions
   ) => {
-    console.log({ cb: values.colorBy });
     plotStore.addStackedLinesPlot(values.accessions, {
       showlegend: values.withLegend,
       showCaption: values.withCaption,
