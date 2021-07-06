@@ -191,7 +191,7 @@ const PlotsHome: React.FC = () => {
     onImageFormClose();
     if (values.file) {
       const url = URL.createObjectURL(values.file);
-      setTimeout(() => plotStore.addImagePlot(url, values.alt), 10);
+      plotStore.addImagePlot(url, values.alt);
     }
   };
 
