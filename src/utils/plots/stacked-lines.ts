@@ -28,6 +28,7 @@ const stackedLinesData = (
   accessions: string[],
   options: PlotlyOptions
 ): Partial<PlotData>[] => {
+  console.log({ options });
   const data: Partial<PlotData>[] = [];
   let colorIndex = 0;
   let styleIndex = 0;

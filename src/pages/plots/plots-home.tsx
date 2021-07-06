@@ -115,11 +115,12 @@ const PlotsHome: React.FC = () => {
     values,
     actions
   ) => {
+    console.log({ cb: values.colorBy });
     plotStore.addStackedLinesPlot(values.accessions, {
       showlegend: values.withLegend,
       showCaption: values.withCaption,
       plotTitle: values.plotTitle,
-      colorBy: 'group',
+      colorBy: values.colorBy,
     } as PlotlyOptions);
 
     actions.setSubmitting(false);

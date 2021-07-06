@@ -21,12 +21,14 @@ import {
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikSwitch from '@/components/formik-switch';
 import { dataTable } from '@/store/data-store';
+import FormikRadio from '@/components/formik-radio';
 
 export interface StackedLinesAttributes {
   accessions: string[];
   plotTitle: string;
   withCaption: boolean;
   withLegend: boolean;
+  colorBy: 'group' | 'accession';
 }
 
 export type StackedLinesFormSubmitHandler = (
@@ -54,6 +56,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
         plotTitle: '',
         withCaption: true,
         withLegend: true,
+        colorBy: 'group',
       }}
       onSubmit={props.onSubmit}
       validateOnBlur={false}
@@ -97,6 +100,41 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
             label="Plot Title"
             name="plotTitle"
           />
+
+          {/* <FormControl as="p" marginTop="1rem">
+            <FormLabel fontWeight="semibold">Color by</FormLabel>
+            <RadioGroup
+              value={
+                formProps.values.accessions.length === 1 ? 'group' : field.value
+              }
+              onChange={field.onChange}
+            >
+              <Stack direction="row">
+                <Radio value="group">Group</Radio>
+                <Radio
+                  value="accession"
+                  isDisabled={formProps.values.accessions.length === 1}
+                >
+                  Accession
+                </Radio>
+              </Stack>
+            </RadioGroup>
+          </FormControl> */}
+          <FormikRadio
+            controlProps={{
+              as: 'p',
+              marginTop: '1rem',
+            }}
+            label="Color by"
+            name="colorBy"
+          ></FormikRadio>
+
+          {/* <FormikSelect
+            controlProps={{ as: 'p', marginTop: '1rem' }}
+            name="colorBy"
+            label="Color by"
+            id="yap"
+          ></FormikSelect> */}
 
           <FieldArray name="accessions">
             {(helpers) => (
