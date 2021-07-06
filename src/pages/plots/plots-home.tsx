@@ -320,8 +320,9 @@ const PlotsHome: React.FC = () => {
               return (
                 <ImagePlot
                   key={plot.id}
-                  src={gxpImage.url}
                   alt={gxpImage.alt}
+                  id={gxpImage.id}
+                  src={gxpImage.src}
                 />
               );
             }

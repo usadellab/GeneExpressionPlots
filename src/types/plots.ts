@@ -73,7 +73,7 @@ export interface GxpPCA extends GxpPlot {
 //#region Images
 
 export interface GxpImage extends GxpPlot {
-  url: string;
+  src: string;
   alt: string;
 }
 

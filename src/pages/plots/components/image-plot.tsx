@@ -1,26 +1,22 @@
 import React from 'react';
-import { Flex, Image, ImageProps } from '@chakra-ui/react';
+import { Image, ImageProps } from '@chakra-ui/react';
+import PlotContainer from './plot-container';
+import { GxpImage } from '@/types/plots';
 
-type ImagePlotProps = ImageProps;
+type ImagePlotProps = Pick<GxpImage, 'alt' | 'id' | 'src'> & ImageProps;
 
-const ImagePlot: React.FC<ImagePlotProps> = ({ alt, src, ...props }) => {
+const ImagePlot: React.FC<ImagePlotProps> = ({ alt, src, id, ...props }) => {
   return (
-    <Flex
-      boxShadow="sm"
-      height={800}
-      margin={3}
-      overflow="hidden"
-      resize="horizontal"
-      // width="100%"
-    >
+    <PlotContainer aria-label={alt} id={id} plotType="image" status="idle">
       <Image
         alt={alt}
         backgroundColor="white"
-        objectFit="contain"
+        objectFit="scale-down"
         src={src}
+        width="100%"
         {...props}
       />
-    </Flex>
+    </PlotContainer>
   );
 };
 
