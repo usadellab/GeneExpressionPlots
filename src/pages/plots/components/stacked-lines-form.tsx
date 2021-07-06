@@ -101,25 +101,6 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
             name="plotTitle"
           />
 
-          {/* <FormControl as="p" marginTop="1rem">
-            <FormLabel fontWeight="semibold">Color by</FormLabel>
-            <RadioGroup
-              value={
-                formProps.values.accessions.length === 1 ? 'group' : field.value
-              }
-              onChange={field.onChange}
-            >
-              <Stack direction="row">
-                <Radio value="group">Group</Radio>
-                <Radio
-                  value="accession"
-                  isDisabled={formProps.values.accessions.length === 1}
-                >
-                  Accession
-                </Radio>
-              </Stack>
-            </RadioGroup>
-          </FormControl> */}
           <FormikRadio
             controlProps={{
               as: 'p',
@@ -127,14 +108,15 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
             }}
             label="Color by"
             name="colorBy"
+            options={[
+              { label: 'Group', value: 'group', disabled: false },
+              {
+                label: 'Accession',
+                value: 'accession',
+                disabled: formProps.values.accessions.length === 1,
+              },
+            ]}
           ></FormikRadio>
-
-          {/* <FormikSelect
-            controlProps={{ as: 'p', marginTop: '1rem' }}
-            name="colorBy"
-            label="Color by"
-            id="yap"
-          ></FormikSelect> */}
 
           <FieldArray name="accessions">
             {(helpers) => (
