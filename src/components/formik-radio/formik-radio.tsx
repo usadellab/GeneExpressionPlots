@@ -5,12 +5,12 @@ import {
   FormControlProps,
   FormLabel,
   FormErrorMessage,
-  InputProps,
   VisuallyHidden,
   Radio,
   RadioGroup,
   UseRadioGroupProps,
   Stack,
+  StackDirection,
 } from '@chakra-ui/react';
 
 interface RadioField {
@@ -19,22 +19,24 @@ interface RadioField {
   disabled: boolean;
 }
 
-interface FormikRadioProps extends InputProps {
-  name: string;
-  label: string;
-  hideLabel?: boolean;
+interface FormikRadioProps {
   controlProps?: FormControlProps;
-  validate?: FieldValidator;
+  direction?: StackDirection;
+  hideLabel?: boolean;
+  label: string;
+  name: string;
   options: RadioField[];
+  validate?: FieldValidator;
 }
 
 const FormikRadio: React.FC<FormikRadioProps> = ({
   controlProps,
+  direction,
   hideLabel,
   label,
   name,
+  options,
   validate,
-  ...props
 }) => {
   const [field, meta, helpers] = useField({
     name,
@@ -49,7 +51,6 @@ const FormikRadio: React.FC<FormikRadioProps> = ({
     <FormControl
       {...controlProps}
       isInvalid={meta.error !== undefined && meta.touched !== undefined}
-      isRequired={props.isRequired}
     >
       {hideLabel ? (
         <VisuallyHidden>
@@ -63,8 +64,8 @@ const FormikRadio: React.FC<FormikRadioProps> = ({
         value={field.value}
         onChange={handleOnChange}
       >
-        <Stack direction="row">
-          {props.options.map((option, index) => (
+        <Stack direction={direction}>
+          {options.map((option, index) => (
             <Radio
               colorScheme="orange"
               key={`${option.label}-${index}`}

@@ -106,6 +106,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
               as: 'p',
               marginTop: '1rem',
             }}
+            direction="row"
             label="Color by"
             name="colorBy"
             options={[
