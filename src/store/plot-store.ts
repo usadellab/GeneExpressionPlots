@@ -36,38 +36,12 @@ class PlotStore {
 
   /* IMAGE */
 
-  get hasImage(): boolean {
-    return this.image ? true : false;
-  }
-
-  addImagePlot(url: string, alt: string): void {
-    const image: GxpImage = {
-      alt,
-      id: nanoid(),
-      isLoading: false,
-      type: 'image',
-      url,
-    };
-
-    this.plots.push(image);
-  }
-
-  clearImage(): void {
-    this._image = null;
-  }
-
-  loadImage(image: string): void {
-    this._image = image;
+  get hasPlots(): boolean {
+    return this.plots.length > 0;
   }
 
   get image(): string | null {
     return this._image;
-  }
-
-  /* PLOTS */
-
-  get hasPlots(): boolean {
-    return this.plots.length > 0;
   }
 
   /**
@@ -77,9 +51,20 @@ class PlotStore {
     this.plots = [];
   }
 
+  /**
+   * Remove a single plot from the store.
+   * @param id plot id
+   */
   deletePlot(id: string): void {
     const index = this.plots.findIndex((plot) => plot.id === id);
-    this.plots.splice(index, 1);
+    if (index > -1) {
+      const plot = this.plots[index];
+      if (plot.type === 'image') {
+        const gxpImage = plot as GxpImage;
+        URL.revokeObjectURL(gxpImage.src);
+      }
+      this.plots.splice(index, 1);
+    }
   }
 
   /**
@@ -114,6 +99,18 @@ class PlotStore {
         ),
       100
     );
+  }
+
+  addImagePlot(url: string, alt: string): void {
+    const image: GxpImage = {
+      alt,
+      id: nanoid(),
+      isLoading: false,
+      type: 'image',
+      src: url,
+    };
+
+    this.plots.push(image);
   }
 
   addPCAPlot(plotTitle?: string): void {
