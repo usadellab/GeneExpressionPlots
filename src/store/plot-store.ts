@@ -6,6 +6,7 @@ import {
   PlotlyOptions,
   GxpPlotly,
   GxpPCA,
+  GxpImage,
 } from '@/types/plots';
 
 // Future Workers
@@ -37,6 +38,18 @@ class PlotStore {
 
   get hasImage(): boolean {
     return this.image ? true : false;
+  }
+
+  addImagePlot(url: string, alt: string): void {
+    const image: GxpImage = {
+      alt,
+      id: nanoid(),
+      isLoading: false,
+      type: 'image',
+      url,
+    };
+
+    this.plots.push(image);
   }
 
   clearImage(): void {
