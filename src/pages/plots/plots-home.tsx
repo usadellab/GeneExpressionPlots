@@ -1,5 +1,11 @@
 import React from 'react';
-import { FaBurn, FaChartBar, FaChartLine, FaTrashAlt } from 'react-icons/fa';
+import {
+  FaBurn,
+  FaChartBar,
+  FaChartLine,
+  FaImage,
+  FaTrashAlt,
+} from 'react-icons/fa';
 import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
 import { observer } from 'mobx-react';
@@ -20,13 +26,21 @@ import { plotStore } from '@/store/plot-store';
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
 import FormikModal from '@/components/formik-modal';
 
-import { GxpHeatmap, PlotlyOptions, GxpPlotly, GxpPCA } from '@/types/plots';
+import {
+  GxpHeatmap,
+  PlotlyOptions,
+  GxpPlotly,
+  GxpPCA,
+  GxpImage,
+} from '@/types/plots';
 
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
 import HeatmapForm, {
   HeatmapFormSubmitHandler,
 } from './components/heatmap-form';
 import HeatmapPlot from './components/heatmap-plot';
+import ImagePlot from './components/image-plot';
+import ImageForm, { ImageFormSubmitHandler } from './components/image-form';
 import PlotContainer from './components/plot-container';
 import PlotlyPlot, { colors } from './components/plotly-plot';
 import PCAPlot from './components/pca-plot';
@@ -162,6 +176,25 @@ const PlotsHome: React.FC = () => {
     setTimeout(() => plotStore.addPCAPlot(values.plotTitle), 10);
   };
 
+  /* IMAGE PLOT */
+
+  const refImageFormInitialFocus = React.useRef<FocusableElement | null>(null);
+
+  const {
+    isOpen: isImageFormOpen,
+    onOpen: onImageFormOpen,
+    onClose: onImageFormClose,
+  } = useDisclosure();
+
+  const onImageFormSubmit: ImageFormSubmitHandler = (values, actions) => {
+    actions.setSubmitting(false);
+    onImageFormClose();
+    if (values.file) {
+      const url = URL.createObjectURL(values.file);
+      setTimeout(() => plotStore.addImagePlot(url, values.alt), 10);
+    }
+  };
+
   /* ACTIONS */
 
   const onDeletePlots = (): void => {
@@ -216,6 +249,8 @@ const PlotsHome: React.FC = () => {
           onClick={onPCAFormOpen}
           disabled={!dataAvailable}
         />
+
+        <SidebarButton text="Image" icon={FaImage} onClick={onImageFormOpen} />
 
         <SidebarButton
           text="Remove All"
@@ -278,6 +313,17 @@ const PlotsHome: React.FC = () => {
             case 'heatmap': {
               const heatmapPlot = plot as GxpHeatmap;
               return <HeatmapPlot {...heatmapPlot} key={heatmapPlot.id} />;
+            }
+
+            case 'image': {
+              const gxpImage = plot as GxpImage;
+              return (
+                <ImagePlot
+                  key={plot.id}
+                  src={gxpImage.url}
+                  alt={gxpImage.alt}
+                />
+              );
             }
 
             case 'plotly': {
@@ -383,6 +429,21 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refPCAFormInitialFocus}
           onCancel={onPCAFormClose}
           onSubmit={onPCAFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refImageFormInitialFocus}
+        isOpen={isImageFormOpen}
+        onClose={onImageFormClose}
+        size="xl"
+        title="Image Plot"
+        scrollBehavior="outside"
+      >
+        <ImageForm
+          initialFocusRef={refImageFormInitialFocus}
+          onCancel={onImageFormClose}
+          onSubmit={onImageFormSubmit}
         />
       </FormikModal>
     </Flex>
