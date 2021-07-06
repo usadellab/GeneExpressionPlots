@@ -392,6 +392,7 @@ const DataFiles: React.FC = () => {
                 onSelect={
                   settings.preloaded ? undefined : updateSelectedReplicates
                 }
+                tabIndex={settings.preloaded ? 0 : undefined}
               />
             </WrapItem>
           ))}
