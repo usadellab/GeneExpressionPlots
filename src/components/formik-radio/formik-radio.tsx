@@ -11,11 +11,11 @@ import {
   UseRadioGroupProps,
   Stack,
   StackDirection,
+  RadioProps,
 } from '@chakra-ui/react';
 
-interface RadioField {
+interface RadioOptions extends RadioProps {
   label: string;
-  value: string;
   disabled: boolean;
 }
 
@@ -25,7 +25,7 @@ interface FormikRadioProps {
   hideLabel?: boolean;
   label: string;
   name: string;
-  options: RadioField[];
+  options: RadioOptions[];
   validate?: FieldValidator;
 }
 
@@ -71,6 +71,7 @@ const FormikRadio: React.FC<FormikRadioProps> = ({
               key={`${option.label}-${index}`}
               value={option.value}
               isDisabled={option.disabled}
+              {...option}
             >
               {option.label}
             </Radio>
