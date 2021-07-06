@@ -241,8 +241,9 @@ const DataFiles: React.FC = () => {
         // Unpack and load the image file, if it exists
         const imageFilePtr = zipImport.files['image.png'];
         if (imageFilePtr) {
-          const imgsrc = await imageFilePtr.async('base64');
-          plotStore.loadImage('data:image/png;base64, ' + imgsrc);
+          const imgsrc = await imageFilePtr.async('blob');
+          const imgUrl = URL.createObjectURL(imgsrc);
+          plotStore.addImagePlot(imgUrl, 'Database Image');
         }
 
         actions.setSubmitting(false);
@@ -325,7 +326,7 @@ const DataFiles: React.FC = () => {
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar maxWidth="17rem">
-        {!settings.preloaded && (
+        {!settings.preloaded.data && (
           <SidebarButton
             text="Load Expression Table"
             icon={FaFile}
@@ -333,7 +334,7 @@ const DataFiles: React.FC = () => {
           />
         )}
 
-        {!settings.preloaded && (
+        {!settings.preloaded.data && (
           <SidebarButton
             text="Load Gene Info Table"
             icon={FaFileAlt}
@@ -341,7 +342,7 @@ const DataFiles: React.FC = () => {
           />
         )}
 
-        {!settings.preloaded && (
+        {!settings.preloaded.data && (
           <SidebarButton
             text="Import GXP Database"
             icon={FaFileImport}
@@ -355,7 +356,7 @@ const DataFiles: React.FC = () => {
           onClick={onGXPExportOpen}
         />
 
-        {!settings.preloaded && (
+        {!settings.preloaded.data && (
           <SidebarButton
             text={
               selectedReplicates.length > 0
