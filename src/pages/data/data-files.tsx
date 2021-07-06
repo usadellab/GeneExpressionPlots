@@ -49,6 +49,10 @@ const DataFiles: React.FC = () => {
     []
   );
 
+  const deleteReplicate = (name: string): void => {
+    dataTable.removeColumns(name);
+  };
+
   const updateSelectedReplicates = (name: string, checked: boolean): void => {
     if (checked) {
       setSelectedReplicates([...selectedReplicates, name]);
@@ -384,7 +388,10 @@ const DataFiles: React.FC = () => {
                 aria-label={replicateName}
                 key={replicateName}
                 name={replicateName}
-                onSelect={updateSelectedReplicates}
+                onDelete={settings.preloaded ? undefined : deleteReplicate}
+                onSelect={
+                  settings.preloaded ? undefined : updateSelectedReplicates
+                }
               />
             </WrapItem>
           ))}
