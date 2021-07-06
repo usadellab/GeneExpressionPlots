@@ -52,12 +52,12 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       ref={(ref) => (figureRef ? (figureRef.current = ref) : ref)}
       resize="horizontal"
       role="group"
-      sx={{
-        '&::-webkit-resizer': {
-          border: '1px',
-          background: 'gray.400',
-        },
-      }}
+      // sx={{
+      //   '&::-webkit-resizer': {
+      //     border: '1px',
+      //     background: 'gray.400',
+      //   },
+      // }}
       tabIndex={0}
       width="100%"
       {...props}
