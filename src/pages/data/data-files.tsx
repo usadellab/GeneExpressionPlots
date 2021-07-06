@@ -321,23 +321,29 @@ const DataFiles: React.FC = () => {
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar maxWidth="17rem">
-        <SidebarButton
-          text="Load Expression Table"
-          icon={FaFile}
-          onClick={onXTableOpen}
-        />
+        {!settings.preloaded && (
+          <SidebarButton
+            text="Load Expression Table"
+            icon={FaFile}
+            onClick={onXTableOpen}
+          />
+        )}
 
-        <SidebarButton
-          text="Load Gene Info Table"
-          icon={FaFileAlt}
-          onClick={onInfoTableOpen}
-        />
+        {!settings.preloaded && (
+          <SidebarButton
+            text="Load Gene Info Table"
+            icon={FaFileAlt}
+            onClick={onInfoTableOpen}
+          />
+        )}
 
-        <SidebarButton
-          text="Import GXP Database"
-          icon={FaFileImport}
-          onClick={onGXPImportOpen}
-        />
+        {!settings.preloaded && (
+          <SidebarButton
+            text="Import GXP Database"
+            icon={FaFileImport}
+            onClick={onGXPImportOpen}
+          />
+        )}
 
         <SidebarButton
           text="Export GXP Database"
@@ -345,16 +351,18 @@ const DataFiles: React.FC = () => {
           onClick={onGXPExportOpen}
         />
 
-        <SidebarButton
-          text={
-            selectedReplicates.length > 0
-              ? 'Remove selected'
-              : 'Remove All Data'
-          }
-          icon={FaTrashAlt}
-          onClick={bulkRemoveReplicates}
-          disabled={!dataAvailable}
-        />
+        {!settings.preloaded && (
+          <SidebarButton
+            text={
+              selectedReplicates.length > 0
+                ? 'Remove selected'
+                : 'Remove All Data'
+            }
+            icon={FaTrashAlt}
+            onClick={bulkRemoveReplicates}
+            disabled={!dataAvailable}
+          />
+        )}
       </Sidebar>
 
       <Flex
