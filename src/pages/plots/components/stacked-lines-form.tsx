@@ -21,12 +21,14 @@ import {
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikSwitch from '@/components/formik-switch';
 import { dataTable } from '@/store/data-store';
+import FormikRadio from '@/components/formik-radio';
 
 export interface StackedLinesAttributes {
   accessions: string[];
   plotTitle: string;
   withCaption: boolean;
   withLegend: boolean;
+  colorBy: 'group' | 'accession';
 }
 
 export type StackedLinesFormSubmitHandler = (
@@ -54,6 +56,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
         plotTitle: '',
         withCaption: true,
         withLegend: true,
+        colorBy: 'group',
       }}
       onSubmit={props.onSubmit}
       validateOnBlur={false}
@@ -97,6 +100,24 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
             label="Plot Title"
             name="plotTitle"
           />
+
+          <FormikRadio
+            controlProps={{
+              as: 'p',
+              marginTop: '1rem',
+            }}
+            direction="row"
+            label="Color by"
+            name="colorBy"
+            options={[
+              { label: 'Group', value: 'group', disabled: false },
+              {
+                label: 'Accession',
+                value: 'accession',
+                disabled: formProps.values.accessions.length === 1,
+              },
+            ]}
+          ></FormikRadio>
 
           <FieldArray name="accessions">
             {(helpers) => (

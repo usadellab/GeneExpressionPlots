@@ -119,7 +119,7 @@ const PlotsHome: React.FC = () => {
       showlegend: values.withLegend,
       showCaption: values.withCaption,
       plotTitle: values.plotTitle,
-      colorBy: 'group',
+      colorBy: values.colorBy,
     } as PlotlyOptions);
 
     actions.setSubmitting(false);
