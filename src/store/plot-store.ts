@@ -40,10 +40,6 @@ class PlotStore {
     return this.plots.length > 0;
   }
 
-  get image(): string | null {
-    return this._image;
-  }
-
   /**
    * Clear the plots array in the store.
    */

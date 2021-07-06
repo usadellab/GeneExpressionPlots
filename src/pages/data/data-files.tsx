@@ -35,6 +35,8 @@ import { infoTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
 import { settings } from '@/store/settings';
 
+import { GxpImage } from '@/types/plots';
+import { fetchResource } from '@/utils/fetch';
 import { readTable } from '@/utils/parser';
 import { unescapeDelimiters } from '@/utils/string';
 
@@ -279,7 +281,9 @@ const DataFiles: React.FC = () => {
       const geneInfoSrc = infoTable.hasData
         ? infoTable.toString(settings.gxpSettings.info_field_sep)
         : null;
-      const imageSrc = plotStore.image?.split('base64,')[1];
+
+      const imagePlot = plotStore.plots.find((plot) => plot.type === 'image');
+
       const gxpSettingsSrc = JSON.stringify(
         Object.assign({}, settings.gxpSettings, {
           expression_field_sep: unescapeDelimiters(values.columnSep),
@@ -293,7 +297,15 @@ const DataFiles: React.FC = () => {
       zip.file('GXP_settings.json', gxpSettingsSrc);
       zip.file('expression_table.txt', geneExpressionSrc);
       if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
-      if (imageSrc) zip.file('image.png', imageSrc, { base64: true });
+      if (imagePlot) {
+        const imageSrc = await fetchResource(
+          (imagePlot as GxpImage).src,
+          'blob'
+        );
+        if (imageSrc) {
+          zip.file('image.png', imageSrc, { base64: true });
+        }
+      }
 
       zip
         .generateAsync({ type: 'blob' })
