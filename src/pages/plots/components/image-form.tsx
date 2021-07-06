@@ -33,6 +33,10 @@ const iMAGEForm: React.FC<ImageFormProps> = (props) => {
     if (value.type !== 'image/png') return ImageFormErrors.FILE_FORMAT;
   };
 
+  const validateAltInput: FieldValidator = (value: string) => {
+    if (!value) return ImageFormErrors.ALT_EMPTY;
+  };
+
   return (
     <Formik<ImageFormAttributes>
       initialValues={{
@@ -49,8 +53,10 @@ const iMAGEForm: React.FC<ImageFormProps> = (props) => {
               marginTop: '1rem',
             }}
             initialFocusRef={props.initialFocusRef}
+            isRequired
             label="Image label"
             name="alt"
+            validate={validateAltInput}
           />
 
           <FormikFile
