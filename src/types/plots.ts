@@ -1,6 +1,6 @@
 import { Layout, PlotData } from 'plotly.js';
 
-export type PlotType = 'heatmap' | 'pca' | 'plotly';
+export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image';
 
 export interface GxpPlot {
   id: string;
@@ -66,6 +66,15 @@ export interface GxpPlotly extends GxpPlot {
 export interface GxpPCA extends GxpPlot {
   data: Partial<PlotData>[];
   layout: Partial<Layout>;
+}
+
+//#endregion
+
+//#region Images
+
+export interface GxpImage extends GxpPlot {
+  src: string;
+  alt: string;
 }
 
 //#endregion

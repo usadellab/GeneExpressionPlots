@@ -66,8 +66,12 @@ const App: React.FC = () => {
 
   React.useEffect(function preloadImage() {
     if (settings.preloaded.image) {
-      fetchResource(settings.preloaded.image, 'url').then((image) => {
-        if (image) plotStore.loadImage(image);
+      fetchResource(settings.preloaded.image, 'url').then((url) => {
+        if (url) {
+          // Use the file name for the "alt" attribute
+          const alt = url.split('/').pop()?.split('.').shift() as string;
+          plotStore.addImagePlot(url, alt);
+        }
       });
     }
   }, []);
