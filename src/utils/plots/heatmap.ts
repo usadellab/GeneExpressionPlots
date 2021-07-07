@@ -59,7 +59,7 @@ type DistanceMethod =
  * @param matrix a matrix of gene counts per replicate
  * @returns the computed euclidean distance matrix
  */
-function computeGeneXDistance(
+export function computeGeneXDistance(
   matrix: number[][],
   method: DistanceMethod
 ): number[][] {
@@ -75,7 +75,7 @@ function computeGeneXDistance(
  * @param method agglomeration method
  * @returns the clustering result in tree format as an instance of ml-hclust's Cluster class
  */
-function clusterGeneXMatrix(
+export function clusterGeneXMatrix(
   matrix: number[][],
   method: AgglomerationMethod
 ): Cluster {
@@ -101,7 +101,7 @@ type BinsMapFunction = (values: number[], index: number) => HeatmapBins;
  * API of '@visx/heatmap'.
  * @param srcNames source matrix column and row names
  */
-function matrixToBins(srcNames: string[]): BinsMapFunction;
+export function matrixToBins(srcNames: string[]): BinsMapFunction;
 /**
  * Higher-order mapping function to transform an array of numeric values into a
  * Bins type ready to be consumed by the `HeatmapPlot` component built with the
@@ -109,8 +109,11 @@ function matrixToBins(srcNames: string[]): BinsMapFunction;
  * @param colNames source matrix column names
  * @param rowNames source matrix row names
  */
-function matrixToBins(colNames: string[], rowNames: string[]): BinsMapFunction;
-function matrixToBins(colNames: string[], rowNames?: string[]) {
+export function matrixToBins(
+  colNames: string[],
+  rowNames: string[]
+): BinsMapFunction;
+export function matrixToBins(colNames: string[], rowNames?: string[]) {
   return (values: number[], index: number): HeatmapBins => {
     const bin = colNames[index];
     const bins = values.map((count, accessionIndex) => ({
@@ -155,18 +158,18 @@ export function clusterToTree(
  * @param cluster an instance of ml-hclust's Cluster class
  * @returns an array with the cluster tree leaves
  */
-function getTreeLeaves(cluster: Cluster): number[];
+export function getTreeLeaves(cluster: Cluster): number[];
 /**
  * Get the names of the clustered tree leave nodes.
  * @param cluster an instance of ml-hclust's Cluster class
  * @param srcNames node names in pre-clustering order
  * @returns an array with the cluster tree leaves
  */
-function getTreeLeaves(
+export function getTreeLeaves(
   cluster: Cluster,
   srcNames: string[]
 ): Record<string, number>;
-function getTreeLeaves(
+export function getTreeLeaves(
   cluster: Cluster,
   srcNames?: string[]
 ): number[] | Record<string, number> {
@@ -198,7 +201,7 @@ function getTreeLeaves(
  * @param sortIndex new indexes for rows and columns
  * @returns the sorted matrix
  */
-function sortClusteredMatrix(
+export function sortClusteredMatrix(
   matrix: number[][],
   sortIndex: number[]
 ): number[][];
@@ -209,12 +212,12 @@ function sortClusteredMatrix(
  * @param rowsOrder new index order for the rows
  * @returns the sorted matrix
  */
-function sortClusteredMatrix(
+export function sortClusteredMatrix(
   matrix: number[][],
   colOrder: number[],
   rowsOrder: number[]
 ): number[][];
-function sortClusteredMatrix(
+export function sortClusteredMatrix(
   matrix: number[][],
   colsOrder: number[],
   rowOrder?: number[]
