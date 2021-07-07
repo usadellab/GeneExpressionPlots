@@ -46,7 +46,7 @@ describe('Heatmap analysis', function () {
     ]);
   });
 
-  it('Can compute euclidian distance Matrix with all replicates', () => {
+  it('Can compute euclidian distance Matrix with select replicates', () => {
     // Prepare the data from the store
     const replicateCounts: number[][] = d.toArrayOfColumns([
       'rep-A',
