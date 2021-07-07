@@ -6,14 +6,19 @@ import {
   FaDatabase,
   FaTools,
 } from 'react-icons/fa';
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import TopbarNav, { TopbarLink } from '@/components/nav-topbar';
 
-const AppLayout: React.FC<React.PropsWithChildren<{}>> = (
-  props
-): React.ReactElement => {
+type AppLayoutProps = FlexProps;
+
+const AppLayout: React.FC<AppLayoutProps> = (props) => {
   return (
-    <Flex flexDirection="column" minHeight="100vh" backgroundColor="gray.100">
+    <Flex
+      flexDirection="column"
+      minHeight="100vh"
+      backgroundColor="gray.100"
+      {...props}
+    >
       <TopbarNav>
         {/* <TopbarLink href="/" icon={FaHome} text="Home" urlMatch="exact" /> */}
         <TopbarLink
