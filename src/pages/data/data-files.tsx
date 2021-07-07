@@ -403,9 +403,9 @@ const DataFiles: React.FC = () => {
                 name={replicateName}
                 onDelete={settings.preloaded ? undefined : deleteReplicate}
                 onSelect={
-                  settings.preloaded ? undefined : updateSelectedReplicates
+                  settings.preloaded.data ? undefined : updateSelectedReplicates
                 }
-                tabIndex={settings.preloaded ? 0 : undefined}
+                tabIndex={settings.preloaded.data ? 0 : undefined}
               />
             </WrapItem>
           ))}
