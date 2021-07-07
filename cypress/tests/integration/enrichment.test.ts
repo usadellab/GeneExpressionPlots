@@ -66,15 +66,12 @@ describe('Enrichment analysis', function () {
 
     const filter_funk = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => !r.includes('NA'));
-    // Object.values(rows).filter((r) => !r.includes('NA'));
 
     const trait_A_selector = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => r[1] === 'a-pos');
-    // Object.values(rows).filter((r) => r[1] === 'a-pos');
 
     const trait_B_selector = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => r[2] === 'b-pos');
-    // Object.values(rows).filter((r) => r[2] === 'b-pos');
 
     const fish_exact_test_rslt = test_for_enrichment({
       dataframe: d,
