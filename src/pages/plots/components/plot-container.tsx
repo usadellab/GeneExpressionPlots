@@ -52,19 +52,19 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
       ref={(ref) => (figureRef ? (figureRef.current = ref) : ref)}
       resize="horizontal"
       role="group"
-      sx={{
-        '&::-webkit-resizer': {
-          border: '1px',
-          background: 'gray.400',
-        },
-      }}
+      // sx={{
+      //   '&::-webkit-resizer': {
+      //     border: '1px',
+      //     background: 'gray.400',
+      //   },
+      // }}
       tabIndex={0}
       width="100%"
       {...props}
     >
       {status === 'idle' ? (
         <>
-          {plotType === 'heatmap' && (
+          {(plotType === 'heatmap' || plotType === 'image') && (
             <Box
               _focusWithin={{
                 '& button': {
@@ -77,31 +77,33 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
               position="absolute"
               top={5}
             >
-              <IconButton
-                _focus={{
-                  border: '1px solid',
-                  borderColor: 'orange.600',
-                  color: 'orange.600',
-                  outline: 'none',
-                  visibility: 'visible',
-                }}
-                _groupFocus={{
-                  visibility: 'visible',
-                }}
-                _groupHover={{
-                  visibility: 'visible',
-                }}
-                _hover={{
-                  color: 'orange.600',
-                }}
-                aria-label="Download plot"
-                color="gray.600"
-                icon={<FaDownload />}
-                variant="outline"
-                size="lg"
-                onClick={handleDownloadSVG}
-                visibility="hidden"
-              />
+              {plotType === 'heatmap' && (
+                <IconButton
+                  _focus={{
+                    border: '1px solid',
+                    borderColor: 'orange.600',
+                    color: 'orange.600',
+                    outline: 'none',
+                    visibility: 'visible',
+                  }}
+                  _groupFocus={{
+                    visibility: 'visible',
+                  }}
+                  _groupHover={{
+                    visibility: 'visible',
+                  }}
+                  _hover={{
+                    color: 'orange.600',
+                  }}
+                  aria-label="Download plot"
+                  color="gray.600"
+                  icon={<FaDownload />}
+                  variant="outline"
+                  size="lg"
+                  onClick={handleDownloadSVG}
+                  visibility="hidden"
+                />
+              )}
 
               <IconButton
                 _focus={{

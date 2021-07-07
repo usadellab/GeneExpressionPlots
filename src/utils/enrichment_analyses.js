@@ -171,7 +171,8 @@ export function test_for_enrichment({
   trait_A_selector,
   trait_B_selector,
 }) {
-  let rows = filter_funk ? filter_funk(dataframe.rows) : dataframe.rows;
+  const rowsAsMatrix = Object.entries(dataframe.rows).map((r) => r.flat());
+  let rows = filter_funk ? filter_funk(rowsAsMatrix) : rowsAsMatrix;
   let universe = get_column(rows, element_col);
   let trait_A_pos = new Set(get_column(trait_A_selector(rows), element_col));
   let trait_A_neg = new Set(universe.filter((x) => !trait_A_pos.has(x)));

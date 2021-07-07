@@ -46,7 +46,7 @@ const ImportGXPForm: React.FC<ImportGXPFormProps> = (props) => {
   };
 
   return (
-    <Formik initialValues={{}} onSubmit={props.onSubmit}>
+    <Formik initialValues={{}} onSubmit={props.onSubmit} validateOnBlur={false}>
       {(formProps) => (
         <Box
           as={Form}

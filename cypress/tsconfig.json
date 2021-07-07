@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6", "dom"],
+    "target": "es2019",
+    "lib": ["es2019", "dom"],
 
     // type checking
     "types": ["cypress", "@types/node"],

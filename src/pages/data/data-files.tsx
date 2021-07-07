@@ -35,6 +35,8 @@ import { infoTable } from '@/store/data-store';
 import { plotStore } from '@/store/plot-store';
 import { settings } from '@/store/settings';
 
+import { GxpImage } from '@/types/plots';
+import { fetchResource } from '@/utils/fetch';
 import { readTable } from '@/utils/parser';
 import { unescapeDelimiters } from '@/utils/string';
 
@@ -48,6 +50,10 @@ const DataFiles: React.FC = () => {
   const [selectedReplicates, setSelectedReplicates] = React.useState<string[]>(
     []
   );
+
+  const deleteReplicate = (name: string): void => {
+    dataTable.removeColumns(name);
+  };
 
   const updateSelectedReplicates = (name: string, checked: boolean): void => {
     if (checked) {
@@ -237,8 +243,9 @@ const DataFiles: React.FC = () => {
         // Unpack and load the image file, if it exists
         const imageFilePtr = zipImport.files['image.png'];
         if (imageFilePtr) {
-          const imgsrc = await imageFilePtr.async('base64');
-          plotStore.loadImage('data:image/png;base64, ' + imgsrc);
+          const imgsrc = await imageFilePtr.async('blob');
+          const imgUrl = URL.createObjectURL(imgsrc);
+          plotStore.addImagePlot(imgUrl, 'Database Image');
         }
 
         actions.setSubmitting(false);
@@ -274,7 +281,9 @@ const DataFiles: React.FC = () => {
       const geneInfoSrc = infoTable.hasData
         ? infoTable.toString(settings.gxpSettings.info_field_sep)
         : null;
-      const imageSrc = plotStore.image?.split('base64,')[1];
+
+      const imagePlot = plotStore.plots.find((plot) => plot.type === 'image');
+
       const gxpSettingsSrc = JSON.stringify(
         Object.assign({}, settings.gxpSettings, {
           expression_field_sep: unescapeDelimiters(values.columnSep),
@@ -288,7 +297,15 @@ const DataFiles: React.FC = () => {
       zip.file('GXP_settings.json', gxpSettingsSrc);
       zip.file('expression_table.txt', geneExpressionSrc);
       if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
-      if (imageSrc) zip.file('image.png', imageSrc, { base64: true });
+      if (imagePlot) {
+        const imageSrc = await fetchResource(
+          (imagePlot as GxpImage).src,
+          'blob'
+        );
+        if (imageSrc) {
+          zip.file('image.png', imageSrc, { base64: true });
+        }
+      }
 
       zip
         .generateAsync({ type: 'blob' })
@@ -321,23 +338,29 @@ const DataFiles: React.FC = () => {
   return (
     <Flex as="main" flexGrow={1}>
       <Sidebar maxWidth="17rem">
-        <SidebarButton
-          text="Load Expression Table"
-          icon={FaFile}
-          onClick={onXTableOpen}
-        />
+        {!settings.preloaded.data && (
+          <SidebarButton
+            text="Load Expression Table"
+            icon={FaFile}
+            onClick={onXTableOpen}
+          />
+        )}
 
-        <SidebarButton
-          text="Load Gene Info Table"
-          icon={FaFileAlt}
-          onClick={onInfoTableOpen}
-        />
+        {!settings.preloaded.data && (
+          <SidebarButton
+            text="Load Gene Info Table"
+            icon={FaFileAlt}
+            onClick={onInfoTableOpen}
+          />
+        )}
 
-        <SidebarButton
-          text="Import GXP Database"
-          icon={FaFileImport}
-          onClick={onGXPImportOpen}
-        />
+        {!settings.preloaded.data && (
+          <SidebarButton
+            text="Import GXP Database"
+            icon={FaFileImport}
+            onClick={onGXPImportOpen}
+          />
+        )}
 
         <SidebarButton
           text="Export GXP Database"
@@ -345,16 +368,18 @@ const DataFiles: React.FC = () => {
           onClick={onGXPExportOpen}
         />
 
-        <SidebarButton
-          text={
-            selectedReplicates.length > 0
-              ? 'Remove selected'
-              : 'Remove All Data'
-          }
-          icon={FaTrashAlt}
-          onClick={bulkRemoveReplicates}
-          disabled={!dataAvailable}
-        />
+        {!settings.preloaded.data && (
+          <SidebarButton
+            text={
+              selectedReplicates.length > 0
+                ? 'Remove selected'
+                : 'Remove All Data'
+            }
+            icon={FaTrashAlt}
+            onClick={bulkRemoveReplicates}
+            disabled={!dataAvailable}
+          />
+        )}
       </Sidebar>
 
       <Flex
@@ -376,7 +401,11 @@ const DataFiles: React.FC = () => {
                 aria-label={replicateName}
                 key={replicateName}
                 name={replicateName}
-                onSelect={updateSelectedReplicates}
+                onDelete={settings.preloaded.data ? undefined : deleteReplicate}
+                onSelect={
+                  settings.preloaded.data ? undefined : updateSelectedReplicates
+                }
+                tabIndex={settings.preloaded.data ? 0 : undefined}
               />
             </WrapItem>
           ))}
