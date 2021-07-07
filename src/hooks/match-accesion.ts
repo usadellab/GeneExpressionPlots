@@ -1,7 +1,6 @@
 import React from 'react';
 import { dataTable } from '@/store/data-store';
 import { RequireExactlyOne } from 'type-fest';
-
 interface UseMatchAccessionOptions {
   accession?: string;
   maxSize?: number;
@@ -32,9 +31,12 @@ function useMatchAccession(
     return accessionIdsView;
   }, []);
 
-  return options?.accession !== undefined
-    ? matchToStoreAccessions(options.accession)
-    : matchToStoreAccessions;
+  const matches = React.useMemo(() => {
+    if (options?.accession !== undefined)
+      return matchToStoreAccessions(options?.accession);
+  }, [matchToStoreAccessions, options?.accession]);
+
+  return matches ?? matchToStoreAccessions;
 }
 
 export default useMatchAccession;
