@@ -49,29 +49,32 @@ describe('Enrichment analysis', function () {
   it('enrichment is found in test data', () => {
     const mockTable = {
       header: ['Gene-ID', 'trait-A', 'trait-B'],
-      rows: [
-        ['Gene-1', 'a-neg', 'b-neg'],
-        ['Gene-2', 'a-neg', 'b-pos'],
-        ['Gene-3', 'a-pos', 'b-neg'],
-        ['Gene-4', 'a-pos', 'b-neg'],
-        ['Gene-5', 'a-neg', 'b-pos'],
-        ['Gene-6', 'NA', 'NA'],
-        ['Gene-7', 'NA', 'b-pos'],
-        ['Gene-8', 'a-neg', 'NA'],
-      ],
+      rows: {
+        'Gene-1': ['a-neg', 'b-neg'],
+        'Gene-2': ['a-neg', 'b-pos'],
+        'Gene-3': ['a-pos', 'b-neg'],
+        'Gene-4': ['a-pos', 'b-neg'],
+        'Gene-5': ['a-neg', 'b-pos'],
+        'Gene-6': ['NA', 'NA'],
+        'Gene-7': ['NA', 'b-pos'],
+        'Gene-8': ['a-neg', 'NA'],
+      },
     };
 
     const d = new Dataframe();
     d.loadFromObject(mockTable);
 
-    const filter_funk = (rows: string[]): string[] | undefined =>
+    const filter_funk = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => !r.includes('NA'));
+    // Object.values(rows).filter((r) => !r.includes('NA'));
 
-    const trait_A_selector = (rows: string[]): string[] | undefined =>
+    const trait_A_selector = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => r[1] === 'a-pos');
+    // Object.values(rows).filter((r) => r[1] === 'a-pos');
 
-    const trait_B_selector = (rows: string[]): string[] | undefined =>
+    const trait_B_selector = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => r[2] === 'b-pos');
+    // Object.values(rows).filter((r) => r[2] === 'b-pos');
 
     const fish_exact_test_rslt = test_for_enrichment({
       dataframe: d,

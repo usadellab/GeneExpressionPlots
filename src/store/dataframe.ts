@@ -8,12 +8,12 @@ interface DataFrameConfig {
   multiHeader: string;
 }
 
-interface DataTable {
+export interface DataTable {
   header: string[];
   rows: DataRow;
 }
 
-interface DataRow {
+export interface DataRow {
   [key: string]: string[];
 }
 
