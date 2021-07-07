@@ -401,7 +401,7 @@ const DataFiles: React.FC = () => {
                 aria-label={replicateName}
                 key={replicateName}
                 name={replicateName}
-                onDelete={settings.preloaded ? undefined : deleteReplicate}
+                onDelete={settings.preloaded.data ? undefined : deleteReplicate}
                 onSelect={
                   settings.preloaded.data ? undefined : updateSelectedReplicates
                 }
