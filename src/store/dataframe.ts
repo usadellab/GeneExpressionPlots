@@ -163,6 +163,7 @@ export class Dataframe {
   }
 
   /**
+   * @deprecated moved to utils/colors
    * Get an array of colors for each unique dataframe subheader.
    * - A subheader is a partial column name composed of `n` chunks.
    * - Each chunk is the corresponding part of a multiheader column name.
@@ -190,6 +191,7 @@ export class Dataframe {
   }
 
   /**
+   * @deprecated moved to utils/store
    * Get the dataframe rows as a two-dimensional array of numeric
    * row values
    * @param filterByColumn optional subset of columns to retrieve
@@ -250,6 +252,7 @@ export class Dataframe {
   }
 
   /**
+   * @deprecated moved to utils/store
    * Get the dataframe columns as a two-dimensional array of numeric
    * column values.
    * @param filterByColumn optional subset of columns to retrieve
