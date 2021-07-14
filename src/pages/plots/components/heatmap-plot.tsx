@@ -134,7 +134,9 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const tickLabelSize =
             Math.max(
               ...props.binData.map((data) => data.bin.length) // get the length of the longest label
-            ) * 6; // multiply by a sensible amount to get a cross browser consisten value in pixels
+            ) *
+              6 + // multiply by a sensible amount to get a cross browser consisten value in pixels
+            5; // add a min margin
 
           // plot
           const plotBoundsX =
