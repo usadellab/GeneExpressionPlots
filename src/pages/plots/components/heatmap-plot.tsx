@@ -126,7 +126,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const titleHeight = props.plotTitle ? 30 : 0;
 
           // ticks
-          const tickLineSize = 10;
+          const tickLineSize = 20; // 10 for tick + 10 for marginLeft to plot
 
           // This is a approximate workaround for calculating the size needed for the labels.
           // Optimally we would get the actual width of the text in pixels using e.g
@@ -147,7 +147,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             entries[0].target.clientHeight -
             clientPaddingY -
             (tickLabelSize ?? 0) -
-            tickLineSize -
             titleHeight * 2;
 
           const treeBoundsY = plotBoundsY / 6;
@@ -262,7 +261,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                     <Group top={node.y} left={node.x} key={`cluster-node-${i}`}>
                       {!node.children && (
                         <Text
-                          dy={10}
+                          dy={3}
                           fontSize={10}
                           fontFamily="Arial"
                           textAnchor="end"
