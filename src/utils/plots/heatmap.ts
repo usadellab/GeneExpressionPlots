@@ -3,11 +3,10 @@ import getDistanceMatrix from 'ml-distance-matrix';
 import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
+import { DataRow } from '@/store/dataframe';
+import { toArrayOfColumns } from '../store';
 
 // Once a worker, data will be accessed via IndexedDb
-import { dataTable } from '@/store/data-store';
-
-//#region PRIVATE API
 
 type DistanceMethod =
   | 'additiveSymmetric'
@@ -232,27 +231,18 @@ export function sortClusteredMatrix(
   return sortedMatrix;
 }
 
-//#endregin
-
-//#region PUBLIC API
-
-interface CreateHeatmapOptions {
-  replicates?: string[];
-}
-
-export async function createHeatmapPlot(
-  options?: CreateHeatmapOptions
-): Promise<{
+export function createHeatmapPlot(
+  dataRows: DataRow,
+  srcReplicateNames: string[]
+): {
   bins: HeatmapBins[];
   tree: ClusterTree;
-}> {
+} {
   // Prepare the data from the store
-  const replicateCounts: number[][] = dataTable.toArrayOfColumns(
-    options?.replicates
+  const replicateCounts: number[][] = toArrayOfColumns(
+    dataRows,
+    srcReplicateNames
   );
-  const srcReplicateNames = options?.replicates?.length
-    ? options.replicates
-    : dataTable.colNames;
 
   // Compute the euclidean distance matrix between each gene
   const distanceMatrix = computeGeneXDistance(replicateCounts, 'euclidean');
@@ -276,5 +266,3 @@ export async function createHeatmapPlot(
     tree,
   };
 }
-
-//#endregion

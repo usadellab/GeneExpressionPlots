@@ -12,9 +12,9 @@ import {
 } from '@/types/plots';
 import { dataTable } from '@/store/data-store';
 
-// Future Workers
-import HeatMapWorker from '../utils/plots/heatmap-ww?worker&inline';
-import PCAWorker from '../utils/plots/pca-ww?worker&inline';
+// Workers
+import HeatMapWorker from '@/workers/heatmap?worker&inline';
+import PCAWorker from '@/workers/pca?worker&inline';
 // import { createHeatmapPlot } from '@/utils/plots/heatmap';
 import multiGeneBarData from '@/utils/plots/multi-gene-bar';
 import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-lines';
@@ -82,15 +82,11 @@ class PlotStore {
     };
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
-    // const worker = new Worker('/src/utils/plots/heatmap-ww.ts', {
-    //   type: 'module',
-    // });
     const worker = new HeatMapWorker();
     const data = {
       dataRows: toJS(dataTable.rows),
-      srcReplicateNames: dataTable.colNames,
+      srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
     };
-    console.log({ data });
     worker.postMessage(data);
     worker.onmessage = function (
       e: MessageEvent<{
@@ -148,7 +144,6 @@ class PlotStore {
         layout: Partial<Layout>;
       }>
     ) {
-      console.log(e.data);
       const loadedPlot: GxpPCA = {
         ...plotStore.plots[plotIndex],
         ...e.data,
