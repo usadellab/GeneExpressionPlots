@@ -94,7 +94,6 @@ class PlotStore {
         tree: ClusterTree;
       }>
     ) {
-      console.log(e.data);
       const loadedPlot: GxpHeatmap = {
         ...plotStore.plots[plotIndex],
         isLoading: false,
