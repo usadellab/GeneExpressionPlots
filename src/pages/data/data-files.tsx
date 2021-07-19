@@ -10,6 +10,11 @@ import {
   FaTrashAlt,
 } from 'react-icons/fa';
 import {
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  AlertTitle,
+  Button,
   Flex,
   useDisclosure,
   Wrap,
@@ -332,6 +337,52 @@ const DataFiles: React.FC = () => {
       setSelectedReplicates([]);
     } else {
       dataTable.clearData();
+      infoTable.clearData();
+    }
+  };
+
+  /* LOAD EXAMPLE DATA */
+  const handleLoadExampleClick = async (): Promise<void> => {
+    plotStore.loadCountUnit('raw');
+
+    settings.loadgxpSettings({
+      unit: 'raw',
+      expression_field_sep: '\t',
+      expression_header_sep: '*',
+      info_field_sep: '\t',
+    });
+    try {
+      // Load Expression Table
+      const expressionFileResponse = await fetch('upload_expression_table.tsv');
+      const expressionText = await expressionFileResponse.text();
+      console.log({ text: expressionText });
+      const expressionTable = readTable(expressionText, {
+        fieldSeparator: '\t',
+        rowNameColumn: 0,
+      });
+
+      // Load the store from the parsed table
+      dataTable.loadFromObject(expressionTable, {
+        multiHeader: '*',
+      });
+
+      // set default group and sample order in the settings
+      settings.setGroupOrder(dataTable.groupsAsArray);
+      settings.setSampleOrder(dataTable.samplesAsArray);
+
+      // Load Info Table
+      const geneInfoFileResponse = await fetch('upload_info_table.tsv');
+      const geneInfoText = await geneInfoFileResponse.text();
+      console.log({ text: geneInfoText });
+      const geneInfoTable = readTable(geneInfoText, {
+        fieldSeparator: '\t',
+        rowNameColumn: 0,
+      });
+
+      // Load the store from the parsed table
+      infoTable.loadFromObject(geneInfoTable);
+    } catch (error) {
+      console.error('There was an error while loading the examle data');
     }
   };
 
@@ -388,6 +439,40 @@ const DataFiles: React.FC = () => {
         padding="2rem"
         width="100%"
       >
+        {!dataAvailable && (
+          <Alert
+            alignItems="center"
+            flexDirection="column"
+            minHeight="20rem"
+            justifyContent="center"
+            marginLeft={3}
+            marginTop={3}
+            status="info"
+            textAlign="center"
+            variant="subtle"
+            colorScheme="orange"
+          >
+            <AlertIcon boxSize="3rem" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              No data has been loaded
+            </AlertTitle>
+            <AlertDescription maxWidth="xl">
+              It seems no data has been loaded into the application yet.
+            </AlertDescription>
+            <AlertDescription maxWidth="xl" marginTop={3}>
+              Load your data via the Sidebar or play around with some examples
+              using the button below.
+            </AlertDescription>
+            <Button
+              colorScheme="orange"
+              variant="solid"
+              marginTop={3}
+              onClick={handleLoadExampleClick}
+            >
+              Load examples
+            </Button>
+          </Alert>
+        )}
         <Wrap
           role="region"
           aria-label="Loaded replicates"
