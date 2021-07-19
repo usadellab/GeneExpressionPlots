@@ -1,4 +1,4 @@
-import { makeAutoObservable, action } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import { nanoid } from 'nanoid';
 import {
   GxpHeatmap,
@@ -7,16 +7,22 @@ import {
   GxpPlotly,
   GxpPCA,
   GxpImage,
+  HeatmapBins,
+  ClusterTree,
 } from '@/types/plots';
+import { dataTable } from '@/store/data-store';
 
-// Future Workers
-import { createHeatmapPlot } from '@/utils/plots/heatmap';
+// Workers
+import HeatMapWorker from '@/workers/heatmap?worker&inline';
+import PCAWorker from '@/workers/pca?worker&inline';
+// import { createHeatmapPlot } from '@/utils/plots/heatmap';
 import multiGeneBarData from '@/utils/plots/multi-gene-bar';
 import multiGeneIndividualLinesData from '@/utils/plots/multi-gene-individual-lines';
 import singleGeneIndividualLinesData from '@/utils/plots/single-gene-individual-lines';
 import singleGeneBarData from '@/utils/plots/single-gene-bar';
 import stackedLinesData from '@/utils/plots/stacked-lines';
-import pcaData from '@/utils/plots/pca';
+// import pcaData from '@/utils/plots/pca';
+import { Layout, PlotData } from 'plotly.js';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -76,25 +82,30 @@ class PlotStore {
     };
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
-    setTimeout(
-      () =>
-        createHeatmapPlot({ replicates }).then(
-          action('addHeatmapPlot', (heatmapData) => {
-            const loadedPlot: GxpHeatmap = {
-              ...this.plots[plotIndex],
-              isLoading: false,
-              binData: heatmapData.bins,
-              tree: heatmapData.tree,
-              plotTitle,
-            };
+    const worker = new HeatMapWorker();
+    const data = {
+      dataRows: toJS(dataTable.rows),
+      srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
+    };
+    worker.postMessage(data);
+    worker.onmessage = function (
+      e: MessageEvent<{
+        bins: HeatmapBins[];
+        tree: ClusterTree;
+      }>
+    ) {
+      const loadedPlot: GxpHeatmap = {
+        ...plotStore.plots[plotIndex],
+        isLoading: false,
+        binData: e.data.bins,
+        tree: e.data.tree,
+        plotTitle,
+      };
 
-            if (this.plots[plotIndex].id === id) {
-              this.plots[plotIndex] = loadedPlot;
-            }
-          })
-        ),
-      100
-    );
+      if (plotStore.plots[plotIndex].id === id) {
+        plotStore.plots[plotIndex] = loadedPlot;
+      }
+    };
   }
 
   addImagePlot(url: string, alt: string): void {
@@ -118,23 +129,30 @@ class PlotStore {
     };
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
-    setTimeout(
-      () =>
-        pcaData(plotTitle).then(
-          action('addPCAPlot', (pcaData) => {
-            const loadedPlot: GxpPCA = {
-              ...this.plots[plotIndex],
-              ...pcaData,
-              isLoading: false,
-            };
+    const worker = new PCAWorker();
+    const data = {
+      dataRows: toJS(dataTable.rows),
+      srcReplicateNames: dataTable.colNames,
+      multiHeaderSep: dataTable.config.multiHeader,
+      plotTitle,
+    };
+    worker.postMessage(data);
+    worker.onmessage = function (
+      e: MessageEvent<{
+        data: Partial<PlotData>[];
+        layout: Partial<Layout>;
+      }>
+    ) {
+      const loadedPlot: GxpPCA = {
+        ...plotStore.plots[plotIndex],
+        ...e.data,
+        isLoading: false,
+      };
 
-            if (this.plots[plotIndex].id === id) {
-              this.plots[plotIndex] = loadedPlot;
-            }
-          })
-        ),
-      100
-    );
+      if (plotStore.plots[plotIndex].id === id) {
+        plotStore.plots[plotIndex] = loadedPlot;
+      }
+    };
   }
 
   addSingleGeneBarPlot(accessions: string[], options: PlotlyOptions): void {
