@@ -2,6 +2,7 @@ import React from 'react';
 import NavCard from '@/components/nav-card';
 import { Box } from '@chakra-ui/react';
 import { FaDna } from 'react-icons/fa';
+import { BiTestTube } from 'react-icons/bi';
 
 const ToolsPage: React.FC = () => {
   return (
@@ -25,6 +26,16 @@ const ToolsPage: React.FC = () => {
           sent anywhere.
         `}
         to="/tools/gene-browser"
+      />
+      <NavCard
+        icon={BiTestTube}
+        label="Enrichment Analyses"
+        text={`
+          The enrichment analyses tool allows you to run enrichment tests for your data.
+          Use the "Gene Info Table" to store information about differentially expressed genes.
+          All tests and results will be private to your browser and will not be sent anywhere.
+        `}
+        to="/tools/enrichment"
       />
     </Box>
   );
