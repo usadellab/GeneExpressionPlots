@@ -2,6 +2,7 @@ import { makeAutoObservable, toJS } from 'mobx';
 import {
   EnrichmentAnalysis,
   EnrichmentAnalysisOptions,
+  EnrichmentExport,
 } from '@/types/enrichment';
 import { nanoid } from 'nanoid';
 import { infoTable } from './data-store';
@@ -38,11 +39,39 @@ class EnrichmentStore {
     }
   }
 
-  addAnalysis(analysis: EnrichmentAnalysis): void {
+  addRawEnrichmentAnalysis(analysis: EnrichmentAnalysis): void {
     this.analyses.push(analysis);
   }
 
+  toJSON(): EnrichmentExport[] | undefined {
+    return this.analyses.length > 0
+      ? this.analyses.map((analysis) => {
+          const { options } = analysis;
+          return {
+            ...options,
+            raw_data: `${options.title.replace(/\s+/g, '_')}.txt`,
+          };
+        })
+      : undefined;
+  }
+
+  dataToCSV(analysis: EnrichmentAnalysis, delimiter: string): string {
+    const header = `Test Entry${delimiter}p_Value${delimiter}adjusted p_Value\n`;
+    const data = analysis.data?.map((row) => row.join(delimiter));
+    return header + data?.join('\n');
+  }
+
   addEnrichmentAnalysis(options: EnrichmentAnalysisOptions): void {
+    if (
+      this.analyses.findIndex(
+        (analysis) => analysis.options.title === options.title
+      ) != -1
+    ) {
+      throw new Error(
+        `Analysis with title ${options.title} already exists. Please select a unique name.`
+      );
+    }
+
     const id = nanoid();
     const pendingEnrichment: EnrichmentAnalysis = {
       id,

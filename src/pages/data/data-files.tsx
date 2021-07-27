@@ -42,8 +42,11 @@ import { settings } from '@/store/settings';
 
 import { GxpImage } from '@/types/plots';
 import { fetchResource } from '@/utils/fetch';
-import { readTable } from '@/utils/parser';
+import { parseEnrichmentData, readTable } from '@/utils/parser';
 import { unescapeDelimiters } from '@/utils/string';
+import { enrichmentStore } from '@/store/enrichment-store';
+import { EnrichmentExport } from '@/types/enrichment';
+import { nanoid } from 'nanoid';
 
 const DataFiles: React.FC = () => {
   const replCardWidth = useBreakpointValue({
@@ -253,6 +256,34 @@ const DataFiles: React.FC = () => {
           plotStore.addImagePlot(imgUrl, 'Database Image');
         }
 
+        // Unpack and load the enrichment analysis files, if exists
+        const enrichmentPtr = zipImport.files['enrichment_analyses.json'];
+        if (enrichmentPtr) {
+          const enrichmentSrc = await enrichmentPtr.async('string');
+          const analyses: EnrichmentExport[] = JSON.parse(enrichmentSrc);
+
+          await Promise.all(
+            analyses.map(async (analysis) => {
+              const { raw_data, ...options } = analysis;
+              const enrichmentDataFilePtr = zipImport.files[raw_data];
+              const enrichmentDataFileSrc = await enrichmentDataFilePtr.async(
+                'string'
+              );
+              const enrichmentData = parseEnrichmentData(
+                enrichmentDataFileSrc,
+                settings.gxpSettings.expression_field_sep
+              );
+
+              enrichmentStore.addRawEnrichmentAnalysis({
+                id: nanoid(),
+                isLoading: false,
+                options: options,
+                data: enrichmentData,
+              });
+            })
+          );
+        }
+
         actions.setSubmitting(false);
         onGXPImportClose();
       } catch (error) {
@@ -297,10 +328,25 @@ const DataFiles: React.FC = () => {
         2
       );
 
+      const enrichmentSrc = JSON.stringify(enrichmentStore.toJSON(), null, 2);
+
       // Package as a zip file
       const zip = new JSZip();
       zip.file('GXP_settings.json', gxpSettingsSrc);
       zip.file('expression_table.txt', geneExpressionSrc);
+
+      // enrichment tables
+      if (enrichmentSrc) {
+        zip.file('enrichment_analyses.json', enrichmentSrc);
+        enrichmentStore.analyses.forEach((analysis) => {
+          const data = enrichmentStore.dataToCSV(
+            analysis,
+            unescapeDelimiters(values.columnSep)
+          );
+          zip.file(`${analysis.options.title.replace(/\s+/g, '_')}.txt`, data);
+        });
+      }
+
       if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
       if (imagePlot) {
         const imageSrc = await fetchResource(
