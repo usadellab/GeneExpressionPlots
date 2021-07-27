@@ -24,26 +24,24 @@ import {
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
-import { motion } from 'framer-motion';
 import { observer } from 'mobx-react';
 
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTrashAlt } from 'react-icons/fa';
 
 import { infoTable } from '@/store/data-store';
 import { enrichmentStore } from '@/store/enrichment-store';
-import {
-  EnrichmentAnalysis,
-  EnrichmentAnalysisOptions,
-} from '@/types/enrichment';
+import { EnrichmentAnalysisOptions } from '@/types/enrichment';
 
 import EnrichmentDetails from './enrichment-details';
 import EnrichmentForm, { EnrichmentFormSubmitHandler } from './enrichment-form';
 import FormikModal from '@/components/formik-modal';
 
-const CardRow: React.FC<{ label: string; value: string }> = ({
-  label,
-  value,
-}) => {
+interface CardRowProps extends FlexProps {
+  label: string;
+  value: string;
+}
+
+const CardRow: React.FC<CardRowProps> = ({ label, value, ...props }) => {
   return (
     <Flex paddingY={0.5} width="full">
       <Flex
@@ -55,6 +53,7 @@ const CardRow: React.FC<{ label: string; value: string }> = ({
         // textTransform="uppercase"
         width="12rem"
         wordBreak="break-all"
+        {...props}
       >
         {label}
       </Flex>
@@ -71,7 +70,6 @@ const EnrichmentTool: React.FC = () => {
     lg: '6xl',
   });
 
-  const [pageLoading, setPageLoading] = React.useState(false);
   const dataAvailable = infoTable.hasData;
 
   /* FORM */
@@ -130,6 +128,13 @@ const EnrichmentTool: React.FC = () => {
   //   enrichmentStore.addAnalysis(data);
   // };
 
+  const handleDeletePlot =
+    (id: string): React.MouseEventHandler<HTMLButtonElement> =>
+    (event): void => {
+      enrichmentStore.deleteAnalysis(id);
+      event.stopPropagation();
+    };
+
   return (
     <Flex
       alignItems="center"
@@ -161,15 +166,30 @@ const EnrichmentTool: React.FC = () => {
             toolbar above.
           </AlertDescription>
         </Alert>
-      ) : pageLoading ? (
-        <Flex
-          width="100%"
-          flexGrow={1}
-          justifyContent="center"
+      ) : enrichmentStore.analyses.length === 0 ? (
+        <Alert
           alignItems="center"
+          flexDirection="column"
+          minHeight="16rem"
+          maxHeight="20rem"
+          justifyContent="center"
+          marginLeft={3}
+          marginTop={3}
+          status="info"
+          textAlign="center"
+          variant="subtle"
+          colorScheme="orange"
         >
-          <Spinner size="xl" />
-        </Flex>
+          <AlertIcon boxSize="3rem" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            Run your enrichment analysis
+          </AlertTitle>
+          <AlertDescription maxWidth="xl">
+            To run an enrichment analysis on the data supplied by your meta
+            information table, click the Button in the bottom right corner and
+            fill out the Form. For more Information see [Documentation]
+          </AlertDescription>
+        </Alert>
       ) : (
         enrichmentStore.analyses.map((analysis, index) => (
           <Flex
@@ -187,12 +207,12 @@ const EnrichmentTool: React.FC = () => {
             backgroundColor="white"
             borderLeft="4px"
             borderLeftColor="transparent"
-            boxShadow="xs"
-            display="flex"
+            boxShadow="sm"
             padding={5}
             tabIndex={0}
             width="100%"
             alignItems="center"
+            justifyContent="center"
             as="section"
             flexGrow={1}
             marginTop={4}
@@ -204,37 +224,67 @@ const EnrichmentTool: React.FC = () => {
               }
             }}
           >
-            <Box width="100%">
-              <Text
-                as="h1"
-                fontSize="xl"
-                fontWeight="semibold"
-                marginBottom={2}
-                textColor="orange.600"
-              >
-                {analysis.title}
-              </Text>
-              <CardRow
-                label="Enrichment type"
-                value={analysis.TEIselectorType}
+            {analysis.isLoading ? (
+              <Spinner
+                display="flex"
+                key={`${analysis.id}-loading`}
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="md"
               />
-              <CardRow
-                label="Tested Enrichment for"
-                value={analysis.TEFcolumn}
+            ) : (
+              <Box width="100%">
+                <Text
+                  as="h1"
+                  fontSize="xl"
+                  fontWeight="semibold"
+                  marginBottom={2}
+                  textColor="orange.600"
+                >
+                  {analysis.options.title}
+                </Text>
+                <CardRow
+                  label="Enrichment type"
+                  value={analysis.options.TEIselectorType}
+                />
+                <CardRow
+                  label="Tested Enrichment for"
+                  value={analysis.options.TEFcolumn}
+                  marginTop="0.4rem"
+                />
+                <CardRow
+                  label="Selector"
+                  value={`"${analysis.options.TEFselector}" : "${analysis.options.TEFselectorValue}"`}
+                />
+                <CardRow
+                  label="Tested Enrichment in"
+                  value={analysis.options.TEIcolumn}
+                  marginTop="0.4rem"
+                />
+                <CardRow
+                  label="Selector"
+                  value={`"${analysis.options.TEIselector}" : "${analysis.options.TEIselectorValue}"`}
+                />
+              </Box>
+            )}
+            {!analysis.isLoading && (
+              <IconButton
+                _hover={{
+                  color: 'orange.600',
+                }}
+                alignSelf="flex-start"
+                aria-label="Delete enrichment analysis"
+                color="gray.600"
+                icon={<FaTrashAlt />}
+                marginLeft={2}
+                size="lg"
+                variant="ghost"
+                onClick={handleDeletePlot(analysis.id)}
+                zIndex="modal"
               />
-              <CardRow
-                label="Selector"
-                value={`"${analysis.TEFselector}" : "${analysis.TEFselectorValue}"`}
-              />
-              <CardRow
-                label="Tested Enrichment in"
-                value={analysis.TEIcolumn}
-              />
-              <CardRow
-                label="Selector"
-                value={`"${analysis.TEIselector}" : "${analysis.TEIselectorValue}"`}
-              />
-            </Box>
+            )}
           </Flex>
         ))
       )}
@@ -288,7 +338,7 @@ const EnrichmentTool: React.FC = () => {
           <ModalHeader color="orange.600">
             {
               enrichmentStore.getAnalysisById(refEnrichmentDetailsId.current)
-                ?.title
+                ?.options.title
             }
           </ModalHeader>
           <ModalCloseButton />
