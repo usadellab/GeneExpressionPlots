@@ -1,5 +1,5 @@
 import { FieldValidator, useField } from 'formik';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   FormControl,
   FormControlProps,
@@ -21,7 +21,7 @@ interface FormikSelectProps extends SelectProps {
   tooltip?: string;
 }
 
-const FormikRadio: React.FC<FormikSelectProps> = ({
+const FormikSelect: React.FC<FormikSelectProps> = ({
   controlProps,
   hideLabel,
   label,
@@ -67,4 +67,4 @@ const FormikRadio: React.FC<FormikSelectProps> = ({
   );
 };
 
-export default FormikRadio;
+export default FormikSelect;
