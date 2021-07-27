@@ -1,15 +1,9 @@
 import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
 import FormikField from '@/components/formik-field';
-import { Box, Button, Flex, Divider, Select } from '@chakra-ui/react';
+import { Box, Button, Flex, Divider } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
-import {
-  EnrichmentAnalysis,
-  TEFSelectorOption,
-  TEISelectorOption,
-  EnrichmentAnalysisOptions,
-  TEISelectorType,
-} from '@/types/enrichment';
+import { TEFSelectorOption, TEISelectorType } from '@/types/enrichment';
 import FormikSelect from '@/components/formik-select';
 import { infoTable } from '@/store/data-store';
 

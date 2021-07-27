@@ -355,7 +355,6 @@ const DataFiles: React.FC = () => {
       // Load Expression Table
       const expressionFileResponse = await fetch('upload_expression_table.tsv');
       const expressionText = await expressionFileResponse.text();
-      console.log({ text: expressionText });
       const expressionTable = readTable(expressionText, {
         fieldSeparator: '\t',
         rowNameColumn: 0,
@@ -373,7 +372,6 @@ const DataFiles: React.FC = () => {
       // Load Info Table
       const geneInfoFileResponse = await fetch('upload_info_table.tsv');
       const geneInfoText = await geneInfoFileResponse.text();
-      console.log({ text: geneInfoText });
       const geneInfoTable = readTable(geneInfoText, {
         fieldSeparator: '\t',
         rowNameColumn: 0,
