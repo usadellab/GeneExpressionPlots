@@ -3,11 +3,8 @@ import {
   EnrichmentAnalysisOptions,
   SelectorFunction,
   TEFSelectorOption,
-  TEISelectorOption,
-  TEISelectorType,
 } from '@/types/enrichment';
 import fishersExactTest from '@/utils/fishers-exact-test';
-import { toArrayOfRows } from './store';
 
 /**
  * Intersects the two argument Sets `a` and `b`.
@@ -224,53 +221,45 @@ export function getSelectorFunction(
   }
 }
 
-interface test_for_enrichment_args {
+interface Test_for_enrichment_args {
   rows: DataRow;
   trait_A_selector: (matrix: (string | number)[][]) => (string | number)[][];
   trait_B_selector: (matrix: (string | number)[][]) => (string | number)[][];
 }
 
-export function test_for_enrichment({
+export async function test_for_enrichment({
   rows,
   trait_A_selector,
   trait_B_selector,
-}: test_for_enrichment_args): number {
-  // console.log({ dataframe });
+}: Test_for_enrichment_args): Promise<number> {
   const rowsAsMatrix = Object.entries(rows).map((r) => r.flat());
-  // let rows = filter_funk ? filter_funk(rowsAsMatrix) : rowsAsMatrix;
-  // console.log({ rowsAsMatrix });
   const universe = Object.keys(rows);
-  // console.log({ universe });
   const trait_A_pos = new Set(getAccessions(trait_A_selector(rowsAsMatrix)));
-  // console.log({ trait_A_pos });
   const trait_A_neg = new Set(universe.filter((x) => !trait_A_pos.has(x)));
-  // console.log({ trait_A_neg });
   const trait_B_pos = new Set(getAccessions(trait_B_selector(rowsAsMatrix)));
-  // console.log({ trait_B_pos });
   const trait_B_neg = new Set(universe.filter((x) => !trait_B_pos.has(x)));
-  // console.log({ trait_B_neg });
   const cont_table = construct_contingency_table(
     trait_A_pos,
     trait_A_neg,
     trait_B_pos,
     trait_B_neg
   );
-  console.log({ cont_table });
-  const fishers_exact_test_result = fishersExactTest(...cont_table);
-  // console.log({ fishers_exact_test_result });
-  // return {
-  //   contingency_table: cont_table,
-  //   fishers_exact_test_result: fishersExactTest(...cont_table),
-  // };
+  const fishers_exact_test_result = await fishersExactTest(
+    cont_table[0],
+    cont_table[1],
+    cont_table[2],
+    cont_table[3]
+  );
+
   return fishers_exact_test_result.rightPValue;
 }
 
-export function runEnrichmentAnalysis(
+export async function runEnrichmentAnalysis(
   rows: DataRow,
   options: EnrichmentAnalysisOptions,
   TEFcolIndex: number,
   TEIcolIndex: number
-): (string | number)[][] {
+): Promise<(string | number)[][]> {
   const data: (string | number)[][] = [];
 
   const TEFselectorFunction = getSelectorFunction(
@@ -286,7 +275,7 @@ export function runEnrichmentAnalysis(
         options.TEIselectorValue,
         TEIcolIndex
       );
-      const pValue = test_for_enrichment({
+      const pValue = await test_for_enrichment({
         rows,
         trait_A_selector: TEFselectorFunction,
         trait_B_selector: TEIselectorFunction,
@@ -301,39 +290,35 @@ export function runEnrichmentAnalysis(
           const TEIcolumnValues = row[TEIcolIndex - 1].split(
             options.TEIselectorValue
           );
-          // console.log(row[TEIcolIndex - 1]);
-          // console.log(options.TEIselectorValue);
-          // console.log({ TEIcolumnValues });
           TEIvalues.push(...TEIcolumnValues);
         });
       } else if (options.TEIselector === 'regexp') {
         const regexp = new RegExp(options.TEIselectorValue, 'g');
-        // console.log({ regexp, val: options.TEIselectorValue });
         Object.values(rows).forEach((row) => {
           const TEIcolumnValues = row[TEIcolIndex - 1].match(regexp);
-          // console.log({ TEIcolumnValues });
           TEIcolumnValues &&
             TEIcolumnValues.length > 1 &&
             TEIvalues.push(...TEIcolumnValues);
         });
       }
-      // console.log({ TEIvalues });
       const uniqueTEIvalues = [...new Set(TEIvalues)];
-      // console.log({ uniqueTEIvalues });
-      uniqueTEIvalues.forEach((value) => {
-        const TEIselectorFunction = getSelectorFunction(
-          'regexp',
-          value,
-          TEIcolIndex
-        );
-        const pValue = test_for_enrichment({
-          rows,
-          trait_A_selector: TEFselectorFunction,
-          trait_B_selector: TEIselectorFunction,
-        });
-        // console.log({ pValue });
-        data.push([value, pValue]);
-      });
+
+      await Promise.all(
+        uniqueTEIvalues.map(async (value) => {
+          const TEIselectorFunction = getSelectorFunction(
+            'regexp',
+            value,
+            TEIcolIndex
+          );
+          const pValue = await test_for_enrichment({
+            rows,
+            trait_A_selector: TEFselectorFunction,
+            trait_B_selector: TEIselectorFunction,
+          });
+          data.push([value, pValue]);
+        })
+      );
+
       break;
     }
     default:

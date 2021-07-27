@@ -13,9 +13,11 @@ export interface EnrichmentAnalysisOptions {
   TEIselectorValue: string;
 }
 
-export interface EnrichmentAnalysis extends EnrichmentAnalysisOptions {
+export interface EnrichmentAnalysis {
   id: string;
-  data: (string | number)[][];
+  data?: (string | number)[][];
+  isLoading: boolean;
+  options: EnrichmentAnalysisOptions;
 }
 
 export type SelectorFunction = (

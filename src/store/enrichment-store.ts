@@ -1,16 +1,13 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import {
   EnrichmentAnalysis,
   EnrichmentAnalysisOptions,
 } from '@/types/enrichment';
 import { nanoid } from 'nanoid';
-import {
-  getSelectorFunction,
-  runEnrichmentAnalysis,
-  test_for_enrichment,
-} from '@/utils/enrichment_analysis';
 import { infoTable } from './data-store';
-import fishersExactTest from '@/utils/fishers-exact-test';
+
+// Workers
+import EnrichmentWorker from '@/workers/enrichment?worker&inline';
 
 class EnrichmentStore {
   analyses: EnrichmentAnalysis[] = [];
@@ -21,8 +18,6 @@ class EnrichmentStore {
 
   getAnalysisById(id: string): EnrichmentAnalysis | undefined {
     return this.analyses.find((analysis) => analysis.id === id);
-    // if (found) return found;
-    // else throw new Error(`No enrichment analysis found with id ${id}`);
   }
 
   /**
@@ -33,8 +28,8 @@ class EnrichmentStore {
   }
 
   /**
-   * Remove a single plot from the store.
-   * @param id plot id
+   * Remove a single anaylsis from the store.
+   * @param id analysis id
    */
   deleteAnalysis(id: string): void {
     const index = this.analyses.findIndex((analysis) => analysis.id === id);
@@ -48,30 +43,40 @@ class EnrichmentStore {
   }
 
   addEnrichmentAnalysis(options: EnrichmentAnalysisOptions): void {
-    // const data: (string | number)[][] = [
-    //   ['P001', 0.05, 0.1],
-    //   ['P002', 0.05, 0.1],
-    //   ['P003', 0.05, 0.1],
-    // ];
+    const id = nanoid();
+    const pendingEnrichment: EnrichmentAnalysis = {
+      id,
+      isLoading: true,
+      options,
+    };
 
-    console.log({ options });
+    const enrichmentIndex = this.analyses.push(pendingEnrichment) - 1;
 
     const TEFcolIndex =
       infoTable.colNames.findIndex((col) => col === options.TEFcolumn) + 1;
-    console.log({ TEFcolIndex });
     const TEIcolIndex =
       infoTable.colNames.findIndex((col) => col === options.TEIcolumn) + 1;
 
-    // const r = fishersExactTest(0, 15, 13, 10000);
-    // console.log({ r });
-    const data = runEnrichmentAnalysis(
-      infoTable.rows,
-      options,
+    const data = {
+      dataRows: toJS(infoTable.rows),
       TEFcolIndex,
-      TEIcolIndex
-    );
-    console.log({ data });
-    // this.analyses.push({ id: nanoid(), data, ...options });
+      TEIcolIndex,
+      options,
+    };
+    const worker = new EnrichmentWorker();
+    worker.postMessage(data);
+
+    worker.onmessage = function (e: MessageEvent<(string | number)[][]>) {
+      const loadedEnrichment: EnrichmentAnalysis = {
+        ...enrichmentStore.analyses[enrichmentIndex],
+        isLoading: false,
+        data: e.data,
+      };
+
+      if (enrichmentStore.analyses[enrichmentIndex].id === id) {
+        enrichmentStore.analyses[enrichmentIndex] = loadedEnrichment;
+      }
+    };
   }
 }
 
