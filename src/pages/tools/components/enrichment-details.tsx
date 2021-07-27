@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td } from '@chakra-ui/react';
 
 import { enrichmentStore } from '@/store/enrichment-store';
 
@@ -20,13 +11,9 @@ const EnrichmentDetails: React.FC<EnrichmentDetails> = ({ id }) => {
   const enrichment = enrichmentStore.getAnalysisById(id);
 
   const data = enrichment ? enrichment.data : [];
-  const TEFcolumn = enrichment ? enrichment.TEFcolumn : '';
 
   return (
     <Table colorScheme="orange" variant="striped">
-      <TableCaption>
-        {`p_Values of over-represented among ${TEFcolumn}`}
-      </TableCaption>
       <Thead>
         <Tr
           sx={{
@@ -41,21 +28,22 @@ const EnrichmentDetails: React.FC<EnrichmentDetails> = ({ id }) => {
         </Tr>
       </Thead>
       <Tbody>
-        {data.map(([testEntry, pValue, adjpValue]) => (
-          <Tr
-            key={`${testEntry}-${pValue}-${adjpValue}`}
-            tabIndex={0}
-            aria-label={`testEntry: ${testEntry}, pValue: ${pValue}, adjpValue: ${adjpValue} `}
-            _focus={{
-              outline: '2px solid',
-              outlineColor: 'orange.600',
-            }}
-          >
-            <Td>{testEntry}</Td>
-            <Td isNumeric>{pValue}</Td>
-            <Td isNumeric>{adjpValue}</Td>
-          </Tr>
-        ))}
+        {data &&
+          data.map(([testEntry, pValue, adjpValue]) => (
+            <Tr
+              key={`${testEntry}-${pValue}-${adjpValue}`}
+              tabIndex={0}
+              aria-label={`testEntry: ${testEntry}, pValue: ${pValue}, adjpValue: ${adjpValue} `}
+              _focus={{
+                outline: '2px solid',
+                outlineColor: 'orange.600',
+              }}
+            >
+              <Td>{testEntry}</Td>
+              <Td isNumeric>{pValue}</Td>
+              <Td isNumeric>{adjpValue}</Td>
+            </Tr>
+          ))}
       </Tbody>
       <Tfoot>
         <Tr>
