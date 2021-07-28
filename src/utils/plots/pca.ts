@@ -1,4 +1,4 @@
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import { PCA } from 'ml-pca';
 
 import { Layout, PlotData } from 'plotly.js';
@@ -10,7 +10,7 @@ const sprintfNum = (num: number): string => {
 };
 
 const pcaData = (
-  rows: DataRow,
+  rows: DataRows,
   srcReplicateNames: string[],
   multiHeaderSep: string,
   plotTitle?: string

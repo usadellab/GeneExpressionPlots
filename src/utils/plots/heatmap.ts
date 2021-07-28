@@ -3,7 +3,7 @@ import getDistanceMatrix from 'ml-distance-matrix';
 import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import { toArrayOfColumns } from '../store';
 
 // Once a worker, data will be accessed via IndexedDb
@@ -232,7 +232,7 @@ export function sortClusteredMatrix(
 }
 
 export function createHeatmapPlot(
-  dataRows: DataRow,
+  dataRows: DataRows,
   srcReplicateNames: string[]
 ): {
   bins: HeatmapBins[];

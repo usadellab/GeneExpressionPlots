@@ -1,9 +1,9 @@
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import pcaData from '@/utils/plots/pca';
 
 onmessage = function (
   e: MessageEvent<{
-    dataRows: DataRow;
+    dataRows: DataRows;
     srcReplicateNames: string[];
     multiHeaderSep: string;
     plotTitle?: string;

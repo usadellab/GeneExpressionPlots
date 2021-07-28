@@ -1,4 +1,4 @@
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import { isNumeric } from '@/utils/validation';
 
 /**
@@ -8,7 +8,7 @@ import { isNumeric } from '@/utils/validation';
  * @returns the two-dimensional array of gene expression counts
  */
 export function toArrayOfRows(
-  rows: DataRow,
+  rows: DataRows,
   filterByColumn: string[] = []
 ): number[][] {
   /**
@@ -71,7 +71,7 @@ export function toArrayOfRows(
  * @return the two dimensional array of column expression counts
  */
 export function toArrayOfColumns(
-  rows: DataRow,
+  rows: DataRows,
   filterByColumn: string[] = []
 ): number[][] {
   const arrayOfRows = toArrayOfRows(rows, filterByColumn);

@@ -1,11 +1,11 @@
 // import { createHeatmapPlot } from '@/utils/plots/heatmap';
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import { EnrichmentAnalysisOptions } from '@/types/enrichment';
 import { runEnrichmentAnalysis } from '@/utils/enrichment_analysis';
 
 onmessage = async function (
   e: MessageEvent<{
-    dataRows: DataRow;
+    dataRows: DataRows;
     options: EnrichmentAnalysisOptions;
     TEFcolIndex: number;
     TEIcolIndex: number;

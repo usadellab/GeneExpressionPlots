@@ -10,10 +10,10 @@ interface DataFrameConfig {
 
 export interface DataTable {
   header: string[];
-  rows: DataRow;
+  rows: DataRows;
 }
 
-export interface DataRow {
+export interface DataRows {
   [key: string]: string[];
 }
 
@@ -31,7 +31,7 @@ interface DataFrameBins {
 
 export class Dataframe {
   header: string[] = [];
-  rows: DataRow = {};
+  rows: DataRows = {};
   config: DataFrameConfig = {
     multiHeader: '',
   };

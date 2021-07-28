@@ -1,4 +1,4 @@
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import {
   EnrichmentAnalysisOptions,
   SelectorFunction,
@@ -225,7 +225,7 @@ export function getSelectorFunction(
 }
 
 interface Test_for_enrichment_args {
-  rows: DataRow;
+  rows: DataRows;
   trait_A_selector: (matrix: (string | number)[][]) => (string | number)[][];
   trait_B_selector: (matrix: (string | number)[][]) => (string | number)[][];
 }
@@ -269,7 +269,7 @@ export async function test_for_enrichment({
 }
 
 export async function runEnrichmentAnalysis(
-  rows: DataRow,
+  rows: DataRows,
   options: EnrichmentAnalysisOptions,
   TEFcolIndex: number,
   TEIcolIndex: number
