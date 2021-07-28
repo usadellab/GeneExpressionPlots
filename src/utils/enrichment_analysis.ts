@@ -14,7 +14,10 @@ import fishersExactTest from '@/utils/fishers-exact-test';
  *
  * @return {Set} The intersection of argument Sets a and b
  */
-export function intersect(a: Set<string>, b: Set<string>): Set<string> {
+export function intersect(
+  a: Set<string | number>,
+  b: Set<string | number>
+): Set<string | number> {
   if (a.constructor.name !== 'Set' || b.constructor.name !== 'Set')
     throw Error(
       `Arguments must be of class 'Set', but a is an ${a.constructor.name} and b is an ${b.constructor.name}`
@@ -47,10 +50,10 @@ export function intersect(a: Set<string>, b: Set<string>): Set<string> {
  * neg B |   2  |   3
  */
 export function construct_contingency_table(
-  trait_A_pos_elems: Set<string>,
-  trait_A_neg_elems: Set<string>,
-  trait_B_pos_elems: Set<string>,
-  trait_B_neg_elems: Set<string>,
+  trait_A_pos_elems: Set<string | number>,
+  trait_A_neg_elems: Set<string | number>,
+  trait_B_pos_elems: Set<string | number>,
+  trait_B_neg_elems: Set<string | number>,
   validate?: boolean
 ): number[] {
   const cont_table = [
