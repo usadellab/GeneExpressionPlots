@@ -108,7 +108,6 @@ const EnrichmentTool: React.FC = () => {
       () => enrichmentStore.addEnrichmentAnalysis(enrichmentInput),
       10
     );
-    // setTimeout(() => enrichmentStore.addAnalysis(data), 10);
   };
 
   /* DETAILS */
@@ -123,10 +122,6 @@ const EnrichmentTool: React.FC = () => {
     refEnrichmentDetailsId.current = id;
     onEnrichmentDetailsOpen();
   };
-
-  // const handleAddbuttonClick = (): void => {
-  //   enrichmentStore.addAnalysis(data);
-  // };
 
   const handleDeletePlot =
     (id: string): React.MouseEventHandler<HTMLButtonElement> =>
@@ -298,7 +293,6 @@ const EnrichmentTool: React.FC = () => {
         variant="solid"
         right="1rem"
         bottom="1rem"
-        // color="orange.400"
         backgroundColor="orange.400"
         borderRadius="full"
         shadow="xl"
