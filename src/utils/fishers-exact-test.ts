@@ -58,12 +58,14 @@ export default async function fishersExactTest(
   let leftPValue = 0;
   let matrix: number[] | undefined = [a, b, c, d];
   do {
-    leftPValue += await calcHypergeometricPMF(
+    const probability = await calcHypergeometricPMF(
       matrix[0],
       matrix[1],
       matrix[2],
       matrix[3]
     );
+    if (probability === 0) break;
+    leftPValue += probability;
     matrix = extremifyMatrix(matrix[0], matrix[1], matrix[2], matrix[3], -1);
   } while (matrix !== undefined);
 
@@ -71,12 +73,14 @@ export default async function fishersExactTest(
   let rightPValue = 0;
   matrix = [a, b, c, d];
   do {
-    rightPValue += await calcHypergeometricPMF(
+    const probability = await calcHypergeometricPMF(
       matrix[0],
       matrix[1],
       matrix[2],
       matrix[3]
     );
+    if (probability === 0) break;
+    rightPValue += probability;
     matrix = extremifyMatrix(matrix[0], matrix[1], matrix[2], matrix[3], 1);
   } while (matrix !== undefined);
 
