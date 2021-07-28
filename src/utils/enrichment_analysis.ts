@@ -231,27 +231,38 @@ export async function test_for_enrichment({
   rows,
   trait_A_selector,
   trait_B_selector,
-}: Test_for_enrichment_args): Promise<number> {
+}: Test_for_enrichment_args): Promise<{
+  contingency_table: number[];
+  fishers_exact_test_result: {
+    leftPValue: number;
+    rightPValue: number;
+    oneTailedPValue: number;
+    twoTailedPValue: number;
+  };
+}> {
   const rowsAsMatrix = Object.entries(rows).map((r) => r.flat());
   const universe = Object.keys(rows);
   const trait_A_pos = new Set(getAccessions(trait_A_selector(rowsAsMatrix)));
   const trait_A_neg = new Set(universe.filter((x) => !trait_A_pos.has(x)));
   const trait_B_pos = new Set(getAccessions(trait_B_selector(rowsAsMatrix)));
   const trait_B_neg = new Set(universe.filter((x) => !trait_B_pos.has(x)));
-  const cont_table = construct_contingency_table(
+  const contingency_table = construct_contingency_table(
     trait_A_pos,
     trait_A_neg,
     trait_B_pos,
     trait_B_neg
   );
   const fishers_exact_test_result = await fishersExactTest(
-    cont_table[0],
-    cont_table[1],
-    cont_table[2],
-    cont_table[3]
+    contingency_table[0],
+    contingency_table[1],
+    contingency_table[2],
+    contingency_table[3]
   );
 
-  return fishers_exact_test_result.rightPValue;
+  return {
+    contingency_table,
+    fishers_exact_test_result,
+  };
 }
 
 export async function runEnrichmentAnalysis(
@@ -275,12 +286,13 @@ export async function runEnrichmentAnalysis(
         options.TEIselectorValue,
         TEIcolIndex
       );
-      const pValue = await test_for_enrichment({
+      const testResult = await test_for_enrichment({
         rows,
         trait_A_selector: TEFselectorFunction,
         trait_B_selector: TEIselectorFunction,
       });
-      data.push([options.TEIselectorValue, pValue]);
+      const pValue = testResult.fishers_exact_test_result.rightPValue;
+      data.push([options.TEIselectorValue, pValue, pValue]);
       break;
     }
     case 'multinomial': {
@@ -310,12 +322,13 @@ export async function runEnrichmentAnalysis(
             value,
             TEIcolIndex
           );
-          const pValue = await test_for_enrichment({
+          const testResult = await test_for_enrichment({
             rows,
             trait_A_selector: TEFselectorFunction,
             trait_B_selector: TEIselectorFunction,
           });
-          data.push([value, pValue]);
+          const pValue = testResult.fishers_exact_test_result.rightPValue;
+          data.push([value, pValue, pValue / uniqueTEIvalues.length]);
         })
       );
 
