@@ -10,7 +10,7 @@ import { isNumeric } from '@/utils/validation';
 export function toArrayOfRows(
   rows: DataRows,
   filterByColumn: string[] = [],
-  filterByRow: string[]
+  filterByRow: string[] = []
 ): number[][] {
   /**
    * Reduce the dataframe header to a subset of its column names.
@@ -78,7 +78,7 @@ export function toArrayOfRows(
 export function toArrayOfColumns(
   rows: DataRows,
   filterByColumn: string[] = [],
-  filterByRow: string[]
+  filterByRow: string[] = []
 ): number[][] {
   const arrayOfRows = toArrayOfRows(rows, filterByColumn, filterByRow);
   const arrayOfCols = arrayOfRows[0].map((_, colIndex) =>
