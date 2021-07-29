@@ -24,6 +24,9 @@ import {
   VisuallyHidden,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
+import FormikRadio from '@/components/formik-radio';
+import FormikReplicate from '@/components/formik-replicate';
+import FormikAccession from '@/components/formik-accession';
 
 export type HeatmapFormSubmitHandler = (
   values: HeatmapFormAttributes,
@@ -36,23 +39,32 @@ export interface HeatmapFormProps {
   onSubmit: HeatmapFormSubmitHandler;
 }
 
-interface HeatmapFormAttributes {
+export interface HeatmapFormAttributes {
+  accessions: string[];
+  clusterBy: 'replicates' | 'genes';
   replicates: string[];
-  plotTitle: string;
+  plotTitle?: string;
 }
 
 enum HeatmapFormErrors {
   EMPTY_REPLICATE = 'A replicate field cannot be empty',
+  EMPTY_ACCESSION = 'A gene accession field cannot be empty',
   MIN_OPTIONAL_REPLICATES = 'At least two replicates must be selected',
+  MIN_OPTIONAL_ACCESSIONS = 'At least two genes must be selected',
 }
 
 const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
   const validateForm = (
     values: HeatmapFormAttributes
   ): FormikErrors<HeatmapFormAttributes> | void => {
-    if (values.replicates.length === 1) {
+    if (values.replicates.length === 1 && values.clusterBy === 'replicates') {
       return {
         replicates: [HeatmapFormErrors.MIN_OPTIONAL_REPLICATES],
+      };
+    }
+    if (values.accessions.length === 1 && values.clusterBy === 'genes') {
+      return {
+        accessions: [HeatmapFormErrors.MIN_OPTIONAL_ACCESSIONS],
       };
     }
   };
@@ -61,9 +73,15 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
     if (!value) return HeatmapFormErrors.EMPTY_REPLICATE;
   };
 
+  const validateAccession: FieldValidator = (value: string) => {
+    if (!value) return HeatmapFormErrors.EMPTY_ACCESSION;
+  };
+
   return (
     <Formik<HeatmapFormAttributes>
       initialValues={{
+        accessions: [],
+        clusterBy: 'replicates',
         replicates: [],
         plotTitle: '',
       }}
@@ -100,14 +118,27 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
               name="plotTitle"
             />
 
+            <FormikRadio
+              controlProps={{
+                marginTop: '1rem',
+              }}
+              label="Cluster By"
+              name="clusterBy"
+              options={[
+                { label: 'Replicates', value: 'replicates' },
+                { label: 'Genes', value: 'genes' },
+              ]}
+              direction="row"
+            />
+
             <FieldArray name="replicates">
               {(helpers) => (
                 <Box as="fieldset">
                   <VisuallyHidden as="legend">Replicates</VisuallyHidden>
 
                   {formProps.values.replicates.length > 0 &&
-                    formProps.values.replicates.map((accession, index) => (
-                      <FormikField
+                    formProps.values.replicates.map((replicate, index) => (
+                      <FormikReplicate
                         controlProps={{
                           as: 'p',
                           marginTop: '1rem',
@@ -143,7 +174,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                               _groupHover={{
                                 color: 'red.600',
                               }}
-                              aria-label={`Remove ${accession}`}
+                              aria-label={`Remove ${replicate}`}
                               color="gray.600"
                               display="flex"
                               justifyContent="center"
@@ -193,7 +224,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                         >
                           <Icon as={FaPlus} />
                         </Box>
-                      </FormikField>
+                      </FormikReplicate>
                     ))}
 
                   {/* ADD NEW BUTTON */}
@@ -221,6 +252,133 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                     {formProps.values.replicates.length === 0
                       ? 'Optional: Select Replicates'
                       : 'Add Another Replicate'}
+                  </Button>
+                </Box>
+              )}
+            </FieldArray>
+
+            <FieldArray name="accessions">
+              {(helpers) => (
+                <Box as="fieldset">
+                  <VisuallyHidden as="legend">Genes</VisuallyHidden>
+
+                  {formProps.values.accessions &&
+                    formProps.values.accessions.length > 0 &&
+                    formProps.values.accessions.map((accession, index) => (
+                      <FormikAccession
+                        controlProps={{
+                          as: 'p',
+                          marginTop: '1rem',
+                        }}
+                        groupProps={{
+                          _focusWithin: {
+                            '& > button': {
+                              display: 'inline-flex',
+                            },
+                          },
+                        }}
+                        isRequired
+                        key={index}
+                        label={`Gene Accession ${index + 1}`}
+                        name={`accessions.${index}`}
+                        rightChildren={
+                          // REMOVE BUTTON
+                          <InputRightAddon
+                            _focusWithin={{
+                              backgroundColor: 'white',
+                            }}
+                            _hover={{
+                              backgroundColor: 'white',
+                            }}
+                            as="span"
+                            padding={0}
+                          >
+                            <IconButton
+                              _focus={{
+                                color: 'red.600',
+                                outline: 'none',
+                              }}
+                              _groupHover={{
+                                color: 'red.600',
+                              }}
+                              aria-label={`Remove ${accession}`}
+                              color="gray.600"
+                              display="flex"
+                              justifyContent="center"
+                              icon={<FaTrash />}
+                              onClick={() => helpers.remove(index)}
+                              size="md"
+                              variant="unstyled"
+                            />
+                          </InputRightAddon>
+                        }
+                        validate={validateAccession}
+                      >
+                        {/* INSERT BUTTON */}
+                        <Box
+                          display="none"
+                          color="gray.500"
+                          _groupFocus={{
+                            display: 'inline-flex',
+                          }}
+                          _groupHover={{
+                            display: 'inline-flex',
+                          }}
+                          _focus={{
+                            backgroundColor: 'orange.600',
+                            color: 'white',
+                            outline: 'none',
+                          }}
+                          _hover={{
+                            backgroundColor: 'orange.600',
+                            color: 'white',
+                          }}
+                          alignItems="center"
+                          as="button"
+                          aria-label={`Insert new below`}
+                          backgroundColor="white"
+                          height="1rem"
+                          justifyContent="center"
+                          left="43%"
+                          padding=".75rem"
+                          position="absolute"
+                          rounded="full"
+                          top="28px"
+                          type="button"
+                          width="1rem"
+                          zIndex="popover"
+                          onClick={() => helpers.insert(index + 1, '')}
+                        >
+                          <Icon as={FaPlus} />
+                        </Box>
+                      </FormikAccession>
+                    ))}
+
+                  {/* ADD NEW BUTTON */}
+                  <Button
+                    _focus={{
+                      outline: 'none',
+                      backgroundColor: 'orange.100',
+                    }}
+                    _hover={{
+                      backgroundColor: 'orange.100',
+                    }}
+                    colorScheme="orange"
+                    marginTop="1rem"
+                    type="button"
+                    onClick={() => {
+                      if (formProps.values.accessions.length === 0) {
+                        helpers.push('');
+                        helpers.push('');
+                      } else {
+                        helpers.push('');
+                      }
+                    }}
+                    variant="ghost"
+                  >
+                    {formProps.values.accessions.length === 0
+                      ? 'Optional: Select Genes'
+                      : 'Add Another Genes'}
                   </Button>
                 </Box>
               )}

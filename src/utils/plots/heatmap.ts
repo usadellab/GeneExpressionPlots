@@ -4,7 +4,7 @@ import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
 import { DataRows } from '@/store/dataframe';
-import { toArrayOfColumns } from '../store';
+import { toArrayOfColumns, toArrayOfRows } from '../store';
 
 // Once a worker, data will be accessed via IndexedDb
 
@@ -233,26 +233,31 @@ export function sortClusteredMatrix(
 
 export function createHeatmapPlot(
   dataRows: DataRows,
-  srcReplicateNames: string[]
+  srcReplicateNames: string[],
+  srcAccessionIds: string[],
+  transpose = false
 ): {
   bins: HeatmapBins[];
   tree: ClusterTree;
 } {
   // Prepare the data from the store
-  const replicateCounts: number[][] = toArrayOfColumns(
-    dataRows,
-    srcReplicateNames
-  );
+  // const geneNames = Object.keys(dataRows).slice(0, 3);
+
+  const counts: number[][] = transpose
+    ? toArrayOfRows(dataRows, srcReplicateNames, srcAccessionIds)
+    : toArrayOfColumns(dataRows, srcReplicateNames, srcAccessionIds);
+
+  const leafNames = transpose ? srcAccessionIds : srcReplicateNames;
 
   // Compute the euclidean distance matrix between each gene
-  const distanceMatrix = computeGeneXDistance(replicateCounts, 'euclidean');
+  const distanceMatrix = computeGeneXDistance(counts, 'euclidean');
 
   // Cluster the gene matrix
   const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
-  const tree = clusterToTree(cluster, srcReplicateNames);
+  const tree = clusterToTree(cluster, leafNames);
 
   // Sort the matrix according to the cluster tree
-  const sortedCols = getTreeLeaves(cluster, srcReplicateNames);
+  const sortedCols = getTreeLeaves(cluster, leafNames);
   const sortedMatrix = sortClusteredMatrix(
     distanceMatrix,
     Object.values(sortedCols)
