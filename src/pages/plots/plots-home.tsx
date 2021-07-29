@@ -246,7 +246,7 @@ const PlotsHome: React.FC = () => {
         />
 
         <SidebarButton
-          text="Heatmap"
+          text="Cluster Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
           disabled={!dataAvailable}
