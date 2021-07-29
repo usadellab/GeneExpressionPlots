@@ -9,7 +9,8 @@ import { isNumeric } from '@/utils/validation';
  */
 export function toArrayOfRows(
   rows: DataRows,
-  filterByColumn: string[] = []
+  filterByColumn: string[] = [],
+  filterByRow: string[] = []
 ): number[][] {
   /**
    * Reduce the dataframe header to a subset of its column names.
@@ -59,7 +60,11 @@ export function toArrayOfRows(
     return counts.map(castToNumber);
   };
 
-  const array2d = Object.entries(rows).map(toCountsArray);
+  const filteredRowEntries: [string, string[]][] = filterByRow.map((key) => [
+    key,
+    rows[key],
+  ]);
+  const array2d = filteredRowEntries.map(toCountsArray);
 
   return array2d;
 }
@@ -72,9 +77,10 @@ export function toArrayOfRows(
  */
 export function toArrayOfColumns(
   rows: DataRows,
-  filterByColumn: string[] = []
+  filterByColumn: string[] = [],
+  filterByRow: string[] = []
 ): number[][] {
-  const arrayOfRows = toArrayOfRows(rows, filterByColumn);
+  const arrayOfRows = toArrayOfRows(rows, filterByColumn, filterByRow);
   const arrayOfCols = arrayOfRows[0].map((_, colIndex) =>
     arrayOfRows.map((row) => row[colIndex])
   );

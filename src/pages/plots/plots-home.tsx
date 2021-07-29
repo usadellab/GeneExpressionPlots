@@ -151,11 +151,20 @@ const PlotsHome: React.FC = () => {
     onClose: onHeatmapFormClose,
   } = useDisclosure();
 
-  const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
+  const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (
+    { plotTitle, accessions, clusterBy, replicates },
+    actions
+  ) => {
     actions.setSubmitting(false);
     onHeatmapFormClose();
     setTimeout(
-      () => plotStore.addHeatmapPlot(values.plotTitle, values.replicates),
+      () =>
+        plotStore.addHeatmapPlot({
+          plotTitle,
+          accessions,
+          clusterBy,
+          replicates,
+        }),
       10
     );
   };
@@ -237,7 +246,7 @@ const PlotsHome: React.FC = () => {
         />
 
         <SidebarButton
-          text="Heatmap"
+          text="Cluster Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
           disabled={!dataAvailable}

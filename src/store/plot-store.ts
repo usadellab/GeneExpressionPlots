@@ -9,6 +9,7 @@ import {
   GxpImage,
   HeatmapBins,
   ClusterTree,
+  CreateHeatmapArgs,
 } from '@/types/plots';
 import { dataTable } from '@/store/data-store';
 
@@ -23,6 +24,7 @@ import singleGeneBarData from '@/utils/plots/single-gene-bar';
 import stackedLinesData from '@/utils/plots/stacked-lines';
 // import pcaData from '@/utils/plots/pca';
 import { Layout, PlotData } from 'plotly.js';
+import { HeatmapFormAttributes } from '@/pages/plots/components/heatmap-form';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -73,8 +75,15 @@ class PlotStore {
    * Add a new gene expression heatmap plot to the store.
    * @param replicates gene accessions to visualize
    */
-  addHeatmapPlot(plotTitle?: string, replicates?: string[]): void {
+  addHeatmapPlot({
+    plotTitle,
+    accessions,
+    replicates,
+    clusterBy,
+  }: HeatmapFormAttributes): void {
     const id = nanoid();
+    const transpose = clusterBy === 'replicates' ? false : true;
+
     const pendingPlot: GxpPlot = {
       id,
       type: 'heatmap',
@@ -83,9 +92,11 @@ class PlotStore {
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
     const worker = new HeatMapWorker();
-    const data = {
+    const data: CreateHeatmapArgs = {
       dataRows: toJS(dataTable.rows),
       srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
+      srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
+      transpose: transpose,
     };
     worker.postMessage(data);
     worker.onmessage = function (

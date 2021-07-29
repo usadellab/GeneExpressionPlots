@@ -1,3 +1,4 @@
+import { DataRows } from '@/store/dataframe';
 import { Layout, PlotData } from 'plotly.js';
 
 export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image';
@@ -43,6 +44,13 @@ export interface HeatmapBins {
 export interface HeatmapBin {
   bin: string;
   count: number;
+}
+
+export interface CreateHeatmapArgs {
+  dataRows: DataRows;
+  srcReplicateNames: string[];
+  srcAccessionIds: string[];
+  transpose: boolean;
 }
 
 //#endregion
