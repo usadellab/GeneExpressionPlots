@@ -151,22 +151,10 @@ const PlotsHome: React.FC = () => {
     onClose: onHeatmapFormClose,
   } = useDisclosure();
 
-  const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (
-    { plotTitle, accessions, clusterBy, replicates },
-    actions
-  ) => {
+  const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onHeatmapFormClose();
-    setTimeout(
-      () =>
-        plotStore.addHeatmapPlot({
-          plotTitle,
-          accessions,
-          clusterBy,
-          replicates,
-        }),
-      10
-    );
+    setTimeout(() => plotStore.addHeatmapPlot(values), 10);
   };
 
   /* PCA PLOT */
@@ -182,7 +170,7 @@ const PlotsHome: React.FC = () => {
   const onPCAFormSubmit: PCAFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onPCAFormClose();
-    setTimeout(() => plotStore.addPCAPlot(values.plotTitle), 10);
+    setTimeout(() => plotStore.addPCAPlot(values), 10);
   };
 
   /* IMAGE PLOT */
