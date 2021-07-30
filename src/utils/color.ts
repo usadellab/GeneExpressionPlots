@@ -1,7 +1,7 @@
 import iwanthue from 'iwanthue';
 
 export function setToColors(set: Set<string>): Record<string, string> {
-  const colors = iwanthue(set.size);
+  const colors = getColors(set.size);
   const values = Array.from(set.values());
   const valueColorZip = values.map((value, index) => [value, colors[index]]);
   const colorMap: Record<string, string> = Object.fromEntries(valueColorZip);
@@ -36,5 +36,15 @@ export function getSubheaderColors(
   // Assign subheader colors
   const colors = subHeaders.map((head) => colorsMap[head]);
 
+  return colors;
+}
+
+/**
+ * Get an array of n colors
+ * @param n number of colors
+ * @returns array of n distinct colors
+ */
+export function getColors(n: number): string[] {
+  const colors = n === 1 ? [iwanthue(2)[0]] : iwanthue(n);
   return colors;
 }
