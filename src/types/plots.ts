@@ -76,6 +76,14 @@ export interface GxpPCA extends GxpPlot {
   layout: Partial<Layout>;
 }
 
+export interface CreatePCAargs {
+  dataRows: DataRows;
+  srcReplicateNames: string[];
+  srcAccessionIds: string[];
+  transpose: boolean;
+  plotTitle?: string;
+  multiHeaderSep: string;
+}
 //#endregion
 
 //#region Images

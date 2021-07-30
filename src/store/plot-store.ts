@@ -10,6 +10,7 @@ import {
   HeatmapBins,
   ClusterTree,
   CreateHeatmapArgs,
+  CreatePCAargs,
 } from '@/types/plots';
 import { dataTable } from '@/store/data-store';
 
@@ -25,6 +26,7 @@ import stackedLinesData from '@/utils/plots/stacked-lines';
 // import pcaData from '@/utils/plots/pca';
 import { Layout, PlotData } from 'plotly.js';
 import { HeatmapFormAttributes } from '@/pages/plots/components/heatmap-form';
+import { PCAFormAttributes } from '@/pages/plots/components/pca-form';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -131,8 +133,15 @@ class PlotStore {
     this.plots.push(image);
   }
 
-  addPCAPlot(plotTitle?: string): void {
+  addPCAPlot({
+    plotTitle,
+    accessions,
+    replicates,
+    calculateFor,
+  }: PCAFormAttributes): void {
     const id = nanoid();
+    const transpose = calculateFor === 'replicates' ? false : true;
+
     const pendingPlot: GxpPlot = {
       id,
       type: 'pca',
@@ -141,12 +150,15 @@ class PlotStore {
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
     const worker = new PCAWorker();
-    const data = {
+    const data: CreatePCAargs = {
       dataRows: toJS(dataTable.rows),
-      srcReplicateNames: dataTable.colNames,
+      srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
+      srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
       multiHeaderSep: dataTable.config.multiHeader,
-      plotTitle,
+      transpose: transpose,
+      plotTitle: plotTitle,
     };
+
     worker.postMessage(data);
     worker.onmessage = function (
       e: MessageEvent<{
