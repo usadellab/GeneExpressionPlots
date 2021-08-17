@@ -264,7 +264,7 @@ const DataFiles: React.FC = () => {
 
           await Promise.all(
             analyses.map(async (analysis) => {
-              const { raw_data, ...options } = analysis;
+              const { rawData: raw_data, ...options } = analysis;
               const enrichmentDataFilePtr = zipImport.files[raw_data];
               const enrichmentDataFileSrc = await enrichmentDataFilePtr.async(
                 'string'
@@ -283,6 +283,19 @@ const DataFiles: React.FC = () => {
             })
           );
         }
+
+        // unpack and load plot files
+        zip.folder('plots')?.forEach(async (relativePath, file) => {
+          console.log({ relativePath, file });
+          const plotFilePtr = zipImport.files[file.name];
+          const plotFileSrc = await plotFilePtr.async('string');
+          const plotData = JSON.parse(plotFileSrc);
+          plotStore.addRawPlot({
+            id: nanoid(),
+            isLoading: false,
+            ...plotData,
+          });
+        });
 
         actions.setSubmitting(false);
         onGXPImportClose();
@@ -328,7 +341,9 @@ const DataFiles: React.FC = () => {
         2
       );
 
-      const enrichmentSrc = JSON.stringify(enrichmentStore.toJSON(), null, 2);
+      const enrichmentSrc = values.exportEnrichments
+        ? JSON.stringify(enrichmentStore.metadataToJSON(), null, 2)
+        : undefined;
 
       // Package as a zip file
       const zip = new JSZip();
@@ -336,14 +351,32 @@ const DataFiles: React.FC = () => {
       zip.file('expression_table.txt', geneExpressionSrc);
 
       // enrichment tables
-      if (enrichmentSrc) {
+      if (values.exportEnrichments && enrichmentSrc) {
         zip.file('enrichment_analyses.json', enrichmentSrc);
+        zip.folder('enrichment_analyses');
         enrichmentStore.analyses.forEach((analysis) => {
           const data = enrichmentStore.dataToCSV(
             analysis,
             unescapeDelimiters(values.columnSep)
           );
-          zip.file(`${analysis.options.title.replace(/\s+/g, '_')}.txt`, data);
+          zip.file(
+            `enrichment_analyses/${analysis.options.title.replace(
+              /\s+/g,
+              '_'
+            )}.txt`,
+            data
+          );
+        });
+      }
+
+      if (values.exportPlots) {
+        zip.folder('plots');
+        plotStore.plots.forEach((plot) => {
+          const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
+          console.log({ data });
+          if (data) {
+            zip.file(`plots/${plot.id}_${plot.type}.json`, data);
+          }
         });
       }
 
