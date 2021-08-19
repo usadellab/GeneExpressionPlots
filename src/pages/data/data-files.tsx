@@ -341,32 +341,33 @@ const DataFiles: React.FC = () => {
         2
       );
 
-      const enrichmentSrc = values.exportEnrichments
-        ? JSON.stringify(enrichmentStore.metadataToJSON(), null, 2)
-        : undefined;
-
       // Package as a zip file
       const zip = new JSZip();
       zip.file('GXP_settings.json', gxpSettingsSrc);
       zip.file('expression_table.txt', geneExpressionSrc);
 
       // enrichment tables
-      if (values.exportEnrichments && enrichmentSrc) {
-        zip.file('enrichment_analyses.json', enrichmentSrc);
-        zip.folder('enrichment_analyses');
-        enrichmentStore.analyses.forEach((analysis) => {
-          const data = enrichmentStore.dataToCSV(
-            analysis,
-            unescapeDelimiters(values.columnSep)
-          );
-          zip.file(
-            `enrichment_analyses/${analysis.options.title.replace(
-              /\s+/g,
-              '_'
-            )}.txt`,
-            data
-          );
-        });
+      if (values.exportEnrichments) {
+        const enrichmentSrc = values.exportEnrichments
+          ? JSON.stringify(enrichmentStore.metadataToJSON(), null, 2)
+          : undefined;
+        if (enrichmentSrc) {
+          zip.file('enrichment_analyses.json', enrichmentSrc);
+          zip.folder('enrichment_analyses');
+          enrichmentStore.analyses.forEach((analysis) => {
+            const data = enrichmentStore.dataToCSV(
+              analysis,
+              unescapeDelimiters(values.columnSep)
+            );
+            zip.file(
+              `enrichment_analyses/${analysis.options.title.replace(
+                /\s+/g,
+                '_'
+              )}.txt`,
+              data
+            );
+          });
+        }
       }
 
       if (values.exportPlots) {
