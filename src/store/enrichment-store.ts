@@ -43,13 +43,16 @@ class EnrichmentStore {
     this.analyses.push(analysis);
   }
 
-  toJSON(): EnrichmentExport[] | undefined {
+  metadataToJSON(): EnrichmentExport[] | undefined {
     return this.analyses.length > 0
       ? this.analyses.map((analysis) => {
           const { options } = analysis;
           return {
             ...options,
-            raw_data: `${options.title.replace(/\s+/g, '_')}.txt`,
+            rawData: `enrichment_analyses/${options.title.replace(
+              /\s+/g,
+              '_'
+            )}.txt`,
           };
         })
       : undefined;

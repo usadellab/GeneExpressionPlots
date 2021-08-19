@@ -74,6 +74,22 @@ class PlotStore {
   }
 
   /**
+   * Export plotData to Javascript object
+   */
+  toJSObject(id: string): Partial<GxpPlot> | undefined {
+    const plot = this.plots.find((plot) => plot.id === id);
+    if (plot) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, isLoading, ...plotData } = plot;
+      return plotData;
+    }
+  }
+
+  addRawPlot(plot: GxpPlot): void {
+    this.plots.push(plot);
+  }
+
+  /**
    * Add a new gene expression heatmap plot to the store.
    * @param replicates gene accessions to visualize
    */

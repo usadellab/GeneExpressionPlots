@@ -21,7 +21,7 @@ export interface EnrichmentAnalysis {
 }
 
 export interface EnrichmentExport extends EnrichmentAnalysisOptions {
-  raw_data: string;
+  rawData: string;
 }
 
 export type SelectorFunction = (
