@@ -331,7 +331,12 @@ export async function runEnrichmentAnalysis(
             trait_B_selector: TEIselectorFunction,
           });
           const pValue = testResult.fishers_exact_test_result.rightPValue;
-          data.push([value, pValue, pValue / uniqueTEIvalues.length]);
+          const adjustedPValue = pValue / uniqueTEIvalues.length;
+          const roundedPValue =
+            Math.round((pValue + Number.EPSILON) * 10000) / 10000;
+          const roundedAdjustedPValue =
+            Math.round((adjustedPValue + Number.EPSILON) * 10000) / 10000;
+          data.push([value, roundedPValue, roundedAdjustedPValue]);
         })
       );
 
