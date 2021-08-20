@@ -54,3 +54,19 @@ export function readTable(
     rows,
   };
 }
+
+export function parseEnrichmentData(
+  table: string,
+  fieldSeparator: string
+): (string | number)[][] {
+  const lines = table.split(/\r?\n|\r/);
+  // remove header line
+  lines.splice(0, 1)[0];
+
+  return lines.reduce<(string | number)[][]>((acc, line: string) => {
+    if (!line) return acc;
+    const cellValues = line.split(fieldSeparator);
+    acc.push(cellValues);
+    return acc;
+  }, []);
+}

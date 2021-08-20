@@ -3,7 +3,7 @@ import {
   intersect,
   construct_contingency_table,
   test_for_enrichment,
-} from '@/utils/enrichment_analyses';
+} from '@/utils/enrichment_analysis';
 
 describe('Enrichment analysis', function () {
   it('intersect generates the set-intersection of two arrays', () => {
@@ -46,7 +46,7 @@ describe('Enrichment analysis', function () {
     );
   });
 
-  it('enrichment is found in test data', () => {
+  it('enrichment is found in test data', async () => {
     const mockTable = {
       header: ['Gene-ID', 'trait-A', 'trait-B'],
       rows: {
@@ -64,8 +64,8 @@ describe('Enrichment analysis', function () {
     const d = new Dataframe();
     d.loadFromObject(mockTable);
 
-    const filter_funk = (rows: string[][]): string[][] | undefined =>
-      rows.filter((r) => !r.includes('NA'));
+    // const filter_funk = (rows: string[][]): string[][] | undefined =>
+    //   rows.filter((r) => !r.includes('NA'));
 
     const trait_A_selector = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => r[1] === 'a-pos');
@@ -73,12 +73,10 @@ describe('Enrichment analysis', function () {
     const trait_B_selector = (rows: string[][]): string[][] | undefined =>
       rows.filter((r) => r[2] === 'b-pos');
 
-    const fish_exact_test_rslt = test_for_enrichment({
-      dataframe: d,
-      filter_funk,
+    const fish_exact_test_rslt = await test_for_enrichment({
+      rows: d.rows,
       trait_A_selector,
       trait_B_selector,
-      element_col: 0,
     });
 
     expect(fish_exact_test_rslt.contingency_table).to.deep.equal([0, 2, 2, 1]);

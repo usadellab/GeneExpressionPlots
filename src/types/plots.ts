@@ -1,3 +1,4 @@
+import { DataRows } from '@/store/dataframe';
 import { Layout, PlotData } from 'plotly.js';
 
 export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image';
@@ -45,6 +46,13 @@ export interface HeatmapBin {
   count: number;
 }
 
+export interface CreateHeatmapArgs {
+  dataRows: DataRows;
+  srcReplicateNames: string[];
+  srcAccessionIds: string[];
+  transpose: boolean;
+}
+
 //#endregion
 
 //#region Plotly Plots
@@ -68,6 +76,14 @@ export interface GxpPCA extends GxpPlot {
   layout: Partial<Layout>;
 }
 
+export interface CreatePCAargs {
+  dataRows: DataRows;
+  srcReplicateNames: string[];
+  srcAccessionIds: string[];
+  transpose: boolean;
+  plotTitle?: string;
+  multiHeaderSep: string;
+}
 //#endregion
 
 //#region Images

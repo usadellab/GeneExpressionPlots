@@ -10,6 +10,11 @@ import {
   FaTrashAlt,
 } from 'react-icons/fa';
 import {
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  AlertTitle,
+  Button,
   Flex,
   useDisclosure,
   Wrap,
@@ -37,8 +42,11 @@ import { settings } from '@/store/settings';
 
 import { GxpImage } from '@/types/plots';
 import { fetchResource } from '@/utils/fetch';
-import { readTable } from '@/utils/parser';
+import { parseEnrichmentData, readTable } from '@/utils/parser';
 import { unescapeDelimiters } from '@/utils/string';
+import { enrichmentStore } from '@/store/enrichment-store';
+import { EnrichmentExport } from '@/types/enrichment';
+import { nanoid } from 'nanoid';
 
 const DataFiles: React.FC = () => {
   const replCardWidth = useBreakpointValue({
@@ -248,6 +256,47 @@ const DataFiles: React.FC = () => {
           plotStore.addImagePlot(imgUrl, 'Database Image');
         }
 
+        // Unpack and load the enrichment analysis files, if exists
+        const enrichmentPtr = zipImport.files['enrichment_analyses.json'];
+        if (enrichmentPtr) {
+          const enrichmentSrc = await enrichmentPtr.async('string');
+          const analyses: EnrichmentExport[] = JSON.parse(enrichmentSrc);
+
+          await Promise.all(
+            analyses.map(async (analysis) => {
+              const { rawData: raw_data, ...options } = analysis;
+              const enrichmentDataFilePtr = zipImport.files[raw_data];
+              const enrichmentDataFileSrc = await enrichmentDataFilePtr.async(
+                'string'
+              );
+              const enrichmentData = parseEnrichmentData(
+                enrichmentDataFileSrc,
+                settings.gxpSettings.expression_field_sep
+              );
+
+              enrichmentStore.addRawEnrichmentAnalysis({
+                id: nanoid(),
+                isLoading: false,
+                options: options,
+                data: enrichmentData,
+              });
+            })
+          );
+        }
+
+        // unpack and load plot files
+        zip.folder('plots')?.forEach(async (relativePath, file) => {
+          console.log({ relativePath, file });
+          const plotFilePtr = zipImport.files[file.name];
+          const plotFileSrc = await plotFilePtr.async('string');
+          const plotData = JSON.parse(plotFileSrc);
+          plotStore.addRawPlot({
+            id: nanoid(),
+            isLoading: false,
+            ...plotData,
+          });
+        });
+
         actions.setSubmitting(false);
         onGXPImportClose();
       } catch (error) {
@@ -296,6 +345,42 @@ const DataFiles: React.FC = () => {
       const zip = new JSZip();
       zip.file('GXP_settings.json', gxpSettingsSrc);
       zip.file('expression_table.txt', geneExpressionSrc);
+
+      // enrichment tables
+      if (values.exportEnrichments) {
+        const enrichmentSrc = values.exportEnrichments
+          ? JSON.stringify(enrichmentStore.metadataToJSON(), null, 2)
+          : undefined;
+        if (enrichmentSrc) {
+          zip.file('enrichment_analyses.json', enrichmentSrc);
+          zip.folder('enrichment_analyses');
+          enrichmentStore.analyses.forEach((analysis) => {
+            const data = enrichmentStore.dataToCSV(
+              analysis,
+              unescapeDelimiters(values.columnSep)
+            );
+            zip.file(
+              `enrichment_analyses/${analysis.options.title.replace(
+                /\s+/g,
+                '_'
+              )}.txt`,
+              data
+            );
+          });
+        }
+      }
+
+      if (values.exportPlots) {
+        zip.folder('plots');
+        plotStore.plots.forEach((plot) => {
+          const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
+          console.log({ data });
+          if (data) {
+            zip.file(`plots/${plot.id}_${plot.type}.json`, data);
+          }
+        });
+      }
+
       if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
       if (imagePlot) {
         const imageSrc = await fetchResource(
@@ -332,6 +417,50 @@ const DataFiles: React.FC = () => {
       setSelectedReplicates([]);
     } else {
       dataTable.clearData();
+      infoTable.clearData();
+    }
+  };
+
+  /* LOAD EXAMPLE DATA */
+  const handleLoadExampleClick = async (): Promise<void> => {
+    plotStore.loadCountUnit('raw');
+
+    settings.loadgxpSettings({
+      unit: 'raw',
+      expression_field_sep: '\t',
+      expression_header_sep: '*',
+      info_field_sep: '\t',
+    });
+    try {
+      // Load Expression Table
+      const expressionFileResponse = await fetch('upload_expression_table.tsv');
+      const expressionText = await expressionFileResponse.text();
+      const expressionTable = readTable(expressionText, {
+        fieldSeparator: '\t',
+        rowNameColumn: 0,
+      });
+
+      // Load the store from the parsed table
+      dataTable.loadFromObject(expressionTable, {
+        multiHeader: '*',
+      });
+
+      // set default group and sample order in the settings
+      settings.setGroupOrder(dataTable.groupsAsArray);
+      settings.setSampleOrder(dataTable.samplesAsArray);
+
+      // Load Info Table
+      const geneInfoFileResponse = await fetch('upload_info_table.tsv');
+      const geneInfoText = await geneInfoFileResponse.text();
+      const geneInfoTable = readTable(geneInfoText, {
+        fieldSeparator: '\t',
+        rowNameColumn: 0,
+      });
+
+      // Load the store from the parsed table
+      infoTable.loadFromObject(geneInfoTable);
+    } catch (error) {
+      console.error('There was an error while loading the examle data');
     }
   };
 
@@ -388,6 +517,40 @@ const DataFiles: React.FC = () => {
         padding="2rem"
         width="100%"
       >
+        {!dataAvailable && (
+          <Alert
+            alignItems="center"
+            flexDirection="column"
+            minHeight="20rem"
+            justifyContent="center"
+            marginLeft={3}
+            marginTop={3}
+            status="info"
+            textAlign="center"
+            variant="subtle"
+            colorScheme="orange"
+          >
+            <AlertIcon boxSize="3rem" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              No data has been loaded
+            </AlertTitle>
+            <AlertDescription maxWidth="xl">
+              It seems no data has been loaded into the application yet.
+            </AlertDescription>
+            <AlertDescription maxWidth="xl" marginTop={3}>
+              Load your data via the Sidebar or play around with some examples
+              using the button below.
+            </AlertDescription>
+            <Button
+              colorScheme="orange"
+              variant="solid"
+              marginTop={3}
+              onClick={handleLoadExampleClick}
+            >
+              Load examples
+            </Button>
+          </Alert>
+        )}
         <Wrap
           role="region"
           aria-label="Loaded replicates"

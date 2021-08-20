@@ -1,20 +1,22 @@
-import { DataRow } from '@/store/dataframe';
-import pcaData from '@/utils/plots/pca';
+import { CreatePCAargs } from '@/types/plots';
+import { createPCAplot } from '@/utils/plots/pca';
 
-onmessage = function (
-  e: MessageEvent<{
-    dataRows: DataRow;
-    srcReplicateNames: string[];
-    multiHeaderSep: string;
-    plotTitle?: string;
-  }>
-) {
-  const { dataRows, srcReplicateNames, multiHeaderSep, plotTitle } = e.data;
-  const workerResult = pcaData(
+onmessage = function (e: MessageEvent<CreatePCAargs>) {
+  const {
     dataRows,
     srcReplicateNames,
+    srcAccessionIds,
     multiHeaderSep,
-    plotTitle
+    transpose,
+    plotTitle,
+  } = e.data;
+  const workerResult = createPCAplot(
+    dataRows,
+    srcReplicateNames,
+    srcAccessionIds,
+    multiHeaderSep,
+    plotTitle,
+    transpose
   );
   postMessage(workerResult, undefined as unknown as string);
 };

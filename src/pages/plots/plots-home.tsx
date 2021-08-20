@@ -154,10 +154,7 @@ const PlotsHome: React.FC = () => {
   const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onHeatmapFormClose();
-    setTimeout(
-      () => plotStore.addHeatmapPlot(values.plotTitle, values.replicates),
-      10
-    );
+    setTimeout(() => plotStore.addHeatmapPlot(values), 10);
   };
 
   /* PCA PLOT */
@@ -173,7 +170,7 @@ const PlotsHome: React.FC = () => {
   const onPCAFormSubmit: PCAFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
     onPCAFormClose();
-    setTimeout(() => plotStore.addPCAPlot(values.plotTitle), 10);
+    setTimeout(() => plotStore.addPCAPlot(values), 10);
   };
 
   /* IMAGE PLOT */
@@ -237,7 +234,7 @@ const PlotsHome: React.FC = () => {
         />
 
         <SidebarButton
-          text="Heatmap"
+          text="Cluster Heatmap"
           icon={FaBurn}
           onClick={onHeatmapFormOpen}
           disabled={!dataAvailable}

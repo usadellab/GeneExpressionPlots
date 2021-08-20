@@ -1,4 +1,5 @@
 import FormikField from '@/components/formik-field';
+import FormikSwitch from '@/components/formik-switch';
 import { settings } from '@/store/settings';
 import { escapeDelimiters } from '@/utils/string';
 import { Box, Flex, Button } from '@chakra-ui/react';
@@ -15,6 +16,8 @@ import React from 'react';
 export interface ExportGXPFormAttributes {
   columnSep: string;
   fileName: string;
+  exportPlots: boolean;
+  exportEnrichments: boolean;
 }
 
 export type ExportGXPFormSubmitHandler = (
@@ -55,6 +58,8 @@ const ExportGXPForm: React.FC<ExportGXPFormProps> = (props) => {
       initialValues={{
         columnSep: escapeDelimiters(settings.gxpSettings.expression_field_sep),
         fileName: 'GXP_Database',
+        exportPlots: false,
+        exportEnrichments: false,
       }}
       onSubmit={props.onSubmit}
       validateOnBlur={false}
@@ -82,6 +87,26 @@ const ExportGXPForm: React.FC<ExportGXPFormProps> = (props) => {
             label="File Name"
             validate={validateFileName}
             isRequired
+          />
+
+          <FormikSwitch
+            controlProps={{
+              marginTop: '1rem',
+            }}
+            color="orange.600"
+            id="export-plots"
+            name="exportPlots"
+            label="Export Plots"
+          />
+
+          <FormikSwitch
+            controlProps={{
+              marginTop: '1rem',
+            }}
+            color="orange.600"
+            id="export-enrichments"
+            name="exportEnrichments"
+            label="Export Enrichments"
           />
 
           {!props.children ? (

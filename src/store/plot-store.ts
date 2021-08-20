@@ -9,6 +9,8 @@ import {
   GxpImage,
   HeatmapBins,
   ClusterTree,
+  CreateHeatmapArgs,
+  CreatePCAargs,
 } from '@/types/plots';
 import { dataTable } from '@/store/data-store';
 
@@ -23,6 +25,8 @@ import singleGeneBarData from '@/utils/plots/single-gene-bar';
 import stackedLinesData from '@/utils/plots/stacked-lines';
 // import pcaData from '@/utils/plots/pca';
 import { Layout, PlotData } from 'plotly.js';
+import { HeatmapFormAttributes } from '@/pages/plots/components/heatmap-form';
+import { PCAFormAttributes } from '@/pages/plots/components/pca-form';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -70,11 +74,34 @@ class PlotStore {
   }
 
   /**
+   * Export plotData to Javascript object
+   */
+  toJSObject(id: string): Partial<GxpPlot> | undefined {
+    const plot = this.plots.find((plot) => plot.id === id);
+    if (plot) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, isLoading, ...plotData } = plot;
+      return plotData;
+    }
+  }
+
+  addRawPlot(plot: GxpPlot): void {
+    this.plots.push(plot);
+  }
+
+  /**
    * Add a new gene expression heatmap plot to the store.
    * @param replicates gene accessions to visualize
    */
-  addHeatmapPlot(plotTitle?: string, replicates?: string[]): void {
+  addHeatmapPlot({
+    plotTitle,
+    accessions,
+    replicates,
+    clusterBy,
+  }: HeatmapFormAttributes): void {
     const id = nanoid();
+    const transpose = clusterBy === 'replicates' ? false : true;
+
     const pendingPlot: GxpPlot = {
       id,
       type: 'heatmap',
@@ -83,9 +110,11 @@ class PlotStore {
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
     const worker = new HeatMapWorker();
-    const data = {
+    const data: CreateHeatmapArgs = {
       dataRows: toJS(dataTable.rows),
       srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
+      srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
+      transpose: transpose,
     };
     worker.postMessage(data);
     worker.onmessage = function (
@@ -120,8 +149,15 @@ class PlotStore {
     this.plots.push(image);
   }
 
-  addPCAPlot(plotTitle?: string): void {
+  addPCAPlot({
+    plotTitle,
+    accessions,
+    replicates,
+    calculateFor,
+  }: PCAFormAttributes): void {
     const id = nanoid();
+    const transpose = calculateFor === 'replicates' ? false : true;
+
     const pendingPlot: GxpPlot = {
       id,
       type: 'pca',
@@ -130,12 +166,15 @@ class PlotStore {
     const plotIndex = this.plots.push(pendingPlot) - 1;
 
     const worker = new PCAWorker();
-    const data = {
+    const data: CreatePCAargs = {
       dataRows: toJS(dataTable.rows),
-      srcReplicateNames: dataTable.colNames,
+      srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
+      srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
       multiHeaderSep: dataTable.config.multiHeader,
-      plotTitle,
+      transpose: transpose,
+      plotTitle: plotTitle,
     };
+
     worker.postMessage(data);
     worker.onmessage = function (
       e: MessageEvent<{

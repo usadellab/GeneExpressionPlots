@@ -1,4 +1,4 @@
-import { DataRow } from '@/store/dataframe';
+import { DataRows } from '@/store/dataframe';
 import { isNumeric } from '@/utils/validation';
 
 /**
@@ -8,8 +8,9 @@ import { isNumeric } from '@/utils/validation';
  * @returns the two-dimensional array of gene expression counts
  */
 export function toArrayOfRows(
-  rows: DataRow,
-  filterByColumn: string[] = []
+  rows: DataRows,
+  filterByColumn: string[] = [],
+  filterByRow: string[] = []
 ): number[][] {
   /**
    * Reduce the dataframe header to a subset of its column names.
@@ -59,7 +60,11 @@ export function toArrayOfRows(
     return counts.map(castToNumber);
   };
 
-  const array2d = Object.entries(rows).map(toCountsArray);
+  const filteredRowEntries: [string, string[]][] = filterByRow.map((key) => [
+    key,
+    rows[key],
+  ]);
+  const array2d = filteredRowEntries.map(toCountsArray);
 
   return array2d;
 }
@@ -71,10 +76,11 @@ export function toArrayOfRows(
  * @return the two dimensional array of column expression counts
  */
 export function toArrayOfColumns(
-  rows: DataRow,
-  filterByColumn: string[] = []
+  rows: DataRows,
+  filterByColumn: string[] = [],
+  filterByRow: string[] = []
 ): number[][] {
-  const arrayOfRows = toArrayOfRows(rows, filterByColumn);
+  const arrayOfRows = toArrayOfRows(rows, filterByColumn, filterByRow);
   const arrayOfCols = arrayOfRows[0].map((_, colIndex) =>
     arrayOfRows.map((row) => row[colIndex])
   );

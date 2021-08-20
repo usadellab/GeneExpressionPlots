@@ -16,7 +16,7 @@ import {
 
 interface RadioOptions extends RadioProps {
   label: string;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 interface FormikRadioProps {
@@ -63,6 +63,7 @@ const FormikRadio: React.FC<FormikRadioProps> = ({
         name={field.name}
         value={field.value}
         onChange={handleOnChange}
+        defaultValue={options[0].value}
       >
         <Stack direction={direction}>
           {options.map((option, index) => (

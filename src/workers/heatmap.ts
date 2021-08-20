@@ -1,10 +1,13 @@
-import { DataRow } from '@/store/dataframe';
+import { CreateHeatmapArgs } from '@/types/plots';
 import { createHeatmapPlot } from '@/utils/plots/heatmap';
 
-onmessage = function (
-  e: MessageEvent<{ dataRows: DataRow; srcReplicateNames: string[] }>
-) {
-  const { dataRows, srcReplicateNames } = e.data;
-  const workerResult = createHeatmapPlot(dataRows, srcReplicateNames);
+onmessage = function (e: MessageEvent<CreateHeatmapArgs>) {
+  const { dataRows, srcReplicateNames, srcAccessionIds, transpose } = e.data;
+  const workerResult = createHeatmapPlot(
+    dataRows,
+    srcReplicateNames,
+    srcAccessionIds,
+    transpose
+  );
   postMessage(workerResult, undefined as unknown as string);
 };
