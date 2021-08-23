@@ -8,7 +8,7 @@ import { nanoid } from 'nanoid';
 import { infoTable } from './data-store';
 
 // Workers
-import EnrichmentWorker from '@/workers/enrichment?worker&inline';
+import EnrichmentWorker from '@/workers/enrichment?worker';
 
 class EnrichmentStore {
   analyses: EnrichmentAnalysis[] = [];
