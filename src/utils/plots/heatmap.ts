@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
 import { DataRows } from '@/store/dataframe';
 import { toArrayOfColumns, toArrayOfRows } from '../store';
+import { correlation } from 'ml-matrix';
 
 // Once a worker, data will be accessed via IndexedDb
 
@@ -63,7 +64,16 @@ export function computeGeneXDistance(
   method: DistanceMethod
 ): number[][] {
   const distanceMatrix = getDistanceMatrix(matrix, distance[method]);
-  return distanceMatrix;
+  console.log(`distanceMatrix = ${distanceMatrix}`);
+  const transposedMtrx = matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+  const corMatrix = correlation(transposedMtrx);
+  // Transform correlation into distances; see
+  // https://stats.stackexchange.com/questions/2976/clustering-variables-based-on-correlations-between-them
+  const trnsfrmdCorMtrx = corMatrix.to2DArray().map(r => r.map(x => 1 - Math.abs(x)));
+  console.log(`correlationMatrix = ${corMatrix}`);
+  console.log('trnsfrmdCorMtrx = ');
+  console.log(trnsfrmdCorMtrx);
+  return trnsfrmdCorMtrx;
 }
 
 /**
