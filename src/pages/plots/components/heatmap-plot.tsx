@@ -371,7 +371,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               Distance
             </ChakraText>
             <ChakraText as="span" ml={1}>
-              {tooltipData.count?.toFixed(2)}
+              {tooltipData.count?.toFixed(4)}
             </ChakraText>
           </p>
         </TooltipInPortal>
