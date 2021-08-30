@@ -5,9 +5,11 @@ import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
 import { DataRows } from '@/store/dataframe';
 import { toArrayOfColumns, toArrayOfRows } from '../store';
-import { correlation } from 'ml-matrix';
+import { correlation, Matrix } from 'ml-matrix';
 
 // Once a worker, data will be accessed via IndexedDb
+
+export type GXPDistanceMethod = 'correlation' | 'euclidean';
 
 type DistanceMethod =
   | 'additiveSymmetric'
@@ -61,19 +63,21 @@ type DistanceMethod =
  */
 export function computeGeneXDistance(
   matrix: number[][],
-  method: DistanceMethod
+  method: GXPDistanceMethod
 ): number[][] {
-  const distanceMatrix = getDistanceMatrix(matrix, distance[method]);
-  console.log(`distanceMatrix = ${distanceMatrix}`);
-  const transposedMtrx = matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
-  const corMatrix = correlation(transposedMtrx);
-  // Transform correlation into distances; see
-  // https://stats.stackexchange.com/questions/2976/clustering-variables-based-on-correlations-between-them
-  const trnsfrmdCorMtrx = corMatrix.to2DArray().map(r => r.map(x => 1 - Math.abs(x)));
-  console.log(`correlationMatrix = ${corMatrix}`);
-  console.log('trnsfrmdCorMtrx = ');
-  console.log(trnsfrmdCorMtrx);
-  return trnsfrmdCorMtrx;
+  switch (method) {
+    case 'euclidean':
+      return getDistanceMatrix(matrix, distance[method]);
+    case 'correlation': {
+      const transposedMatrix = new Matrix(matrix).transpose();
+      const corrMatrix = correlation(transposedMatrix);
+      // Transform correlation into distances; see
+      // https://stats.stackexchange.com/questions/2976/clustering-variables-based-on-correlations-between-them
+      return corrMatrix.to2DArray().map((r) => r.map((x) => 1 - Math.abs(x)));
+    }
+    default:
+      throw new Error(`unsupported distance method ${method}.`);
+  }
 }
 
 /**
@@ -243,6 +247,7 @@ export function sortClusteredMatrix(
 
 export function createHeatmapPlot(
   dataRows: DataRows,
+  distanceMethod: GXPDistanceMethod,
   srcReplicateNames: string[],
   srcAccessionIds: string[],
   transpose = false
@@ -260,7 +265,7 @@ export function createHeatmapPlot(
   const leafNames = transpose ? srcAccessionIds : srcReplicateNames;
 
   // Compute the euclidean distance matrix between each gene
-  const distanceMatrix = computeGeneXDistance(counts, 'euclidean');
+  const distanceMatrix = computeGeneXDistance(counts, distanceMethod);
 
   // Cluster the gene matrix
   const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');

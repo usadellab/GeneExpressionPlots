@@ -1,4 +1,5 @@
 import { DataRows } from '@/store/dataframe';
+import { GXPDistanceMethod } from '@/utils/plots/heatmap';
 import { Layout, PlotData } from 'plotly.js';
 
 export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image';
@@ -48,6 +49,7 @@ export interface HeatmapBin {
 
 export interface CreateHeatmapArgs {
   dataRows: DataRows;
+  distanceMethod: GXPDistanceMethod;
   srcReplicateNames: string[];
   srcAccessionIds: string[];
   transpose: boolean;

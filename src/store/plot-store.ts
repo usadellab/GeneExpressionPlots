@@ -96,6 +96,7 @@ class PlotStore {
   addHeatmapPlot({
     plotTitle,
     accessions,
+    distanceMethod,
     replicates,
     clusterBy,
   }: HeatmapFormAttributes): void {
@@ -112,6 +113,7 @@ class PlotStore {
     const worker = new HeatMapWorker();
     const data: CreateHeatmapArgs = {
       dataRows: toJS(dataTable.rows),
+      distanceMethod: distanceMethod,
       srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
       srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
       transpose: transpose,

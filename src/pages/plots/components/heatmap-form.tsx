@@ -27,6 +27,8 @@ import { FocusableElement } from '@chakra-ui/utils';
 import FormikRadio from '@/components/formik-radio';
 import FormikReplicate from '@/components/formik-replicate';
 import FormikAccession from '@/components/formik-accession';
+import FormikSelect from '@/components/formik-select';
+import { GXPDistanceMethod } from '@/utils/plots/heatmap';
 
 export type HeatmapFormSubmitHandler = (
   values: HeatmapFormAttributes,
@@ -42,6 +44,7 @@ export interface HeatmapFormProps {
 export interface HeatmapFormAttributes {
   accessions: string[];
   clusterBy: 'replicates' | 'genes';
+  distanceMethod: GXPDistanceMethod;
   replicates: string[];
   plotTitle?: string;
 }
@@ -82,6 +85,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
       initialValues={{
         accessions: [],
         clusterBy: 'replicates',
+        distanceMethod: 'correlation',
         replicates: [],
         plotTitle: '',
       }}
@@ -116,6 +120,15 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
               initialFocusRef={props.initialFocusRef}
               label="Plot Title"
               name="plotTitle"
+            />
+
+            <FormikSelect
+              controlProps={{
+                marginTop: '1rem',
+              }}
+              label="Distance method"
+              name="distanceMethod"
+              options={['correlation', 'euclidean']}
             />
 
             <FormikRadio
