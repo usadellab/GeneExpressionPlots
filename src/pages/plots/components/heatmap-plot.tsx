@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { Text as ChakraText } from '@chakra-ui/react';
 
-import { ScaleLinear, ScaleBand } from 'd3-scale';
+import { ScaleLinear, ScaleBand, scaleSequential } from 'd3-scale';
+import { interpolateRdBu } from 'd3-scale-chromatic';
 import { AxisLeft } from '@visx/axis';
 import { Group } from '@visx/group';
 import { HeatmapRect } from '@visx/heatmap';
@@ -66,10 +67,13 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
   // color
   const colorMin = min(props.binData, (d) => min(bins(d), count));
   const colorMax = max(props.binData, (d) => max(bins(d), count));
-  const colorScale = scaleLinear<string>({
-    range: [gradient0, gradient1],
-    domain: [colorMin, colorMax],
-  });
+  const colorScale =
+    props.distanceMethod === 'correlation'
+      ? scaleSequential([-1, 1], interpolateRdBu)
+      : scaleLinear<string>({
+          range: [gradient0, gradient1],
+          domain: [colorMin, colorMax],
+        });
 
   // dimensions
   const figureRef = React.useRef<HTMLDivElement | null>(null);

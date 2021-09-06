@@ -130,6 +130,7 @@ class PlotStore {
         isLoading: false,
         binData: e.data.bins,
         tree: e.data.tree,
+        distanceMethod,
         plotTitle,
       };
 

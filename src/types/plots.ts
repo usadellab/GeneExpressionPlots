@@ -19,6 +19,7 @@ export interface GxpPlot {
 export interface GxpHeatmap extends GxpPlot {
   tree: ClusterTree;
   binData: HeatmapBins[];
+  distanceMethod: GXPDistanceMethod;
   plotTitle?: string;
 }
 

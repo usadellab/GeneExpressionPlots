@@ -73,7 +73,7 @@ export function computeGeneXDistance(
       const corrMatrix = correlation(transposedMatrix);
       // Transform correlation into distances; see
       // https://stats.stackexchange.com/questions/2976/clustering-variables-based-on-correlations-between-them
-      return corrMatrix.to2DArray().map((r) => r.map((x) => 1 - Math.abs(x)));
+      return corrMatrix.to2DArray();
     }
     default:
       throw new Error(`unsupported distance method ${method}.`);
@@ -268,7 +268,12 @@ export function createHeatmapPlot(
   const distanceMatrix = computeGeneXDistance(counts, distanceMethod);
 
   // Cluster the gene matrix
-  const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
+  const cluster = clusterGeneXMatrix(
+    distanceMethod === 'correlation'
+      ? distanceMatrix.map((r) => r.map((x) => 1 - Math.abs(x)))
+      : distanceMatrix,
+    'ward'
+  );
   const tree = clusterToTree(cluster, leafNames);
 
   // Sort the matrix according to the cluster tree
