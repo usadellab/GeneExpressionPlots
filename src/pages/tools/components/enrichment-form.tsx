@@ -78,7 +78,10 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
               }}
               label="Test enrichment for"
               name="TEFcolumn"
-              options={infoTable.colNames}
+              options={infoTable.colNames.map((colName) => ({
+                value: colName,
+                label: colName,
+              }))}
               tooltip="Select a column from your gene info table to test enrichment for"
             />
 
@@ -91,7 +94,10 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
                 }}
                 label="Selector"
                 name="TEFselector"
-                options={TEFselectorOptions}
+                options={TEFselectorOptions.map((option) => ({
+                  value: option,
+                  label: option,
+                }))}
                 tooltip="Choose a selector function to classify your column values"
               />
 
@@ -115,7 +121,10 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
               }}
               label="Test enrichment in"
               name="TEIcolumn"
-              options={infoTable.colNames}
+              options={infoTable.colNames.map((colName) => ({
+                value: colName,
+                label: colName,
+              }))}
               tooltip="Select a column from your gene info table to test enrichment in"
             />
 
@@ -128,7 +137,10 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
                 }}
                 label="Selector type"
                 name="TEIselectorType"
-                options={['multinomial', 'binary']}
+                options={[
+                  { value: 'multinomial', label: 'multinomial' },
+                  { value: 'binary', label: 'binary' },
+                ]}
                 tooltip="Choose a selector function to classify your column values."
               />
               {formProps.values.TEIselectorType === 'binary' ? (
@@ -140,7 +152,10 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
                   }}
                   label="Selector"
                   name="TEIselectorBinary"
-                  options={TEFselectorOptions}
+                  options={TEFselectorOptions.map((option) => ({
+                    value: option,
+                    label: option,
+                  }))}
                   tooltip="Choose a selector function to classify your column values."
                 />
               ) : (
@@ -152,7 +167,10 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
                   }}
                   label="Selector"
                   name="TEIselectorMulti"
-                  options={['delimiter', 'regexp']}
+                  options={[
+                    { value: 'delimiter', label: 'delimiter' },
+                    { value: 'regexp', label: 'regexp' },
+                  ]}
                   tooltip="Choose a selector function to classify your column values."
                 />
               )}

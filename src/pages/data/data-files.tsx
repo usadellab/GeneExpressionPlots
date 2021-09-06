@@ -126,7 +126,7 @@ const DataFiles: React.FC = () => {
         reader.readAsText(file);
       } catch (error) {
         actions.setSubmitting(false);
-        console.error(error.message);
+        console.error(error);
       }
     }
   };
@@ -286,7 +286,6 @@ const DataFiles: React.FC = () => {
 
         // unpack and load plot files
         zip.folder('plots')?.forEach(async (relativePath, file) => {
-          console.log({ relativePath, file });
           const plotFilePtr = zipImport.files[file.name];
           const plotFileSrc = await plotFilePtr.async('string');
           const plotData = JSON.parse(plotFileSrc);
@@ -301,7 +300,7 @@ const DataFiles: React.FC = () => {
         onGXPImportClose();
       } catch (error) {
         actions.setSubmitting(false);
-        console.error(error.message);
+        console.error(error);
       }
     }
   };
@@ -374,7 +373,6 @@ const DataFiles: React.FC = () => {
         zip.folder('plots');
         plotStore.plots.forEach((plot) => {
           const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
-          console.log({ data });
           if (data) {
             zip.file(`plots/${plot.id}_${plot.type}.json`, data);
           }
@@ -547,7 +545,7 @@ const DataFiles: React.FC = () => {
               marginTop={3}
               onClick={handleLoadExampleClick}
             >
-              Load examples
+              Load examples data
             </Button>
           </Alert>
         )}

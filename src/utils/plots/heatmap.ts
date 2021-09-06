@@ -5,8 +5,11 @@ import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
 import { DataRows } from '@/store/dataframe';
 import { toArrayOfColumns, toArrayOfRows } from '../store';
+import { correlation, Matrix } from 'ml-matrix';
 
 // Once a worker, data will be accessed via IndexedDb
+
+export type GXPDistanceMethod = 'correlation' | 'euclidean';
 
 type DistanceMethod =
   | 'additiveSymmetric'
@@ -60,10 +63,21 @@ type DistanceMethod =
  */
 export function computeGeneXDistance(
   matrix: number[][],
-  method: DistanceMethod
+  method: GXPDistanceMethod
 ): number[][] {
-  const distanceMatrix = getDistanceMatrix(matrix, distance[method]);
-  return distanceMatrix;
+  switch (method) {
+    case 'euclidean':
+      return getDistanceMatrix(matrix, distance[method]);
+    case 'correlation': {
+      const transposedMatrix = new Matrix(matrix).transpose();
+      const corrMatrix = correlation(transposedMatrix);
+      // Transform correlation into distances; see
+      // https://stats.stackexchange.com/questions/2976/clustering-variables-based-on-correlations-between-them
+      return corrMatrix.to2DArray();
+    }
+    default:
+      throw new Error(`unsupported distance method ${method}.`);
+  }
 }
 
 /**
@@ -233,6 +247,7 @@ export function sortClusteredMatrix(
 
 export function createHeatmapPlot(
   dataRows: DataRows,
+  distanceMethod: GXPDistanceMethod,
   srcReplicateNames: string[],
   srcAccessionIds: string[],
   transpose = false
@@ -250,10 +265,15 @@ export function createHeatmapPlot(
   const leafNames = transpose ? srcAccessionIds : srcReplicateNames;
 
   // Compute the euclidean distance matrix between each gene
-  const distanceMatrix = computeGeneXDistance(counts, 'euclidean');
+  const distanceMatrix = computeGeneXDistance(counts, distanceMethod);
 
   // Cluster the gene matrix
-  const cluster = clusterGeneXMatrix(distanceMatrix, 'ward');
+  const cluster = clusterGeneXMatrix(
+    distanceMethod === 'correlation'
+      ? distanceMatrix.map((r) => r.map((x) => 1 - Math.abs(x)))
+      : distanceMatrix,
+    'ward'
+  );
   const tree = clusterToTree(cluster, leafNames);
 
   // Sort the matrix according to the cluster tree

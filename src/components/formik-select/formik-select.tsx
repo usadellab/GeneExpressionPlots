@@ -16,7 +16,7 @@ interface FormikSelectProps extends SelectProps {
   hideLabel?: boolean;
   label: string;
   name: string;
-  options: string[];
+  options: { value: string; label: string }[];
   validate?: FieldValidator;
   tooltip?: string;
 }
@@ -57,8 +57,8 @@ const FormikSelect: React.FC<FormikSelectProps> = ({
         {...props}
       >
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </Select>
