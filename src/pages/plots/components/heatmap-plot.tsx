@@ -372,7 +372,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           </p>
           <p>
             <ChakraText as="span" fontWeight="semibold">
-              Distance
+              {props.distanceMethod.charAt(0).toUpperCase() +
+                props.distanceMethod.slice(1)}
             </ChakraText>
             <ChakraText as="span" ml={1}>
               {tooltipData.count?.toFixed(4)}
