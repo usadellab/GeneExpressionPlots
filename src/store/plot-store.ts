@@ -99,7 +99,7 @@ class PlotStore {
     distanceMethod,
     replicates,
     clusterBy,
-  }: HeatmapFormAttributes): void {
+  }: Omit<HeatmapFormAttributes, 'replicatesList' | 'accessionsList'>): void {
     const id = nanoid();
     const transpose = clusterBy === 'replicates' ? false : true;
 
@@ -157,7 +157,7 @@ class PlotStore {
     accessions,
     replicates,
     calculateFor,
-  }: PCAFormAttributes): void {
+  }: Omit<PCAFormAttributes, 'replicatesList' | 'accessionsList'>): void {
     const id = nanoid();
     const transpose = calculateFor === 'replicates' ? false : true;
 

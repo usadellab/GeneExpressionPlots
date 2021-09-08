@@ -16,12 +16,14 @@ import {
   IconButton,
   InputRightAddon,
   VisuallyHidden,
+  FormLabel,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikRadio from '@/components/formik-radio';
 import FormikReplicate from '@/components/formik-replicate';
 import { FaTrash, FaPlus } from 'react-icons/fa';
 import FormikAccession from '@/components/formik-accession';
+import FormikArea from '@/components/formik-area';
 
 export type PCAFormSubmitHandler = (
   values: PCAFormAttributes,
@@ -36,8 +38,10 @@ export interface PCAFormProps {
 
 export interface PCAFormAttributes {
   accessions: string[];
+  accessionsList: string;
   calculateFor: 'replicates' | 'genes';
   replicates: string[];
+  replicatesList: string;
   plotTitle?: string;
 }
 
@@ -79,8 +83,10 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
     <Formik<PCAFormAttributes>
       initialValues={{
         accessions: [],
+        accessionsList: '',
         calculateFor: 'replicates',
         replicates: [],
+        replicatesList: '',
         plotTitle: '',
       }}
       validateOnBlur={false}
@@ -101,7 +107,7 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
 
           <FormikRadio
             controlProps={{
-              marginTop: '1rem',
+              marginTop: '2rem',
             }}
             label="Calculate For"
             name="calculateFor"
@@ -116,13 +122,28 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
             {(helpers) => (
               <Box as="fieldset">
                 <VisuallyHidden as="legend">Replicates</VisuallyHidden>
+                <FormLabel as="p" marginTop="2rem" fontWeight="semibold">
+                  Optionally filter replicates
+                </FormLabel>
+
+                <FormikArea
+                  controlProps={{
+                    marginTop: '1rem',
+                    marginLeft: '.5rem',
+                  }}
+                  focusBorderColor="orange.300"
+                  name="replicatesList"
+                  label="replicates"
+                  hideLabel
+                  placeholder="List your replicates here, separated by a newline."
+                  isDisabled={formProps.values.replicates.length > 0}
+                />
 
                 {formProps.values.replicates.length > 0 &&
                   formProps.values.replicates.map((replicate, index) => (
                     <FormikReplicate
                       controlProps={{
                         as: 'p',
-                        marginTop: '1rem',
                       }}
                       groupProps={{
                         _focusWithin: {
@@ -218,7 +239,7 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
                     backgroundColor: 'orange.100',
                   }}
                   colorScheme="orange"
-                  marginTop="1rem"
+                  marginTop=".5rem"
                   type="button"
                   onClick={() => {
                     if (formProps.values.replicates.length === 0) {
@@ -229,9 +250,10 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
                     }
                   }}
                   variant="ghost"
+                  disabled={formProps.values.replicatesList !== ''}
                 >
                   {formProps.values.replicates.length === 0
-                    ? 'Optional: Select Replicates'
+                    ? 'Select Replicates'
                     : 'Add Another Replicate'}
                 </Button>
               </Box>
@@ -243,13 +265,29 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
               <Box as="fieldset">
                 <VisuallyHidden as="legend">Genes</VisuallyHidden>
 
+                <FormLabel as="p" marginTop="1rem" fontWeight="semibold">
+                  Optionally filter genes
+                </FormLabel>
+
+                <FormikArea
+                  controlProps={{
+                    marginTop: '1rem',
+                    marginLeft: '.5rem',
+                  }}
+                  focusBorderColor="orange.300"
+                  name="accessionsList"
+                  label="accession"
+                  hideLabel
+                  placeholder="List your gene accessions here, separated by a newline."
+                  isDisabled={formProps.values.accessions.length > 0}
+                />
+
                 {formProps.values.accessions &&
                   formProps.values.accessions.length > 0 &&
                   formProps.values.accessions.map((accession, index) => (
                     <FormikAccession
                       controlProps={{
                         as: 'p',
-                        marginTop: '1rem',
                       }}
                       groupProps={{
                         _focusWithin: {
@@ -345,7 +383,7 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
                     backgroundColor: 'orange.100',
                   }}
                   colorScheme="orange"
-                  marginTop="1rem"
+                  marginTop=".5rem"
                   type="button"
                   onClick={() => {
                     if (formProps.values.accessions.length === 0) {
@@ -356,9 +394,10 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
                     }
                   }}
                   variant="ghost"
+                  disabled={formProps.values.accessionsList !== ''}
                 >
                   {formProps.values.accessions.length === 0
-                    ? 'Optional: Select Genes'
+                    ? 'Select Genes'
                     : 'Add Another Genes'}
                 </Button>
               </Box>

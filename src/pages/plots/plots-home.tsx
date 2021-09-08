@@ -17,6 +17,7 @@ import {
   Flex,
   Spinner,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
@@ -54,6 +55,8 @@ import PlotCaption from './components/plot-caption';
 import PCAForm, { PCAFormSubmitHandler } from './components/pca-form';
 
 const PlotsHome: React.FC = () => {
+  const toast = useToast();
+
   /* BARS PLOT */
   const refBarsFormInitialFocus = React.useRef<FocusableElement | null>(null);
 
@@ -153,8 +156,70 @@ const PlotsHome: React.FC = () => {
 
   const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
+
+    // handle and validate replicate input
+    let replicates = values.replicates;
+    const invalidReplicates: string[] = [];
+    if (values.replicatesList !== '') {
+      replicates = values.replicatesList.split('\n');
+      // validate replicates
+      replicates.forEach((replicate, i, arr) => {
+        replicate = replicate.trim();
+        arr[i] = replicate;
+        if (!dataTable.colNames.includes(replicate))
+          invalidReplicates.push(replicate);
+      });
+      if (invalidReplicates.length > 0) {
+        toast({
+          title: 'Error',
+          description: `Invalid replicates: ${JSON.stringify(
+            invalidReplicates
+          )}`,
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    }
+
+    // handle and validate accession input
+    let accessions = values.accessions;
+    const invalidAccessions: string[] = [];
+    if (values.accessionsList !== '') {
+      accessions = values.accessionsList.split('\n');
+      // validate accessions
+      accessions.forEach((accession, i, arr) => {
+        accession = accession.trim();
+        arr[i] = accession;
+        if (!dataTable.rowNames.includes(accession))
+          invalidAccessions.push(accession);
+      });
+      if (invalidAccessions.length > 0) {
+        toast({
+          title: 'Error',
+          description: `Invalid accessions: ${JSON.stringify(
+            invalidAccessions
+          )}`,
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    }
+
+    if (invalidReplicates.length > 0 || invalidAccessions.length > 0) return;
+
     onHeatmapFormClose();
-    setTimeout(() => plotStore.addHeatmapPlot(values), 10);
+
+    setTimeout(
+      () =>
+        plotStore.addHeatmapPlot({
+          accessions: accessions,
+          clusterBy: values.clusterBy,
+          distanceMethod: values.distanceMethod,
+          replicates: replicates,
+          plotTitle: values.plotTitle,
+        }),
+      10
+    );
   };
 
   /* PCA PLOT */
@@ -169,8 +234,68 @@ const PlotsHome: React.FC = () => {
 
   const onPCAFormSubmit: PCAFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
+
+    // handle and validate replicate input
+    let replicates = values.replicates;
+    const invalidReplicates: string[] = [];
+    if (values.replicatesList !== '') {
+      replicates = values.replicatesList.split('\n');
+      // validate replicates
+      replicates.forEach((replicate, i, arr) => {
+        replicate = replicate.trim();
+        arr[i] = replicate;
+        if (!dataTable.colNames.includes(replicate))
+          invalidReplicates.push(replicate);
+      });
+      if (invalidReplicates.length > 0) {
+        toast({
+          title: 'Error',
+          description: `Invalid replicates: ${JSON.stringify(
+            invalidReplicates
+          )}`,
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    }
+
+    // handle and validate accession input
+    let accessions = values.accessions;
+    const invalidAccessions: string[] = [];
+    if (values.accessionsList !== '') {
+      accessions = values.accessionsList.split('\n');
+      // validate accessions
+      accessions.forEach((accession, i, arr) => {
+        accession = accession.trim();
+        arr[i] = accession;
+        if (!dataTable.rowNames.includes(accession))
+          invalidAccessions.push(accession);
+      });
+      if (invalidAccessions.length > 0) {
+        toast({
+          title: 'Error',
+          description: `Invalid accessions: ${JSON.stringify(
+            invalidAccessions
+          )}`,
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    }
+
+    if (invalidReplicates.length > 0 || invalidAccessions.length > 0) return;
+
     onPCAFormClose();
-    setTimeout(() => plotStore.addPCAPlot(values), 10);
+    setTimeout(
+      () =>
+        plotStore.addPCAPlot({
+          accessions: accessions,
+          calculateFor: values.calculateFor,
+          replicates: replicates,
+          plotTitle: values.plotTitle,
+        }),
+      10
+    );
   };
 
   /* IMAGE PLOT */
