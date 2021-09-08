@@ -285,7 +285,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       }
                     }}
                     variant="ghost"
-                    marginTop="1rem"
+                    marginTop=".5rem"
                     disabled={formProps.values.replicatesList !== ''}
                   >
                     {formProps.values.replicates.length === 0
@@ -324,7 +324,6 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       <FormikAccession
                         controlProps={{
                           as: 'p',
-                          marginTop: '1rem',
                         }}
                         groupProps={{
                           _focusWithin: {
@@ -420,7 +419,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       backgroundColor: 'orange.100',
                     }}
                     colorScheme="orange"
-                    marginTop="1rem"
+                    marginTop=".5rem"
                     type="button"
                     onClick={() => {
                       if (formProps.values.accessions.length === 0) {
