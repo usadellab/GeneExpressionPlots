@@ -285,7 +285,7 @@ const DataFiles: React.FC = () => {
         }
 
         // unpack and load plot files
-        zip.folder('plots')?.forEach(async (relativePath, file) => {
+        zip.folder('plots')?.forEach(async (_, file) => {
           const plotFilePtr = zipImport.files[file.name];
           const plotFileSrc = await plotFilePtr.async('string');
           const plotData = JSON.parse(plotFileSrc);
@@ -370,13 +370,18 @@ const DataFiles: React.FC = () => {
       }
 
       if (values.exportPlots) {
-        zip.folder('plots');
-        plotStore.plots.forEach((plot) => {
-          const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
-          if (data) {
-            zip.file(`plots/${plot.id}_${plot.type}.json`, data);
-          }
-        });
+        const plotsSrc = JSON.stringify(plotStore.plotNamesForExport());
+        console.log({ plotsSrc });
+        if (plotsSrc) {
+          zip.file('plots.json', plotsSrc);
+          zip.folder('plots');
+          plotStore.plots.forEach((plot) => {
+            const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
+            if (data) {
+              zip.file(`plots/${plot.id}_${plot.type}.json`, data);
+            }
+          });
+        }
       }
 
       if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
