@@ -85,6 +85,18 @@ class PlotStore {
     }
   }
 
+  /**
+   * Get an array of plot names used for exporting plots.
+   */
+  plotNamesForExport(): string[] | undefined {
+    return this.plots.length > 0
+      ? this.plots.map((plot) => `plots/${plot.id}_${plot.type}.json`)
+      : undefined;
+  }
+
+  /**
+   * Add a plot directly from raw data. Used to import plots from JSON.
+   */
   addRawPlot(plot: GxpPlot): void {
     this.plots.push(plot);
   }

@@ -15,11 +15,15 @@ import AppRoutes from './app-routes';
 import AppLayout from './layouts/app-layout';
 
 import { fetchResource } from '@/utils/fetch';
-import { readTable } from '@/utils/parser';
+import { parseEnrichmentData, readTable } from '@/utils/parser';
 
 import { dataTable, infoTable } from '@/store/data-store';
 import { plotStore } from './store/plot-store';
 import { settings } from '@/store/settings';
+import { EnrichmentExport } from './types/enrichment';
+import { nanoid } from 'nanoid';
+import { PlotType } from './types/plots';
+import { enrichmentStore } from './store/enrichment-store';
 
 type AppState = 'failed' | 'idle' | 'loading';
 
@@ -90,13 +94,61 @@ const App: React.FC = () => {
         const alt = url.split('/').pop()?.split('.').shift() as string;
         plotStore.addImagePlot(url, alt);
       }
+
+      // Preload Plots
+      if (settings.preloaded.plots) {
+        const plotsSrc: string[] = await fetchResource(
+          settings.preloaded.plots,
+          'json'
+        );
+
+        await Promise.all(
+          plotsSrc.map(async (plotSrc) => {
+            const plotData: { type: PlotType; [key: string]: unknown } =
+              await fetchResource(plotSrc, 'json');
+            plotStore.addRawPlot({
+              id: nanoid(),
+              isLoading: false,
+              ...plotData,
+            });
+          })
+        );
+      }
+
+      // Preload Enrichments
+      if (settings.preloaded.enrichments) {
+        const enrichmentSrc: EnrichmentExport[] = await fetchResource(
+          settings.preloaded.enrichments,
+          'json'
+        );
+
+        await Promise.all(
+          enrichmentSrc.map(async (enrichmentSrc) => {
+            const { rawData, ...options } = enrichmentSrc;
+            const enrichmentRawData = await fetchResource(rawData, 'text');
+            const enrichmentData = parseEnrichmentData(
+              enrichmentRawData,
+              settings.gxpSettings.expression_field_sep
+            );
+
+            enrichmentStore.addRawEnrichmentAnalysis({
+              id: nanoid(),
+              isLoading: false,
+              options: options,
+              data: enrichmentData,
+            });
+          })
+        );
+      }
+
       setAppState({
         status: 'idle',
       });
     } catch (error) {
+      const e = error as Error;
       setAppState({
         status: 'failed',
-        message: error.message,
+        message: e.message,
       });
     }
   };
