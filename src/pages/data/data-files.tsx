@@ -20,6 +20,7 @@ import {
   Wrap,
   WrapItem,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
@@ -58,6 +59,8 @@ const DataFiles: React.FC = () => {
   const [selectedReplicates, setSelectedReplicates] = React.useState<string[]>(
     []
   );
+
+  const toast = useToast();
 
   const deleteReplicate = (name: string): void => {
     dataTable.removeColumns(name);
@@ -462,6 +465,14 @@ const DataFiles: React.FC = () => {
 
       // Load the store from the parsed table
       infoTable.loadFromObject(geneInfoTable);
+
+      toast({
+        title: 'Example data has been loaded',
+        description: 'Click on the above "Plots" button and start plotting!',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error('There was an error while loading the examle data');
     }
@@ -550,7 +561,7 @@ const DataFiles: React.FC = () => {
               marginTop={3}
               onClick={handleLoadExampleClick}
             >
-              Load examples data
+              Load example data
             </Button>
           </Alert>
         )}
