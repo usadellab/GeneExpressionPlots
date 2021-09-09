@@ -15,12 +15,16 @@ interface Preloaded {
   info: string;
   image: string;
   settings: string;
+  plots: string;
+  enrichments: string;
 }
 
 const PRELOAD_DATA = import.meta.env.VITE_PRELOAD_DATA;
 const PRELOAD_IMAGE = import.meta.env.VITE_PRELOAD_IMAGE;
 const PRELOAD_INFO = import.meta.env.VITE_PRELOAD_INFO;
 const PRELOAD_SETTINGS = import.meta.env.VITE_PRELOAD_SETTINGS;
+const PRELOAD_PLOTS = import.meta.env.VITE_PRELOAD_PLOTS;
+const PRELOAD_ENRICHMENTS = import.meta.env.VITE_PRELOAD_ENRICHMENTS;
 
 class Settings {
   _PRELOADED: Preloaded = {
@@ -28,6 +32,8 @@ class Settings {
     info: '',
     image: '',
     settings: '',
+    plots: '',
+    enrichments: '',
   };
 
   _gxpSettings: GxpSettings = {
@@ -88,4 +94,6 @@ export const settings = new Settings({
   info: PRELOAD_INFO,
   image: PRELOAD_IMAGE,
   settings: PRELOAD_SETTINGS,
+  plots: PRELOAD_PLOTS,
+  enrichments: PRELOAD_ENRICHMENTS,
 });

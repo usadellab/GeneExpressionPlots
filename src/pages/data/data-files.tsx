@@ -20,6 +20,7 @@ import {
   Wrap,
   WrapItem,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import Sidebar, { SidebarButton } from '@/components/nav-sidebar';
@@ -58,6 +59,8 @@ const DataFiles: React.FC = () => {
   const [selectedReplicates, setSelectedReplicates] = React.useState<string[]>(
     []
   );
+
+  const toast = useToast();
 
   const deleteReplicate = (name: string): void => {
     dataTable.removeColumns(name);
@@ -126,7 +129,7 @@ const DataFiles: React.FC = () => {
         reader.readAsText(file);
       } catch (error) {
         actions.setSubmitting(false);
-        console.error(error.message);
+        console.error(error);
       }
     }
   };
@@ -285,8 +288,7 @@ const DataFiles: React.FC = () => {
         }
 
         // unpack and load plot files
-        zip.folder('plots')?.forEach(async (relativePath, file) => {
-          console.log({ relativePath, file });
+        zip.folder('plots')?.forEach(async (_, file) => {
           const plotFilePtr = zipImport.files[file.name];
           const plotFileSrc = await plotFilePtr.async('string');
           const plotData = JSON.parse(plotFileSrc);
@@ -301,7 +303,7 @@ const DataFiles: React.FC = () => {
         onGXPImportClose();
       } catch (error) {
         actions.setSubmitting(false);
-        console.error(error.message);
+        console.error(error);
       }
     }
   };
@@ -371,14 +373,18 @@ const DataFiles: React.FC = () => {
       }
 
       if (values.exportPlots) {
-        zip.folder('plots');
-        plotStore.plots.forEach((plot) => {
-          const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
-          console.log({ data });
-          if (data) {
-            zip.file(`plots/${plot.id}_${plot.type}.json`, data);
-          }
-        });
+        const plotsSrc = JSON.stringify(plotStore.plotNamesForExport());
+        console.log({ plotsSrc });
+        if (plotsSrc) {
+          zip.file('plots.json', plotsSrc);
+          zip.folder('plots');
+          plotStore.plots.forEach((plot) => {
+            const data = JSON.stringify(plotStore.toJSObject(plot.id), null, 2);
+            if (data) {
+              zip.file(`plots/${plot.id}_${plot.type}.json`, data);
+            }
+          });
+        }
       }
 
       if (geneInfoSrc) zip.file('info_table.txt', geneInfoSrc);
@@ -459,6 +465,14 @@ const DataFiles: React.FC = () => {
 
       // Load the store from the parsed table
       infoTable.loadFromObject(geneInfoTable);
+
+      toast({
+        title: 'Example data has been loaded',
+        description: 'Click on the above "Plots" button and start plotting!',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error('There was an error while loading the examle data');
     }
@@ -547,7 +561,7 @@ const DataFiles: React.FC = () => {
               marginTop={3}
               onClick={handleLoadExampleClick}
             >
-              Load examples
+              Load example data
             </Button>
           </Alert>
         )}

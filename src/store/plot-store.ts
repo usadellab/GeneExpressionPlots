@@ -85,6 +85,18 @@ class PlotStore {
     }
   }
 
+  /**
+   * Get an array of plot names used for exporting plots.
+   */
+  plotNamesForExport(): string[] | undefined {
+    return this.plots.length > 0
+      ? this.plots.map((plot) => `plots/${plot.id}_${plot.type}.json`)
+      : undefined;
+  }
+
+  /**
+   * Add a plot directly from raw data. Used to import plots from JSON.
+   */
   addRawPlot(plot: GxpPlot): void {
     this.plots.push(plot);
   }
@@ -96,9 +108,10 @@ class PlotStore {
   addHeatmapPlot({
     plotTitle,
     accessions,
+    distanceMethod,
     replicates,
     clusterBy,
-  }: HeatmapFormAttributes): void {
+  }: Omit<HeatmapFormAttributes, 'replicatesList' | 'accessionsList'>): void {
     const id = nanoid();
     const transpose = clusterBy === 'replicates' ? false : true;
 
@@ -112,6 +125,7 @@ class PlotStore {
     const worker = new HeatMapWorker();
     const data: CreateHeatmapArgs = {
       dataRows: toJS(dataTable.rows),
+      distanceMethod: distanceMethod,
       srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
       srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
       transpose: transpose,
@@ -128,6 +142,7 @@ class PlotStore {
         isLoading: false,
         binData: e.data.bins,
         tree: e.data.tree,
+        distanceMethod,
         plotTitle,
       };
 
@@ -154,7 +169,7 @@ class PlotStore {
     accessions,
     replicates,
     calculateFor,
-  }: PCAFormAttributes): void {
+  }: Omit<PCAFormAttributes, 'replicatesList' | 'accessionsList'>): void {
     const id = nanoid();
     const transpose = calculateFor === 'replicates' ? false : true;
 

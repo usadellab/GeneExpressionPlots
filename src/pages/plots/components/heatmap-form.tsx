@@ -22,11 +22,15 @@ import {
   IconButton,
   InputRightAddon,
   VisuallyHidden,
+  FormLabel,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikRadio from '@/components/formik-radio';
 import FormikReplicate from '@/components/formik-replicate';
 import FormikAccession from '@/components/formik-accession';
+import FormikSelect from '@/components/formik-select';
+import { GXPDistanceMethod } from '@/utils/plots/heatmap';
+import FormikArea from '@/components/formik-area';
 
 export type HeatmapFormSubmitHandler = (
   values: HeatmapFormAttributes,
@@ -41,8 +45,11 @@ export interface HeatmapFormProps {
 
 export interface HeatmapFormAttributes {
   accessions: string[];
+  accessionsList: string;
   clusterBy: 'replicates' | 'genes';
+  distanceMethod: GXPDistanceMethod;
   replicates: string[];
+  replicatesList: string;
   plotTitle?: string;
 }
 
@@ -81,8 +88,11 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
     <Formik<HeatmapFormAttributes>
       initialValues={{
         accessions: [],
+        accessionsList: '',
         clusterBy: 'replicates',
+        distanceMethod: 'correlation',
         replicates: [],
+        replicatesList: '',
         plotTitle: '',
       }}
       validateOnBlur={false}
@@ -118,11 +128,23 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
               name="plotTitle"
             />
 
+            <FormikSelect
+              controlProps={{
+                marginTop: '2rem',
+              }}
+              label="Likelihood measure"
+              name="distanceMethod"
+              options={[
+                { value: 'correlation', label: 'correlation' },
+                { value: 'euclidean', label: 'euclidean distance' },
+              ]}
+            />
+
             <FormikRadio
               controlProps={{
-                marginTop: '1rem',
+                marginTop: '2rem',
               }}
-              label="Cluster By"
+              label="Cluster"
               name="clusterBy"
               options={[
                 { label: 'Replicates', value: 'replicates' },
@@ -130,18 +152,32 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
               ]}
               direction="row"
             />
-
             <FieldArray name="replicates">
               {(helpers) => (
                 <Box as="fieldset">
                   <VisuallyHidden as="legend">Replicates</VisuallyHidden>
+                  <FormLabel as="p" marginTop="2rem" fontWeight="semibold">
+                    Optionally filter replicates
+                  </FormLabel>
+
+                  <FormikArea
+                    controlProps={{
+                      marginTop: '1rem',
+                      marginLeft: '.5rem',
+                    }}
+                    focusBorderColor="orange.300"
+                    name="replicatesList"
+                    label="replicates"
+                    hideLabel
+                    placeholder="List your replicates here, separated by a newline."
+                    isDisabled={formProps.values.replicates.length > 0}
+                  />
 
                   {formProps.values.replicates.length > 0 &&
                     formProps.values.replicates.map((replicate, index) => (
                       <FormikReplicate
                         controlProps={{
                           as: 'p',
-                          marginTop: '1rem',
                         }}
                         groupProps={{
                           _focusWithin: {
@@ -237,7 +273,8 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       backgroundColor: 'orange.100',
                     }}
                     colorScheme="orange"
-                    marginTop="1rem"
+                    // backgroundColor="orange.100"
+                    // textColor="orange.600"
                     type="button"
                     onClick={() => {
                       if (formProps.values.replicates.length === 0) {
@@ -248,9 +285,11 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       }
                     }}
                     variant="ghost"
+                    marginTop=".5rem"
+                    disabled={formProps.values.replicatesList !== ''}
                   >
                     {formProps.values.replicates.length === 0
-                      ? 'Optional: Select Replicates'
+                      ? 'Select Replicates'
                       : 'Add Another Replicate'}
                   </Button>
                 </Box>
@@ -262,13 +301,29 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                 <Box as="fieldset">
                   <VisuallyHidden as="legend">Genes</VisuallyHidden>
 
+                  <FormLabel as="p" marginTop="1rem" fontWeight="semibold">
+                    Optionally filter genes
+                  </FormLabel>
+
+                  <FormikArea
+                    controlProps={{
+                      marginTop: '1rem',
+                      marginLeft: '.5rem',
+                    }}
+                    focusBorderColor="orange.300"
+                    name="accessionsList"
+                    label="accession"
+                    hideLabel
+                    placeholder="List your gene accessions here, separated by a newline."
+                    isDisabled={formProps.values.accessions.length > 0}
+                  />
+
                   {formProps.values.accessions &&
                     formProps.values.accessions.length > 0 &&
                     formProps.values.accessions.map((accession, index) => (
                       <FormikAccession
                         controlProps={{
                           as: 'p',
-                          marginTop: '1rem',
                         }}
                         groupProps={{
                           _focusWithin: {
@@ -364,7 +419,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       backgroundColor: 'orange.100',
                     }}
                     colorScheme="orange"
-                    marginTop="1rem"
+                    marginTop=".5rem"
                     type="button"
                     onClick={() => {
                       if (formProps.values.accessions.length === 0) {
@@ -375,9 +430,10 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                       }
                     }}
                     variant="ghost"
+                    disabled={formProps.values.accessionsList !== ''}
                   >
                     {formProps.values.accessions.length === 0
-                      ? 'Optional: Select Genes'
+                      ? 'Select Genes'
                       : 'Add Another Genes'}
                   </Button>
                 </Box>
