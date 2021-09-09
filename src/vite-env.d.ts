@@ -6,4 +6,6 @@ interface ImportMetaEnv {
   VITE_PRELOAD_IMAGE: string;
   VITE_PRELOAD_INFO: string;
   VITE_PRELOAD_SETTINGS: string;
+  VITE_PRELOAD_PLOTS: string;
+  VITE_PRELOAD_ENRICHMENTS: string;
 }
