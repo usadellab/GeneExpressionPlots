@@ -1,20 +1,24 @@
 <h1 align=center>Gene Expression Plotter</h1>
 
-<p align=center>Visualize gene expression from standard data tables generated in data analysis pipelines</p>
+<p align=center>Visualize and compare gene expression from standard transcriptome (RNA-Seq) data, cluster samples and genes, and infer enrichment of gene function in gene-sets.</p>
 
 <p align=center>
 <a href="https://zendro-dev.gitbook.io/geneexpressionplots/">Documentation</a> --
-<a href="https://usadellab.github.io/GeneExpressionPlots/">Demo</a>
+<a href="https://usadellab.github.io/GeneExpressionPlots/">Use it here</a>
 </p>
 
 
 ## &#9733; Overview
 
-**Gene Expression Plotter** is an experimental single page application designed to allow custom visualizations of gene expression results over a custom discrete variable.
+**Gene Expression Plotter** is a single page application (SPA) designed to allow custom visualizations of gene expression from transcriptome (RNA-Seq) data.
 
 Typical **RNA-seq** pipelines output _relatively_ large transcript abundance tables, that require the use of a programming language to shape and visualize the data as a way to better understand results.
 
-This application provides a graphical user interface to upload, process, and plot tabular data outputs from tools like [Kallisto](https://pachterlab.github.io/kallisto/), [Sailfish](https://www.cs.cmu.edu/~ckingsf/software/sailfish/), or [Salmon](https://combine-lab.github.io/salmon/).
+This application provides a graphical user interface to upload, process, and plot tabular data outputs from tools like [Kallisto](https://pachterlab.github.io/kallisto/), [Sailfish](https://www.cs.cmu.edu/~ckingsf/software/sailfish/), [Salmon](https://combine-lab.github.io/salmon/), and many others. 
+
+The user can also generate a custom expression table using e.g. Microsoft Excel and provide further information about the transcripts in an information table, including gene function, differential gene expression, and ontological annotations.
+
+This tool enables clustering of genes or biological samples by correlation resulting in a heatmap visualization. Principal component analysis (PCA) and enrichment analyses can be carried out.
 
 ## &lt;/&gt; Develop
 
