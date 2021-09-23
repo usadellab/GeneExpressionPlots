@@ -60,7 +60,7 @@ const ImportGXPForm: React.FC<ImportGXPFormProps> = (props) => {
           <FormikFile
             initialFocusRef={props.initialFocusRef}
             name="file"
-            label="Tabular File"
+            label="GXP Archive"
             validate={validateFileInput}
             isRequired
           />

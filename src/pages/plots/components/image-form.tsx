@@ -51,6 +51,7 @@ const iMAGEForm: React.FC<ImageFormProps> = (props) => {
             controlProps={{
               as: 'p',
               marginTop: '1rem',
+              marginBottom: '1rem',
             }}
             initialFocusRef={props.initialFocusRef}
             isRequired
