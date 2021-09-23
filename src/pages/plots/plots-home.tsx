@@ -372,7 +372,11 @@ const PlotsHome: React.FC = () => {
           disabled={!dataAvailable}
         />
 
-        <SidebarButton text="Image" icon={FaImage} onClick={onImageFormOpen} />
+        <SidebarButton
+          text="Custom figure"
+          icon={FaImage}
+          onClick={onImageFormOpen}
+        />
 
         <SidebarButton
           text="Remove All"
@@ -560,7 +564,7 @@ const PlotsHome: React.FC = () => {
         isOpen={isImageFormOpen}
         onClose={onImageFormClose}
         size="xl"
-        title="Image Plot"
+        title="Custom figure"
         scrollBehavior="outside"
       >
         <ImageForm
