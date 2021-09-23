@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Text as ChakraText } from '@chakra-ui/react';
+import { Text as ChakraText, Flex } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand, scaleSequential } from 'd3-scale';
 import { interpolateRdBu } from 'd3-scale-chromatic';
@@ -10,7 +10,9 @@ import { Cluster, hierarchy } from '@visx/hierarchy';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import { Text } from '@visx/text';
 import { useTooltipInPortal, useTooltip } from '@visx/tooltip';
-import { LinkVerticalStep } from '@visx/shape';
+import { LinkVerticalStep, Bar } from '@visx/shape';
+import { LinearGradient } from '@visx/gradient';
+import {} from '';
 
 import PlotContainer from './plot-container';
 import {
@@ -24,6 +26,13 @@ import {
   HierarchyPointLink,
   HierarchyPointNode,
 } from '@visx/hierarchy/lib/types';
+import { Legend, LegendItem, LegendLabel, LegendLinear } from '@visx/legend';
+
+const linearScale = scaleLinear({
+  domain: [0, 10],
+  range: ['#ed4fbb', '#e9a039'],
+});
+const legendGlyphSize = 15;
 
 const gradient0 = '#f33d15';
 const gradient1 = '#b4fbde';
@@ -75,6 +84,8 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           domain: [colorMin, colorMax],
         });
 
+  console.log({ colorScale });
+  console.log(interpolateRdBu.toString());
   // dimensions
   const figureRef = React.useRef<HTMLDivElement | null>(null);
   const timeoutRef = React.useRef<number>();
@@ -226,132 +237,174 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       id={props.id}
     >
       {plotDims && (
-        <svg className="main-svg" width="100%" height="100%" ref={containerRef}>
-          <Group>
-            <Text
-              x={plotDims.xMax / 2 + plotDims.tickLabelSize}
-              y={15}
-              textAnchor="middle"
-              fontSize={20}
-            >
-              {props.plotTitle}
-            </Text>
-          </Group>
-          <Group
-            top={plotDims.titleHeight}
-            left={plotDims.tickLabelSize + plotDims.tickLineSize}
+        <>
+          <svg
+            className="main-svg"
+            width="100%"
+            height="100%"
+            ref={containerRef}
           >
-            <Cluster<ClusterTree>
-              root={treeData}
-              size={[plotDims.xMax, plotDims.treeBoundsY]}
-              separation={() => {
-                return 5;
-              }}
+            <Group>
+              <Text
+                x={plotDims.xMax / 2 + plotDims.tickLabelSize}
+                y={15}
+                textAnchor="middle"
+                fontSize={20}
+              >
+                {props.plotTitle}
+              </Text>
+            </Group>
+            <Group
+              top={plotDims.titleHeight}
+              left={plotDims.tickLabelSize + plotDims.tickLineSize}
             >
-              {(cluster) => (
-                <Group>
-                  {cluster.links().map((link, i) => (
-                    <LinkVerticalStep<
-                      HierarchyPointLink<ClusterTree>,
-                      HierarchyPointNode<ClusterTree>
-                    >
-                      key={`cluster-link-${i}`}
-                      data={link}
-                      stroke="black"
-                      strokeWidth="1"
-                      fill="none"
-                      percent={0}
-                    />
-                  ))}
-                  {cluster.descendants().map((node, i) => (
-                    <Group top={node.y} left={node.x} key={`cluster-node-${i}`}>
-                      {!node.children && (
-                        <Text
-                          dy={3}
-                          fontSize={10}
-                          fontFamily="Arial"
-                          textAnchor="end"
-                          angle={270}
-                          dx={4}
-                        >
-                          {node.data.name}
-                        </Text>
-                      )}
-                    </Group>
-                  ))}
-                </Group>
-              )}
-            </Cluster>
-          </Group>
-          <Group
-            top={
-              plotDims.titleHeight +
-              plotDims.treeBoundsY +
-              plotDims.tickLabelSize
-            }
-            left={plotDims.tickLabelSize + plotDims.tickLineSize}
-          >
-            <HeatmapRect
-              data={props.binData}
-              xScale={(d) =>
-                plotDims?.xScalePlot ? plotDims.xScalePlot(d) : 0
-              }
-              yScale={(d) =>
-                plotDims?.yScalePlot ? plotDims.yScalePlot(d) : 0
-              }
-              colorScale={colorScale}
-              // opacityScale={opacityScale}
-              binWidth={plotDims?.binWidth}
-              binHeight={plotDims?.binHeight}
-              bins={(d: HeatmapBins) => d && d.bins}
-              count={(d: HeatmapBin) => d && d.count}
-              gap={1}
-            >
-              {(heatmap) =>
-                heatmap.map((heatmapData) =>
-                  heatmapData.map((data) => {
-                    return (
-                      <rect
-                        key={`heatmap-rect-${data.row}-${data.column}`}
-                        width={data.width}
-                        height={data.height}
-                        x={data.x}
-                        y={data.y}
-                        fill={data.color}
-                        fillOpacity={data.opacity}
-                        onMouseOver={() => {
-                          showTooltip({
-                            tooltipData: data,
-                            tooltipTop:
-                              data.y +
-                              plotDims.titleHeight +
-                              plotDims.treeBoundsY +
-                              plotDims.tickLabelSize,
-                            tooltipLeft: data.x,
-                          });
-                        }}
-                        onMouseOut={hideTooltip}
+              <Cluster<ClusterTree>
+                root={treeData}
+                size={[plotDims.xMax, plotDims.treeBoundsY]}
+                separation={() => {
+                  return 5;
+                }}
+              >
+                {(cluster) => (
+                  <Group>
+                    {cluster.links().map((link, i) => (
+                      <LinkVerticalStep<
+                        HierarchyPointLink<ClusterTree>,
+                        HierarchyPointNode<ClusterTree>
+                      >
+                        key={`cluster-link-${i}`}
+                        data={link}
+                        stroke="black"
+                        strokeWidth="1"
+                        fill="none"
+                        percent={0}
                       />
-                    );
-                  })
-                )
+                    ))}
+                    {cluster.descendants().map((node, i) => (
+                      <Group
+                        top={node.y}
+                        left={node.x}
+                        key={`cluster-node-${i}`}
+                      >
+                        {!node.children && (
+                          <Text
+                            dy={3}
+                            fontSize={10}
+                            fontFamily="Arial"
+                            textAnchor="end"
+                            angle={270}
+                            dx={4}
+                          >
+                            {node.data.name}
+                          </Text>
+                        )}
+                      </Group>
+                    ))}
+                  </Group>
+                )}
+              </Cluster>
+            </Group>
+            <Group
+              top={
+                plotDims.titleHeight +
+                plotDims.treeBoundsY +
+                plotDims.tickLabelSize
               }
-            </HeatmapRect>
-            <AxisLeft
-              left={-10}
-              numTicks={props.binData.length}
-              tickLabelProps={() => ({
-                lengthAdjust: 'spacing',
-                fontSize: 10,
-                textAnchor: 'end',
-                dy: 3,
-                dx: -3,
-              })}
-              scale={plotDims.yScaleAxis}
-            />
-          </Group>
-        </svg>
+              left={plotDims.tickLabelSize + plotDims.tickLineSize}
+            >
+              <HeatmapRect
+                data={props.binData}
+                xScale={(d) =>
+                  plotDims?.xScalePlot ? plotDims.xScalePlot(d) : 0
+                }
+                yScale={(d) =>
+                  plotDims?.yScalePlot ? plotDims.yScalePlot(d) : 0
+                }
+                colorScale={colorScale}
+                // opacityScale={opacityScale}
+                binWidth={plotDims?.binWidth}
+                binHeight={plotDims?.binHeight}
+                bins={(d: HeatmapBins) => d && d.bins}
+                count={(d: HeatmapBin) => d && d.count}
+                gap={1}
+              >
+                {(heatmap) =>
+                  heatmap.map((heatmapData) =>
+                    heatmapData.map((data) => {
+                      return (
+                        <rect
+                          key={`heatmap-rect-${data.row}-${data.column}`}
+                          width={data.width}
+                          height={data.height}
+                          x={data.x}
+                          y={data.y}
+                          fill={data.color}
+                          fillOpacity={data.opacity}
+                          onMouseOver={() => {
+                            showTooltip({
+                              tooltipData: data,
+                              tooltipTop:
+                                data.y +
+                                plotDims.titleHeight +
+                                plotDims.treeBoundsY +
+                                plotDims.tickLabelSize,
+                              tooltipLeft: data.x,
+                            });
+                          }}
+                          onMouseOut={hideTooltip}
+                        />
+                      );
+                    })
+                  )
+                }
+              </HeatmapRect>
+              <AxisLeft
+                left={-10}
+                numTicks={props.binData.length}
+                tickLabelProps={() => ({
+                  lengthAdjust: 'spacing',
+                  fontSize: 10,
+                  textAnchor: 'end',
+                  dy: 3,
+                  dx: -3,
+                })}
+                scale={plotDims.yScaleAxis}
+              />
+            </Group>
+          </svg>
+          <LegendLinear
+            scale={colorScale}
+            steps={41}
+            labelFormat={(d, i) => (i === 0 ? d.toString() : '')}
+          >
+            {
+              (labels) =>
+                // <Flex
+                //   flexDir="column"
+                //   marginLeft={plotDims.tickLabelSize + plotDims.tickLineSize}
+                // >
+                labels.map((label, i) => (
+                  <Flex flexDir="row" key={`legend-quantile-${i}`}>
+                    <LegendItem key={`legend-quantile-${i}`} margin="0px 0">
+                      <svg width={legendGlyphSize} height={legendGlyphSize}>
+                        <rect
+                          fill={label.value}
+                          width={legendGlyphSize}
+                          height={legendGlyphSize}
+                        />
+                      </svg>
+                      {/* <LegendLabel align="left" >
+                      {label.text}
+                    </LegendLabel> */}
+                    </LegendItem>
+                  </Flex>
+                ))
+              // </Flex>
+            }
+          </LegendLinear>
+        </>
       )}
+
       {tooltipOpen && tooltipData && (
         <TooltipInPortal left={tooltipLeft} top={tooltipTop}>
           <p>
