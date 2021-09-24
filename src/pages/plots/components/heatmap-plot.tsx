@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Text as ChakraText, Flex } from '@chakra-ui/react';
+import { Text as ChakraText } from '@chakra-ui/react';
 
 import { ScaleLinear, ScaleBand, scaleSequential } from 'd3-scale';
 import { interpolateRdBu } from 'd3-scale-chromatic';
@@ -10,9 +10,7 @@ import { Cluster, hierarchy } from '@visx/hierarchy';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import { Text } from '@visx/text';
 import { useTooltipInPortal, useTooltip } from '@visx/tooltip';
-import { LinkVerticalStep, Bar } from '@visx/shape';
-import { LinearGradient } from '@visx/gradient';
-import {} from '';
+import { LinkVerticalStep } from '@visx/shape';
 
 import PlotContainer from './plot-container';
 import {
@@ -26,13 +24,10 @@ import {
   HierarchyPointLink,
   HierarchyPointNode,
 } from '@visx/hierarchy/lib/types';
-import { Legend, LegendItem, LegendLabel, LegendLinear } from '@visx/legend';
 
-const linearScale = scaleLinear({
-  domain: [0, 10],
-  range: ['#ed4fbb', '#e9a039'],
-});
-const legendGlyphSize = 15;
+import HeatmapLegend from '@/pages/plots/components/heatmap-legend';
+
+import { nanoid } from 'nanoid';
 
 const gradient0 = '#f33d15';
 const gradient1 = '#b4fbde';
@@ -84,8 +79,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           domain: [colorMin, colorMax],
         });
 
-  console.log({ colorScale });
-  console.log(interpolateRdBu.toString());
   // dimensions
   const figureRef = React.useRef<HTMLDivElement | null>(null);
   const timeoutRef = React.useRef<number>();
@@ -244,6 +237,17 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             height="100%"
             ref={containerRef}
           >
+            <HeatmapLegend
+              colorScale={colorScale}
+              id={nanoid()}
+              minVal={props.distanceMethod === 'euclidean' ? colorMin : -1}
+              maxVal={props.distanceMethod === 'euclidean' ? colorMax : 1}
+              label={
+                props.distanceMethod === 'euclidean'
+                  ? 'euclidean distance'
+                  : 'correlation coefficient'
+              }
+            />
             <Group>
               <Text
                 x={plotDims.xMax / 2 + plotDims.tickLabelSize}
@@ -372,36 +376,6 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               />
             </Group>
           </svg>
-          <LegendLinear
-            scale={colorScale}
-            steps={41}
-            labelFormat={(d, i) => (i === 0 ? d.toString() : '')}
-          >
-            {
-              (labels) =>
-                // <Flex
-                //   flexDir="column"
-                //   marginLeft={plotDims.tickLabelSize + plotDims.tickLineSize}
-                // >
-                labels.map((label, i) => (
-                  <Flex flexDir="row" key={`legend-quantile-${i}`}>
-                    <LegendItem key={`legend-quantile-${i}`} margin="0px 0">
-                      <svg width={legendGlyphSize} height={legendGlyphSize}>
-                        <rect
-                          fill={label.value}
-                          width={legendGlyphSize}
-                          height={legendGlyphSize}
-                        />
-                      </svg>
-                      {/* <LegendLabel align="left" >
-                      {label.text}
-                    </LegendLabel> */}
-                    </LegendItem>
-                  </Flex>
-                ))
-              // </Flex>
-            }
-          </LegendLinear>
         </>
       )}
 
