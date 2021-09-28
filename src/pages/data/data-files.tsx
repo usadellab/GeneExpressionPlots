@@ -374,7 +374,6 @@ const DataFiles: React.FC = () => {
 
       if (values.exportPlots) {
         const plotsSrc = JSON.stringify(plotStore.plotNamesForExport());
-        console.log({ plotsSrc });
         if (plotsSrc) {
           zip.file('plots.json', plotsSrc);
           zip.folder('plots');
@@ -398,15 +397,11 @@ const DataFiles: React.FC = () => {
         }
       }
 
-      zip
-        .generateAsync({ type: 'blob' })
-        .then((zipFile) => {
-          saveAs(zipFile, values.fileName + '.zip');
-        })
-        .finally(() => {
-          actions.setSubmitting(false);
-          onGXPExportClose();
-        });
+      const zipFile = await zip.generateAsync({ type: 'blob' });
+      saveAs(zipFile, values.fileName + '.zip');
+
+      actions.setSubmitting(false);
+      onGXPExportClose();
     } catch (error) {
       actions.setSubmitting(false);
       console.error(error);
