@@ -25,6 +25,10 @@ import {
   HierarchyPointNode,
 } from '@visx/hierarchy/lib/types';
 
+import HeatmapLegend from '@/pages/plots/components/heatmap-legend';
+
+import { nanoid } from 'nanoid';
+
 const gradient0 = '#f33d15';
 const gradient1 = '#b4fbde';
 // const gradient0 = '#77312f';
@@ -226,132 +230,155 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
       id={props.id}
     >
       {plotDims && (
-        <svg className="main-svg" width="100%" height="100%" ref={containerRef}>
-          <Group>
-            <Text
-              x={plotDims.xMax / 2 + plotDims.tickLabelSize}
-              y={15}
-              textAnchor="middle"
-              fontSize={20}
-            >
-              {props.plotTitle}
-            </Text>
-          </Group>
-          <Group
-            top={plotDims.titleHeight}
-            left={plotDims.tickLabelSize + plotDims.tickLineSize}
+        <>
+          <svg
+            className="main-svg"
+            width="100%"
+            height="100%"
+            ref={containerRef}
           >
-            <Cluster<ClusterTree>
-              root={treeData}
-              size={[plotDims.xMax, plotDims.treeBoundsY]}
-              separation={() => {
-                return 5;
-              }}
-            >
-              {(cluster) => (
-                <Group>
-                  {cluster.links().map((link, i) => (
-                    <LinkVerticalStep<
-                      HierarchyPointLink<ClusterTree>,
-                      HierarchyPointNode<ClusterTree>
-                    >
-                      key={`cluster-link-${i}`}
-                      data={link}
-                      stroke="black"
-                      strokeWidth="1"
-                      fill="none"
-                      percent={0}
-                    />
-                  ))}
-                  {cluster.descendants().map((node, i) => (
-                    <Group top={node.y} left={node.x} key={`cluster-node-${i}`}>
-                      {!node.children && (
-                        <Text
-                          dy={3}
-                          fontSize={10}
-                          fontFamily="Arial"
-                          textAnchor="end"
-                          angle={270}
-                          dx={4}
-                        >
-                          {node.data.name}
-                        </Text>
-                      )}
-                    </Group>
-                  ))}
-                </Group>
-              )}
-            </Cluster>
-          </Group>
-          <Group
-            top={
-              plotDims.titleHeight +
-              plotDims.treeBoundsY +
-              plotDims.tickLabelSize
-            }
-            left={plotDims.tickLabelSize + plotDims.tickLineSize}
-          >
-            <HeatmapRect
-              data={props.binData}
-              xScale={(d) =>
-                plotDims?.xScalePlot ? plotDims.xScalePlot(d) : 0
-              }
-              yScale={(d) =>
-                plotDims?.yScalePlot ? plotDims.yScalePlot(d) : 0
-              }
+            <HeatmapLegend
               colorScale={colorScale}
-              // opacityScale={opacityScale}
-              binWidth={plotDims?.binWidth}
-              binHeight={plotDims?.binHeight}
-              bins={(d: HeatmapBins) => d && d.bins}
-              count={(d: HeatmapBin) => d && d.count}
-              gap={1}
-            >
-              {(heatmap) =>
-                heatmap.map((heatmapData) =>
-                  heatmapData.map((data) => {
-                    return (
-                      <rect
-                        key={`heatmap-rect-${data.row}-${data.column}`}
-                        width={data.width}
-                        height={data.height}
-                        x={data.x}
-                        y={data.y}
-                        fill={data.color}
-                        fillOpacity={data.opacity}
-                        onMouseOver={() => {
-                          showTooltip({
-                            tooltipData: data,
-                            tooltipTop:
-                              data.y +
-                              plotDims.titleHeight +
-                              plotDims.treeBoundsY +
-                              plotDims.tickLabelSize,
-                            tooltipLeft: data.x,
-                          });
-                        }}
-                        onMouseOut={hideTooltip}
-                      />
-                    );
-                  })
-                )
+              id={nanoid()}
+              minVal={props.distanceMethod === 'euclidean' ? colorMin : -1}
+              maxVal={props.distanceMethod === 'euclidean' ? colorMax : 1}
+              label={
+                props.distanceMethod === 'euclidean'
+                  ? 'euclidean distance'
+                  : 'correlation coefficient'
               }
-            </HeatmapRect>
-            <AxisLeft
-              left={-10}
-              numTicks={props.binData.length}
-              tickLabelProps={() => ({
-                lengthAdjust: 'spacing',
-                fontSize: 10,
-                textAnchor: 'end',
-                dy: 3,
-                dx: -3,
-              })}
-              scale={plotDims.yScaleAxis}
             />
-          </Group>
-        </svg>
+            <Group>
+              <Text
+                x={plotDims.xMax / 2 + plotDims.tickLabelSize}
+                y={15}
+                textAnchor="middle"
+                fontSize={20}
+              >
+                {props.plotTitle}
+              </Text>
+            </Group>
+            <Group
+              top={plotDims.titleHeight}
+              left={plotDims.tickLabelSize + plotDims.tickLineSize}
+            >
+              <Cluster<ClusterTree>
+                root={treeData}
+                size={[plotDims.xMax, plotDims.treeBoundsY]}
+                separation={() => {
+                  return 5;
+                }}
+              >
+                {(cluster) => (
+                  <Group>
+                    {cluster.links().map((link, i) => (
+                      <LinkVerticalStep<
+                        HierarchyPointLink<ClusterTree>,
+                        HierarchyPointNode<ClusterTree>
+                      >
+                        key={`cluster-link-${i}`}
+                        data={link}
+                        stroke="black"
+                        strokeWidth="1"
+                        fill="none"
+                        percent={0}
+                      />
+                    ))}
+                    {cluster.descendants().map((node, i) => (
+                      <Group
+                        top={node.y}
+                        left={node.x}
+                        key={`cluster-node-${i}`}
+                      >
+                        {!node.children && (
+                          <Text
+                            dy={3}
+                            fontSize={10}
+                            fontFamily="Arial"
+                            textAnchor="end"
+                            angle={270}
+                            dx={4}
+                          >
+                            {node.data.name}
+                          </Text>
+                        )}
+                      </Group>
+                    ))}
+                  </Group>
+                )}
+              </Cluster>
+            </Group>
+            <Group
+              top={
+                plotDims.titleHeight +
+                plotDims.treeBoundsY +
+                plotDims.tickLabelSize
+              }
+              left={plotDims.tickLabelSize + plotDims.tickLineSize}
+            >
+              <HeatmapRect
+                data={props.binData}
+                xScale={(d) =>
+                  plotDims?.xScalePlot ? plotDims.xScalePlot(d) : 0
+                }
+                yScale={(d) =>
+                  plotDims?.yScalePlot ? plotDims.yScalePlot(d) : 0
+                }
+                colorScale={colorScale}
+                // opacityScale={opacityScale}
+                binWidth={plotDims?.binWidth}
+                binHeight={plotDims?.binHeight}
+                bins={(d: HeatmapBins) => d && d.bins}
+                count={(d: HeatmapBin) => d && d.count}
+                gap={1}
+              >
+                {(heatmap) =>
+                  heatmap.map((heatmapData) =>
+                    heatmapData.map((data) => {
+                      return (
+                        <rect
+                          key={`heatmap-rect-${data.row}-${data.column}`}
+                          width={data.width}
+                          height={data.height}
+                          x={data.x}
+                          y={data.y}
+                          fill={data.color}
+                          fillOpacity={data.opacity}
+                          onMouseOver={() => {
+                            showTooltip({
+                              tooltipData: data,
+                              tooltipTop:
+                                data.y +
+                                plotDims.titleHeight +
+                                plotDims.treeBoundsY +
+                                plotDims.tickLabelSize,
+                              tooltipLeft: data.x,
+                            });
+                          }}
+                          onMouseOut={hideTooltip}
+                        />
+                      );
+                    })
+                  )
+                }
+              </HeatmapRect>
+              <AxisLeft
+                left={-10}
+                numTicks={props.binData.length}
+                tickLabelProps={() => ({
+                  lengthAdjust: 'spacing',
+                  fontSize: 10,
+                  textAnchor: 'end',
+                  dy: 3,
+                  dx: -3,
+                })}
+                scale={plotDims.yScaleAxis}
+              />
+            </Group>
+          </svg>
+        </>
       )}
+
       {tooltipOpen && tooltipData && (
         <TooltipInPortal left={tooltipLeft} top={tooltipTop}>
           <p>
