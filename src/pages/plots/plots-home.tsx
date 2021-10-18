@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
+import { VscGraphScatter } from 'react-icons/vsc';
 import { observer } from 'mobx-react';
 import {
   Alert,
@@ -53,6 +54,7 @@ import StackedLinesForm, {
 } from './components/stacked-lines-form';
 import PlotCaption from './components/plot-caption';
 import PCAForm, { PCAFormSubmitHandler } from './components/pca-form';
+import MapManForm, { MapManFormSubmitHandler } from './components/mapman-form';
 
 const PlotsHome: React.FC = () => {
   const toast = useToast();
@@ -298,6 +300,20 @@ const PlotsHome: React.FC = () => {
     );
   };
 
+  /* MapMan Plot*/
+  const refMapManFormInitialFocus = React.useRef<FocusableElement | null>(null);
+  const {
+    isOpen: isMapManFormOpen,
+    onOpen: onMapManFormOpen,
+    onClose: onMapManFormClose,
+  } = useDisclosure();
+
+  const onMapManFormSubmit: MapManFormSubmitHandler = (values, actions) => {
+    actions.setSubmitting(false);
+    onMapManFormClose();
+    console.log({ values });
+  };
+
   /* IMAGE PLOT */
 
   const refImageFormInitialFocus = React.useRef<FocusableElement | null>(null);
@@ -371,7 +387,12 @@ const PlotsHome: React.FC = () => {
           onClick={onPCAFormOpen}
           disabled={!dataAvailable}
         />
-
+        <SidebarButton
+          text="MapMan Function"
+          icon={VscGraphScatter}
+          onClick={onMapManFormOpen}
+          disabled={!dataAvailable}
+        />
         <SidebarButton
           text="Custom figure"
           icon={FaImage}
@@ -556,6 +577,21 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refPCAFormInitialFocus}
           onCancel={onPCAFormClose}
           onSubmit={onPCAFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refMapManFormInitialFocus}
+        isOpen={isMapManFormOpen}
+        onClose={onMapManFormClose}
+        size="xl"
+        title="MapMan function Sketch Implementation"
+        scrollBehavior="outside"
+      >
+        <MapManForm
+          initialFocusRef={refMapManFormInitialFocus}
+          onCancel={onMapManFormClose}
+          onSubmit={onMapManFormSubmit}
         />
       </FormikModal>
 
