@@ -34,6 +34,7 @@ import {
   GxpPlotly,
   GxpPCA,
   GxpImage,
+  GxpMapMan,
 } from '@/types/plots';
 
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
@@ -46,6 +47,7 @@ import ImageForm, { ImageFormSubmitHandler } from './components/image-form';
 import PlotContainer from './components/plot-container';
 import PlotlyPlot, { colors } from './components/plotly-plot';
 import PCAPlot from './components/pca-plot';
+import MapManPlot from './components/mapman-plot';
 import IndividualLinesForm, {
   IndividualLinesFormSubmitHandler,
 } from './components/individual-lines-form';
@@ -310,8 +312,10 @@ const PlotsHome: React.FC = () => {
 
   const onMapManFormSubmit: MapManFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
-    onMapManFormClose();
     console.log({ values });
+    // pass values.template to addMapManPlot
+    plotStore.addMapManPlot(values.template);
+    onMapManFormClose();
   };
 
   /* IMAGE PLOT */
@@ -498,6 +502,18 @@ const PlotsHome: React.FC = () => {
             case 'pca': {
               const pcaPlot = plot as GxpPCA;
               return <PCAPlot key={pcaPlot.id} {...pcaPlot} />;
+            }
+            case 'mapman': {
+              const mapmanPlot = plot as GxpMapMan;
+              console.log({ mapmanPlot });
+              // pass the template to the MapManPlot
+              return (
+                <MapManPlot
+                  key={mapmanPlot.id}
+                  // template={mapmanPlot.template}
+                  {...mapmanPlot}
+                />
+              );
             }
             default:
               break;

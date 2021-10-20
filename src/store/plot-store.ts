@@ -1,4 +1,4 @@
-import { makeAutoObservable, toJS } from 'mobx';
+import { makeAutoObservable, toJS, values } from 'mobx';
 import { nanoid } from 'nanoid';
 import {
   GxpHeatmap,
@@ -11,6 +11,7 @@ import {
   ClusterTree,
   CreateHeatmapArgs,
   CreatePCAargs,
+  GxpMapMan,
 } from '@/types/plots';
 import { dataTable } from '@/store/data-store';
 
@@ -27,6 +28,7 @@ import stackedLinesData from '@/utils/plots/stacked-lines';
 import { Layout, PlotData } from 'plotly.js';
 import { HeatmapFormAttributes } from '@/pages/plots/components/heatmap-form';
 import { PCAFormAttributes } from '@/pages/plots/components/pca-form';
+import { FcTemplate } from 'react-icons/fc';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -278,6 +280,20 @@ class PlotStore {
       options,
     };
     this.plots.push(stackedLines);
+  }
+
+  // add template argument
+  addMapManPlot(template: string): void {
+    const id = nanoid();
+    const plot: GxpMapMan = {
+      id,
+      template,
+      type: 'mapman',
+      isLoading: false,
+      // template: value of the template select option
+    };
+    console.log({ plot });
+    this.plots.push(plot);
   }
 }
 

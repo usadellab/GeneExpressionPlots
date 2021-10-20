@@ -2,13 +2,19 @@ import { DataRows } from '@/store/dataframe';
 import { GXPDistanceMethod } from '@/utils/plots/heatmap';
 import { Layout, PlotData } from 'plotly.js';
 
-export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image';
+export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image' | 'mapman';
 
 export interface GxpPlot {
   id: string;
   type: PlotType;
   isLoading: boolean;
 }
+
+//#region MapMan
+export interface GxpMapMan extends GxpPlot {
+  template: string;
+}
+//#endregion
 
 //#region Heatmap
 
