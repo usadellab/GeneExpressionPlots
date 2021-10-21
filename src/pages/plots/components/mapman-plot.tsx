@@ -19,8 +19,7 @@ const MapManPlot: React.FC<GxpMapMan> = (props) => {
   useLayoutEffect(() => {
     const binCoords: { [key: string]: DataPoint } = {};
     const svg = d3.select(ref.current);
-    // d3.xml(`mapman-template/${props.template}`)
-    // d3.xml('mapman-templates/X4.3_Amino_acid_metabolism_R3.0.svg').then(
+
     d3.xml(`mapman-templates/${props.template}`).then((data) => {
       console.log({ data });
       svg.node()?.append(data.documentElement);
