@@ -74,7 +74,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
       initialValues={{
         infoTableColumn: infoTable.colNames[0],
         infoTableColumnSep: ',',
-        template: 'Amino acid metabolism',
+        template: '',
       }}
       validateOnBlur={false}
       onSubmit={props.onSubmit}
