@@ -22,8 +22,8 @@ const multiGeneBarData = (
         if (groupSamplePlotData) {
           x[0].push(groupName);
           x[1].push(sampleName);
-          y.push(mean(groupSamplePlotData));
-          error_y.push(deviation(groupSamplePlotData));
+          y.push(mean(groupSamplePlotData) as number);
+          error_y.push(deviation(groupSamplePlotData) as number);
         }
       });
     });
