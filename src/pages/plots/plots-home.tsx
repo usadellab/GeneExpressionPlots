@@ -489,7 +489,7 @@ const PlotsHome: React.FC = () => {
         isOpen={isBarsFormOpen}
         onClose={onBarsFormClose}
         size="xl"
-        title="Bars Plot"
+        title="Bar Plot"
         scrollBehavior="outside"
       >
         <BarsForm
