@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 import PlotContainer from './plot-container';
@@ -12,6 +12,7 @@ import {
 } from '@/utils/plots/mapman-xml-domparser';
 import { BiAlignMiddle } from 'react-icons/bi';
 import { removeObserver } from 'mobx/dist/internal';
+import { readFile } from '@/utils/parser';
 
 // import { getDataAreaXml } from '@/utils/plots/mapman-xml-domparser';
 
@@ -36,76 +37,72 @@ interface identifier {
 
 const MapManPlot: React.FC<GxpMapMan> = (props) => {
   const ref = useRef(null);
+  const svgRef = useRef(null);
   props.template;
+  console.log(
+    infoTable.getGenesForMapManBin('MapMan-Bins', ',', '1.3.4', true)
+  );
 
+  const [xmlDocument, setxmlDocument] = useState<Document>();
   useLayoutEffect(() => {
-    const binCoords: { [key: string]: DataPoint } = {};
-    const svg = d3.select(ref.current);
+    const svgMaster = d3.select(ref.current);
+    console.log({ svgMaster });
+    const svg = d3
+      .select(svgRef.current)
+      .attr('width', '1024')
+      .attr('height', '800');
 
     d3.xml(`mapman-templates/${props.template}`).then((data) => {
-      console.log({ data });
+      // console.log({ data });
       svg.node()?.append(data.documentElement);
+      parseXmlData('mapman-templates/X4.3_Metabolism_overview_R3.0.xml').then(
+        (xmlDocument) => {
+          const bins = xmlDocument.getElementsByTagName('Identifier');
+          console.log({ xmlDocument, bins });
+        }
+      );
+
+      const svgViz = d3
+        .select(svgRef.current)
+        .append('g')
+        .attr('id', 'Viz layer');
+      svgViz
+        .append('rect')
+        .attr('x', 35)
+        .attr('y', 35)
+        .attr('height', 5)
+        .attr('width', 5)
+        .append('title')
+        .text('Hello world');
     });
 
-    var xmlBins: string = getXmlBins(
-      'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    );
+    // var xmlBins: string = getXmlBins(
+    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
+    // );
 
-    var coordinates_x_y = getXml_x_yCords(
-      'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    );
+    // var coordinates_x_y = getXml_x_yCords(
+    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
+    // );
 
-    var recursive = getXmlRecursive(
-      'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    );
+    // var recursive = getXmlRecursive(
+    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
+    // );
 
-    var xmlData = parseXmlData(
-      'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    ).then((x) => {
-      x.querySelectorAll('DataArea').forEach((xmlNode) => {
-        console.log(
-          xmlNode.getElementsByTagName('Identifier')[0].attributes[0].nodeValue
-        );
-      });
-    });
+    // var xmlData = parseXmlData(
+    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
+    // ).then((x) => {
+    //   x.querySelectorAll('DataArea').forEach((xmlNode) => {
+    //     console.log(
+    //       xmlNode.getElementsByTagName('Identifier')[0].attributes[0].nodeValue
+    //     );
+    //   });
+    // });
 
     // console.log(Object.values(recursive).map((i) => recursive[i]));
 
-    console.log(xmlBins, coordinates_x_y, coordinates_x_y, recursive);
+    // console.log(xmlBins, coordinates_x_y, coordinates_x_y, recursive);
 
-    console.log(xmlBins.length);
-
-    /**
-     * Get genes matching the MapMan
-     */
-    function getGenesForMapManBins(): any {
-      //   colName: String,
-      //   mapmanBin: String,
-      //   recursive: boolean
-      return console.log(dataTable);
-    }
-
-    console.log(dataTable.getRow('PGSC0003DMT400039136'));
-
-    d3.xml('mapman-templates/X4.3_Metabolism_overview_R3.0.xml').then(
-      (data) => {
-        console.log({ data });
-
-        [].map.call(data.querySelectorAll('DataArea'), (dataArea: any) => {
-          const id: string =
-            dataArea.firstElementChild.attributes.getNamedItem('id').value;
-          const { x: xPoint, y: yPoint } = dataArea.attributes;
-          binCoords[id] = {
-            x: xPoint.value,
-            y: yPoint.value,
-            offset: 0,
-            format: 'x',
-            formatnumber: 5,
-          };
-        });
-        console.log({ binCoords });
-      }
-    );
+    // console.log(xmlBins.length);
   }, []);
   return (
     <PlotContainer
@@ -117,7 +114,7 @@ const MapManPlot: React.FC<GxpMapMan> = (props) => {
       status="idle"
       id={props.id}
     >
-      <svg ref={ref} />
+      <svg ref={svgRef} />
     </PlotContainer>
   );
 };

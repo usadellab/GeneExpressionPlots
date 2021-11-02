@@ -410,10 +410,19 @@ export class Dataframe {
     this.rows = newRows;
   }
   getGenesForMapManBin(
-    colname: string,
-    mapmanbin: string,
+    colName: string,
+    separator: string,
+    mapmanBin: string,
     recursive: boolean
   ): string[] {
-    return [];
+    const colIndex = this.colNames.findIndex((col) => col === colName);
+    return this.rowNames.filter((geneId) => {
+      const bins = this.rows[geneId][colIndex].split(separator);
+      const pattern = recursive
+        ? new RegExp(`^${mapmanBin}`)
+        : new RegExp(`^${mapmanBin}$`);
+
+      return bins.some((bin) => pattern.test(bin));
+    });
   }
 }
