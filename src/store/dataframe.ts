@@ -409,4 +409,11 @@ export class Dataframe {
     this.header = newCols;
     this.rows = newRows;
   }
+  getGenesForMapManBin(
+    colname: string,
+    mapmanbin: string,
+    recursive: boolean
+  ): string[] {
+    return [];
+  }
 }
