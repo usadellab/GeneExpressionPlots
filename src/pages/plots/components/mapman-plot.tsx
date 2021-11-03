@@ -5,6 +5,8 @@ import PlotContainer from './plot-container';
 import { GxpMapMan } from '@/types/plots';
 import { dataTable, infoTable } from '@/store/data-store';
 import {
+  getCoordinates,
+  getMapManBins,
   getXmlBins,
   getXmlRecursive,
   getXml_x_yCords,
@@ -14,6 +16,9 @@ import { BiAlignMiddle } from 'react-icons/bi';
 import { removeObserver } from 'mobx/dist/internal';
 import { readFile } from '@/utils/parser';
 
+import { interpolateRdBu } from 'd3-scale-chromatic';
+import { scaleSequential } from 'd3-scale';
+
 // import { getDataAreaXml } from '@/utils/plots/mapman-xml-domparser';
 
 // interface dataArea {
@@ -21,19 +26,14 @@ import { readFile } from '@/utils/parser';
 //   y: number;
 //   identifiers: identifier[];
 // }
+const SIZE = 5;
 
 interface identifier {
   id: string;
   recursive: boolean;
 }
 
-// let rows = infoTable.colNames;
-
-// console.log('row --- 1', rows);
-
-// let row2 = dataTable.colNames;
-
-// console.log('rows --- 2', row2);
+const colorScale = scaleSequential([-1, 1], interpolateRdBu);
 
 const MapManPlot: React.FC<GxpMapMan> = (props) => {
   const ref = useRef(null);
@@ -55,54 +55,64 @@ const MapManPlot: React.FC<GxpMapMan> = (props) => {
     d3.xml(`mapman-templates/${props.template}`).then((data) => {
       // console.log({ data });
       svg.node()?.append(data.documentElement);
+
       parseXmlData('mapman-templates/X4.3_Metabolism_overview_R3.0.xml').then(
         (xmlDocument) => {
+          const svgViz = d3
+            .select(svgRef.current)
+            .append('g')
+            .attr('id', 'Viz layer');
           const bins = xmlDocument.getElementsByTagName('Identifier');
-          console.log({ xmlDocument, bins });
+          // console.log({ xmlDocument, bins });
+
+          const dataAreas = xmlDocument.querySelectorAll('DataArea');
+          // console.log({ dataAreas });
+
+          dataAreas.forEach((dataArea) => {
+            // console.log(dataArea.getElementsByTagName('Identifier'));
+            const { x, y } = getCoordinates(dataArea);
+            const bins = getMapManBins(dataArea);
+            // console.log({ x, y, bins });
+
+            const geneIds = infoTable.getGenesForMapManBin(
+              'MapMan-Bins',
+              ',',
+              bins[0].id,
+              bins[0].recursive
+            );
+
+            let xOffset = 0;
+            let yOffset = 0;
+
+            geneIds.forEach((geneId) => {
+              const rectValue = infoTable.getColumnValue(
+                geneId,
+                'log-fold change'
+              );
+
+              console.log({ rectValue });
+              // console.log(colorScale(rectValue));
+
+              svgViz
+                .append('rect')
+                .attr('x', x + (xOffset % 5) * SIZE)
+                .attr('y', y + yOffset * SIZE)
+                .attr('height', SIZE)
+                .attr('width', SIZE)
+                .style('stroke', 'lightgray')
+                .style('fill', colorScale(parseFloat(rectValue)))
+                .append('title')
+                .text(bins[0].id + ': ' + geneId + ' - ' + rectValue);
+
+              xOffset++;
+              if (xOffset != 0 && xOffset % 5 === 0) {
+                yOffset++;
+              }
+            });
+          });
         }
       );
-
-      const svgViz = d3
-        .select(svgRef.current)
-        .append('g')
-        .attr('id', 'Viz layer');
-      svgViz
-        .append('rect')
-        .attr('x', 35)
-        .attr('y', 35)
-        .attr('height', 5)
-        .attr('width', 5)
-        .append('title')
-        .text('Hello world');
     });
-
-    // var xmlBins: string = getXmlBins(
-    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    // );
-
-    // var coordinates_x_y = getXml_x_yCords(
-    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    // );
-
-    // var recursive = getXmlRecursive(
-    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    // );
-
-    // var xmlData = parseXmlData(
-    //   'mapman-templates/X4.3_Metabolism_overview_R3.0.xml'
-    // ).then((x) => {
-    //   x.querySelectorAll('DataArea').forEach((xmlNode) => {
-    //     console.log(
-    //       xmlNode.getElementsByTagName('Identifier')[0].attributes[0].nodeValue
-    //     );
-    //   });
-    // });
-
-    // console.log(Object.values(recursive).map((i) => recursive[i]));
-
-    // console.log(xmlBins, coordinates_x_y, coordinates_x_y, recursive);
-
-    // console.log(xmlBins.length);
   }, []);
   return (
     <PlotContainer
