@@ -1,3 +1,5 @@
+import { DataTable } from '@/store/dataframe';
+
 export async function readFile(
   file: Blob
 ): Promise<string | ArrayBuffer | null> {
@@ -69,4 +71,21 @@ export function parseEnrichmentData(
     acc.push(cellValues);
     return acc;
   }, []);
+}
+
+export function parseMercator(
+  table: string, // The File to be parsed as string. This will be passed from the frontend
+  options?: { addName: boolean; addDescription: boolean } // options to add columns
+): DataTable {
+  /* IMPLEMENTATION */
+  // See for example FileReader (https://developer.mozilla.org/de/docs/Web/API/FileReader)
+  // and e.g. onXTableFormSubmit() function in src/pages/data/data-files.tsx.
+  // For now we are not processing files in a stream, if you find a good way to do so
+  // do it.
+  // Have a look at the readTable function in the parser utility that returns
+  // the same object
+  return {
+    header: [],
+    rows: {},
+  };
 }
