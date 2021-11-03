@@ -112,6 +112,11 @@ export class Dataframe {
     return this.rows[rowName];
   }
 
+  getColumnValue(rowName: string, colName: string): string {
+    const colIndex = this.colNames.findIndex((col) => col === colName);
+    return this.rows[rowName][colIndex];
+  }
+
   /**
    * Get a single row as an object of key-value pairs.
    * - Each key represents the column header for a single cell value.
