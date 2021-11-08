@@ -24,12 +24,12 @@ describe('parse Mercator table', function () {
     const table = parseMercator(mercator_table);
 
     expect(table).to.deep.eq({
-      header: ['mc_BINCODE'],
+      header: ['BINCODE'],
       rows: {
-        'gene-1': ['1.1.1.1.1,1.1.1.2.2.1'],
-        'gene-2': ['1.1.1.1.1,1.1.1.2.2.1'],
+        'gene-1': ['1.1.1.1.1', '1.1.1.2.2.1'],
+        'gene-2': ['1.1.1.1.1', '1.1.1.2.2.1'],
         'gene-3': ['1.1.1.1.2'],
-        'gene-4': ['1.1.1.1.3'],
+        'gene-4': ['1.1.1.1.2'],
         'gene-5': ['1.1.1.1.3'],
         'gene-6': ['1.1.1.2.1.6'],
       },

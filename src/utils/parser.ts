@@ -1,4 +1,7 @@
 import { DataTable } from '@/store/dataframe';
+import { ArrowModifier } from '@popperjs/core/lib/modifiers/arrow';
+import { values } from 'mobx';
+import { unescapeDelimiters } from './string';
 
 export async function readFile(
   file: Blob
@@ -77,15 +80,32 @@ export function parseMercator(
   table: string, // The File to be parsed as string. This will be passed from the frontend
   options?: { addName: boolean; addDescription: boolean } // options to add columns
 ): DataTable {
-  /* IMPLEMENTATION */
-  // See for example FileReader (https://developer.mozilla.org/de/docs/Web/API/FileReader)
-  // and e.g. onXTableFormSubmit() function in src/pages/data/data-files.tsx.
-  // For now we are not processing files in a stream, if you find a good way to do so
-  // do it.
-  // Have a look at the readTable function in the parser utility that returns
-  // the same object
+  const mercator_data: any = {};
+  const header: any = [];
+  const lines = table.split('\n').map(function (line) {
+    // reader.results of the read file can be parsed at this point
+    return line.split('\t');
+  });
+
+  lines.forEach((line) => {
+    if (line[0] === 'BINCODE') {
+      header.push(line[0]);
+    } else {
+      if (line[0].length !== 0) {
+        let bins: string = line[0].replace(/[']+/g, ''); // remove extra quotation marks
+        let ids: string = line[2].replace(/[']+/g, ''); // remove extra quotation marks
+
+        if (!(ids in mercator_data)) {
+          mercator_data[ids] = [];
+        }
+        mercator_data[ids].push(bins);
+      }
+    }
+  });
+  delete mercator_data['']; // remove bins that don't have gene identification
+
   return {
-    header: [],
-    rows: {},
+    header: header,
+    rows: mercator_data,
   };
 }
