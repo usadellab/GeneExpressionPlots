@@ -13,6 +13,11 @@ export interface GxpPlot {
 //#region MapMan
 export interface GxpMapMan extends GxpPlot {
   template: string;
+  infoTableColumn: string;
+  infoTableColumnSep: string;
+  valuesFrom: string;
+  colorScale: 'sequential' | 'linear';
+  sample?: string;
 }
 //#endregion
 

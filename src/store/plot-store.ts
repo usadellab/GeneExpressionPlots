@@ -28,7 +28,7 @@ import stackedLinesData from '@/utils/plots/stacked-lines';
 import { Layout, PlotData } from 'plotly.js';
 import { HeatmapFormAttributes } from '@/pages/plots/components/heatmap-form';
 import { PCAFormAttributes } from '@/pages/plots/components/pca-form';
-import { FcTemplate } from 'react-icons/fc';
+import { MapManFormAttributes } from '@/pages/plots/components/mapman-form';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -283,16 +283,26 @@ class PlotStore {
   }
 
   // add template argument
-  addMapManPlot(template: string): void {
+  addMapManPlot({
+    template,
+    infoTableColumn,
+    infoTableColumnSep,
+    valuesFrom,
+    colorScale,
+    sample,
+  }: MapManFormAttributes): void {
     const id = nanoid();
     const plot: GxpMapMan = {
       id,
-      template,
       type: 'mapman',
       isLoading: false,
-      // template: value of the template select option
+      template,
+      infoTableColumn,
+      infoTableColumnSep,
+      valuesFrom,
+      colorScale,
+      sample,
     };
-    console.log({ plot });
     this.plots.push(plot);
   }
 }
