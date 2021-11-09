@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Image image="M4_Nucleotide_metabolism_r1.1" size="1024x724" modified="2020-07-24 14:35:47.579526" scaling="1.0">
+	<DataArea x="609" y="130" visualizationType="1">
+		<Identifier id="6.2.1" recursive="true"/>
+	</DataArea>
+	<DataArea x="123" y="125" visualizationType="1">
+		<Identifier id="6.1.1" recursive="true"/>
+	</DataArea>
+	<DataArea x="816" y="287" visualizationType="1">
+		<Identifier id="6.2.3" recursive="true"/>
+	</DataArea>
+	<DataArea x="408" y="202" visualizationType="1">
+		<Identifier id="6.1.4" recursive="true"/>
+	</DataArea>
+	<DataArea x="610" y="279" visualizationType="1">
+		<Identifier id="6.2.4" recursive="true"/>
+	</DataArea>
+	<DataArea x="118" y="277" visualizationType="1">
+		<Identifier id="6.1.5" recursive="true"/>
+	</DataArea>
+	<DataArea x="221" y="202" visualizationType="1">
+		<Identifier id="6.1.3" recursive="true"/>
+	</DataArea>
+	<DataArea x="771" y="205" visualizationType="1">
+		<Identifier id="6.2.2" recursive="true"/>
+	</DataArea>
+	<DataArea x="505" y="518" visualizationType="1">
+		<Identifier id="6.3.2" recursive="true"/>
+	</DataArea>
+	<DataArea x="342" y="442" visualizationType="1">
+		<Identifier id="6.3.1" recursive="true"/>
+	</DataArea>
+	<DataArea x="344" y="594" visualizationType="1">
+		<Identifier id="6.3.3" recursive="true"/>
+	</DataArea>
+	<DataArea x="317" y="128" visualizationType="1">
+		<Identifier id="6.1.2" recursive="true"/>
+	</DataArea>
+	<DataArea x="313" y="299" visualizationType="1">
+		<Identifier id="6.1.6" recursive="true"/>
+	</DataArea>
+</Image>
