@@ -1,50 +1,12 @@
 /**
  * DOMparser functions for xml filem types.
- *
- * Loads an xml file and to the DOMParser
- *
  */
 
 export async function parseXmlData(xmlFile: string): Promise<Document> {
   const parser = new DOMParser();
-  let xmlContent = '';
   const areaFile = await fetch(xmlFile);
   const areaText = await areaFile.text();
   return parser.parseFromString(areaText, 'application/xml');
-}
-
-export function getXmlBins(xmlParsedDoc: Document): any {
-  let xmlBins: string[] = [];
-  var i = 0;
-  xmlParsedDoc.forEach((xmlNode) => {
-    xmlBins[i] =
-      xmlNode.getElementsByTagName('Identifier')[0].attributes[0].nodeValue;
-    i++;
-  });
-  return xmlBins;
-}
-
-export function getXml_x_yCords(xmlFile: string): string[] {
-  let x_y_Cords: any[] = Array.of();
-
-  dataAreaXml.forEach((xmlNode) => {
-    let x_cord = xmlNode.attributes[0].nodeValue;
-    let y_cord = xmlNode.attributes[1].nodeValue;
-    x_y_Cords.push({ x: x_cord, y: y_cord });
-  });
-  return x_y_Cords;
-}
-
-export function getXmlRecursive(xmlFile: string): any {
-  let xmlContent = '';
-  let xmlRecursive: boolean | string[] = Array.of();
-
-  dataAreaXml.forEach((xmlNode) => {
-    let recur =
-      xmlNode.getElementsByTagName('Identifier')[0].attributes[1].nodeValue;
-    xmlRecursive.push(recur);
-  });
-  return xmlRecursive;
 }
 
 export function getCoordinates(dataArea: Element): {
@@ -79,4 +41,22 @@ export function getMapManBins(
     bins.push({ id, recursive: JSON.parse(recursive) });
   }
   return bins;
+}
+
+export function getBlockformat(dataArea: Element): {
+  bformat: 'x' | 'y';
+  fnumber: number;
+} {
+  const blockFormat =
+    dataArea.attributes.getNamedItem('blockFormat')?.nodeValue;
+  const formatSplit = blockFormat?.split('');
+
+  if (formatSplit && formatSplit[0] !== 'x' && formatSplit[0] !== 'y') {
+    throw new Error(`unallowed blockFormat type ${formatSplit[0]}`);
+  } else if (formatSplit && formatSplit[0] === 'x') {
+    return { bformat: 'x', fnumber: parseInt(formatSplit[1]) };
+  } else if (formatSplit && formatSplit[0] === 'y') {
+    return { bformat: 'y', fnumber: parseInt(formatSplit[1]) };
+  }
+  return { bformat: 'x', fnumber: 5 };
 }
