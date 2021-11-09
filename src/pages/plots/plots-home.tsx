@@ -312,9 +312,7 @@ const PlotsHome: React.FC = () => {
 
   const onMapManFormSubmit: MapManFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
-    console.log({ values });
-    // pass values.template to addMapManPlot
-    plotStore.addMapManPlot(values.template);
+    plotStore.addMapManPlot(values);
     onMapManFormClose();
   };
 
@@ -355,7 +353,7 @@ const PlotsHome: React.FC = () => {
         maxWidth="14rem"
         position="fixed"
         boxShadow="2xl"
-        zIndex="overlay"
+        zIndex="popover"
       >
         <SidebarButton
           text="Bars"
@@ -505,7 +503,6 @@ const PlotsHome: React.FC = () => {
             }
             case 'mapman': {
               const mapmanPlot = plot as GxpMapMan;
-              console.log({ mapmanPlot });
               // pass the template to the MapManPlot
               return (
                 <MapManPlot
