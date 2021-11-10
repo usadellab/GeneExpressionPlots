@@ -21,13 +21,19 @@ df.loadFromObject(info_table);
 
 describe('parse Mercator table', function () {
   it('correctly parse a Mercator output', async () => {
-    const table = parseMercator(mercator_table);
+    const table = parseMercator(
+      mercator_table
+      // {
+      // addName: true,
+      // addDescription: true,
+      // }
+    );
 
     expect(table).to.deep.eq({
       header: ['BINCODE'],
       rows: {
-        'gene-1': ['1.1.1.1.1', '1.1.1.2.2.1'],
-        'gene-2': ['1.1.1.1.1', '1.1.1.2.2.1'],
+        'gene-1': ['1.1.1.1.1,1.1.1.2.2.1'],
+        'gene-2': ['1.1.1.1.1,1.1.1.2.2.1'],
         'gene-3': ['1.1.1.1.2'],
         'gene-4': ['1.1.1.1.2'],
         'gene-5': ['1.1.1.1.3'],
@@ -37,7 +43,27 @@ describe('parse Mercator table', function () {
   });
 
   // it('add to existing table', () => {
+  //   const table = parseMercator(mercator_table);
+  //   df.addFromObject(table)
+  //   expect(df).to.deep.eq({
+  //     header: ['pValue', 'pfamA','BINCODE','DESCRIPTION'],
+  //     rows: {
+  //       'gene-1': ['1.1.1.1.1,1.1.1.2.2.1','Photosynthesis.photophosphorylation'],
+  //       'gene-2': ['1.1.1.1.1,1.1.1.2.2.1'],
+  //       'gene-3': ['1.1.1.1.2'],
+  //       'gene-4': ['1.1.1.1.2'],
+  //       'gene-5': ['1.1.1.1.3'],
 
+  //       'Gene-1': ['0.05', 'PF392847','1.1.1.1.1,1.1.1.2.2.1','Photosynthesis.photophosphorylation'],
+  //       'Gene-2': ['0.02', 'PF392847'],
+  //       'Gene-3': ['0.09', 'PF392847'],
+  //       'Gene-4': ['0.09', 'PF392847'],
+  //       'Gene-5': ['0.09', 'PF392847'],
+  //       'Gene-6': ['0.09', 'PF392847'],
+  //       'gene-7': ['1.1.1.2.1.6'],
+  //     },
+  //   });
+  // });
   // });
 
   // it('add to non-existing table', () => {
