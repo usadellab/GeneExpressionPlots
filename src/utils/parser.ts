@@ -90,13 +90,13 @@ export function parseMercator(
 
   lines.forEach((mcLine) => {
     if (mcLine[0] === 'BINCODE') {
-      header.push(mcLine[0]);
+      header.push('MC_' + mcLine[0]);
 
       if (options?.addName) {
-        header.push(mcLine[1]);
+        header.push('MC_' + mcLine[1]);
       }
       if (options?.addDescription) {
-        header.push(mcLine[2]);
+        header.push('MC_' + mcLine[3]);
       }
     } else {
       if (mcLine[0].length !== 0) {
@@ -122,7 +122,7 @@ export function parseMercator(
       }
     }
   });
-  // process the data to the reqquired format.
+  // process the data to the required format.
   var mcData = function (): {} {
     Object.keys(mercatorData).forEach(function (key) {
       mercatorData[key] = [

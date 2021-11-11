@@ -1,5 +1,6 @@
 import { Dataframe } from '@/store/dataframe';
 import { parseMercator } from '@/utils/parser';
+import { fakeServer } from 'cypress/types/sinon';
 
 const info_table = {
   header: ['pValue', 'pfamA'],
@@ -21,16 +22,13 @@ df.loadFromObject(info_table);
 
 describe('parse Mercator table', function () {
   it('correctly parse a Mercator output', async () => {
-    const table = parseMercator(
-      mercator_table
-      // {
-      // addName: true,
-      // addDescription: true,
-      // }
-    );
+    const table = parseMercator(mercator_table, {
+      addName: false,
+      addDescription: false,
+    });
 
     expect(table).to.deep.eq({
-      header: ['BINCODE'],
+      header: ['MC_BINCODE'],
       rows: {
         'gene-1': ['1.1.1.1.1,1.1.1.2.2.1'],
         'gene-2': ['1.1.1.1.1,1.1.1.2.2.1'],
@@ -38,6 +36,86 @@ describe('parse Mercator table', function () {
         'gene-4': ['1.1.1.1.2'],
         'gene-5': ['1.1.1.1.3'],
         'gene-6': ['1.1.1.2.1.6'],
+      },
+    });
+  });
+
+  it('correctly parse a Mercator output with names', async () => {
+    const table = parseMercator(mercator_table, {
+      addName: true,
+      addDescription: false,
+    });
+
+    expect(table).to.deep.eq({
+      header: ['MC_BINCODE', 'MC_NAME'],
+      rows: {
+        'gene-1': [
+          '1.1.1.1.1,1.1.1.2.2.1',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb1/2/3,Photosynthesis.photophosphorylation.photosystem II.PS-II complex.oxygen-evolving center (OEC) extrinsic proteins.component OEC33/PsbO',
+        ],
+        'gene-2': [
+          '1.1.1.1.1,1.1.1.2.2.1',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb1/2/3,Photosynthesis.photophosphorylation.photosystem II.PS-II complex.oxygen-evolving center (OEC) extrinsic proteins.component OEC33/PsbO',
+        ],
+        'gene-3': [
+          '1.1.1.1.2',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb4',
+        ],
+        'gene-4': [
+          '1.1.1.1.2',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb4',
+        ],
+        'gene-5': [
+          '1.1.1.1.3',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb5',
+        ],
+        'gene-6': [
+          '1.1.1.2.1.6',
+          'Photosynthesis.photophosphorylation.photosystem II.PS-II complex.reaction center complex.component PsbI',
+        ],
+      },
+    });
+  });
+
+  it('correctly parse a Mercator output with names and descriptions', async () => {
+    const table = parseMercator(mercator_table, {
+      addName: true,
+      addDescription: true,
+    });
+
+    expect(table).to.deep.eq({
+      header: ['MC_BINCODE', 'MC_NAME', 'MC_DESCRIPTION'],
+      rows: {
+        'gene-1': [
+          '1.1.1.1.1,1.1.1.2.2.1',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb1/2/3,Photosynthesis.photophosphorylation.photosystem II.PS-II complex.oxygen-evolving center (OEC) extrinsic proteins.component OEC33/PsbO',
+          'component LHCb1/2/3 of LHC-II complex,component PsbO/OEC33 of PS-II oxygen-evolving center',
+        ],
+        'gene-2': [
+          '1.1.1.1.1,1.1.1.2.2.1',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb1/2/3,Photosynthesis.photophosphorylation.photosystem II.PS-II complex.oxygen-evolving center (OEC) extrinsic proteins.component OEC33/PsbO',
+          'component LHCb1/2/3 of LHC-II complex,component PsbO/OEC33 of PS-II oxygen-evolving center',
+        ],
+        'gene-3': [
+          '1.1.1.1.2',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb4',
+          'component LHCb4 of LHC-II complex',
+        ],
+        'gene-4': [
+          '1.1.1.1.2',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb4',
+          'component LHCb4 of LHC-II complex',
+        ],
+        'gene-5': [
+          '1.1.1.1.3',
+          'Photosynthesis.photophosphorylation.photosystem II.LHC-II complex.component LHCb5',
+          'component LHCb5 of LHC-II complex',
+        ],
+        'gene-6': [
+          '1.1.1.2.1.6',
+          'Photosynthesis.photophosphorylation.photosystem II.PS-II complex.reaction center complex.component PsbI',
+          'component PsbI of PS-II reaction center complex',
+        ],
       },
     });
   });
