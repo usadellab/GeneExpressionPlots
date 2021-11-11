@@ -1,8 +1,4 @@
-import { DataTable } from '@/store/dataframe';
-import { mergeThemeOverride } from '@chakra-ui/react';
-import { ArrowModifier } from '@popperjs/core/lib/modifiers/arrow';
-import { values } from 'mobx';
-import { unescapeDelimiters } from './string';
+import { infoTable, dataTable } from '@/store/data-store';
 
 export async function readFile(
   file: Blob
@@ -77,64 +73,104 @@ export function parseEnrichmentData(
   }, []);
 }
 
-export function parseMercator(
-  table: string, // The File to be parsed as string. This will be passed from the frontend
-  options?: { addName: boolean; addDescription: boolean } // options to add columns
-): DataTable {
-  const mercatorData: any = {};
-  const header: any = [];
+/**
+ * Sanity check to validate if the expected Mercator headers are present
+ * @param table
+ */
+export function validateMercator(headerLine: string): boolean {
+  const header = headerLine.split('\t');
+  if (
+    header[0] === 'BINCODE' &&
+    header[1] === 'NAME' &&
+    header[2] === 'IDENTIFIER' &&
+    header[3] === 'DESCRIPTION' &&
+    header[4] === 'TYPE'
+  )
+    return true;
+
+  return false;
+}
+
+function addMercatorColumns(
+  rowName: string,
+  columns: string[],
+  colIndex: number,
+  isEmptyInfoTable: boolean
+): void {
+  // check if infoTable has data and find the matching gene
+  const validRowName = isEmptyInfoTable
+    ? infoTable.rowNames.find((row) => row.toLowerCase() === rowName)
+    : dataTable.rowNames.find((row) => row.toLowerCase() === rowName);
+
+  if (validRowName) {
+    if (!Array.isArray(infoTable.rows[validRowName]))
+      infoTable.rows[validRowName] = [];
+    if (infoTable.rows[validRowName].length <= colIndex)
+      infoTable.rows[validRowName].push(...columns);
+    else {
+      for (let i = colIndex; i < columns.length + colIndex; i++) {
+        infoTable.rows[validRowName][i] += `,${columns[i - colIndex]}`;
+      }
+    }
+  }
+}
+
+export function parseMercatorAndAddToInfoTable(
+  table: string, // The File to be parsed as string. infoTable will be passed from the frontend
+  options: { addName: boolean; addDescription: boolean } // options to add columns
+): void {
   const lines = table.split('\n').map(function (line) {
-    // reader.results of the read file can be parsed at this point
+    // reader.results of the read file can be parsed at infoTable point
     return line.split('\t');
   });
+  const colIndex = infoTable.header.length;
 
-  lines.forEach((mcLine) => {
-    if (mcLine[0] === 'BINCODE') {
-      header.push('MC_' + mcLine[0]);
+  const infoTableHasData = infoTable.hasData;
+  const fillLength: number =
+    1 + (options.addName ? 1 : 0) + (options.addDescription ? 1 : 0);
 
-      if (options?.addName) {
-        header.push('MC_' + mcLine[1]);
-      }
-      if (options?.addDescription) {
-        header.push('MC_' + mcLine[3]);
-      }
-    } else {
-      if (mcLine[0].length !== 0) {
-        // Skip empty lines
-        let mcBin: string = mcLine[0].replace(/[']+/g, ''); // remove extra quotation marks
-        let mcName: string = mcLine[1].replace(/[']+/g, '');
-        let mcGeneId: string = mcLine[2].replace(/[']+/g, ''); // remove extra quotation marks
-        let mcDescription: string = mcLine[3].replace(/[']+/g, '');
-        if (mcGeneId.length !== 0) {
-          // Skip mercator bins that don't have gene identification
-          if (!(mcGeneId in mercatorData)) {
-            mercatorData[mcGeneId] = [[], [], []];
-          }
-          mercatorData[mcGeneId][0].push(mcBin);
+  infoTable.addMercatorHeaderAndPrepareColumns(
+    options.addName,
+    options.addDescription
+  );
 
-          if (options?.addName) {
-            mercatorData[mcGeneId][1].push(mcName);
-          }
-          if (options?.addDescription) {
-            mercatorData[mcGeneId][2].push(mcDescription);
-          }
+  lines.forEach((mcLine, i) => {
+    // skip the first line
+    if (i === 0) return;
+
+    if (mcLine[0].length !== 0) {
+      // Skip lines without a defined BINCODE
+      const mcBin: string = mcLine[0].replace(/[']+/g, ''); // remove extra quotation marks
+      const mcName: string = mcLine[1].replace(/[']+/g, '');
+      const mcGeneId: string = mcLine[2].replace(/[']+/g, ''); // remove extra quotation marks
+      const mcDescription: string = mcLine[3].replace(/[']+/g, '');
+      if (mcGeneId.length !== 0) {
+        const mcColumns = [mcBin];
+
+        if (options?.addName) {
+          mcColumns.push(mcName);
         }
+        if (options?.addDescription) {
+          mcColumns.push(mcDescription);
+        }
+        addMercatorColumns(mcGeneId, mcColumns, colIndex, infoTableHasData);
       }
     }
   });
-  // process the data to the required format.
-  var mcData = function (): {} {
-    Object.keys(mercatorData).forEach(function (key) {
-      mercatorData[key] = [
-        mercatorData[key][0].toString(), // Join multiple bins sharing the same gene id using comma sep
-        mercatorData[key][1].toString(), // Join the names for multiple bins sharing the same gene id
-        mercatorData[key][2].toString(), // Join the descriptions for multiple bins sharing the same gene id
-      ].filter((e) => e); // remove empty strings incase only mercator bins are parsed
+
+  if (infoTableHasData) {
+    infoTable.rowNames.forEach((rowName) => {
+      if (infoTable.rows[rowName].length < infoTable.header.length) {
+        const lengthDiff =
+          infoTable.header.length - infoTable.rows[rowName].length;
+        infoTable.rows[rowName].push(...Array(lengthDiff).fill(''));
+      }
     });
-    return mercatorData;
-  };
-  return {
-    header: header,
-    rows: mcData(),
-  };
+  } else {
+    dataTable.rowNames.forEach((rowName) => {
+      if (!infoTable.rows[rowName]) {
+        infoTable.rows[rowName] = Array(fillLength).fill('');
+      }
+    });
+  }
 }
