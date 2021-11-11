@@ -71,7 +71,7 @@ export class Dataframe {
    * Get whether the dataframe contains data.
    */
   get hasData(): boolean {
-    return this.colNames.length > 0;
+    return this.colNames.length > 0 && this.rowNames.length > 0;
   }
 
   /**
@@ -408,5 +408,19 @@ export class Dataframe {
 
     this.header = newCols;
     this.rows = newRows;
+  }
+
+  addMercatorHeaderAndPrepareColumns(
+    addName: boolean,
+    addDescription: boolean
+  ): void {
+    this.header.push('MC_BINCODE');
+
+    if (addName) {
+      this.header.push('MC_NAME');
+    }
+    if (addDescription) {
+      this.header.push('MC_DESCRIPTION');
+    }
   }
 }
