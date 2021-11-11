@@ -112,7 +112,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
             options={[
               { label: 'Group', value: 'group', disabled: false },
               {
-                label: 'Accession',
+                label: 'Gene',
                 value: 'accession',
                 disabled: formProps.values.accessions.length === 1,
               },
@@ -141,7 +141,7 @@ const StackedLinesForm: React.FC<StackedLinesFormProps> = (props) => {
                       }}
                       isRequired
                       key={index}
-                      label={`Gene Accession ${index + 1}`}
+                      label={`Gene Identifier ${index + 1}`}
                       name={`accessions.${index}`}
                       rightChildren={
                         formProps.values.accessions.length > 1 && (

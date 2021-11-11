@@ -21,7 +21,7 @@ const ToolsPage: React.FC = () => {
         icon={FaDna}
         label="Gene Browser"
         text={`
-          The gene browser provides is a tools to search and inspect the
+          The gene browser provides an interface to search and inspect the
           individual gene information stored in the replicates database.
           All searches are privately kept within your browser and will not be
           sent anywhere.
