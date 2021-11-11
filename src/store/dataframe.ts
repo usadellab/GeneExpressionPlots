@@ -434,7 +434,7 @@ export class Dataframe {
     this.header = newCols;
     this.rows = newRows;
   }
-  
+
   /**
    *
    * @param colName name of the column that hold the MapMan Bins
@@ -481,6 +481,7 @@ export class Dataframe {
       values[rowName] = meanVal;
     });
     return values;
+  }
 
   addMercatorHeaderAndPrepareColumns(
     addName: boolean,
