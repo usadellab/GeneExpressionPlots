@@ -115,9 +115,10 @@ const MapMan: React.FC = () => {
             icon={VscGraphScatter}
             label="Mercator v4"
             text={`
-              The enrichment analyses tool allows you to run enrichment tests for your data.
-              Use the "Gene Info Table" to store information about differentially expressed genes.
-              All tests and results will be private to your browser and will not be sent anywhere.
+              Use the Mercator v4 tool to annotate your genes with MapMan Bins. Clicking here
+              will bring you to the plabipd online resources to run Mercator on your DNA or protein
+              sequences. After running Mercator you can import the output table into GXP by using
+              the Card below. 
             `}
             to="/tools/mapman"
             onClick={() => window.open('https://plabipd.de/portal/mercator4')}
@@ -126,9 +127,9 @@ const MapMan: React.FC = () => {
             icon={FaFileImport}
             label="Import Mercator output"
             text={`
-              The enrichment analyses tool allows you to run enrichment tests for your data.
-              Use the "Gene Info Table" to store information about differentially expressed genes.
-              All tests and results will be private to your browser and will not be sent anywhere.
+              Import Mercator v4 tabular output into the GXP. Importing the file will automatically
+              append the Mercator columns to already uploaded gene info. If no gene info was uploaded
+              yet, the in memory gene info will be created for you.
             `}
             to="/tools/mapman"
             onClick={onOpen}

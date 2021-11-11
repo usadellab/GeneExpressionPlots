@@ -43,9 +43,9 @@ const ToolsPage: React.FC = () => {
         icon={VscGraphScatter}
         label="MapMan Functional Annotations"
         text={`
-          The enrichment analyses tool allows you to run enrichment tests for your data.
-          Use the "Gene Info Table" to store information about differentially expressed genes.
-          All tests and results will be private to your browser and will not be sent anywhere.
+          The MapMan Functional Annotations provide resources to run functional annotations on your
+          sequence data via Mercator v4, that can automatically be linked to your sublementary gene information.
+          You can directly use that meta data to plot MapMan Classification and expression of your genes. 
         `}
         to="/tools/mapman"
       />
