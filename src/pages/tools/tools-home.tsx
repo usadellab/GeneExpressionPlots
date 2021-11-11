@@ -3,6 +3,7 @@ import NavCard from '@/components/nav-card';
 import { Box } from '@chakra-ui/react';
 import { FaDna } from 'react-icons/fa';
 import { BiTestTube } from 'react-icons/bi';
+import { VscGraphScatter } from 'react-icons/vsc';
 
 const ToolsPage: React.FC = () => {
   return (
@@ -36,6 +37,17 @@ const ToolsPage: React.FC = () => {
           All tests and results will be private to your browser and will not be sent anywhere.
         `}
         to="/tools/enrichment"
+      />
+
+      <NavCard
+        icon={VscGraphScatter}
+        label="MapMan Functional Annotations"
+        text={`
+          The MapMan Functional Annotations provide resources to run functional annotations on your
+          sequence data via Mercator v4, that can automatically be linked to your sublementary gene information.
+          You can directly use that meta data to plot MapMan Classification and expression of your genes. 
+        `}
+        to="/tools/mapman"
       />
     </Box>
   );
