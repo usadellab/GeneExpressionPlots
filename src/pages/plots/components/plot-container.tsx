@@ -102,6 +102,7 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
                   size="lg"
                   onClick={handleDownloadSVG}
                   visibility="hidden"
+                  zIndex="modal"
                 />
               )}
 
@@ -130,6 +131,7 @@ const PlotContainer: React.FC<PlotContainerProps> = ({
                 variant="outline"
                 onClick={handleDeletePlot}
                 visibility="hidden"
+                zIndex="overlay"
               />
             </Box>
           )}

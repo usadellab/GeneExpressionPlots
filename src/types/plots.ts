@@ -2,13 +2,24 @@ import { DataRows } from '@/store/dataframe';
 import { GXPDistanceMethod } from '@/utils/plots/heatmap';
 import { Layout, PlotData } from 'plotly.js';
 
-export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image';
+export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image' | 'mapman';
 
 export interface GxpPlot {
   id: string;
   type: PlotType;
   isLoading: boolean;
 }
+
+//#region MapMan
+export interface GxpMapMan extends GxpPlot {
+  template: string;
+  infoTableColumn: string;
+  infoTableColumnSep: string;
+  valuesFrom: string;
+  colorScale: 'sequential' | 'linear';
+  sample?: string;
+}
+//#endregion
 
 //#region Heatmap
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Image image="X4_JA_synthesis_R1.0" size="1200x800" modified="2020-07-24 14:35:47.580897" scaling="1.0">
+	<DataArea x="531" y="196" visualizationType="1">
+		<Identifier id="11.7.1.2" recursive="true"/>
+	</DataArea>
+	<DataArea x="536" y="258" visualizationType="1">
+		<Identifier id="11.7.1.3" recursive="true"/>
+	</DataArea>
+	<DataArea x="539" y="344" visualizationType="1">
+		<Identifier id="11.7.1.4" recursive="true"/>
+	</DataArea>
+	<DataArea x="583" y="495" visualizationType="1">
+		<Identifier id="11.7.1.6" recursive="true"/>
+	</DataArea>
+	<DataArea x="580" y="550" visualizationType="1">
+		<Identifier id="11.7.1.7" recursive="true"/>
+	</DataArea>
+	<DataArea x="578" y="600" visualizationType="1">
+		<Identifier id="11.7.1.8" recursive="true"/>
+	</DataArea>
+	<DataArea x="579" y="657" visualizationType="1">
+		<Identifier id="11.7.1.9" recursive="true"/>
+	</DataArea>
+	<DataArea x="530" y="163" visualizationType="1">
+		<Identifier id="11.7.1.1" recursive="true"/>
+	</DataArea>
+	<DataArea x="576" y="417" visualizationType="1">
+		<Identifier id="11.7.1.5" recursive="true"/>
+	</DataArea>
+</Image>
