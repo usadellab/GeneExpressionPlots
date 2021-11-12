@@ -104,7 +104,9 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
                 .style('stroke', 'lightgray')
                 .style('fill', colorScale(parseFloat(rectValue as string)))
                 .append('title')
-                .text(bins[0].id + ': ' + geneId + ' - ' + rectValue);
+                .text(
+                  `Gene-ID: ${geneId}\nMapMan_BINCODE: ${bins[0].id}\n${props.valuesFrom}: ${rectValue}`
+                );
 
               bformat === 'x' ? xOffset++ : yOffset++;
               if (bformat === 'x' && xOffset != 0 && xOffset % fnumber === 0) {
