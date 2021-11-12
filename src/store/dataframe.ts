@@ -144,8 +144,10 @@ export class Dataframe {
    *
    * @param rowName unique row name
    */
-  getRowAsMap(rowName: string): Map<string, string> {
-    return mapFromArrays(this.colNames, this.getRow(rowName));
+  getRowAsMap(rowName: string): Map<string, string> | undefined {
+    return this.getRow(rowName)
+      ? mapFromArrays(this.colNames, this.getRow(rowName))
+      : undefined;
   }
 
   /**
