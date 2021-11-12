@@ -2,14 +2,10 @@ import React from 'react';
 
 import { Formik, Form, FormikHelpers, FieldValidator } from 'formik';
 
-import FormikField from '@/components/formik-field';
 import FormikFile from '@/components/formik-file';
-import FormikSelect from '@/components/formik-select';
 
-import { Box, Button, Flex, Divider } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
-import { TEFSelectorOption, TEISelectorType } from '@/types/enrichment';
-import { infoTable } from '@/store/data-store';
 import FormikSwitch from '@/components/formik-switch';
 
 export type MercatorFormSubmitHandler = (
@@ -89,7 +85,7 @@ const MercatorForm: React.FC<MercatorFormProps> = (props) => {
                 type="submit"
                 variant="solid"
               >
-                Run
+                Load
               </Button>
             </Flex>
           </Box>

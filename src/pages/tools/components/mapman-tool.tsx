@@ -169,6 +169,13 @@ const MapMan: React.FC = () => {
         reader.onloadend = () => {
           actions.setSubmitting(false);
           onClose();
+          toast({
+            title: 'Successfully imported Mercator table',
+            status: 'success',
+            description:
+              'The provided Mercator tabular output was successfully imported into the application.',
+            isClosable: true,
+          });
         };
 
         reader.onerror = () => {
@@ -247,7 +254,7 @@ const MapMan: React.FC = () => {
         initialFocusRef={refInitialFocus}
         isOpen={isOpen}
         onClose={onClose}
-        title="Load Expression Table"
+        title="Load Mercator Table"
       >
         <MercatorForm
           initialFocusRef={refInitialFocus}
