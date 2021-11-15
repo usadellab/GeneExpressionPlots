@@ -481,18 +481,23 @@ const PlotsHome: React.FC = () => {
               return (
                 <PlotlyPlot {...plotlyPlot} key={plotlyPlot.id}>
                   {plotlyPlot.options.showCaption &&
-                    plotlyPlot.accessions.map((accession, index) => (
-                      <PlotCaption
-                        key={`${accession}-${index}`}
-                        accession={accession}
-                        caption={infoTable.getRowAsMap(accession)}
-                        color={
-                          plotlyPlot.accessions.length > 1
-                            ? colors[index]
-                            : undefined
-                        }
-                      />
-                    ))}
+                    plotlyPlot.accessions.map((accession, index) => {
+                      const caption = infoTable.getRowAsMap(accession);
+                      return (
+                        caption && (
+                          <PlotCaption
+                            key={`${accession}-${index}`}
+                            accession={accession}
+                            caption={caption}
+                            color={
+                              plotlyPlot.accessions.length > 1
+                                ? colors[index]
+                                : undefined
+                            }
+                          />
+                        )
+                      );
+                    })}
                 </PlotlyPlot>
               );
             }
