@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import * as d3 from 'd3';
 
 import PlotContainer from './plot-container';
@@ -14,11 +14,14 @@ import {
 import { interpolateRdBu } from 'd3-scale-chromatic';
 import { scaleSequential } from 'd3-scale';
 import { scaleLinear } from '@visx/scale';
+import { IconButton } from '@chakra-ui/button';
+import { Flex, Text } from '@chakra-ui/layout';
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
 const gradient0 = '#f33d15';
 const gradient1 = '#b4fbde';
 
-const SIZE = 5;
+const INITIALSIZE = 5;
 
 type MapManPlotProps = GxpMapMan;
 
@@ -26,6 +29,8 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
   const ref = useRef(null);
   const svgRef = useRef(null);
   props.template;
+
+  const [rectSize, setRectSize] = useState(5);
 
   const [group, sample] = props.sample
     ? props.sample.split(dataTable.config.multiHeader)
@@ -48,6 +53,7 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
         });
 
   useLayoutEffect(() => {
+    console.log({ INITIALSIZE });
     const svg = d3
       .select(svgRef.current)
       .attr('width', '100%')
@@ -88,19 +94,21 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
 
               const xValue =
                 bformat === 'x'
-                  ? x + (xOffset % fnumber) * SIZE
-                  : x + xOffset * SIZE;
+                  ? x + (xOffset % fnumber) * INITIALSIZE
+                  : x + xOffset * INITIALSIZE;
               const yValue =
                 bformat === 'y'
-                  ? y + (yOffset % fnumber) * SIZE
-                  : y + yOffset * SIZE;
+                  ? y + (yOffset % fnumber) * INITIALSIZE
+                  : y + yOffset * INITIALSIZE;
 
               svgViz
                 .append('rect')
                 .attr('x', xValue)
                 .attr('y', yValue)
-                .attr('height', SIZE)
-                .attr('width', SIZE)
+                .attr('height', INITIALSIZE)
+                .attr('width', INITIALSIZE)
+                .attr('xOffset', xOffset % fnumber)
+                .attr('yOffset', yOffset % fnumber)
                 .style('stroke', 'lightgray')
                 .style('fill', colorScale(parseFloat(rectValue as string)))
                 .append('title')
@@ -124,6 +132,28 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
       );
     });
   }, []);
+
+  useLayoutEffect(() => {
+    const rects = d3
+      .select(svgRef.current)
+      .select('#viz-layer')
+      .selectAll('rect');
+
+    rects.attr('x', function () {
+      const x = parseInt(d3.select(this).attr('x'));
+      const xOffset = parseInt(d3.select(this).attr('xOffset'));
+      const sizeDiff = rectSize - parseInt(d3.select(this).attr('width'));
+      return x + xOffset * sizeDiff;
+    });
+    rects.attr('y', function () {
+      const y = parseInt(d3.select(this).attr('y'));
+      const yOffset = parseInt(d3.select(this).attr('yOffset'));
+      const sizeDiff = rectSize - parseInt(d3.select(this).attr('width'));
+      return y + yOffset * sizeDiff;
+    });
+    rects.attr('height', rectSize).attr('width', rectSize);
+  }, [rectSize]);
+
   return (
     <PlotContainer
       figureRef={ref}
@@ -134,15 +164,36 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
       id={props.id}
       overflow="auto"
     >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          height: '100%',
-        }}
+      <Flex
+        justifyContent="center"
+        height="100%"
+        flexDirection="column"
+        alignItems="center"
       >
         <svg ref={svgRef} />
-      </div>
+        <Flex justifyContent="center" alignItems="center" gridGap={2}>
+          <IconButton
+            aria-label="increase rect size"
+            isRound
+            colorScheme="black"
+            variant="outline"
+            size="sm"
+            icon={<AiOutlinePlus />}
+            onClick={() => setRectSize(rectSize + 1)}
+          ></IconButton>
+          <Text>{`[ ${rectSize} ]`}</Text>
+          <IconButton
+            aria-label="decrease rect size"
+            isRound
+            colorScheme="black"
+            variant="outline"
+            size="sm"
+            icon={<AiOutlineMinus />}
+            onClick={() => setRectSize(rectSize - 1)}
+          ></IconButton>
+        </Flex>
+        <Text>Adjust Size</Text>
+      </Flex>
     </PlotContainer>
   );
 };
