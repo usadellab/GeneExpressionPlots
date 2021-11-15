@@ -43,6 +43,7 @@ const GeneCard: React.FC<GeneCardProps> = ({
               textColor="gray.600"
               textTransform="uppercase"
               width={36}
+              wordBreak="break-all"
             >
               {colName}
             </Flex>
