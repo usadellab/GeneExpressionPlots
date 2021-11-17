@@ -489,13 +489,13 @@ export class Dataframe {
     addName: boolean,
     addDescription: boolean
   ): void {
-    this.header.push('MC_BINCODE');
+    this.header.push('MapMan_BINCODE');
 
     if (addName) {
-      this.header.push('MC_NAME');
+      this.header.push('MapMan_NAME');
     }
     if (addDescription) {
-      this.header.push('MC_DESCRIPTION');
+      this.header.push('MapMan_DESCRIPTION');
     }
   }
 }

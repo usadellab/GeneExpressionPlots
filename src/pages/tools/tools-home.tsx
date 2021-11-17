@@ -45,7 +45,7 @@ const ToolsPage: React.FC = () => {
         text={`
           The MapMan Functional Annotations provide resources to run functional annotations on your
           sequence data via Mercator v4, that can automatically be linked to your supplementary gene information.
-          You can directly use that meta data to plot MapMan Classification and expression of your genes. 
+          You can then directly use the protein annotation metadata to plot MapMan Classification and expression of your genes. 
         `}
         to="/tools/mapman"
       />
