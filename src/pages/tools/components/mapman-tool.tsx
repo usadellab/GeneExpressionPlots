@@ -38,23 +38,15 @@ export function validateMercator(headerLine: string): boolean {
 }
 
 /**
- *
- * @param rowName rowName to add column to
+ * @param validRowName valid existing identifier of a row in the info/data table
  * @param columns array of columns to add
  * @param colIndex column index to start appending from
- * @param isEmptyInfoTable depending on whether the infotable has data, we get the valid row names
  */
 function addMercatorColumns(
-  rowName: string,
+  validRowName: string,
   columns: string[],
-  colIndex: number,
-  isEmptyInfoTable: boolean
+  colIndex: number
 ): void {
-  // check if infoTable has data and find the matching gene
-  const validRowName = isEmptyInfoTable
-    ? infoTable.rowNames.find((row) => row.toLowerCase() === rowName)
-    : dataTable.rowNames.find((row) => row.toLowerCase() === rowName);
-
   if (validRowName) {
     if (!Array.isArray(infoTable.rows[validRowName]))
       infoTable.rows[validRowName] = [];
@@ -83,9 +75,18 @@ export function parseMercatorAndAddToInfoTable(
   });
   const colIndex = infoTable.header.length;
 
-  const infoTableHasData = infoTable.hasData;
   const fillLength: number =
     1 + (options.addName ? 1 : 0) + (options.addDescription ? 1 : 0);
+
+  const geneIDIndex: { [key: string]: number } = {};
+  infoTable.hasData
+    ? infoTable.rowNames.forEach((row, i) => {
+        geneIDIndex[row.toLowerCase()] = i;
+      })
+    : dataTable.rowNames.forEach((row, i) => {
+        geneIDIndex[row.toLowerCase()] = i;
+      });
+  const rowNames = infoTable.rowNames.slice();
 
   infoTable.addMercatorHeaderAndPrepareColumns(
     options.addName,
@@ -96,7 +97,7 @@ export function parseMercatorAndAddToInfoTable(
     // skip the first line
     if (i === 0) return;
 
-    if (mcLine[0].length !== 0) {
+    if (mcLine[0].length !== 0 && mcLine[2].length !== 0) {
       // Skip lines without a defined BINCODE
       const mcBin: string = mcLine[0].replace(/[']+/g, ''); // remove extra quotation marks
       const mcName: string = mcLine[1].replace(/[']+/g, '');
@@ -104,6 +105,8 @@ export function parseMercatorAndAddToInfoTable(
       const mcDescription: string = mcLine[3].replace(/[']+/g, '');
       if (mcGeneId.length !== 0) {
         const mcColumns = [mcBin];
+        const validGeneIndex = geneIDIndex[mcGeneId];
+        const validRowName = rowNames[validGeneIndex];
 
         if (options?.addName) {
           mcColumns.push(mcName);
@@ -111,12 +114,12 @@ export function parseMercatorAndAddToInfoTable(
         if (options?.addDescription) {
           mcColumns.push(mcDescription);
         }
-        addMercatorColumns(mcGeneId, mcColumns, colIndex, infoTableHasData);
+        addMercatorColumns(validRowName, mcColumns, colIndex);
       }
     }
   });
 
-  if (infoTableHasData) {
+  if (infoTable.hasData) {
     infoTable.rowNames.forEach((rowName) => {
       if (infoTable.rows[rowName].length < infoTable.header.length) {
         const lengthDiff =
