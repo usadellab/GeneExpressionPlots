@@ -1,4 +1,4 @@
-import { makeAutoObservable, toJS, values } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 import { nanoid } from 'nanoid';
 import {
   GxpHeatmap,
@@ -283,25 +283,13 @@ class PlotStore {
   }
 
   // add template argument
-  addMapManPlot({
-    template,
-    infoTableColumn,
-    infoTableColumnSep,
-    valuesFrom,
-    colorScale,
-    sample,
-  }: MapManFormAttributes): void {
+  addMapManPlot(options: MapManFormAttributes): void {
     const id = nanoid();
     const plot: GxpMapMan = {
       id,
       type: 'mapman',
       isLoading: false,
-      template,
-      infoTableColumn,
-      infoTableColumnSep,
-      valuesFrom,
-      colorScale,
-      sample,
+      ...options,
     };
     this.plots.push(plot);
   }

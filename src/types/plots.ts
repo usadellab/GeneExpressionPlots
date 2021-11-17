@@ -11,12 +11,20 @@ export interface GxpPlot {
 }
 
 //#region MapMan
+
+export type GxpMapManColorScale =
+  | 'continuous_0q3'
+  | 'continuous_q1q3'
+  | 'continuous_xy'
+  | 'diverging_-xx';
 export interface GxpMapMan extends GxpPlot {
   template: string;
   infoTableColumn: string;
   infoTableColumnSep: string;
   valuesFrom: string;
-  colorScale: 'sequential' | 'linear';
+  colorScale: GxpMapManColorScale;
+  colorScaleValueX?: number;
+  colorScaleValueY?: number;
   sample?: string;
 }
 //#endregion

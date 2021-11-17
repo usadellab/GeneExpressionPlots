@@ -1,10 +1,18 @@
 import { Formik, Form, FormikHelpers } from 'formik';
 import React from 'react';
 import FormikField from '@/components/formik-field';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  useBreakpointValue,
+  SystemProps,
+} from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 import FormikSelect from '@/components/formik-select';
 import { dataTable, infoTable } from '@/store/data-store';
+import FormikNumber from '@/components/formik-number';
+import { GxpMapManColorScale } from '@/types/plots';
 
 export type MapManFormSubmitHandler = (
   values: MapManFormAttributes,
@@ -22,7 +30,9 @@ export interface MapManFormAttributes {
   infoTableColumnSep: string;
   template: string;
   valuesFrom: string;
-  colorScale: 'sequential' | 'linear';
+  colorScale: GxpMapManColorScale;
+  colorScaleValueX?: number;
+  colorScaleValueY?: number;
   sample?: string;
 }
 
@@ -70,6 +80,12 @@ const templates = [
 ];
 
 const MapManForm: React.FC<MapManFormProps> = (props) => {
+  const colorScaleFlexDir = useBreakpointValue<
+    SystemProps['flexDirection'] | undefined
+  >({
+    base: 'column',
+    sm: 'row',
+  });
   return (
     <Formik<MapManFormAttributes>
       initialValues={{
@@ -77,7 +93,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
         infoTableColumnSep: ',',
         template: 'X4.3_Amino_acid_metabolism_R3.0',
         valuesFrom: infoTable.colNames[0],
-        colorScale: 'linear',
+        colorScale: 'diverging_-xx',
         sample: dataTable.sampleGroupsAsArray[0],
       }}
       validateOnBlur={false}
@@ -85,33 +101,37 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
     >
       {(formProps) => (
         <Box as={Form}>
+          <Flex gridGap="1rem" flexDirection={colorScaleFlexDir}>
+            <FormikSelect
+              controlProps={{
+                marginTop: '1rem',
+              }}
+              label="MapMan BINCODE column"
+              name="infoTableColumn"
+              options={infoTable.colNames.map((colName) => ({
+                value: colName,
+                label: colName,
+              }))}
+              tooltip="Select the column from your gene info table that holds MapMan BINCODE(s)."
+              width="20rem"
+            />
+
+            <FormikField
+              controlProps={{
+                as: 'p',
+                marginTop: '1rem',
+              }}
+              initialFocusRef={props.initialFocusRef}
+              label="BINCODE separator"
+              name="infoTableColumnSep"
+              tooltip="In-column separator for MapMan BINCODEs, in case a gene is annotated with multiple bins."
+              isRequired
+            />
+          </Flex>
+
           <FormikSelect
             controlProps={{
               marginTop: '1rem',
-            }}
-            label="MapMan Info table column"
-            name="infoTableColumn"
-            options={infoTable.colNames.map((colName) => ({
-              value: colName,
-              label: colName,
-            }))}
-            tooltip="Select a column from your gene info table to test enrichment for"
-          />
-
-          <FormikField
-            controlProps={{
-              as: 'p',
-              marginTop: '1rem',
-            }}
-            initialFocusRef={props.initialFocusRef}
-            label="MapMan Info table column separator"
-            name="infoTableColumnSep"
-            isRequired
-          />
-
-          <FormikSelect
-            controlProps={{
-              marginTop: '2rem',
             }}
             label="Values from"
             name="valuesFrom"
@@ -122,6 +142,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
               },
               [{ value: 'expressionValue', label: 'Mean expression value' }]
             )}
+            tooltip="Select where to get the values to be plotted from. Can be any numeric value from the info table or mean expression values for a specific sample."
           />
           {formProps.values.valuesFrom == 'expressionValue' && (
             <FormikSelect
@@ -134,20 +155,60 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
                 label: sample,
                 value: sample,
               }))}
+              tooltip="Select the sample to get the shown values for each gene from"
             />
           )}
-
-          <FormikSelect
-            controlProps={{
-              marginTop: '1rem',
-            }}
-            label="Color Scale"
-            name="colorScale"
-            options={[
-              { value: 'linear', label: 'linear' },
-              { value: 'sequential', label: 'sequential [-1,1]' },
-            ]}
-          />
+          <Flex
+            marginTop="2rem"
+            gridGap="1rem"
+            flexDirection={colorScaleFlexDir}
+          >
+            <FormikSelect
+              label="Color Scale"
+              name="colorScale"
+              width={'20rem'}
+              options={
+                [
+                  {
+                    value: 'diverging_-xx',
+                    label: 'diverging (-x to x)',
+                  },
+                  {
+                    value: 'continuous_0q3',
+                    label: 'continuous (0 to 3. quartile)',
+                  },
+                  {
+                    value: 'continuous_q1q3',
+                    label: 'continuous (1. quartile to 3. quartile)',
+                  },
+                  { value: 'continuous_xy', label: 'continuous (x to y)' },
+                ] as { value: GxpMapManColorScale; label: string }[]
+              }
+              tooltip="Select a color scale for your values. For log2FC or similar, choose a divergent scale."
+            />
+            {formProps.values.colorScale === 'diverging_-xx' && (
+              <FormikNumber
+                label="Value (x)"
+                name="colorScaleValueX"
+                min={1}
+                isRequired
+              />
+            )}
+            {formProps.values.colorScale === 'continuous_xy' && (
+              <>
+                <FormikNumber
+                  label="Value (x)"
+                  name="colorScaleValueX"
+                  isRequired
+                />
+                <FormikNumber
+                  label="Value (y)"
+                  name="colorScaleValueY"
+                  isRequired
+                />
+              </>
+            )}
+          </Flex>
 
           <FormikSelect
             controlProps={{
@@ -156,6 +217,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
             label="MapMan Template"
             name="template"
             options={templates}
+            tooltip="Select the MapMan Pathway File to use as template for plotting your values"
           />
 
           <Flex as="p" paddingY={6} justifyContent="flex-end">
@@ -170,7 +232,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
               type="submit"
               variant="solid"
             >
-              Add
+              Load
             </Button>
           </Flex>
         </Box>

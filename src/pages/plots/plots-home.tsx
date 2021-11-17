@@ -311,9 +311,9 @@ const PlotsHome: React.FC = () => {
   } = useDisclosure();
 
   const onMapManFormSubmit: MapManFormSubmitHandler = (values, actions) => {
-    actions.setSubmitting(false);
-    plotStore.addMapManPlot(values);
     onMapManFormClose();
+    plotStore.addMapManPlot(values);
+    actions.setSubmitting(false);
   };
 
   /* IMAGE PLOT */
@@ -481,18 +481,23 @@ const PlotsHome: React.FC = () => {
               return (
                 <PlotlyPlot {...plotlyPlot} key={plotlyPlot.id}>
                   {plotlyPlot.options.showCaption &&
-                    plotlyPlot.accessions.map((accession, index) => (
-                      <PlotCaption
-                        key={`${accession}-${index}`}
-                        accession={accession}
-                        caption={infoTable.getRowAsMap(accession)}
-                        color={
-                          plotlyPlot.accessions.length > 1
-                            ? colors[index]
-                            : undefined
-                        }
-                      />
-                    ))}
+                    plotlyPlot.accessions.map((accession, index) => {
+                      const caption = infoTable.getRowAsMap(accession);
+                      return (
+                        caption && (
+                          <PlotCaption
+                            key={`${accession}-${index}`}
+                            accession={accession}
+                            caption={caption}
+                            color={
+                              plotlyPlot.accessions.length > 1
+                                ? colors[index]
+                                : undefined
+                            }
+                          />
+                        )
+                      );
+                    })}
                 </PlotlyPlot>
               );
             }
@@ -503,14 +508,7 @@ const PlotsHome: React.FC = () => {
             }
             case 'mapman': {
               const mapmanPlot = plot as GxpMapMan;
-              // pass the template to the MapManPlot
-              return (
-                <MapManPlot
-                  key={mapmanPlot.id}
-                  // template={mapmanPlot.template}
-                  {...mapmanPlot}
-                />
-              );
+              return <MapManPlot key={mapmanPlot.id} {...mapmanPlot} />;
             }
             default:
               break;
@@ -598,7 +596,7 @@ const PlotsHome: React.FC = () => {
         isOpen={isMapManFormOpen}
         onClose={onMapManFormClose}
         size="xl"
-        title="MapMan function Sketch Implementation"
+        title="MapMan Functional Template Plot"
         scrollBehavior="outside"
       >
         <MapManForm
