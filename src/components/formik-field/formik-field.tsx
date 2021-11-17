@@ -10,6 +10,7 @@ import {
   InputGroupProps,
   InputProps,
   VisuallyHidden,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
@@ -23,6 +24,7 @@ interface FormikFieldProps extends InputProps {
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
   rightChildren?: React.ReactNode;
   validate?: FieldValidator;
+  tooltip?: string;
 }
 
 const FormikField: React.FC<FormikFieldProps> = ({
@@ -36,6 +38,7 @@ const FormikField: React.FC<FormikFieldProps> = ({
   name,
   rightChildren,
   validate,
+  tooltip,
   ...props
 }) => {
   const [field, meta] = useField({
@@ -54,7 +57,9 @@ const FormikField: React.FC<FormikFieldProps> = ({
           <FormLabel fontWeight="semibold">{label}</FormLabel>
         </VisuallyHidden>
       ) : (
-        <FormLabel fontWeight="semibold">{label}</FormLabel>
+        <Tooltip label={tooltip} placement="auto">
+          <FormLabel fontWeight="semibold">{label}</FormLabel>
+        </Tooltip>
       )}
       <InputGroup as="span" {...groupProps}>
         {leftChildren}
