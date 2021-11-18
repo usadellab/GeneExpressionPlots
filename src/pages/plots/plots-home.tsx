@@ -393,12 +393,14 @@ const PlotsHome: React.FC = () => {
           onClick={onPCAFormOpen}
           disabled={!dataAvailable}
         />
+
         <SidebarButton
           text="MapMan Function"
           icon={VscGraphScatter}
           onClick={onMapManFormOpen}
           disabled={!dataAvailable}
         />
+
         <SidebarButton
           text="Custom figure"
           icon={FaImage}
