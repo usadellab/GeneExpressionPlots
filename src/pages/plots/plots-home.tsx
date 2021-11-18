@@ -310,9 +310,13 @@ const PlotsHome: React.FC = () => {
     onClose: onMapManFormClose,
   } = useDisclosure();
 
-  const onMapManFormSubmit: MapManFormSubmitHandler = (values, actions) => {
+  const onMapManFormSubmit: MapManFormSubmitHandler = async (
+    values,
+    actions
+  ) => {
     onMapManFormClose();
-    plotStore.addMapManPlot(values);
+    setTimeout(() => plotStore.addMapManPlot(values), 10);
+
     actions.setSubmitting(false);
   };
 
