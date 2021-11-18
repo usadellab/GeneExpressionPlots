@@ -140,18 +140,20 @@ class PlotStore {
         tree: ClusterTree;
       }>
     ) {
-      const loadedPlot: GxpHeatmap = {
-        ...plotStore.plots[plotIndex],
-        isLoading: false,
-        binData: e.data.bins,
-        tree: e.data.tree,
-        distanceMethod,
-        plotTitle,
-      };
+      runInAction(() => {
+        const loadedPlot: GxpHeatmap = {
+          ...plotStore.plots[plotIndex],
+          isLoading: false,
+          binData: e.data.bins,
+          tree: e.data.tree,
+          distanceMethod,
+          plotTitle,
+        };
 
-      if (plotStore.plots[plotIndex].id === id) {
-        plotStore.plots[plotIndex] = loadedPlot;
-      }
+        if (plotStore.plots[plotIndex].id === id) {
+          plotStore.plots[plotIndex] = loadedPlot;
+        }
+      });
     };
   }
 
@@ -200,15 +202,17 @@ class PlotStore {
         layout: Partial<Layout>;
       }>
     ) {
-      const loadedPlot: GxpPCA = {
-        ...plotStore.plots[plotIndex],
-        ...e.data,
-        isLoading: false,
-      };
+      runInAction(() => {
+        const loadedPlot: GxpPCA = {
+          ...plotStore.plots[plotIndex],
+          ...e.data,
+          isLoading: false,
+        };
 
-      if (plotStore.plots[plotIndex].id === id) {
-        plotStore.plots[plotIndex] = loadedPlot;
-      }
+        if (plotStore.plots[plotIndex].id === id) {
+          plotStore.plots[plotIndex] = loadedPlot;
+        }
+      });
     };
   }
 
