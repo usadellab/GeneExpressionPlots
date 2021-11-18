@@ -3,6 +3,7 @@ import { mapFromArrays } from '@/utils/collection';
 import { buildTreeBranches, ArrayTree } from '@/utils/reducers';
 import { isNumeric } from '@/utils/validation';
 import { setToColors } from '@/utils/color';
+import { mean } from 'd3';
 
 interface DataFrameConfig {
   multiHeader: string;
@@ -71,7 +72,7 @@ export class Dataframe {
    * Get whether the dataframe contains data.
    */
   get hasData(): boolean {
-    return this.colNames.length > 0;
+    return this.colNames.length > 0 && this.rowNames.length > 0;
   }
 
   /**
@@ -102,6 +103,16 @@ export class Dataframe {
     return [...new Set(sampleSet)];
   }
 
+  get sampleGroupsAsArray(): string[] {
+    const sampleSet: string[] = [];
+    Object.entries(this.headerObject).forEach((entry) =>
+      Object.keys(entry[1]).forEach((sample) => {
+        sampleSet.push(`${entry[0]}${this.config.multiHeader}${sample}`);
+      })
+    );
+    return [...new Set(sampleSet)];
+  }
+
   /* ACTION QUERIES */
 
   /**
@@ -112,6 +123,20 @@ export class Dataframe {
     return this.rows[rowName];
   }
 
+  getColumnValue(rowName: string, colName: string): string {
+    const colIndex = this.colNames.findIndex((col) => col === colName);
+    return this.rows[rowName][colIndex];
+  }
+
+  getColumn(colName: string): { [key: string]: string } {
+    const colIndex = this.colNames.findIndex((col) => col === colName);
+    const column: { [key: string]: string } = {};
+
+    this.rowNames.forEach((row) => {
+      column[row] = this.rows[row][colIndex];
+    });
+    return column;
+  }
   /**
    * Get a single row as an object of key-value pairs.
    * - Each key represents the column header for a single cell value.
@@ -119,8 +144,10 @@ export class Dataframe {
    *
    * @param rowName unique row name
    */
-  getRowAsMap(rowName: string): Map<string, string> {
-    return mapFromArrays(this.colNames, this.getRow(rowName));
+  getRowAsMap(rowName: string): Map<string, string> | undefined {
+    return this.getRow(rowName)
+      ? mapFromArrays(this.colNames, this.getRow(rowName))
+      : undefined;
   }
 
   /**
@@ -408,5 +435,67 @@ export class Dataframe {
 
     this.header = newCols;
     this.rows = newRows;
+  }
+
+  /**
+   *
+   * @param colName name of the column that hold the MapMan Bins
+   * @param separator internal column separator for the MapMan Bin column
+   * @param mapmanBin Bin to filter
+   * @param recursive filter bins recursivley: every child of the given bin is also true
+   * @returns array of gene identifiers that are assigned to the given MapMan bin
+   */
+  getGenesForMapManBin(
+    colName: string,
+    separator: string,
+    mapmanBin: string,
+    recursive: boolean
+  ): string[] {
+    const colIndex = this.colNames.findIndex((col) => col === colName);
+    return this.rowNames.filter((geneId) => {
+      const bins = this.rows[geneId][colIndex].split(separator);
+      const pattern = recursive
+        ? new RegExp(`^${mapmanBin}`)
+        : new RegExp(`^${mapmanBin}$`);
+
+      return bins.some((bin) => pattern.test(bin));
+    });
+  }
+
+  /**
+   *
+   * @param group group
+   * @param sample sample
+   * @returns The mean values for the given group*sample for every gene Id.
+   */
+  getMapManMeanValues(
+    group: string,
+    sample: string
+  ): {
+    [key: string]: number;
+  } {
+    const values: { [key: string]: number } = {};
+    this.rowNames.forEach((rowName) => {
+      const tree = this.getRowAsTree(rowName) as any;
+      const meanVal = mean(
+        tree[group][sample].map((val: string) => parseFloat(val))
+      ) as number;
+      values[rowName] = meanVal;
+    });
+    return values;
+  }
+
+  addMercatorHeaderAndPrepareColumns(
+    addName: boolean,
+    addDescription: boolean
+  ): void {
+    this.header.push('MapMan_BINCODE');
+
+    if (addName) {
+      this.header.push('MapMan_NAME');
+    }
+    if (addDescription) {
+      this.header.push('MapMan_DESCRIPTION');
+    }
   }
 }

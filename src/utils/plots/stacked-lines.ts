@@ -42,8 +42,8 @@ const stackedLinesData = (
         const groupSamplePlotData = plotData[groupName][sampleName];
         if (groupSamplePlotData) {
           x.push(sampleName);
-          y.push(mean(groupSamplePlotData));
-          error_y.push(deviation(groupSamplePlotData));
+          y.push(mean(groupSamplePlotData) as number);
+          error_y.push(deviation(groupSamplePlotData) as number);
         }
       });
       data.push({

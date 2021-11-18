@@ -1,4 +1,4 @@
-import { makeAutoObservable, toJS } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import {
   EnrichmentAnalysis,
   EnrichmentAnalysisOptions,
@@ -99,15 +99,17 @@ class EnrichmentStore {
     worker.postMessage(data);
 
     worker.onmessage = function (e: MessageEvent<(string | number)[][]>) {
-      const loadedEnrichment: EnrichmentAnalysis = {
-        ...enrichmentStore.analyses[enrichmentIndex],
-        isLoading: false,
-        data: e.data,
-      };
+      runInAction(() => {
+        const loadedEnrichment: EnrichmentAnalysis = {
+          ...enrichmentStore.analyses[enrichmentIndex],
+          isLoading: false,
+          data: e.data,
+        };
 
-      if (enrichmentStore.analyses[enrichmentIndex].id === id) {
-        enrichmentStore.analyses[enrichmentIndex] = loadedEnrichment;
-      }
+        if (enrichmentStore.analyses[enrichmentIndex].id === id) {
+          enrichmentStore.analyses[enrichmentIndex] = loadedEnrichment;
+        }
+      });
     };
   }
 }

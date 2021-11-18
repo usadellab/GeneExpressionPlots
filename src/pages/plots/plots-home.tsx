@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import { FcLineChart } from 'react-icons/fc';
 import { MdBubbleChart } from 'react-icons/md';
+import { VscGraphScatter } from 'react-icons/vsc';
 import { observer } from 'mobx-react';
 import {
   Alert,
@@ -33,6 +34,7 @@ import {
   GxpPlotly,
   GxpPCA,
   GxpImage,
+  GxpMapMan,
 } from '@/types/plots';
 
 import BarsForm, { BarsFormSubmitHandler } from './components/bars-form';
@@ -45,6 +47,7 @@ import ImageForm, { ImageFormSubmitHandler } from './components/image-form';
 import PlotContainer from './components/plot-container';
 import PlotlyPlot, { colors } from './components/plotly-plot';
 import PCAPlot from './components/pca-plot';
+import MapManPlot from './components/mapman-plot';
 import IndividualLinesForm, {
   IndividualLinesFormSubmitHandler,
 } from './components/individual-lines-form';
@@ -53,6 +56,7 @@ import StackedLinesForm, {
 } from './components/stacked-lines-form';
 import PlotCaption from './components/plot-caption';
 import PCAForm, { PCAFormSubmitHandler } from './components/pca-form';
+import MapManForm, { MapManFormSubmitHandler } from './components/mapman-form';
 
 const PlotsHome: React.FC = () => {
   const toast = useToast();
@@ -298,6 +302,24 @@ const PlotsHome: React.FC = () => {
     );
   };
 
+  /* MapMan Plot*/
+  const refMapManFormInitialFocus = React.useRef<FocusableElement | null>(null);
+  const {
+    isOpen: isMapManFormOpen,
+    onOpen: onMapManFormOpen,
+    onClose: onMapManFormClose,
+  } = useDisclosure();
+
+  const onMapManFormSubmit: MapManFormSubmitHandler = async (
+    values,
+    actions
+  ) => {
+    onMapManFormClose();
+    setTimeout(() => plotStore.addMapManPlot(values), 10);
+
+    actions.setSubmitting(false);
+  };
+
   /* IMAGE PLOT */
 
   const refImageFormInitialFocus = React.useRef<FocusableElement | null>(null);
@@ -335,7 +357,7 @@ const PlotsHome: React.FC = () => {
         maxWidth="14rem"
         position="fixed"
         boxShadow="2xl"
-        zIndex="overlay"
+        zIndex="popover"
       >
         <SidebarButton
           text="Bars"
@@ -369,6 +391,13 @@ const PlotsHome: React.FC = () => {
           text="PCA"
           icon={MdBubbleChart}
           onClick={onPCAFormOpen}
+          disabled={!dataAvailable}
+        />
+
+        <SidebarButton
+          text="MapMan Function"
+          icon={VscGraphScatter}
+          onClick={onMapManFormOpen}
           disabled={!dataAvailable}
         />
 
@@ -458,18 +487,23 @@ const PlotsHome: React.FC = () => {
               return (
                 <PlotlyPlot {...plotlyPlot} key={plotlyPlot.id}>
                   {plotlyPlot.options.showCaption &&
-                    plotlyPlot.accessions.map((accession, index) => (
-                      <PlotCaption
-                        key={`${accession}-${index}`}
-                        accession={accession}
-                        caption={infoTable.getRowAsMap(accession)}
-                        color={
-                          plotlyPlot.accessions.length > 1
-                            ? colors[index]
-                            : undefined
-                        }
-                      />
-                    ))}
+                    plotlyPlot.accessions.map((accession, index) => {
+                      const caption = infoTable.getRowAsMap(accession);
+                      return (
+                        caption && (
+                          <PlotCaption
+                            key={`${accession}-${index}`}
+                            accession={accession}
+                            caption={caption}
+                            color={
+                              plotlyPlot.accessions.length > 1
+                                ? colors[index]
+                                : undefined
+                            }
+                          />
+                        )
+                      );
+                    })}
                 </PlotlyPlot>
               );
             }
@@ -477,6 +511,10 @@ const PlotsHome: React.FC = () => {
             case 'pca': {
               const pcaPlot = plot as GxpPCA;
               return <PCAPlot key={pcaPlot.id} {...pcaPlot} />;
+            }
+            case 'mapman': {
+              const mapmanPlot = plot as GxpMapMan;
+              return <MapManPlot key={mapmanPlot.id} {...mapmanPlot} />;
             }
             default:
               break;
@@ -489,7 +527,7 @@ const PlotsHome: React.FC = () => {
         isOpen={isBarsFormOpen}
         onClose={onBarsFormClose}
         size="xl"
-        title="Bars Plot"
+        title="Bar Plot"
         scrollBehavior="outside"
       >
         <BarsForm
@@ -556,6 +594,21 @@ const PlotsHome: React.FC = () => {
           initialFocusRef={refPCAFormInitialFocus}
           onCancel={onPCAFormClose}
           onSubmit={onPCAFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refMapManFormInitialFocus}
+        isOpen={isMapManFormOpen}
+        onClose={onMapManFormClose}
+        size="xl"
+        title="MapMan Functional Template Plot"
+        scrollBehavior="outside"
+      >
+        <MapManForm
+          initialFocusRef={refMapManFormInitialFocus}
+          onCancel={onMapManFormClose}
+          onSubmit={onMapManFormSubmit}
         />
       </FormikModal>
 

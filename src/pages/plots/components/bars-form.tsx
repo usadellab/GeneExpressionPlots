@@ -120,7 +120,7 @@ const BarsForm: React.FC<BarsFormProps> = (props) => {
                       }}
                       isRequired
                       key={index}
-                      label={`Gene Accession ${index + 1}`}
+                      label={`Gene Identifier ${index + 1}`}
                       name={`accessions.${index}`}
                       rightChildren={
                         formProps.values.accessions.length > 1 && (
