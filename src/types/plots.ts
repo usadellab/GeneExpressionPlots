@@ -1,5 +1,6 @@
 import { DataRows } from '@/store/dataframe';
 import { GXPDistanceMethod } from '@/utils/plots/heatmap';
+import { GxpMapManRect, GxpMapManStats } from '@/utils/plots/mapman';
 import { Layout, PlotData } from 'plotly.js';
 
 export type PlotType = 'heatmap' | 'pca' | 'plotly' | 'image' | 'mapman';
@@ -18,14 +19,13 @@ export type GxpMapManColorScale =
   | 'continuous_xy'
   | 'diverging_-xx';
 export interface GxpMapMan extends GxpPlot {
+  rects: GxpMapManRect[];
+  stats: GxpMapManStats;
   template: string;
-  infoTableColumn: string;
-  infoTableColumnSep: string;
   valuesFrom: string;
   colorScale: GxpMapManColorScale;
   colorScaleValueX?: number;
   colorScaleValueY?: number;
-  sample?: string;
 }
 //#endregion
 

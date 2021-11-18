@@ -1,4 +1,4 @@
-import { makeAutoObservable, toJS } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import { nanoid } from 'nanoid';
 import {
   GxpHeatmap,
@@ -29,6 +29,7 @@ import { Layout, PlotData } from 'plotly.js';
 import { HeatmapFormAttributes } from '@/pages/plots/components/heatmap-form';
 import { PCAFormAttributes } from '@/pages/plots/components/pca-form';
 import { MapManFormAttributes } from '@/pages/plots/components/mapman-form';
+import { createMapManArgs } from '@/utils/plots/mapman';
 
 class PlotStore {
   plots: GxpPlot[] = [];
@@ -283,15 +284,44 @@ class PlotStore {
   }
 
   // add template argument
-  addMapManPlot(options: MapManFormAttributes): void {
+  async addMapManPlot(options: MapManFormAttributes): Promise<void> {
+    const {
+      template,
+      infoTableColumn,
+      infoTableColumnSep,
+      valuesFrom,
+      sample,
+    } = options;
+
     const id = nanoid();
-    const plot: GxpMapMan = {
+    const pendingPlot: GxpPlot = {
       id,
       type: 'mapman',
-      isLoading: false,
-      ...options,
+      isLoading: true,
     };
-    this.plots.push(plot);
+    const plotIndex = this.plots.push(pendingPlot) - 1;
+
+    createMapManArgs(
+      template,
+      infoTableColumn,
+      infoTableColumnSep,
+      valuesFrom,
+      sample
+    ).then((data) => {
+      runInAction(() => {
+        const loadedPlot: GxpMapMan = {
+          ...plotStore.plots[plotIndex],
+          isLoading: false,
+          rects: data.rects,
+          stats: data.stats,
+          ...options,
+        };
+
+        if (plotStore.plots[plotIndex].id === id) {
+          plotStore.plots[plotIndex] = loadedPlot;
+        }
+      });
+    });
   }
 }
 
