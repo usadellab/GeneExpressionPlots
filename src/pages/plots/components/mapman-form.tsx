@@ -89,12 +89,16 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
   return (
     <Formik<MapManFormAttributes>
       initialValues={{
-        infoTableColumn: infoTable.colNames[0],
+        infoTableColumn:
+          infoTable.colNames.find((col) => col === 'MapMan_BINCODE') ??
+          infoTable.colNames[0],
         infoTableColumnSep: ',',
         template: 'X4.3_Amino_acid_metabolism_R3.0',
         valuesFrom: infoTable.colNames[0],
         colorScale: 'diverging_-xx',
         sample: dataTable.sampleGroupsAsArray[0],
+        colorScaleValueX: 3,
+        colorScaleValueY: 3,
       }}
       validateOnBlur={false}
       onSubmit={props.onSubmit}
