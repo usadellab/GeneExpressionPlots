@@ -21,7 +21,6 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react';
-import { GxpMapManRect, GxpMapManStats } from '@/utils/plots/mapman';
 import ColorLegend from './color-legend';
 import { nanoid } from 'nanoid';
 
@@ -30,10 +29,7 @@ const gradient1 = '#b4fbde';
 
 const INITIALSIZE = 5;
 
-interface MapManPlotProps extends GxpMapMan {
-  rects: GxpMapManRect[];
-  stats: GxpMapManStats;
-}
+type MapManPlotProps = GxpMapMan;
 
 const MapManPlot: React.FC<MapManPlotProps> = (props) => {
   const ref = useRef(null);
@@ -79,18 +75,33 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
 
   useLayoutEffect(() => {
     d3.xml(`mapman-templates/${props.template}.svg`).then((data) => {
+      const viewBoxY = props.plotTitle ? props.height + 30 : props.height;
+
       const svg = d3
         .select(svgRef.current)
         .attr('width', '90%')
         .attr('height', '100%')
         .attr('preserveAspectRatio', 'xMinYMin meet')
-        .attr('viewBox', `0 0 ${props.width + 100} ${props.height}`)
+        // add space (20) for title
+        .attr(
+          'viewBox',
+          `0 ${props.plotTitle ? -30 : 0} ${props.width + 100} ${viewBoxY}`
+        )
         .classed('main-svg', true);
       (svg.node() as any).append(data.documentElement);
       const svgViz = d3
         .select(svgRef.current)
         .append('g')
         .attr('id', 'viz-layer');
+
+      // Title
+      svg
+        .append('text')
+        .attr('x', props.width / 2)
+        .attr('y', 0)
+        .attr('text-anchor', 'middle')
+        .style('font-size', props.height / 25)
+        .text(`${props.plotTitle}`);
 
       const rects = svgViz
         .selectAll('rect')
@@ -180,6 +191,7 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
             x={props.width + 50}
             y={10}
             label={props.valuesFrom}
+            reverse={props.colorScale === 'diverging_-xx'}
           />
         </svg>
         <Flex

@@ -34,6 +34,7 @@ export interface MapManFormAttributes {
   colorScaleValueX?: number;
   colorScaleValueY?: number;
   sample?: string;
+  plotTitle?: string;
 }
 
 const templates = [
@@ -99,17 +100,27 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
         sample: dataTable.sampleGroupsAsArray[0],
         colorScaleValueX: 3,
         colorScaleValueY: 3,
+        plotTitle: '',
       }}
       validateOnBlur={false}
       onSubmit={props.onSubmit}
     >
       {(formProps) => (
         <Box as={Form}>
-          <Flex gridGap="1rem" flexDirection={colorScaleFlexDir}>
+          <FormikField
+            controlProps={{
+              as: 'p',
+            }}
+            initialFocusRef={props.initialFocusRef}
+            label="Plot Title"
+            name="plotTitle"
+          />
+          <Flex
+            gridGap="1rem"
+            flexDirection={colorScaleFlexDir}
+            marginTop="2rem"
+          >
             <FormikSelect
-              controlProps={{
-                marginTop: '1rem',
-              }}
               label="MapMan BINCODE column"
               name="infoTableColumn"
               options={infoTable.colNames.map((colName) => ({
@@ -123,7 +134,6 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
             <FormikField
               controlProps={{
                 as: 'p',
-                marginTop: '1rem',
               }}
               initialFocusRef={props.initialFocusRef}
               label="BINCODE separator"

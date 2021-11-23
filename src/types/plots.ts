@@ -28,6 +28,7 @@ export interface GxpMapMan extends GxpPlot {
   colorScale: GxpMapManColorScale;
   colorScaleValueX?: number;
   colorScaleValueY?: number;
+  plotTitle?: string;
 }
 //#endregion
 
