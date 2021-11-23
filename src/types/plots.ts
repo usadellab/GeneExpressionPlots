@@ -21,11 +21,14 @@ export type GxpMapManColorScale =
 export interface GxpMapMan extends GxpPlot {
   rects: GxpMapManRect[];
   stats: GxpMapManStats;
+  width: number;
+  height: number;
   template: string;
   valuesFrom: string;
   colorScale: GxpMapManColorScale;
   colorScaleValueX?: number;
   colorScaleValueY?: number;
+  plotTitle?: string;
 }
 //#endregion
 

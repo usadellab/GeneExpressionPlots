@@ -41,7 +41,12 @@ export async function createMapManArgs(
   infoTableColumnSep: string,
   valuesFrom: string,
   sampleGroup?: string
-): Promise<{ rects: GxpMapManRect[]; stats: GxpMapManStats }> {
+): Promise<{
+  rects: GxpMapManRect[];
+  stats: GxpMapManStats;
+  width: number;
+  height: number;
+}> {
   const INITIALSIZE = 5;
 
   const [group, sample] = sampleGroup
@@ -54,6 +59,15 @@ export async function createMapManArgs(
       : infoTable.getColumn(valuesFrom);
 
   const xmlDocument = await parseXmlData(`mapman-templates/${template}.xml`);
+  const svgDocument = await parseXmlData(`mapman-templates/${template}.svg`);
+  const width = parseInt(
+    svgDocument.firstElementChild?.attributes.getNamedItem('width')
+      ?.nodeValue ?? '1024'
+  );
+  const height = parseInt(
+    svgDocument.firstElementChild?.attributes.getNamedItem('height')
+      ?.nodeValue ?? '800'
+  );
 
   const dataAreas = xmlDocument.querySelectorAll('DataArea');
 
@@ -128,5 +142,7 @@ export async function createMapManArgs(
   return {
     rects,
     stats: { min, q1, median, mean, q3, max },
+    width,
+    height,
   };
 }

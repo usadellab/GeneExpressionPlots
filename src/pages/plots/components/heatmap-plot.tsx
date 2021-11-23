@@ -25,12 +25,12 @@ import {
   HierarchyPointNode,
 } from '@visx/hierarchy/lib/types';
 
-import HeatmapLegend from '@/pages/plots/components/heatmap-legend';
+import ColorLegend from '@/pages/plots/components/color-legend';
 
 import { nanoid } from 'nanoid';
 
-const gradient0 = '#f33d15';
-const gradient1 = '#b4fbde';
+const gradient0 = '#b4fbde';
+const gradient1 = '#f33d15';
 // const gradient0 = '#77312f';
 // const gradient1 = '#f33d15';
 // const cool1 = '#122549';
@@ -73,7 +73,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
   const colorMax = max(props.binData, (d) => max(bins(d), count));
   const colorScale =
     props.distanceMethod === 'correlation'
-      ? scaleSequential([-1, 1], interpolateRdBu)
+      ? scaleSequential([1, -1], interpolateRdBu)
       : scaleLinear<string>({
           range: [gradient0, gradient1],
           domain: [colorMin, colorMax],
@@ -237,11 +237,16 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             height="100%"
             ref={containerRef}
           >
-            <HeatmapLegend
+            <ColorLegend
               colorScale={colorScale}
               id={nanoid()}
               minVal={props.distanceMethod === 'euclidean' ? colorMin : -1}
               maxVal={props.distanceMethod === 'euclidean' ? colorMax : 1}
+              width={20}
+              height={250}
+              x={120}
+              y={60}
+              reverse={props.distanceMethod === 'correlation'}
               label={
                 props.distanceMethod === 'euclidean'
                   ? 'euclidean distance'

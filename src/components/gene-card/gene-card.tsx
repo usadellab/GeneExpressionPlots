@@ -25,6 +25,7 @@ const GeneCard: React.FC<GeneCardProps> = ({ color, accession, geneInfo }) => {
                 w="36"
                 textTransform="uppercase"
                 textColor="yellow.700"
+                wordBreak="break-all"
               >
                 {colName}
               </Flex>

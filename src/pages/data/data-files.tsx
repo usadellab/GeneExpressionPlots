@@ -3,9 +3,9 @@ import JSZip from 'jszip';
 import { observer } from 'mobx-react';
 import React from 'react';
 import {
+  FaDna,
   FaFile,
   FaFileAlt,
-  FaFileExport,
   FaFileImport,
   FaTrashAlt,
 } from 'react-icons/fa';
@@ -15,6 +15,7 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
+  Divider,
   Flex,
   useDisclosure,
   Wrap,
@@ -48,6 +49,15 @@ import { unescapeDelimiters } from '@/utils/string';
 import { enrichmentStore } from '@/store/enrichment-store';
 import { EnrichmentExport } from '@/types/enrichment';
 import { nanoid } from 'nanoid';
+import { RiInboxArchiveFill, RiInboxUnarchiveFill } from 'react-icons/ri';
+import {
+  parseMercatorAndAddToInfoTable,
+  validateMercator,
+} from '@/utils/mercator';
+import MercatorForm, {
+  MercatorFormSubmitHandler,
+} from '../tools/components/mercator-form';
+import SiteLink from '@/components/site-link';
 
 const DataFiles: React.FC = () => {
   const replCardWidth = useBreakpointValue({
@@ -180,6 +190,72 @@ const DataFiles: React.FC = () => {
       } catch (error) {
         actions.setSubmitting(false);
         console.error('There was an error while reading the file');
+      }
+    }
+  };
+
+  /* LOAD MERCATOR TABLE */
+  const refMercatorTableInitialFocus = React.useRef<FocusableElement | null>(
+    null
+  );
+
+  const {
+    isOpen: isMercatorTableOpen,
+    onOpen: onMercatorTableOpen,
+    onClose: onMercatorTableClose,
+  } = useDisclosure();
+
+  const onMercatorTableFormSubmit: MercatorFormSubmitHandler = (
+    values,
+    actions
+  ) => {
+    const file = values.file;
+
+    if (file) {
+      try {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          // validate Mercator input
+          const header = (reader.result as string).split('\n', 1)[0];
+          if (!validateMercator(header)) {
+            toast({
+              title: 'Error',
+              status: 'error',
+              description: 'Invalid Mercator Input.',
+              isClosable: true,
+            });
+            return;
+          }
+
+          // Parse the input file as a table
+          parseMercatorAndAddToInfoTable(reader.result as string, {
+            addDescription: values.addDescription,
+            addName: values.addName,
+          });
+        };
+
+        reader.onloadend = () => {
+          actions.setSubmitting(false);
+          onMercatorTableClose();
+          toast({
+            title: 'Successfully imported Mercator table',
+            status: 'success',
+            description:
+              'The provided Mercator tabular output was successfully imported into the application.',
+            isClosable: true,
+          });
+        };
+
+        reader.onerror = () => {
+          actions.setSubmitting(false);
+          console.error('There was an error while reading the file');
+        };
+
+        reader.readAsText(file);
+      } catch (error) {
+        actions.setSubmitting(false);
+        console.error(error);
       }
     }
   };
@@ -483,7 +559,6 @@ const DataFiles: React.FC = () => {
             onClick={onXTableOpen}
           />
         )}
-
         {!settings.preloaded.data && (
           <SidebarButton
             text="Load Gene Info Table"
@@ -491,21 +566,26 @@ const DataFiles: React.FC = () => {
             onClick={onInfoTableOpen}
           />
         )}
-
+        {!settings.preloaded.data && (
+          <SidebarButton
+            text="Load Mercator Table"
+            icon={FaFileImport}
+            onClick={onMercatorTableOpen}
+            disabled={!dataAvailable}
+          />
+        )}
         {!settings.preloaded.data && (
           <SidebarButton
             text="Import GXP Database"
-            icon={FaFileImport}
+            icon={RiInboxArchiveFill}
             onClick={onGXPImportOpen}
           />
         )}
-
         <SidebarButton
           text="Export GXP Database"
-          icon={FaFileExport}
+          icon={RiInboxUnarchiveFill}
           onClick={onGXPExportOpen}
         />
-
         {!settings.preloaded.data && (
           <SidebarButton
             text={
@@ -518,6 +598,20 @@ const DataFiles: React.FC = () => {
             disabled={!dataAvailable}
           />
         )}
+        <Divider />
+
+        <SiteLink
+          to="/tools/gene-browser"
+          _hover={{
+            textColor: 'orange.600',
+          }}
+        >
+          <SidebarButton
+            text="Gene Browser"
+            icon={FaDna}
+            disabled={!dataAvailable}
+          />
+        </SiteLink>
       </Sidebar>
 
       <Flex
@@ -607,6 +701,19 @@ const DataFiles: React.FC = () => {
           initialFocusRef={refInfoTableInitialFocus}
           onCancel={onInfoTableClose}
           onSubmit={onInfoTableFormSubmit}
+        />
+      </FormikModal>
+
+      <FormikModal
+        initialFocusRef={refMercatorTableInitialFocus}
+        isOpen={isMercatorTableOpen}
+        onClose={onMercatorTableClose}
+        title="Load Gene-Info Table"
+      >
+        <MercatorForm
+          initialFocusRef={refMercatorTableInitialFocus}
+          onCancel={onMercatorTableClose}
+          onSubmit={onMercatorTableFormSubmit}
         />
       </FormikModal>
 
