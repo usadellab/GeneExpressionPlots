@@ -318,6 +318,8 @@ class PlotStore {
           isLoading: false,
           rects: data.rects,
           stats: data.stats,
+          width: data.width,
+          height: data.height,
           ...options,
         };
 
