@@ -15,6 +15,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Divider,
   Flex,
   Spinner,
   useDisclosure,
@@ -380,6 +381,8 @@ const PlotsHome: React.FC = () => {
           disabled={!dataAvailable}
         />
 
+        <Divider />
+
         <SidebarButton
           text="Cluster Heatmap"
           icon={FaBurn}
@@ -394,12 +397,14 @@ const PlotsHome: React.FC = () => {
           disabled={!dataAvailable}
         />
 
+        <Divider />
         <SidebarButton
           text="MapMan Function"
           icon={VscGraphScatter}
           onClick={onMapManFormOpen}
           disabled={!dataAvailable}
         />
+        <Divider />
 
         <SidebarButton
           text="Custom figure"
