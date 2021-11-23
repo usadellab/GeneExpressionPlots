@@ -11,6 +11,7 @@ interface colorLegendProps {
   height: number;
   x: number;
   y: number;
+  reverse?: boolean;
 }
 
 const ColorLegend: React.FC<colorLegendProps> = ({
@@ -23,11 +24,12 @@ const ColorLegend: React.FC<colorLegendProps> = ({
   height,
   x,
   y,
+  reverse,
 }: colorLegendProps) => {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
-    const scale = d3.scaleLinear().domain([minVal, maxVal]).range([250, 0]);
+    const scale = d3.scaleLinear().domain([minVal, maxVal]).range([height, 0]);
     const axis = d3.axisLeft(scale).scale(scale).tickValues([minVal, maxVal]);
 
     const svg = d3.select(ref.current);
@@ -42,9 +44,9 @@ const ColorLegend: React.FC<colorLegendProps> = ({
 
     linearGradient
       .attr('x1', '0%')
-      .attr('y1', '100%')
+      .attr('y1', `${reverse ? '0' : '100'}%`)
       .attr('x2', '0%')
-      .attr('y2', '0%');
+      .attr('y2', `${reverse ? '110' : '0'}%`);
 
     linearGradient
       .selectAll('stop')
