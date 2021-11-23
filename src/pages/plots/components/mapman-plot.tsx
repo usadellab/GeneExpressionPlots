@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 
 import PlotContainer from './plot-container';
 import { GxpMapMan } from '@/types/plots';
-import { parseXmlData } from '@/utils/plots/mapman-xml-domparser';
 
 import { interpolateRdBu } from 'd3-scale-chromatic';
 import { scaleSequential } from 'd3-scale';
@@ -23,6 +22,8 @@ import {
   TableCaption,
 } from '@chakra-ui/react';
 import { GxpMapManRect, GxpMapManStats } from '@/utils/plots/mapman';
+import ColorLegend from './color-legend';
+import { nanoid } from 'nanoid';
 
 const gradient0 = '#f33d15';
 const gradient1 = '#b4fbde';
@@ -37,66 +38,53 @@ interface MapManPlotProps extends GxpMapMan {
 const MapManPlot: React.FC<MapManPlotProps> = (props) => {
   const ref = useRef(null);
   const svgRef = useRef(null);
-  props.template;
 
   const [rectSize, setRectSize] = useState(5);
 
   const [plotStatus, setPlotStatus] = useState<'loading' | 'idle'>('loading');
 
+  // color
+  let colorX = 0;
+  let colorY = 0;
+  switch (props.colorScale) {
+    case 'diverging_-xx':
+      colorX = -(props.colorScaleValueX as number);
+      colorY = props.colorScaleValueX as number;
+      break;
+    case 'continuous_0q3':
+      colorX = 0;
+      colorY = props.stats.q3;
+      break;
+    case 'continuous_q1q3':
+      colorX = props.stats.q1;
+      colorY = props.stats.q3;
+      break;
+    case 'continuous_xy':
+      colorX = props.colorScaleValueX as number;
+      colorY = props.colorScaleValueY as number;
+      break;
+    default:
+      break;
+  }
+
+  const colorScaleValues = [colorX, colorY];
+
+  const colorScale =
+    props.colorScale === 'diverging_-xx'
+      ? scaleSequential(colorScaleValues.reverse(), interpolateRdBu)
+      : scaleLinear<string>({
+          range: [gradient1, gradient0],
+          domain: colorScaleValues,
+        });
+
   useLayoutEffect(() => {
-    // color
-    let colorX = 0;
-    let colorY = 0;
-    switch (props.colorScale) {
-      case 'diverging_-xx':
-        colorX = -(props.colorScaleValueX as number);
-        colorY = props.colorScaleValueX as number;
-        break;
-      case 'continuous_0q3':
-        colorX = 0;
-        colorY = props.stats.q3;
-        break;
-      case 'continuous_q1q3':
-        colorX = props.stats.q1;
-        colorY = props.stats.q3;
-        break;
-      case 'continuous_xy':
-        colorX = props.colorScaleValueX as number;
-        colorY = props.colorScaleValueY as number;
-        break;
-      default:
-        break;
-    }
-
-    const colorScaleValues = [colorX, colorY];
-
-    const colorScale =
-      props.colorScale === 'diverging_-xx'
-        ? scaleSequential(colorScaleValues.reverse(), interpolateRdBu)
-        : scaleLinear<string>({
-            range: [gradient1, gradient0],
-            domain: colorScaleValues,
-          });
-
-    let svgWidth = '1024';
-    let svgHeight = '800';
-
-    parseXmlData(`mapman-templates/${props.template}.svg`).then((xmlDoc) => {
-      svgWidth =
-        xmlDoc.firstElementChild?.attributes.getNamedItem('width')?.nodeValue ??
-        svgWidth;
-      svgHeight =
-        xmlDoc.firstElementChild?.attributes.getNamedItem('height')
-          ?.nodeValue ?? svgHeight;
-    });
-
     d3.xml(`mapman-templates/${props.template}.svg`).then((data) => {
       const svg = d3
         .select(svgRef.current)
         .attr('width', '90%')
         .attr('height', '100%')
         .attr('preserveAspectRatio', 'xMinYMin meet')
-        .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`)
+        .attr('viewBox', `0 0 ${props.width + 100} ${props.height}`)
         .classed('main-svg', true);
       (svg.node() as any).append(data.documentElement);
       const svgViz = d3
@@ -181,9 +169,22 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
             size="xl"
           ></Spinner>
         )}
-        <svg ref={svgRef} />
+        <svg ref={svgRef}>
+          <ColorLegend
+            colorScale={colorScale}
+            id={nanoid()}
+            minVal={colorX}
+            maxVal={colorY}
+            width={20}
+            height={250}
+            x={props.width + 50}
+            y={10}
+            label={props.valuesFrom}
+          />
+        </svg>
         <Flex
           marginTop="2rem"
+          marginRight="8rem"
           flexDirection="row"
           justifyContent="space-around"
           width="full"
