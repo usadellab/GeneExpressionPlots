@@ -71,6 +71,7 @@ const ColorLegend: React.FC<colorLegendProps> = ({
 
     svg
       .append('g')
+      .style('font-size', '1rem')
       .attr('transform', `translate(${x - 10}, ${y})`)
       .call(axis);
 
