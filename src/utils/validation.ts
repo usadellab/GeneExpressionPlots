@@ -26,3 +26,19 @@ export function isNullOrUndefined(x: unknown): x is null | undefined {
 export function isNumeric(x: unknown): x is number {
   return typeof x === 'number' && !isNaN(x);
 }
+
+export function isParsableAsNumeric(x: string): boolean {
+  const naValues = [
+    'na',
+    'NA',
+    'N/A',
+    'n/a',
+    null,
+    NaN,
+    'NaN',
+    'nan',
+    'null',
+    '',
+  ];
+  return isNumeric(Number(x)) || naValues.includes(x);
+}

@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { mapFromArrays } from '@/utils/collection';
 import { buildTreeBranches, ArrayTree } from '@/utils/reducers';
-import { isNumeric } from '@/utils/validation';
+import { isNumeric, isParsableAsNumeric } from '@/utils/validation';
 import { setToColors } from '@/utils/color';
 import { mean } from 'd3';
 
@@ -497,5 +497,10 @@ export class Dataframe {
     if (addDescription) {
       this.header.push('MapMan_DESCRIPTION');
     }
+  }
+
+  isNumericColumn(colName: string): boolean {
+    const col10Elm = Object.values(this.getColumn(colName)).slice(0, 9);
+    return col10Elm.every((x) => isParsableAsNumeric(x));
   }
 }

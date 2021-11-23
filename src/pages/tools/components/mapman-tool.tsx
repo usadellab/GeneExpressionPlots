@@ -160,27 +160,25 @@ const MapMan: React.FC = () => {
               isClosable: true,
             });
             return;
+          } else {
+            // Parse the input file as a table
+            parseMercatorAndAddToInfoTable(reader.result as string, {
+              addDescription: values.addDescription,
+              addName: values.addName,
+            });
+            toast({
+              title: 'Successfully imported Mercator table',
+              status: 'success',
+              description:
+                'The provided Mercator tabular output was successfully imported into the application.',
+              isClosable: true,
+            });
           }
-
-          // Parse the input file as a table
-          parseMercatorAndAddToInfoTable(reader.result as string, {
-            addDescription: values.addDescription,
-            addName: values.addName,
-          });
         };
-
         reader.onloadend = () => {
           actions.setSubmitting(false);
           onClose();
-          toast({
-            title: 'Successfully imported Mercator table',
-            status: 'success',
-            description:
-              'The provided Mercator tabular output was successfully imported into the application.',
-            isClosable: true,
-          });
         };
-
         reader.onerror = () => {
           actions.setSubmitting(false);
           console.error('There was an error while reading the file');
@@ -236,7 +234,7 @@ const MapMan: React.FC = () => {
               Use the Mercator v4 tool to annotate your genes with MapMan Bins. Clicking here
               will bring you to the plabipd online resources to run Mercator on your DNA or protein
               sequences. After running Mercator you can import the output table into GXP by using
-              the Card below. 
+              the Card below.
             `}
               onClick={() => window.open('https://plabipd.de/portal/mercator4')}
             />
