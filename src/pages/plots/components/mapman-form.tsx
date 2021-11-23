@@ -141,7 +141,9 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
             name="valuesFrom"
             options={infoTable.colNames.reduce(
               (acc, colName) => {
-                acc.push({ value: colName, label: colName });
+                if (infoTable.isNumericColumn(colName)) {
+                  acc.push({ value: colName, label: colName });
+                }
                 return acc;
               },
               [{ value: 'expressionValue', label: 'Mean expression value' }]
