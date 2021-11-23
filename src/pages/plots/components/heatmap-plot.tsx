@@ -25,7 +25,7 @@ import {
   HierarchyPointNode,
 } from '@visx/hierarchy/lib/types';
 
-import HeatmapLegend from '@/pages/plots/components/heatmap-legend';
+import ColorLegend from '@/pages/plots/components/color-legend';
 
 import { nanoid } from 'nanoid';
 
@@ -237,11 +237,15 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             height="100%"
             ref={containerRef}
           >
-            <HeatmapLegend
+            <ColorLegend
               colorScale={colorScale}
               id={nanoid()}
               minVal={props.distanceMethod === 'euclidean' ? colorMin : -1}
               maxVal={props.distanceMethod === 'euclidean' ? colorMax : 1}
+              width={20}
+              height={250}
+              x={120}
+              y={60}
               label={
                 props.distanceMethod === 'euclidean'
                   ? 'euclidean distance'

@@ -1,21 +1,29 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import * as d3 from 'd3';
 
-interface HeatmapLegendProps {
+interface colorLegendProps {
   colorScale: any;
   id: string;
   minVal: number;
   maxVal: number;
   label: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
 }
 
-const HeatmapLegend: React.FC<HeatmapLegendProps> = ({
+const ColorLegend: React.FC<colorLegendProps> = ({
   colorScale,
   id,
   minVal,
   maxVal,
   label,
-}: HeatmapLegendProps) => {
+  width,
+  height,
+  x,
+  y,
+}: colorLegendProps) => {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
@@ -53,22 +61,25 @@ const HeatmapLegend: React.FC<HeatmapLegendProps> = ({
 
     svg
       .append('rect')
-      .attr('width', 20)
-      .attr('height', 250)
-      .attr('x', 120)
-      .attr('y', 60)
+      .attr('width', width)
+      .attr('height', height)
+      .attr('x', x)
+      .attr('y', y)
       .style('fill', `url(#linear-gradient-${id})`);
 
-    svg.append('g').attr('transform', 'translate(110, 60)').call(axis);
+    svg
+      .append('g')
+      .attr('transform', `translate(${x - 10}, ${y})`)
+      .call(axis);
 
     svg
       .append('text')
       .attr('class', 'y label')
       .attr('text-anchor', 'end')
-      .attr('transform', 'translate (100,110) rotate(-90)')
+      .attr('transform', `translate (${x - 20},${y + 80}) rotate(-90)`)
       .text(label);
   }, []);
   return <svg ref={ref} />;
 };
 
-export default HeatmapLegend;
+export default ColorLegend;
