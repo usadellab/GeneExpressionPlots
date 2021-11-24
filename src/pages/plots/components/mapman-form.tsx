@@ -113,7 +113,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
           infoTable.colNames[0],
         infoTableColumnSep: ',',
         template: 'X4.3_Amino_acid_metabolism_R3.0',
-        valuesFrom: infoTable.colNames[0],
+        valuesFrom: valuesFromOptions[0].value,
         colorScale: 'diverging_-xx',
         sample: dataTable.sampleGroupsAsArray[0],
         colorScaleValueX: 3,
