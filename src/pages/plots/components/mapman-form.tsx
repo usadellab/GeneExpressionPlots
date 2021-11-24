@@ -1,5 +1,5 @@
 import { Formik, Form, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { useMemo } from 'react';
 import FormikField from '@/components/formik-field';
 import {
   Box,
@@ -13,6 +13,8 @@ import FormikSelect from '@/components/formik-select';
 import { dataTable, infoTable } from '@/store/data-store';
 import FormikNumber from '@/components/formik-number';
 import { GxpMapManColorScale } from '@/types/plots';
+import { isNumericColumn } from '@/utils/validation';
+import { toJS } from 'mobx';
 
 export type MapManFormSubmitHandler = (
   values: MapManFormAttributes,
@@ -34,6 +36,7 @@ export interface MapManFormAttributes {
   colorScaleValueX?: number;
   colorScaleValueY?: number;
   sample?: string;
+  plotTitle?: string;
 }
 
 const templates = [
@@ -86,26 +89,56 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
     base: 'column',
     sm: 'row',
   });
+
+  const valuesFromOptions = useMemo(() => {
+    const slicedColumns = toJS(infoTable.sliceColumns(0, 9));
+
+    return slicedColumns.reduce(
+      (acc, column, i) => {
+        if (isNumericColumn(column)) {
+          const colName = infoTable.colNames[i];
+          acc.push({ value: colName, label: colName });
+        }
+        return acc;
+      },
+      [{ value: 'expressionValue', label: 'Mean expression value' }]
+    );
+  }, []);
+
   return (
     <Formik<MapManFormAttributes>
       initialValues={{
-        infoTableColumn: infoTable.colNames[0],
+        infoTableColumn:
+          infoTable.colNames.find((col) => col === 'MapMan_BINCODE') ??
+          infoTable.colNames[0],
         infoTableColumnSep: ',',
         template: 'X4.3_Amino_acid_metabolism_R3.0',
-        valuesFrom: infoTable.colNames[0],
+        valuesFrom: valuesFromOptions[0].value,
         colorScale: 'diverging_-xx',
         sample: dataTable.sampleGroupsAsArray[0],
+        colorScaleValueX: 3,
+        colorScaleValueY: 3,
+        plotTitle: '',
       }}
       validateOnBlur={false}
       onSubmit={props.onSubmit}
     >
       {(formProps) => (
         <Box as={Form}>
-          <Flex gridGap="1rem" flexDirection={colorScaleFlexDir}>
+          <FormikField
+            controlProps={{
+              as: 'p',
+            }}
+            initialFocusRef={props.initialFocusRef}
+            label="Plot Title"
+            name="plotTitle"
+          />
+          <Flex
+            gridGap="1rem"
+            flexDirection={colorScaleFlexDir}
+            marginTop="2rem"
+          >
             <FormikSelect
-              controlProps={{
-                marginTop: '1rem',
-              }}
               label="MapMan BINCODE column"
               name="infoTableColumn"
               options={infoTable.colNames.map((colName) => ({
@@ -119,7 +152,6 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
             <FormikField
               controlProps={{
                 as: 'p',
-                marginTop: '1rem',
               }}
               initialFocusRef={props.initialFocusRef}
               label="BINCODE separator"
@@ -135,13 +167,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
             }}
             label="Values from"
             name="valuesFrom"
-            options={infoTable.colNames.reduce(
-              (acc, colName) => {
-                acc.push({ value: colName, label: colName });
-                return acc;
-              },
-              [{ value: 'expressionValue', label: 'Mean expression value' }]
-            )}
+            options={valuesFromOptions}
             tooltip="Select where to get the values to be plotted from. Can be any numeric value from the info table or mean expression values for a specific sample."
           />
           {formProps.values.valuesFrom == 'expressionValue' && (

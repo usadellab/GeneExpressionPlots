@@ -1,5 +1,8 @@
+import { IconButton } from '@chakra-ui/button';
+import Icon from '@chakra-ui/icon';
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/layout';
 import React from 'react';
+import { AiOutlineEye } from 'react-icons/ai';
 
 interface GeneCardProps extends BoxProps {
   color?: string;
@@ -21,16 +24,32 @@ const GeneCard: React.FC<GeneCardProps> = ({
       flexDirection="column"
       {...props}
     >
-      <Text
-        as="h1"
-        color="orange.600"
-        fontWeight="semibold"
-        fontSize="lg"
-        id={accession}
-        marginBottom={2}
-      >
-        {accession}
-      </Text>
+      <Flex alignItems="center" marginBottom={2} gridGap="1rem">
+        <Text
+          as="h1"
+          color="orange.600"
+          fontWeight="semibold"
+          fontSize="lg"
+          id={accession}
+        >
+          {accession}
+        </Text>
+        <Icon
+          aria-label="show tabular transcript expression values"
+          as={AiOutlineEye}
+          w={5}
+          h={5}
+          color="gray.600"
+          onClick={
+            props.onDoubleClick as
+              | React.MouseEventHandler<SVGElement>
+              | undefined
+          }
+          _hover={{
+            color: 'gray.800',
+          }}
+        ></Icon>
+      </Flex>
 
       {geneInfo.size > 0 ? (
         [...geneInfo.entries()].map(([colName, cellValue]) => (

@@ -9,7 +9,7 @@ import { MercatorFormSubmitHandler } from './mercator-form';
 import FormikModal from '@/components/formik-modal';
 
 import MercatorForm from './mercator-form';
-import { dataTable, infoTable } from '@/store/data-store';
+import { dataTable } from '@/store/data-store';
 import {
   Alert,
   AlertDescription,
@@ -18,123 +18,10 @@ import {
 } from '@chakra-ui/alert';
 import { useToast } from '@chakra-ui/toast';
 import CardButton from '@/components/card-button';
-
-/**
- * Sanity check to validate if the expected Mercator headers are present
- * @param table
- */
-export function validateMercator(headerLine: string): boolean {
-  const header = headerLine.split('\t');
-  if (
-    header[0] === 'BINCODE' &&
-    header[1] === 'NAME' &&
-    header[2] === 'IDENTIFIER' &&
-    header[3] === 'DESCRIPTION' &&
-    header[4] === 'TYPE'
-  )
-    return true;
-
-  return false;
-}
-
-/**
- * @param validRowName valid existing identifier of a row in the info/data table
- * @param columns array of columns to add
- * @param colIndex column index to start appending from
- */
-function addMercatorColumns(
-  validRowName: string,
-  columns: string[],
-  colIndex: number
-): void {
-  if (validRowName) {
-    if (!Array.isArray(infoTable.rows[validRowName]))
-      infoTable.rows[validRowName] = [];
-    if (infoTable.rows[validRowName].length <= colIndex)
-      infoTable.rows[validRowName].push(...columns);
-    else {
-      for (let i = colIndex; i < columns.length + colIndex; i++) {
-        infoTable.rows[validRowName][i] += `,${columns[i - colIndex]}`;
-      }
-    }
-  }
-}
-
-/**
- *
- * @param table mercator table parsed as string
- * @param options options which columns to parse and add to the info table
- */
-export function parseMercatorAndAddToInfoTable(
-  table: string, // The File to be parsed as string. infoTable will be passed from the frontend
-  options: { addName: boolean; addDescription: boolean } // options to add columns
-): void {
-  const lines = table.split('\n').map(function (line) {
-    // reader.results of the read file can be parsed at infoTable point
-    return line.split('\t');
-  });
-  const colIndex = infoTable.header.length;
-
-  const fillLength: number =
-    1 + (options.addName ? 1 : 0) + (options.addDescription ? 1 : 0);
-
-  const geneIDIndex: { [key: string]: number } = {};
-  infoTable.hasData
-    ? infoTable.rowNames.forEach((row, i) => {
-        geneIDIndex[row.toLowerCase()] = i;
-      })
-    : dataTable.rowNames.forEach((row, i) => {
-        geneIDIndex[row.toLowerCase()] = i;
-      });
-  const rowNames = infoTable.rowNames.slice();
-
-  infoTable.addMercatorHeaderAndPrepareColumns(
-    options.addName,
-    options.addDescription
-  );
-
-  lines.forEach((mcLine, i) => {
-    // skip the first line
-    if (i === 0) return;
-
-    if (mcLine[0].length !== 0 && mcLine[2].length !== 0) {
-      // Skip lines without a defined BINCODE
-      const mcBin: string = mcLine[0].replace(/[']+/g, ''); // remove extra quotation marks
-      const mcName: string = mcLine[1].replace(/[']+/g, '');
-      const mcGeneId: string = mcLine[2].replace(/[']+/g, ''); // remove extra quotation marks
-      const mcDescription: string = mcLine[3].replace(/[']+/g, '');
-      if (mcGeneId.length !== 0) {
-        const mcColumns = [mcBin];
-        const validGeneIndex = geneIDIndex[mcGeneId];
-        const validRowName = rowNames[validGeneIndex];
-
-        if (options?.addName) {
-          mcColumns.push(mcName);
-        }
-        if (options?.addDescription) {
-          mcColumns.push(mcDescription);
-        }
-        addMercatorColumns(validRowName, mcColumns, colIndex);
-      }
-    }
-  });
-
-  if (infoTable.hasData) {
-    infoTable.rowNames.forEach((rowName) => {
-      if (infoTable.rows[rowName].length < infoTable.header.length) {
-        const lengthDiff =
-          infoTable.header.length - infoTable.rows[rowName].length;
-        infoTable.rows[rowName].push(...Array(lengthDiff).fill(''));
-      }
-    });
-  } else {
-    dataTable.rowNames.forEach((rowName) => {
-      if (!infoTable.rows[rowName]) {
-        infoTable.rows[rowName] = Array(fillLength).fill('');
-      }
-    });
-  }
-}
+import {
+  parseMercatorAndAddToInfoTable,
+  validateMercator,
+} from '@/utils/mercator';
 
 const MapMan: React.FC = () => {
   const refInitialFocus = React.useRef<FocusableElement | null>(null);
@@ -160,27 +47,25 @@ const MapMan: React.FC = () => {
               isClosable: true,
             });
             return;
+          } else {
+            // Parse the input file as a table
+            parseMercatorAndAddToInfoTable(reader.result as string, {
+              addDescription: values.addDescription,
+              addName: values.addName,
+            });
+            toast({
+              title: 'Successfully imported Mercator table',
+              status: 'success',
+              description:
+                'The provided Mercator tabular output was successfully imported into the application.',
+              isClosable: true,
+            });
           }
-
-          // Parse the input file as a table
-          parseMercatorAndAddToInfoTable(reader.result as string, {
-            addDescription: values.addDescription,
-            addName: values.addName,
-          });
         };
-
         reader.onloadend = () => {
           actions.setSubmitting(false);
           onClose();
-          toast({
-            title: 'Successfully imported Mercator table',
-            status: 'success',
-            description:
-              'The provided Mercator tabular output was successfully imported into the application.',
-            isClosable: true,
-          });
         };
-
         reader.onerror = () => {
           actions.setSubmitting(false);
           console.error('There was an error while reading the file');
@@ -236,7 +121,7 @@ const MapMan: React.FC = () => {
               Use the Mercator v4 tool to annotate your genes with MapMan Bins. Clicking here
               will bring you to the plabipd online resources to run Mercator on your DNA or protein
               sequences. After running Mercator you can import the output table into GXP by using
-              the Card below. 
+              the Card below.
             `}
               onClick={() => window.open('https://plabipd.de/portal/mercator4')}
             />
