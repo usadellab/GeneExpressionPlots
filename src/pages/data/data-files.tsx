@@ -706,7 +706,7 @@ const DataFiles: React.FC = () => {
         initialFocusRef={refMercatorTableInitialFocus}
         isOpen={isMercatorTableOpen}
         onClose={onMercatorTableClose}
-        title="Load Gene-Info Table"
+        title="Load Mercator Table"
       >
         <MercatorForm
           initialFocusRef={refMercatorTableInitialFocus}
