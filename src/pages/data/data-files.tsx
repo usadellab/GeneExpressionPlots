@@ -226,27 +226,25 @@ const DataFiles: React.FC = () => {
               isClosable: true,
             });
             return;
+          } else {
+            // Parse the input file as a table
+            parseMercatorAndAddToInfoTable(reader.result as string, {
+              addDescription: values.addDescription,
+              addName: values.addName,
+            });
+            toast({
+              title: 'Successfully imported Mercator table',
+              status: 'success',
+              description:
+                'The provided Mercator tabular output was successfully imported into the application.',
+              isClosable: true,
+            });
           }
-
-          // Parse the input file as a table
-          parseMercatorAndAddToInfoTable(reader.result as string, {
-            addDescription: values.addDescription,
-            addName: values.addName,
-          });
         };
-
         reader.onloadend = () => {
           actions.setSubmitting(false);
           onMercatorTableClose();
-          toast({
-            title: 'Successfully imported Mercator table',
-            status: 'success',
-            description:
-              'The provided Mercator tabular output was successfully imported into the application.',
-            isClosable: true,
-          });
         };
-
         reader.onerror = () => {
           actions.setSubmitting(false);
           console.error('There was an error while reading the file');
