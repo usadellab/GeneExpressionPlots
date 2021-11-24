@@ -1,5 +1,5 @@
 import { Formik, Form, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { useMemo } from 'react';
 import FormikField from '@/components/formik-field';
 import {
   Box,
@@ -13,6 +13,8 @@ import FormikSelect from '@/components/formik-select';
 import { dataTable, infoTable } from '@/store/data-store';
 import FormikNumber from '@/components/formik-number';
 import { GxpMapManColorScale } from '@/types/plots';
+import { isNumericColumn } from '@/utils/validation';
+import { toJS } from 'mobx';
 
 export type MapManFormSubmitHandler = (
   values: MapManFormAttributes,
@@ -87,6 +89,22 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
     base: 'column',
     sm: 'row',
   });
+
+  const valuesFromOptions = useMemo(() => {
+    const slicedColumns = toJS(infoTable.sliceColumns(0, 9));
+
+    return slicedColumns.reduce(
+      (acc, column, i) => {
+        if (isNumericColumn(column)) {
+          const colName = infoTable.colNames[i];
+          acc.push({ value: colName, label: colName });
+        }
+        return acc;
+      },
+      [{ value: 'expressionValue', label: 'Mean expression value' }]
+    );
+  }, []);
+
   return (
     <Formik<MapManFormAttributes>
       initialValues={{
@@ -149,15 +167,7 @@ const MapManForm: React.FC<MapManFormProps> = (props) => {
             }}
             label="Values from"
             name="valuesFrom"
-            options={infoTable.colNames.reduce(
-              (acc, colName) => {
-                if (infoTable.isNumericColumn(colName)) {
-                  acc.push({ value: colName, label: colName });
-                }
-                return acc;
-              },
-              [{ value: 'expressionValue', label: 'Mean expression value' }]
-            )}
+            options={valuesFromOptions}
             tooltip="Select where to get the values to be plotted from. Can be any numeric value from the info table or mean expression values for a specific sample."
           />
           {formProps.values.valuesFrom == 'expressionValue' && (
