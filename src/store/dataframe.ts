@@ -137,6 +137,19 @@ export class Dataframe {
     });
     return column;
   }
+
+  /**
+   * Get a 2 dimensional array of columns sliced out of the dataframe.
+   * @param start start index
+   * @param end end index
+   * @returns dataframe columns as matrix, from rowIndex start to rowIndex end
+   */
+  sliceColumns(start: number, end: number): string[][] {
+    const values = Object.values(this.rows).slice(start, end);
+
+    return values[0].map((_, colIndex) => values.map((row) => row[colIndex]));
+  }
+
   /**
    * Get a single row as an object of key-value pairs.
    * - Each key represents the column header for a single cell value.
@@ -499,6 +512,11 @@ export class Dataframe {
     }
   }
 
+  /**
+   * @deprecated This function is slow calculating directly on the dataframe.
+   * @param colName
+   * @returns if a given column is numeric
+   */
   isNumericColumn(colName: string): boolean {
     const col10Elm = Object.values(this.getColumn(colName)).slice(0, 9);
     return col10Elm.every((x) => isParsableAsNumeric(x));
