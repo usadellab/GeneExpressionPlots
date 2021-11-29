@@ -12,6 +12,7 @@ interface colorLegendProps {
   x: number;
   y: number;
   reverse?: boolean;
+  labelOffset?: number;
 }
 
 const ColorLegend: React.FC<colorLegendProps> = ({
@@ -25,6 +26,7 @@ const ColorLegend: React.FC<colorLegendProps> = ({
   x,
   y,
   reverse,
+  labelOffset,
 }: colorLegendProps) => {
   const ref = useRef(null);
 
@@ -79,7 +81,10 @@ const ColorLegend: React.FC<colorLegendProps> = ({
       .append('text')
       .attr('class', 'y label')
       .attr('text-anchor', 'end')
-      .attr('transform', `translate (${x - 20},${y + 80}) rotate(-90)`)
+      .attr(
+        'transform',
+        `translate (${x - 20},${y + 80 - (labelOffset ?? 0)}) rotate(-90)`
+      )
       .text(label);
   }, []);
   return <svg ref={ref} />;
