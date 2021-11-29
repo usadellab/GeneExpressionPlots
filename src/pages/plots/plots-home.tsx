@@ -348,6 +348,7 @@ const PlotsHome: React.FC = () => {
 
   const dataAvailable = dataTable.hasData;
   const plotsAvailable = plotStore.hasPlots;
+  const infoAvailable = infoTable.hasData;
 
   return (
     <Flex as="main" flexGrow={1}>
@@ -402,7 +403,7 @@ const PlotsHome: React.FC = () => {
           text="MapMan Function"
           icon={VscGraphScatter}
           onClick={onMapManFormOpen}
-          disabled={!dataAvailable}
+          disabled={!dataAvailable || !infoAvailable}
         />
         <Divider />
 
