@@ -1,5 +1,7 @@
 import init from '@/utils/gsl/gsl';
 
+const gsl = init();
+
 // Direction:
 // -1 = left, which means a - 1
 // 1 = right, which means a + 1
@@ -27,7 +29,7 @@ function calcHypergeometricPMF(
   c: number,
   d: number
 ): Promise<number> {
-  return init().then((instance: any) =>
+  return gsl.then((instance: any) =>
     instance._gsl_ran_hypergeometric_pdf(a, a + b, c + d, a + c)
   );
 }

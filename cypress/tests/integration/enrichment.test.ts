@@ -1,8 +1,8 @@
 import { Dataframe } from '@/store/dataframe';
 import {
   intersect,
-  construct_contingency_table,
-  test_for_enrichment,
+  constructContingencyTable,
+  getSelectorFunction,
 } from '@/utils/enrichment_analysis';
 
 describe('Enrichment analysis', function () {
@@ -19,7 +19,7 @@ describe('Enrichment analysis', function () {
     const pos_b = new Set([2, 3, 4]);
     const neg_b = new Set([1, 5]);
 
-    const contigencyTable = construct_contingency_table(
+    const contigencyTable = constructContingencyTable(
       pos_a,
       neg_a,
       pos_b,
@@ -35,7 +35,7 @@ describe('Enrichment analysis', function () {
       const neg_a = new Set([5]);
       const pos_b = new Set([2, 3, 4]);
       const neg_b = new Set([1, 5]);
-      return construct_contingency_table(pos_a, neg_a, pos_b, neg_b, true);
+      return constructContingencyTable(pos_a, neg_a, pos_b, neg_b, true);
     };
 
     expect(invoke_construct_contingency_table).to.throw(
@@ -48,7 +48,7 @@ describe('Enrichment analysis', function () {
 
   it('enrichment is found in test data', async () => {
     const mockTable = {
-      header: ['Gene-ID', 'trait-A', 'trait-B'],
+      header: ['trait-A', 'trait-B'],
       rows: {
         'Gene-1': ['a-neg', 'b-neg'],
         'Gene-2': ['a-neg', 'b-pos'],
@@ -64,24 +64,46 @@ describe('Enrichment analysis', function () {
     const d = new Dataframe();
     d.loadFromObject(mockTable);
 
-    // const filter_funk = (rows: string[][]): string[][] | undefined =>
-    //   rows.filter((r) => !r.includes('NA'));
+    const TEFselectorFunction = getSelectorFunction('==', 'a-pos');
+    console.log({ TEFselectorFunction });
+    const TEFcol = d.getColumn('trait-A');
+    console.log({ TEFcol });
 
-    const trait_A_selector = (rows: string[][]): string[][] | undefined =>
-      rows.filter((r) => r[1] === 'a-pos');
+    const geneIdsTEFpos = new Set(TEFselectorFunction(TEFcol));
+    expect(geneIdsTEFpos).to.deep.equal(new Set(['Gene-3', 'Gene-4']));
 
-    const trait_B_selector = (rows: string[][]): string[][] | undefined =>
-      rows.filter((r) => r[2] === 'b-pos');
-
-    const fish_exact_test_rslt = await test_for_enrichment({
-      rows: d.rows,
-      trait_A_selector,
-      trait_B_selector,
-    });
-
-    expect(fish_exact_test_rslt.contingency_table).to.deep.equal([0, 2, 2, 1]);
-    expect(fish_exact_test_rslt.fishers_exact_test_result.rightPValue).to.equal(
-      0.9999999999999999
+    const geneIdsTEFneg = new Set(
+      Object.keys(d.rows).filter((id) => !geneIdsTEFpos.has(id))
     );
+
+    expect(geneIdsTEFneg).to.deep.equal(
+      new Set(['Gene-1', 'Gene-2', 'Gene-5', 'Gene-6', 'Gene-7', 'Gene-8'])
+    );
+
+    const universe = Object.keys(d.rows);
+
+    const TEIcol = d.getColumn('trait-B');
+    const TEIselectorFunction = getSelectorFunction('==', 'b-pos');
+
+    const geneIdsTEIpos = new Set(TEIselectorFunction(TEIcol));
+    expect(geneIdsTEIpos).to.deep.equal(
+      new Set(['Gene-2', 'Gene-5', 'Gene-7'])
+    );
+
+    const geneIdsTEIneg = new Set(
+      universe.filter((id) => !geneIdsTEIpos.has(id))
+    );
+    expect(geneIdsTEIneg).to.deep.equal(
+      new Set(['Gene-1', 'Gene-3', 'Gene-4', 'Gene-6', 'Gene-8'])
+    );
+
+    const contingencyTable = constructContingencyTable(
+      geneIdsTEFpos,
+      geneIdsTEFneg,
+      geneIdsTEIpos,
+      geneIdsTEIneg
+    );
+
+    expect(contingencyTable).to.deep.equal([0, 3, 2, 3]);
   });
 });

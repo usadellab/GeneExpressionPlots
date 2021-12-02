@@ -243,9 +243,10 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               minVal={props.distanceMethod === 'euclidean' ? colorMin : -1}
               maxVal={props.distanceMethod === 'euclidean' ? colorMax : 1}
               width={20}
-              height={250}
-              x={120}
-              y={60}
+              height={225}
+              x={60}
+              y={10}
+              labelOffset={30}
               reverse={props.distanceMethod === 'correlation'}
               label={
                 props.distanceMethod === 'euclidean'
