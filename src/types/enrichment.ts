@@ -24,6 +24,4 @@ export interface EnrichmentExport extends EnrichmentAnalysisOptions {
   rawData: string;
 }
 
-export type SelectorFunction = (
-  rows: (string | number)[][]
-) => (string | number)[][];
+export type SelectorFunction = (rows: { [key: string]: string }) => string[];

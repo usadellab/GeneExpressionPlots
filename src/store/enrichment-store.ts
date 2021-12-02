@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import {
   EnrichmentAnalysis,
   EnrichmentAnalysisOptions,
@@ -6,6 +6,7 @@ import {
 } from '@/types/enrichment';
 import { nanoid } from 'nanoid';
 import { infoTable } from './data-store';
+import { getSelectorFunction } from '@/utils/enrichment_analysis';
 
 // Workers
 import EnrichmentWorker from '@/workers/enrichment?worker';
@@ -84,19 +85,26 @@ class EnrichmentStore {
 
     const enrichmentIndex = this.analyses.push(pendingEnrichment) - 1;
 
-    const TEFcolIndex =
-      infoTable.colNames.findIndex((col) => col === options.TEFcolumn) + 1;
-    const TEIcolIndex =
-      infoTable.colNames.findIndex((col) => col === options.TEIcolumn) + 1;
+    const TEFselectorFunction = getSelectorFunction(
+      options.TEFselector,
+      options.TEFselectorValue
+    );
 
-    const data = {
-      dataRows: toJS(infoTable.rows),
-      TEFcolIndex,
-      TEIcolIndex,
-      options,
-    };
+    const TEFcolumn = infoTable.getColumn(options.TEFcolumn);
+    const TEIcolumn = infoTable.getColumn(options.TEIcolumn);
+
+    const geneIdsTEFpos = new Set(TEFselectorFunction(TEFcolumn));
+    const geneIdsTEFneg = new Set(
+      Object.keys(infoTable.rows).filter((id) => !geneIdsTEFpos.has(id))
+    );
+
     const worker = new EnrichmentWorker();
-    worker.postMessage(data);
+    worker.postMessage({
+      geneIdsTEFpos,
+      geneIdsTEFneg,
+      TEIpayload: TEIcolumn,
+      options,
+    });
 
     worker.onmessage = function (e: MessageEvent<(string | number)[][]>) {
       runInAction(() => {

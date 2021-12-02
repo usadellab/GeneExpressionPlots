@@ -1,4 +1,3 @@
-import { DataRows } from '@/store/dataframe';
 import {
   EnrichmentAnalysisOptions,
   SelectorFunction,
@@ -49,7 +48,7 @@ export function intersect(
  * pos B |   0  |   1
  * neg B |   2  |   3
  */
-export function construct_contingency_table(
+export function constructContingencyTable(
   trait_A_pos_elems: Set<string | number>,
   trait_A_neg_elems: Set<string | number>,
   trait_B_pos_elems: Set<string | number>,
@@ -136,214 +135,197 @@ export function getAccessions(rows: (string | number)[][]): string[] {
 }
 
 /**
- * Uses Fisher's exact test to assess the alternative hypotheses of over- or
- * underrepresentation of a trait A positive elements among trait B positive
- * elements.
  *
- * @param {object} {
- *   dataframe - an instance of class Dataframe
- *   filter_funk - a function accepting a single argument (rows) from the
- *                 dataframe and filters those out to be used in the test
- *   element_col - the index of the column of dataframe.rows in which to find
- *                 the element identifiers
- *   trait_A_selector - a function accepting a single argument (rows) from the
- *                      dataframe that retains those rows that are considered
- *                      trait A positive
- *   trait_B_selector - a function accepting a single argument (rows) from the
- *                      dataframe that retains those rows that are considered
- *                      trait B positive
- * }
- *
- * @return {object} An object with two fields; see the following example:
- *  {
- *    contingency_table: [
- *      #(pos-A&pos-B), #(neg-A&pos-B),
- *      #(pos-A&neg-B), #(neg-A&neg-B)
- *    ],
- *    fishers_exact_test_result: {
- *      leftPValue:      0.0013797280926100416,
- *      rightPValue:     0.9999663480953023,
- *      oneTailedPValue: 0.0013797280926100416,
- *      twoTailedPValue: 0.002759456185220083
- *    }
- *  }
- *  _Note_, that the `rightPValue` indicates the likelihood that the observed
- *  values are underrepresented, i.e. in R that would be
- *  `fish.test(contingency_table, alternative='greater')$p.value`. In other
- *  words, a `rightPValue` _below_ your significance cutoff indicates
- *  enrichment of trait A positive elements among trait B positives.
+ * @param selector Selector filter criterium.
+ * @param selectorValue Selector filter value.
+ * @returns A function that filters a dataframe column for a given selector and selector value
  */
 export function getSelectorFunction(
   selector: TEFSelectorOption,
-  selectorValue: string,
-  selectorIndex: number
+  value: string
 ): SelectorFunction {
   switch (selector) {
-    case '<': {
-      const parsedValue = parseFloat(selectorValue);
-      const selectorFunction: SelectorFunction = (rows) =>
-        rows.filter((r) => r[selectorIndex] < parsedValue);
-      return selectorFunction;
-    }
+    case '<':
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter((row) => parseFloat(row[1]) < parseFloat(value))
+          .map((row) => row[0]);
     case '>': {
-      const parsedValue = parseFloat(selectorValue);
-      const selectorFunction: SelectorFunction = (rows) =>
-        rows.filter((r) => r[selectorIndex] > parsedValue);
-      return selectorFunction;
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter((row) => parseFloat(row[1]) > parseFloat(value))
+          .map((row) => row[0]);
     }
     case '<=': {
-      const parsedValue = parseFloat(selectorValue);
-      const selectorFunction: SelectorFunction = (rows) =>
-        rows.filter((r) => r[selectorIndex] <= parsedValue);
-      return selectorFunction;
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter((row) => parseFloat(row[1]) <= parseFloat(value))
+          .map((row) => row[0]);
     }
     case '>=': {
-      const parsedValue = parseFloat(selectorValue);
-      const selectorFunction: SelectorFunction = (rows) =>
-        rows.filter((r) => r[selectorIndex] >= parsedValue);
-      return selectorFunction;
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter((row) => parseFloat(row[1]) >= parseFloat(value))
+          .map((row) => row[0]);
     }
     case '==': {
-      const selectorFunction: SelectorFunction = (rows) => {
-        return rows.filter((r) => r[selectorIndex] == selectorValue);
-      };
-      return selectorFunction;
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter((row) => row[1] == value)
+          .map((row) => row[0]);
     }
-    case 'regexp': {
-      const selectorFunction: SelectorFunction = (rows) =>
-        rows.filter((r) => {
-          const regexp = new RegExp(selectorValue);
-          const rowAsString = r[selectorIndex] as string;
-          return rowAsString.match(regexp) ? true : false;
-        });
-      return selectorFunction;
-    }
-
+    case 'regexp':
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter((row) => {
+            const regexp = new RegExp(value);
+            return row[1].match(regexp) ? true : false;
+          })
+          .map((row) => row[0]);
     default:
       throw new Error(`unsupported selector ${selector}`);
   }
 }
 
-interface Test_for_enrichment_args {
-  rows: DataRows;
-  trait_A_selector: (matrix: (string | number)[][]) => (string | number)[][];
-  trait_B_selector: (matrix: (string | number)[][]) => (string | number)[][];
-}
-
-export async function test_for_enrichment({
-  rows,
-  trait_A_selector,
-  trait_B_selector,
-}: Test_for_enrichment_args): Promise<{
-  contingency_table: number[];
-  fishers_exact_test_result: {
-    leftPValue: number;
-    rightPValue: number;
-    oneTailedPValue: number;
-    twoTailedPValue: number;
-  };
+/**
+ * @param contingencyTable contingency table
+ * @returns An object containing the p_values, for example:
+ *  {
+ *    leftPValue:      0.0013797280926100416,
+ *    rightPValue:     0.9999663480953023,
+ *    oneTailedPValue: 0.0013797280926100416,
+ *    twoTailedPValue: 0.002759456185220083
+ *  }
+ * _Note_, that the `rightPValue` indicates the likelihood that the observed
+ *  values are underrepresented, i.e. in R that would be
+ *  `fish.test(contingency_table, alternative='greater')$p.value`. In other
+ *  words, a `rightPValue` _below_ your significance cutoff indicates
+ *  enrichment of trait A positive elements among trait B positives.
+ */
+export async function testForEnrichment(contingencyTable: number[]): Promise<{
+  leftPValue: number;
+  rightPValue: number;
+  oneTailedPValue: number;
+  twoTailedPValue: number;
 }> {
-  const rowsAsMatrix = Object.entries(rows).map((r) => r.flat());
-  const universe = Object.keys(rows);
-  const trait_A_pos = new Set(getAccessions(trait_A_selector(rowsAsMatrix)));
-  const trait_A_neg = new Set(universe.filter((x) => !trait_A_pos.has(x)));
-  const trait_B_pos = new Set(getAccessions(trait_B_selector(rowsAsMatrix)));
-  const trait_B_neg = new Set(universe.filter((x) => !trait_B_pos.has(x)));
-  const contingency_table = construct_contingency_table(
-    trait_A_pos,
-    trait_A_neg,
-    trait_B_pos,
-    trait_B_neg
+  const fishersExactTestResult = await fishersExactTest(
+    contingencyTable[0],
+    contingencyTable[1],
+    contingencyTable[2],
+    contingencyTable[3]
   );
-  const fishers_exact_test_result = await fishersExactTest(
-    contingency_table[0],
-    contingency_table[1],
-    contingency_table[2],
-    contingency_table[3]
-  );
-
-  return {
-    contingency_table,
-    fishers_exact_test_result,
-  };
+  return fishersExactTestResult;
 }
 
-export async function runEnrichmentAnalysis(
-  rows: DataRows,
-  options: EnrichmentAnalysisOptions,
-  TEFcolIndex: number,
-  TEIcolIndex: number
-): Promise<(string | number)[][]> {
+/**
+ * Uses Fisher's exact test to assess the alternative hypotheses of over- or
+ * underrepresentation of a trait A positive elements among trait B positive
+ * elements.
+ * @param contingencyTables An object containing the payload to be analyzed for each TEI (Test enrichment in)
+ * positive column (trait B pos). For each of those a contingency table represents the value
+ * @returns the output table to be rendered.
+ */
+export async function runEnrichment(contingencyTables: {
+  [key: string]: number[];
+}): Promise<(string | number)[][]> {
   const data: (string | number)[][] = [];
-
-  const TEFselectorFunction = getSelectorFunction(
-    options.TEFselector,
-    options.TEFselectorValue,
-    TEFcolIndex
+  const pValueAdjustFactor = Object.keys(contingencyTables).length;
+  await Promise.all(
+    Object.entries(contingencyTables).map(async ([key, cT]) => {
+      const testResult = await testForEnrichment(cT);
+      const pValue = testResult.rightPValue;
+      const adjustedPValue = pValue * pValueAdjustFactor;
+      const bonferroniPValue = adjustedPValue > 1 ? 1 : adjustedPValue;
+      // const roundedPValue =
+      //   Math.round((pValue + Number.EPSILON) * 10000) / 10000;
+      // const roundedAdjustedPValue =
+      //   Math.round((adjustedPValue + Number.EPSILON) * 10000) / 10000;
+      data.push([key, pValue, bonferroniPValue]);
+    })
   );
+  return data;
+}
 
+/**
+ *
+ * @param universe All transcript ids
+ * @param geneIdsTEFpos trait A pos transcript ids
+ * @param geneIdsTEFneg trait A neg transcript ids
+ * @param TEIpayload trait B paylods. The dataframe column to be analyzed
+ * @param options The enrichment analyses options
+ * @returns For each trait B pos element, the corresponding contingency table
+ */
+export function getContingencyTables(
+  universe: string[],
+  geneIdsTEFpos: Set<string>,
+  geneIdsTEFneg: Set<string>,
+  TEIpayload: { [key: string]: string },
+  options: EnrichmentAnalysisOptions
+): { [key: string]: number[] } {
   switch (options.TEIselectorType) {
     case 'binary': {
       const TEIselectorFunction = getSelectorFunction(
         options.TEIselector as TEFSelectorOption,
-        options.TEIselectorValue,
-        TEIcolIndex
+        options.TEIselectorValue
       );
-      const testResult = await test_for_enrichment({
-        rows,
-        trait_A_selector: TEFselectorFunction,
-        trait_B_selector: TEIselectorFunction,
-      });
-      const pValue = testResult.fishers_exact_test_result.rightPValue;
-      data.push([options.TEIselectorValue, pValue, pValue]);
-      break;
+      const geneIdsTEIpos = new Set(TEIselectorFunction(TEIpayload));
+      const geneIdsTEIneg = new Set(
+        universe.filter((id) => !geneIdsTEIpos.has(id))
+      );
+
+      const key = `${options.TEIcolumn} ${options.TEIselector} ${options.TEIselectorValue}`;
+
+      const contingencyTable = constructContingencyTable(
+        geneIdsTEFpos,
+        geneIdsTEFneg,
+        geneIdsTEIpos,
+        geneIdsTEIneg
+      );
+      return { [key]: contingencyTable };
     }
     case 'multinomial': {
-      const TEIvalues: string[] = [];
-      if (options.TEIselector === 'delimiter') {
-        Object.values(rows).forEach((row) => {
-          const TEIcolumnValues = row[TEIcolIndex - 1].split(
-            options.TEIselectorValue
-          );
-          TEIvalues.push(...TEIcolumnValues);
-        });
-      } else if (options.TEIselector === 'regexp') {
-        const regexp = new RegExp(options.TEIselectorValue, 'g');
-        Object.values(rows).forEach((row) => {
-          const TEIcolumnValues = row[TEIcolIndex - 1].match(regexp);
-          TEIcolumnValues &&
-            TEIcolumnValues.length > 1 &&
-            TEIvalues.push(...TEIcolumnValues);
-        });
-      }
-      const uniqueTEIvalues = [...new Set(TEIvalues)];
+      const uniqueTEIvalues2GeneIds: { [key: string]: string[] } = {};
+      let TEIcolumnValues: string[] = [];
 
-      await Promise.all(
-        uniqueTEIvalues.map(async (value) => {
-          const TEIselectorFunction = getSelectorFunction(
-            'regexp',
-            value,
-            TEIcolIndex
-          );
-          const testResult = await test_for_enrichment({
-            rows,
-            trait_A_selector: TEFselectorFunction,
-            trait_B_selector: TEIselectorFunction,
+      Object.entries(TEIpayload).forEach(([id, col]) => {
+        if (options.TEIselector === 'delimiter')
+          TEIcolumnValues = col.split(options.TEIselectorValue);
+        else if (options.TEFselector === 'regexp') {
+          const regexp = new RegExp(options.TEIselectorValue, 'g');
+          TEIcolumnValues = col.match(regexp) ?? [];
+        }
+        if (TEIcolumnValues) {
+          TEIcolumnValues.forEach((value: string) => {
+            if (Array.isArray(uniqueTEIvalues2GeneIds[value]))
+              uniqueTEIvalues2GeneIds[value].push(id);
+            else uniqueTEIvalues2GeneIds[value] = [id];
           });
-          const pValue = testResult.fishers_exact_test_result.rightPValue;
-          const adjustedPValue = pValue / uniqueTEIvalues.length;
-          const roundedPValue =
-            Math.round((pValue + Number.EPSILON) * 10000) / 10000;
-          const roundedAdjustedPValue =
-            Math.round((adjustedPValue + Number.EPSILON) * 10000) / 10000;
-          data.push([value, roundedPValue, roundedAdjustedPValue]);
-        })
-      );
+        }
+      });
 
-      break;
+      const uniqueTEIvaluesContingencyTables: { [key: string]: number[] } =
+        Object.entries(uniqueTEIvalues2GeneIds).reduce(
+          (acc: { [key: string]: number[] }, [key, ids]) => {
+            if (ids.some((id) => geneIdsTEFpos.has(id))) {
+              const geneIdsTEIpos = new Set(ids);
+              const geneIdsTEIneg = new Set(
+                universe.filter((id) => !geneIdsTEIpos.has(id))
+              );
+              const contingencyTable = constructContingencyTable(
+                geneIdsTEFpos,
+                geneIdsTEFneg,
+                geneIdsTEIpos,
+                geneIdsTEIneg
+              );
+              acc[key] = contingencyTable;
+            }
+            return acc;
+          },
+          {}
+        );
+      return uniqueTEIvaluesContingencyTables;
     }
     default:
       throw new Error(`unsupported selector type ${options.TEIselectorType}`);
   }
-  return data;
 }
