@@ -11,6 +11,7 @@ export interface EnrichmentAnalysisOptions {
   TEIselector: TEISelectorOption;
   TEIselectorType: TEISelectorType;
   TEIselectorValue: string;
+  filterGenes?: string[];
 }
 
 export interface EnrichmentAnalysis {
