@@ -8,6 +8,7 @@ import {
   VisuallyHidden,
   Textarea,
   TextareaProps,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
@@ -18,6 +19,7 @@ interface FormikAreaProps extends TextareaProps {
   controlProps?: FormControlProps;
   validate?: FieldValidator;
   initialFocusRef?: React.MutableRefObject<FocusableElement | null>;
+  tooltip?: string;
 }
 
 const FormikArea: React.FC<FormikAreaProps> = ({
@@ -27,6 +29,7 @@ const FormikArea: React.FC<FormikAreaProps> = ({
   name,
   validate,
   initialFocusRef,
+  tooltip,
   ...props
 }) => {
   const [field, meta] = useField({
@@ -45,7 +48,9 @@ const FormikArea: React.FC<FormikAreaProps> = ({
           <FormLabel fontWeight="semibold">{label}</FormLabel>
         </VisuallyHidden>
       ) : (
-        <FormLabel fontWeight="semibold">{label}</FormLabel>
+        <Tooltip label={tooltip} placement="auto">
+          <FormLabel fontWeight="semibold">{label}</FormLabel>
+        </Tooltip>
       )}
       <Textarea
         ref={(ref) => (initialFocusRef ? (initialFocusRef.current = ref) : ref)}

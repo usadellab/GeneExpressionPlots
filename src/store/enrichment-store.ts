@@ -76,28 +76,37 @@ class EnrichmentStore {
       );
     }
 
+    // PLACEHOLDER
     const id = nanoid();
     const pendingEnrichment: EnrichmentAnalysis = {
       id,
       isLoading: true,
       options,
     };
-
     const enrichmentIndex = this.analyses.push(pendingEnrichment) - 1;
 
-    const TEFselectorFunction = getSelectorFunction(
-      options.TEFselector,
-      options.TEFselectorValue
-    );
+    // TEST ENRICHMENT FOR
+    let geneIdsTEFpos = new Set<string>();
+    let geneIdsTEFneg = new Set<string>();
 
-    const TEFcolumn = infoTable.getColumn(options.TEFcolumn);
-    const TEIcolumn = infoTable.getColumn(options.TEIcolumn);
+    if (options.filterGeneIds) geneIdsTEFpos = new Set(options.filterGeneIds);
+    else if (options.TEFselector && options.TEFselectorValue) {
+      const TEFselectorFunction = getSelectorFunction(
+        options.TEFselector,
+        options.TEFselectorValue
+      );
+      const TEFcolumn = infoTable.getColumn(options.TEFcolumn);
+      geneIdsTEFpos = new Set(TEFselectorFunction(TEFcolumn));
+    }
 
-    const geneIdsTEFpos = new Set(TEFselectorFunction(TEFcolumn));
-    const geneIdsTEFneg = new Set(
+    geneIdsTEFneg = new Set(
       Object.keys(infoTable.rows).filter((id) => !geneIdsTEFpos.has(id))
     );
 
+    // TEST ENRICHMENT IN
+    const TEIcolumn = infoTable.getColumn(options.TEIcolumn);
+
+    // START THE WORKER THREAD
     const worker = new EnrichmentWorker();
     worker.postMessage({
       geneIdsTEFpos,

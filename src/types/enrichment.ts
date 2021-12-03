@@ -5,12 +5,13 @@ export type TEISelectorType = 'binary' | 'multinomial';
 export interface EnrichmentAnalysisOptions {
   title: string;
   TEFcolumn: string;
-  TEFselector: TEFSelectorOption;
-  TEFselectorValue: string;
+  TEFselector?: TEFSelectorOption;
+  TEFselectorValue?: string;
   TEIcolumn: string;
   TEIselector: TEISelectorOption;
   TEIselectorType: TEISelectorType;
   TEIselectorValue: string;
+  filterGeneIds?: string[];
 }
 
 export interface EnrichmentAnalysis {

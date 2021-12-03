@@ -4,6 +4,7 @@ import { Box, Flex, FlexProps, IconButton, Spinner } from '@chakra-ui/react';
 import { getSVGString } from '@/utils/svg';
 import { PlotType } from '@/types/plots';
 import { plotStore } from '@/store/plot-store';
+import { saveAs } from 'file-saver';
 
 interface PlotContainerProps extends FlexProps {
   status: 'idle' | 'loading';

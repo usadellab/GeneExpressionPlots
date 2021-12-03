@@ -13,7 +13,6 @@ onmessage = async function (
   }>
 ) {
   const { geneIdsTEFpos, geneIdsTEFneg, TEIpayload, options } = e.data;
-  console.log('on worker... ', e.data);
   const universe = [...geneIdsTEFpos, ...geneIdsTEFneg];
   const contingencyTables = getContingencyTables(
     universe,
@@ -22,8 +21,6 @@ onmessage = async function (
     TEIpayload,
     options
   );
-  console.log({ contingencyTables });
-  console.log({ c_len: Object.keys(contingencyTables).length });
   const workerResult = await runEnrichment(contingencyTables);
   postMessage(workerResult.sort(), undefined as unknown as string);
 };
