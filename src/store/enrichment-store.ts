@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import {
   EnrichmentAnalysis,
   EnrichmentAnalysisOptions,
@@ -6,6 +6,7 @@ import {
 } from '@/types/enrichment';
 import { nanoid } from 'nanoid';
 import { infoTable } from './data-store';
+import { getSelectorFunction } from '@/utils/enrichment_analysis';
 
 // Workers
 import EnrichmentWorker from '@/workers/enrichment?worker';
@@ -75,28 +76,44 @@ class EnrichmentStore {
       );
     }
 
+    // PLACEHOLDER
     const id = nanoid();
     const pendingEnrichment: EnrichmentAnalysis = {
       id,
       isLoading: true,
       options,
     };
-
     const enrichmentIndex = this.analyses.push(pendingEnrichment) - 1;
 
-    const TEFcolIndex =
-      infoTable.colNames.findIndex((col) => col === options.TEFcolumn) + 1;
-    const TEIcolIndex =
-      infoTable.colNames.findIndex((col) => col === options.TEIcolumn) + 1;
+    // TEST ENRICHMENT FOR
+    let geneIdsTEFpos = new Set<string>();
+    let geneIdsTEFneg = new Set<string>();
 
-    const data = {
-      dataRows: toJS(infoTable.rows),
-      TEFcolIndex,
-      TEIcolIndex,
-      options,
-    };
+    if (options.filterGeneIds) geneIdsTEFpos = new Set(options.filterGeneIds);
+    else if (options.TEFselector && options.TEFselectorValue) {
+      const TEFselectorFunction = getSelectorFunction(
+        options.TEFselector,
+        options.TEFselectorValue
+      );
+      const TEFcolumn = infoTable.getColumn(options.TEFcolumn);
+      geneIdsTEFpos = new Set(TEFselectorFunction(TEFcolumn));
+    }
+
+    geneIdsTEFneg = new Set(
+      Object.keys(infoTable.rows).filter((id) => !geneIdsTEFpos.has(id))
+    );
+
+    // TEST ENRICHMENT IN
+    const TEIcolumn = infoTable.getColumn(options.TEIcolumn);
+
+    // START THE WORKER THREAD
     const worker = new EnrichmentWorker();
-    worker.postMessage(data);
+    worker.postMessage({
+      geneIdsTEFpos,
+      geneIdsTEFneg,
+      TEIpayload: TEIcolumn,
+      options,
+    });
 
     worker.onmessage = function (e: MessageEvent<(string | number)[][]>) {
       runInAction(() => {

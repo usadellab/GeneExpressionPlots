@@ -1,22 +1,26 @@
-// import { createHeatmapPlot } from '@/utils/plots/heatmap';
-import { DataRows } from '@/store/dataframe';
 import { EnrichmentAnalysisOptions } from '@/types/enrichment';
-import { runEnrichmentAnalysis } from '@/utils/enrichment_analysis';
+import {
+  getContingencyTables,
+  runEnrichment,
+} from '@/utils/enrichment_analysis';
 
 onmessage = async function (
   e: MessageEvent<{
-    dataRows: DataRows;
+    geneIdsTEFpos: Set<string>;
+    geneIdsTEFneg: Set<string>;
+    TEIpayload: { [key: string]: string };
     options: EnrichmentAnalysisOptions;
-    TEFcolIndex: number;
-    TEIcolIndex: number;
   }>
 ) {
-  const { dataRows, TEFcolIndex, TEIcolIndex, options } = e.data;
-  const workerResult = await runEnrichmentAnalysis(
-    dataRows,
-    options,
-    TEFcolIndex,
-    TEIcolIndex
+  const { geneIdsTEFpos, geneIdsTEFneg, TEIpayload, options } = e.data;
+  const universe = [...geneIdsTEFpos, ...geneIdsTEFneg];
+  const contingencyTables = getContingencyTables(
+    universe,
+    geneIdsTEFpos,
+    geneIdsTEFneg,
+    TEIpayload,
+    options
   );
-  postMessage(workerResult, undefined as unknown as string);
+  const workerResult = await runEnrichment(contingencyTables);
+  postMessage(workerResult.sort(), undefined as unknown as string);
 };

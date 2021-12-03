@@ -20,13 +20,14 @@ import {
   Text,
   useDisclosure,
   useBreakpointValue,
+  useToast,
   ThemingProps,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
 import { observer } from 'mobx-react';
 
-import { FaPlus, FaTrashAlt } from 'react-icons/fa';
+import { FaPlus, FaTrashAlt, FaDownload } from 'react-icons/fa';
 
 import { infoTable } from '@/store/data-store';
 import { enrichmentStore } from '@/store/enrichment-store';
@@ -35,6 +36,7 @@ import { EnrichmentAnalysisOptions } from '@/types/enrichment';
 import EnrichmentDetails from './enrichment-details';
 import EnrichmentForm, { EnrichmentFormSubmitHandler } from './enrichment-form';
 import FormikModal from '@/components/formik-modal';
+import { saveAs } from 'file-saver';
 
 interface CardRowProps extends FlexProps {
   label: string;
@@ -70,6 +72,8 @@ const EnrichmentTool: React.FC = () => {
     lg: '6xl',
   });
 
+  const toast = useToast();
+
   const dataAvailable = infoTable.hasData;
 
   /* FORM */
@@ -102,12 +106,24 @@ const EnrichmentTool: React.FC = () => {
           : values.TEIselectorMulti,
       TEIselectorValue: values.TEIselectorValue,
       title: values.title,
+      filterGeneIds: values.filterGeneIds
+        ? values.filterGeneIds.split('\n')
+        : undefined,
     };
 
-    setTimeout(
-      () => enrichmentStore.addEnrichmentAnalysis(enrichmentInput),
-      10
-    );
+    setTimeout(() => {
+      try {
+        enrichmentStore.addEnrichmentAnalysis(enrichmentInput);
+      } catch (error) {
+        const e = error as Error;
+        toast({
+          title: 'Error',
+          description: e.message,
+          status: 'error',
+          isClosable: true,
+        });
+      }
+    }, 10);
   };
 
   /* DETAILS */
@@ -127,6 +143,18 @@ const EnrichmentTool: React.FC = () => {
     (id: string): React.MouseEventHandler<HTMLButtonElement> =>
     (event): void => {
       enrichmentStore.deleteAnalysis(id);
+      event.stopPropagation();
+    };
+
+  const handleDownloadEnrichment =
+    (id: string): React.MouseEventHandler<HTMLButtonElement> =>
+    (event): void => {
+      const enrichment = enrichmentStore.getAnalysisById(id);
+      if (!enrichment)
+        throw new Error('Specified enrichment analysis does not exist.');
+      const csvData = enrichmentStore.dataToCSV(enrichment, '\t');
+      const blob = new Blob([csvData], { type: 'text/plain' });
+      saveAs(blob, 'enrichment.tsv');
       event.stopPropagation();
     };
 
@@ -206,7 +234,7 @@ const EnrichmentTool: React.FC = () => {
             padding={5}
             tabIndex={0}
             width="100%"
-            alignItems="center"
+            alignItems="start"
             justifyContent="center"
             as="section"
             flexGrow={1}
@@ -265,20 +293,37 @@ const EnrichmentTool: React.FC = () => {
               </Box>
             )}
             {!analysis.isLoading && (
-              <IconButton
-                _hover={{
-                  color: 'orange.600',
-                }}
-                alignSelf="flex-start"
-                aria-label="Delete enrichment analysis"
-                color="gray.600"
-                icon={<FaTrashAlt />}
-                marginLeft={2}
-                size="lg"
-                variant="ghost"
-                onClick={handleDeletePlot(analysis.id)}
-                zIndex="modal"
-              />
+              <Flex>
+                <IconButton
+                  _hover={{
+                    color: 'orange.600',
+                  }}
+                  // alignSelf="flex-start"
+                  aria-label="Delete enrichment analysis"
+                  color="gray.600"
+                  icon={<FaDownload />}
+                  marginLeft={2}
+                  size="lg"
+                  variant="ghost"
+                  onClick={handleDownloadEnrichment(analysis.id)}
+                  zIndex="overlay"
+                  as="a"
+                />
+                <IconButton
+                  _hover={{
+                    color: 'orange.600',
+                  }}
+                  // alignSelf="flex-start"
+                  aria-label="Delete enrichment analysis"
+                  color="gray.600"
+                  icon={<FaTrashAlt />}
+                  marginLeft={2}
+                  size="lg"
+                  variant="ghost"
+                  onClick={handleDeletePlot(analysis.id)}
+                  zIndex="overlay"
+                />
+              </Flex>
             )}
           </Flex>
         ))

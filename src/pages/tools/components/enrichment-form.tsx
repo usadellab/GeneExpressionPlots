@@ -6,6 +6,7 @@ import { FocusableElement } from '@chakra-ui/utils';
 import { TEFSelectorOption, TEISelectorType } from '@/types/enrichment';
 import FormikSelect from '@/components/formik-select';
 import { infoTable } from '@/store/data-store';
+import FormikArea from '@/components/formik-area';
 
 export type EnrichmentFormSubmitHandler = (
   values: EnrichmentAnalysisFormAttributes,
@@ -22,6 +23,9 @@ interface EnrichmentAnalysisFormAttributes {
   TEIselectorMulti: 'delimiter' | 'regexp';
   TEIselectorType: TEISelectorType;
   TEIselectorValue: string;
+  accessions: string[];
+  accessionsList: string;
+  filterGeneIds?: string;
 }
 
 export interface EnrichmentFormProps {
@@ -43,6 +47,8 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
   return (
     <Formik<EnrichmentAnalysisFormAttributes>
       initialValues={{
+        accessions: [],
+        accessionsList: '',
         title: '',
         TEFcolumn: infoTable.colNames[0],
         TEFselector: '<',
@@ -78,40 +84,61 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
               }}
               label="Test enrichment for"
               name="TEFcolumn"
-              options={infoTable.colNames.map((colName) => ({
-                value: colName,
-                label: colName,
-              }))}
+              // options={valuesFromOptions}
+              options={infoTable.colNames.reduce(
+                (acc, colName) => {
+                  acc.push({
+                    value: colName,
+                    label: colName,
+                  });
+                  return acc;
+                },
+                [{ value: 'filterGeneIds', label: 'Filter Gene identifiers' }]
+              )}
               tooltip="Select a column from your gene info table to test enrichment for"
             />
 
-            <Flex alignItems="center" justifyContent="center">
-              <FormikSelect
+            {formProps.values.TEFcolumn === 'filterGeneIds' ? (
+              <FormikArea
                 controlProps={{
                   marginTop: '1rem',
-                  flexShrink: 3,
-                  marginRight: '1rem',
                 }}
-                label="Selector"
-                name="TEFselector"
-                options={TEFselectorOptions.map((option) => ({
-                  value: option,
-                  label: option,
-                }))}
-                tooltip="Choose a selector function to classify your column values"
+                focusBorderColor="orange.300"
+                name="filterGeneIds"
+                label="Identifier List"
+                placeholder="List your gene identifiers here, separated by a newline."
+                isDisabled={formProps.values.accessions.length > 0}
+                tooltip="List your gene identifiers to filter for enrichment"
               />
+            ) : (
+              <Flex alignItems="center" justifyContent="center">
+                <FormikSelect
+                  controlProps={{
+                    marginTop: '1rem',
+                    flexShrink: 3,
+                    marginRight: '1rem',
+                  }}
+                  label="Selector"
+                  name="TEFselector"
+                  options={TEFselectorOptions.map((option) => ({
+                    value: option,
+                    label: option,
+                  }))}
+                  tooltip="Choose a selector function to classify your column values"
+                />
 
-              <FormikField
-                controlProps={{
-                  as: 'p',
-                  marginTop: '1rem',
-                }}
-                initialFocusRef={props.initialFocusRef}
-                label="Selector Value"
-                name="TEFselectorValue"
-                isRequired
-              />
-            </Flex>
+                <FormikField
+                  controlProps={{
+                    as: 'p',
+                    marginTop: '1rem',
+                  }}
+                  initialFocusRef={props.initialFocusRef}
+                  label="Selector Value"
+                  name="TEFselectorValue"
+                  isRequired
+                />
+              </Flex>
+            )}
 
             <Divider marginTop="1rem" />
 
