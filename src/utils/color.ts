@@ -45,6 +45,6 @@ export function getSubheaderColors(
  * @returns array of n distinct colors
  */
 export function getColors(n: number): string[] {
-  const colors = n === 1 ? [iwanthue(2)[0]] : iwanthue(n);
+  const colors = n === 1 ? [iwanthue(2)[0]] : iwanthue(n, { seed: 1 });
   return colors;
 }
