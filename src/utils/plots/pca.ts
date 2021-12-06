@@ -2,7 +2,7 @@ import { DataRows } from '@/store/dataframe';
 import { PCA } from 'ml-pca';
 
 import { Layout, PlotData } from 'plotly.js';
-import { getColors, getSubheaderColors } from '../color';
+import { getColors } from '../color';
 import { toArrayOfColumns, toArrayOfRows } from '../store';
 
 const sprintfNum = (num: number): string => {
@@ -28,28 +28,40 @@ export function createPCAplot(
   const projectedData = pca.predict(data2dArr);
 
   // Plot using Plotly.js:
-
-  const colors = transpose
-    ? getColors(srcAccessionIds.length)
-    : getSubheaderColors(2, srcReplicateNames, multiHeaderSep);
-
-  const data: Partial<PlotData>[] = [
-    {
-      x: projectedData.getColumn(0),
-      y: projectedData.getColumn(1),
-      type: 'scatter',
-      mode: 'markers',
-      text: transpose ? srcAccessionIds : srcReplicateNames,
-      textfont: {
-        family: 'Times New Roman',
-      },
-      textposition: 'bottom center',
-      marker: {
-        size: 12,
-        color: colors,
-      },
+  const traceNames = transpose ? srcAccessionIds : srcReplicateNames;
+  const traces = traceNames.reduce(
+    (acc: { [key: string]: Partial<PlotData> }, name: string, i) => {
+      const replicateSplit = name.split(multiHeaderSep);
+      const key = transpose
+        ? name
+        : `${replicateSplit[0]}${multiHeaderSep}${replicateSplit[1]}`;
+      if (acc[key]) {
+        (acc[key].x as number[]).push(projectedData.getRow(i)[0]);
+        (acc[key].y as number[]).push(projectedData.getRow(i)[1]);
+        (acc[key].text as string[]).push(name);
+      } else {
+        acc[key] = {
+          x: [projectedData.getRow(i)[0]],
+          y: [projectedData.getRow(i)[1]],
+          type: 'scatter',
+          mode: 'markers',
+          marker: { size: 9 },
+          name: key + '       ',
+          text: [name],
+          textfont: {
+            family: 'Times New Roman',
+          },
+          textposition: 'bottom center',
+        };
+      }
+      return acc;
     },
-  ];
+    {}
+  );
+
+  const colors = getColors(Object.keys(traces).length);
+
+  const data = Object.values(traces);
 
   const varExpl = pca.getExplainedVariance();
   const layout: Partial<Layout> = {
@@ -73,8 +85,10 @@ export function createPCAplot(
         )})`,
       },
     },
+    showlegend: true,
     autosize: true,
     hovermode: 'closest',
+    colorway: colors,
   };
 
   return {
