@@ -49,14 +49,15 @@ export function getBlockformat(dataArea: Element): {
 } {
   const blockFormat =
     dataArea.attributes.getNamedItem('blockFormat')?.nodeValue;
-  const formatSplit = blockFormat?.split('');
+  const bformat = blockFormat?.substr(0, 1);
+  const fnumber = blockFormat?.substr(1);
 
-  if (formatSplit && formatSplit[0] !== 'x' && formatSplit[0] !== 'y') {
-    throw new Error(`unallowed blockFormat type ${formatSplit[0]}`);
-  } else if (formatSplit && formatSplit[0] === 'x') {
-    return { bformat: 'x', fnumber: parseInt(formatSplit[1]) };
-  } else if (formatSplit && formatSplit[0] === 'y') {
-    return { bformat: 'y', fnumber: parseInt(formatSplit[1]) };
+  if (bformat && bformat !== 'x' && bformat !== 'y') {
+    throw new Error(`unallowed blockFormat type ${bformat}`);
+  } else if (bformat && bformat === 'x' && fnumber) {
+    return { bformat: 'x', fnumber: parseInt(fnumber) };
+  } else if (bformat && bformat === 'y' && fnumber) {
+    return { bformat: 'y', fnumber: parseInt(fnumber) };
   }
   return { bformat: 'x', fnumber: 5 };
 }
