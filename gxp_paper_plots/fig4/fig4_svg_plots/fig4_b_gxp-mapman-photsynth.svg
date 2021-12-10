@@ -1,0 +1,697 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90%" height="100%" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1124 724" class="main-svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style xmlns="http://www.w3.org/1999/xhtml" type="text/css"></style><svg><defs><linearGradient id="linear-gradient-RCxLTUCk087q7aiNDUp81" x1="0%" y1="0%" x2="0%" y2="110%"><stop offset="0%" stop-color="rgb(103, 0, 31)"/><stop offset="7.6923076923076925%" stop-color="rgb(162, 25, 43)"/><stop offset="15.384615384615385%" stop-color="rgb(201, 72, 67)"/><stop offset="23.076923076923077%" stop-color="rgb(228, 130, 104)"/><stop offset="30.76923076923077%" stop-color="rgb(246, 182, 154)"/><stop offset="38.46153846153846%" stop-color="rgb(251, 221, 205)"/><stop offset="46.15384615384615%" stop-color="rgb(242, 239, 238)"/><stop offset="53.84615384615385%" stop-color="rgb(213, 231, 240)"/><stop offset="61.53846153846154%" stop-color="rgb(166, 207, 227)"/><stop offset="69.23076923076923%" stop-color="rgb(107, 172, 208)"/><stop offset="76.92307692307692%" stop-color="rgb(58, 132, 187)"/><stop offset="84.61538461538461%" stop-color="rgb(29, 92, 154)"/><stop offset="92.3076923076923%" stop-color="rgb(5, 48, 97)"/></linearGradient></defs><rect width="20" height="250" x="1074" y="10" style="fill: url(&quot;#linear-gradient-RCxLTUCk087q7aiNDUp81&quot;);"/><g style="font-size: 1rem;" transform="translate(1064, 10)" fill="none" font-size="10" font-family="sans-serif" text-anchor="end"><path class="domain" stroke="currentColor" d="M-6,250.5H0.5V0.5H-6"/><g class="tick" opacity="1" transform="translate(0,250.5)"><line stroke="currentColor" x2="-6"/><text fill="currentColor" x="-9" dy="0.32em">−3.0</text></g><g class="tick" opacity="1" transform="translate(0,0.5)"><line stroke="currentColor" x2="-6"/><text fill="currentColor" x="-9" dy="0.32em">3.0</text></g></g><text class="y label" text-anchor="end" transform="translate (1054,90) rotate(-90)">expressionValue</text></svg><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1024" height="724" viewBox="0 0 1024 724" version="1.1" id="svg4774" inkscape:version="0.92.3 (2405546, 2018-03-11)" sodipodi:docname="M4_Photosynthesis_r1.1.svg">
+  <defs id="defs4768">
+    <marker inkscape:stockid="Arrow1Lend" orient="auto" refY="0" refX="0" id="marker4189" style="overflow:visible" inkscape:isstock="true">
+      <path inkscape:connector-curvature="0" id="path4187" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(-0.8,0,0,-0.8,-10,0)"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker8286" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend" inkscape:collect="always">
+      <path transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#4d4d4d;fill-opacity:1;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path8284" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:stockid="Arrow1Lend" orient="auto" refY="0" refX="0" id="marker23865" style="overflow:visible" inkscape:isstock="true">
+      <path id="path23863" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#ff0000;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(-0.8,0,0,-0.8,-10,0)" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker9101" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path9099" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:stockid="Arrow1Lstart" orient="auto" refY="0" refX="0" id="marker6058" style="overflow:visible" inkscape:isstock="true">
+      <path id="path6056" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#eeffaa;fill-opacity:1;fill-rule:evenodd;stroke:#eeffaa;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(0.8,0,0,0.8,10,0)" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:stockid="Arrow1Lstart" orient="auto" refY="0" refX="0" id="Arrow1Lstart" style="overflow:visible" inkscape:isstock="true">
+      <path id="path5774" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#eeffaa;fill-opacity:1;fill-rule:evenodd;stroke:#eeffaa;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(0.8,0,0,0.8,10,0)" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:stockid="Arrow1Lend" orient="auto" refY="0" refX="0" id="Arrow1Lend-9" style="overflow:visible" inkscape:isstock="true">
+      <path inkscape:connector-curvature="0" id="path5777-3" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(-0.8,0,0,-0.8,-10,0)"/>
+    </marker>
+    <marker inkscape:stockid="Arrow1Lend" orient="auto" refY="0" refX="0" id="marker10349-9" style="overflow:visible" inkscape:isstock="true">
+      <path inkscape:connector-curvature="0" id="path10347-4" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(-0.8,0,0,-0.8,-10,0)"/>
+    </marker>
+    <marker inkscape:stockid="Arrow1Lend" orient="auto" refY="0" refX="0" id="marker10349-9-8" style="overflow:visible" inkscape:isstock="true">
+      <path inkscape:connector-curvature="0" id="path10347-4-4" d="M 0,0 5,-5 -12.5,0 5,5 Z" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" transform="matrix(-0.8,0,0,-0.8,-10,0)"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-6" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-1"/>
+    </marker>
+    <path style="fill:none;stroke:#000000;stroke-width:0.25382066px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 114.72717,225.19997 c 14.17625,11.05144 25.38435,7.53448 35.77392,0" id="path18963-7" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <path style="fill:none;stroke:#000000;stroke-width:0.25382066px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 114.72717,225.19997 c 14.17625,11.05144 25.38435,7.53448 35.77392,0" id="path18963-5" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-8" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-4"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-14" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-9"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-0" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-6"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-9" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-2"/>
+    </marker>
+    <path style="fill:#ffffff;stroke:#ffffff;stroke-width:0.25519919px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 183.78126,115.78028 c 14.26406,10.85693 25.08316,6.78004 34.95223,-1.41513" id="path18963-4" inkscape:connector-curvature="0"/>
+    <path style="fill:#ffffff;stroke:#ffffff;stroke-width:0.25519919px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 183.78126,115.78028 c 14.26406,10.85693 25.08316,6.78004 34.95223,-1.41513" id="path18963-48" inkscape:connector-curvature="0"/>
+    <path style="fill:#ffffff;stroke:#ffffff;stroke-width:0.25519919px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 183.78126,115.78028 c 14.26406,10.85693 25.08316,6.78004 34.95223,-1.41513" id="path18963-2" inkscape:connector-curvature="0"/>
+    <path style="fill:#ffffff;stroke:#ffffff;stroke-width:0.25519919px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="m 183.78126,115.78028 c 14.26406,10.85693 25.08316,6.78004 34.95223,-1.41513" id="path18963-2-5" inkscape:connector-curvature="0"/>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-8-6" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-4-7"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-5" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-3"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-8-6-9" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-4-7-2"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker10271-5" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend" inkscape:collect="always">
+      <path transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path10269-3" inkscape:connector-curvature="0"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-8-1" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-4-8"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-7" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-9"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-8-1-2" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-4-8-0"/>
+    </marker>
+    <marker inkscape:isstock="true" style="overflow:visible" id="marker14291-0-1-8-7-2" refX="0" refY="0" orient="auto" inkscape:stockid="Arrow1Lend">
+      <path inkscape:connector-curvature="0" transform="matrix(-0.8,0,0,-0.8,-10,0)" style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1" d="M 0,0 5,-5 -12.5,0 5,5 Z" id="path14289-3-0-6-9-3"/>
+    </marker>
+  </defs>
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="1" inkscape:cx="461.93536" inkscape:cy="340.50023" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="false" units="px" inkscape:showpageshadow="false" inkscape:window-width="1920" inkscape:window-height="999" inkscape:window-x="0" inkscape:window-y="30" inkscape:window-maximized="1" scale-x="0.26458" viewbox-width="1024"/>
+  <metadata id="metadata4771">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <dc:title/>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g inkscape:groupmode="layer" id="layer3" inkscape:label="Layer 3" style="display:none"/>
+  <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" transform="translate(0,-105.44165)">
+    <rect style="fill:#e3dedb;fill-opacity:1;stroke:#999999;stroke-width:1.0372045;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect6162-3-0" width="102.4277" height="73.835709" x="231.3503" y="-512.40869" ry="8.534771" rx="6.1535211" transform="scale(1,-1)"/>
+    <g inkscape:groupmode="layer" id="layer2" inkscape:label="Layer 2" transform="translate(0,105.44165)" style="display:inline"/>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:23.2398262px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.58099568" x="682.40106" y="158.17488" id="text5323-8-5" transform="scale(1.0974084,0.91123778)"><tspan sodipodi:role="line" id="tspan5321-7-9" x="682.40106" y="158.17488" style="fill:#808080;stroke-width:0.58099568">Photosynthesis </tspan></text>
+    <rect style="fill:none;stroke:#b3b3b3;stroke-width:5.11511087;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4776-2-2" width="1017.514" height="717.21259" x="3.4255955" y="109.39086" ry="8.53477" rx="8.5347691"/>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458335" x="190.5" y="112.5854" id="text1713"><tspan sodipodi:role="line" id="tspan1711" x="190.5" y="121.94917" style="stroke-width:0.26458335"/></text>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#5aa02c;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="567.80804" y="211.58556" id="text5386-3-9-3-6-9-4-5-6" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-0-8" x="567.80804" y="211.58556" style="fill:#5aa02c;fill-opacity:1;stroke-width:0.40036726">Calvin cycle</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#447821;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="483.15295" y="728.10645" id="text5386-3-9-3-6-9-4-5-7" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-0-9" x="483.15295" y="728.10645" style="fill:#447821;fill-opacity:1;stroke-width:0.40036726">photophosphorylation</tspan></text>
+    <rect style="fill:#e3f4d7;fill-opacity:1;stroke:#4d4d4d;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect131" width="949" height="149" x="50" y="616.44165" rx="2.2573853" ry="32.257401"/>
+    <text xml:space="preserve" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.40036726;" x="-827.38062" y="790.12762" id="text5386-3-9-3" transform="matrix(-0.01581336,-0.92359436,1.0824091,-0.01853252,0,0)"><tspan sodipodi:role="line" id="tspan5384-5-1-6" x="-827.38062" y="790.12762" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#808080;stroke-width:0.40036726;">ATP synthase</tspan></text>
+    <rect style="fill:#e6e6e6;stroke:#808080;stroke-width:2.81222367;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect5382" width="150.4751" height="54.582249" x="-763.60663" y="-933.61884" rx="1.9201918" ry="8.534771" transform="matrix(-0.01711904,-0.99985346,-0.99985346,0.01711904,0,0)"/>
+    <ellipse style="fill:#e6e6e6;stroke:#4d4d4d;stroke-width:1.10782075;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path5463" cx="-612.50879" cy="-930.58655" rx="34.382725" ry="16.8419" transform="matrix(-0.01711904,-0.99985346,-0.99985346,0.01711904,0,0)"/>
+    <ellipse style="fill:#e6e6e6;stroke:#4d4d4d;stroke-width:1.10782075;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path5463-0" cx="-611.88617" cy="-907.84393" rx="34.382721" ry="16.8419" transform="matrix(-0.01711904,-0.99985346,-0.99985346,0.01711904,0,0)"/>
+    <ellipse style="fill:#e6e6e6;stroke:#4d4d4d;stroke-width:1.10782075;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path5463-9" cx="-613.13153" cy="-880.5528" rx="34.382721" ry="16.8419" transform="matrix(-0.01711904,-0.99985346,-0.99985346,0.01711904,0,0)"/>
+    <g transform="matrix(1.1301732e-4,0.00660088,0.00659052,-1.1283997e-4,866.00741,714.20344)" id="g2431-2-9-3" style="fill:#e6e6e6;stroke:#999999;stroke-width:454.77526855;stroke-miterlimit:4;stroke-dasharray:none">
+      <path d="m 4289,12758 c -59,-224 -229,-841 -231,-842 -2,-1 -48,-12 -103,-25 -55,-13 -154,-38 -219,-58 l -120,-34 -322,322 c -300,300 -324,322 -346,312 -20,-9 -1009,-581 -1015,-587 -1,-1 51,-200 115,-441 l 118,-439 -163,-163 c -90,-90 -168,-163 -173,-163 -6,0 -205,52 -442,115 -237,63 -432,114 -434,113 -9,-10 -594,-1022 -594,-1029 0,-4 145,-151 322,-327 l 322,-319 -37,-124 C 947,9001 921,8905 909,8855 877,8715 893,8729 719,8685 634,8664 439,8614 285,8575 L 5,8503 v -599 -599 l 220,-56 c 121,-31 315,-81 430,-110 116,-29 213,-55 217,-58 4,-3 25,-76 47,-161 21,-85 50,-190 64,-233 l 25,-77 -324,-317 C 506,6119 360,5973 360,5969 c 0,-8 577,-1007 590,-1022 4,-5 203,46 441,113 l 434,122 173,-173 173,-173 -117,-426 c -64,-234 -119,-430 -121,-436 -2,-6 214,-137 484,-294 268,-155 502,-291 519,-301 l 30,-18 314,322 c 173,177 319,323 326,325 6,2 70,-15 140,-36 71,-22 173,-50 226,-63 65,-15 99,-28 103,-38 2,-9 50,-189 105,-401 56,-212 105,-402 111,-422 l 10,-38 h 598 599 l 14,58 c 9,31 59,228 113,438 l 97,381 97,22 c 53,12 158,40 235,63 l 138,41 152,-154 c 83,-85 226,-231 318,-326 l 167,-171 518,299 c 404,233 517,303 515,317 -2,9 -39,144 -83,300 -43,155 -79,285 -79,289 0,4 72,-116 161,-265 l 160,-273 -34,-57 c -87,-144 -166,-329 -217,-508 l -32,-110 -291,-74 c -161,-40 -307,-78 -325,-82 l -32,-9 2,-347 3,-347 319,-81 c 263,-66 321,-84 327,-100 4,-10 21,-66 39,-124 42,-140 107,-292 180,-423 l 60,-108 -170,-286 -169,-287 230,-237 c 126,-130 236,-242 243,-249 12,-9 69,20 302,158 l 287,169 131,-68 c 153,-79 272,-127 434,-173 l 117,-34 80,-323 81,-324 h 349 349 l 81,324 80,323 116,33 c 155,45 280,95 430,172 l 126,65 292,-167 293,-167 35,33 c 19,19 129,131 243,250 l 209,216 -170,287 -169,288 35,59 c 79,129 183,378 221,527 18,69 20,73 54,82 19,5 167,45 327,87 l 293,78 v 347 348 l -22,5 c -13,4 -160,43 -327,88 l -305,82 -28,100 c -51,177 -125,350 -224,520 l -23,40 169,290 169,290 -242,243 c -148,149 -248,241 -257,239 -8,-2 -140,-76 -294,-165 l -278,-160 -48,29 c -135,83 -520,239 -590,239 -14,0 -22,11 -30,38 -5,20 -46,168 -89,327 l -78,290 -346,3 -345,2 -11,-32 c -5,-18 -42,-152 -81,-298 -39,-146 -75,-278 -80,-295 -9,-27 -17,-32 -80,-47 -140,-35 -383,-138 -540,-228 l -55,-32 -282,166 c -155,91 -285,166 -290,166 -4,0 -115,-107 -245,-237 -131,-130 -239,-235 -242,-232 -3,2 -18,52 -34,109 l -29,105 173,171 173,171 178,-49 c 564,-155 695,-190 698,-187 2,2 136,234 298,516 l 295,512 -211,208 c -117,114 -263,258 -324,318 l -113,110 30,95 c 17,52 46,155 65,229 19,74 37,136 39,139 3,3 200,57 438,121 l 433,117 v 598 598 l -430,115 c -236,64 -434,119 -438,122 -4,4 -25,73 -46,152 -21,79 -49,179 -62,222 l -23,78 322,322 322,322 -296,515 c -163,283 -298,516 -299,518 -1,1 -201,-52 -445,-118 l -443,-120 -165,165 -165,165 88,322 c 48,178 102,377 120,443 19,66 33,120 32,121 -9,8 -1031,594 -1035,594 -4,0 -151,-144 -328,-321 l -321,-321 -73,22 c -40,12 -138,37 -218,56 -80,18 -148,37 -152,41 -4,5 -55,188 -114,408 -59,220 -112,417 -118,438 l -11,37 h -598 -598 z" id="path2429-3-7-6" inkscape:connector-curvature="0" style="fill:#e6e6e6;stroke:#999999;stroke-width:454.77526855;stroke-miterlimit:4;stroke-dasharray:none"/>
+    </g>
+    <rect style="fill:#e3dedb;fill-opacity:1;stroke:#999999;stroke-width:1.47571492;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect6162" width="102.21297" height="149.78009" x="662.15692" y="-766.29553" ry="8.534771" rx="6.1535211" transform="scale(1,-1)"/>
+    <rect style="fill:#e3dedb;fill-opacity:1;stroke:#999999;stroke-width:1.0372045;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect6162-3" width="102.4277" height="73.835709" x="468.78613" y="-734.27991" ry="8.534771" rx="6.1535211" transform="scale(1,-1)"/>
+    <rect style="fill:#e3dedb;fill-opacity:1;stroke:#999999;stroke-width:1.47571492;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect6162-3-7" width="102.21297" height="149.78009" x="184.52827" y="-766.22168" ry="8.534771" rx="6.1535211" transform="scale(1,-1)"/>
+    <ellipse style="fill:#e3dedb;fill-opacity:1;stroke:#999999;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path1134" cx="604.5" cy="731.44165" rx="21.5" ry="22"/>
+    <rect style="fill:none;stroke:#c6e9af;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4776-2-5" width="457.50476" height="318.78226" x="51.516006" y="205.15024" ry="8.53477" rx="8.5347691"/>
+    <path style="fill:none;stroke:#e6e6e6;stroke-width:48.14435196;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path5578-6" sodipodi:type="arc" sodipodi:cx="414.58835" sodipodi:cy="76.658997" sodipodi:rx="85.781784" sodipodi:ry="85.74955" sodipodi:start="0.49011252" sodipodi:end="6.2265584" d="M 490.27189,117.02347 A 85.781784,85.74955 0 0 1 384.89793,157.10853 85.781784,85.74955 0 0 1 330.81359,58.218574 85.781784,85.74955 0 0 1 421.44853,-8.8159038 85.781784,85.74955 0 0 1 500.23263,71.805859" sodipodi:open="true" transform="matrix(0.76861567,0.63971083,-0.62701621,0.77900621,0,0)"/>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#447821;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="106.82533" y="417.59506" id="text5386-3-9-3-6-2" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-9" x="106.82533" y="417.59506" style="fill:#447821;fill-opacity:1;stroke-width:0.40036726">carboxylation</tspan></text>
+    <path style="fill:none;stroke:#000000;stroke-width:0.01481596;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker10271-5)" d="M 272.49855,336.96691 C 317.86964,278.70589 318.651,278.53459 318.651,278.53459" id="path10261-6" inkscape:connector-curvature="0"/>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#447821;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="381.28708" y="416.67889" id="text5386-3-9-3-6-3-0" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-0-6" x="381.28708" y="416.67889" style="fill:#447821;fill-opacity:1;stroke-width:0.40036726">oxygenation</tspan></text>
+    <path style="fill:none;fill-opacity:1;stroke:#c8beb7;stroke-width:15.99824333;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path32457-2" sodipodi:type="arc" sodipodi:cx="377.08087" sodipodi:cy="-193.44887" sodipodi:rx="40.408978" sodipodi:ry="39.209103" sodipodi:start="0" sodipodi:end="4.7229991" sodipodi:open="true" d="m 417.48985,-193.44887 a 40.408978,39.209103 0 0 1 -25.04421,36.26416 40.408978,39.209103 0 0 1 -44.08941,-8.68661 40.408978,39.209103 0 0 1 -8.48415,-42.87 40.408978,39.209103 0 0 1 37.63753,-23.91444" transform="rotate(77.635969)"/>
+    <path style="fill:#c8beb7;fill-opacity:1;stroke:none;stroke-width:7.81207895;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" d="m 328.1858,312.03289 -15.634,25.29081 -25.23023,-15.72578 20.24781,-4.24304 z" id="rect32459-6" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
+    <rect style="fill:none;stroke:#aaccff;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4776-2-7" width="124.86576" height="100.31397" x="826.23425" y="378.55652" ry="8.53477" rx="8.53477"/>
+    <path style="fill:none;stroke:#808080;stroke-width:1.64673865;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker14291-0-1-8-7)" d="m 732.12581,414.04889 c 56.40762,-32.54576 80.99261,-12.80677 105.5132,11.33932" id="path14279-6-6-8" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <rect style="fill:none;stroke:#eeaaff;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4776-2-7-3" width="124.80241" height="101.3537" x="614.11108" y="378.0231" ry="8.53477" rx="8.53477"/>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="820.41669" y="361.55237" id="text5386-3-9-3-6-9-9-9" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1" x="820.41669" y="361.55237" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">glycine</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="826.17542" y="438.35089" id="text5386-3-9-3-6-9-9-3-2" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" x="826.17542" y="438.35089" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726" id="tspan5748-7">serine</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:24.24520493px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.60613012" x="635.91418" y="499.88062" id="text1673-3-2" transform="scale(1.0660312,0.93805885)"><tspan sodipodi:role="line" id="tspan1671-6-6" x="635.91418" y="499.88062" style="fill:#999999;stroke-width:0.60613012">PEX</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:24.24520493px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.60613012" x="832.08002" y="500.21844" id="text1673-3-1" transform="scale(1.0660312,0.93805885)"><tspan sodipodi:role="line" id="tspan1671-6-8" x="832.08002" y="500.21844" style="fill:#999999;stroke-width:0.60613012">MTC</tspan></text>
+    <path style="fill:none;stroke:#808080;stroke-width:1.64205122;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker14291-0-1-8-8-1)" d="m 834.72211,444.29665 c -34.34873,25.55431 -70.33195,14.68506 -105.51325,-11.33902" id="path14279-6-6-8-3" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <path style="fill:none;stroke:#808080;stroke-width:1.71954775;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker14291-0-1-8-7-2)" d="m 507.93131,415.90931 c 61.50593,-32.54576 88.31298,-12.80677 115.04982,11.33932" id="path14279-6-6-8-7" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="576.34302" y="361.55237" id="text5386-3-9-3-6-9-9-9-5" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1-9" x="576.34302" y="361.55237" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">glycolate</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="578.85406" y="438.35089" id="text5386-3-9-3-6-9-9-3-2-2" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" x="578.85406" y="438.35089" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726" id="tspan5748-7-2">glycerate</tspan></text>
+    <path style="fill:none;stroke:#808080;stroke-width:1.71465313;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker14291-0-1-8-8-1-2)" d="m 619.80059,446.15707 c -37.45328,25.55431 -76.68877,14.68506 -115.04987,-11.33902" id="path14279-6-6-8-3-8" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="835.67395" y="322.58911" id="text5386-3-9-3-6-9-4-5-7-9" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-0-9-7" x="835.67395" y="322.58911" style="fill:#4d4d4d;fill-opacity:1;stroke-width:0.40036726">photorespiration</tspan></text>
+    <rect style="fill:none;stroke:#c6e9af;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="rect4776-2-5-6" width="174.1201" height="71.23835" x="334.90067" y="534.92987" ry="8.53477" rx="8.5347691"/>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#447821;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="565.03198" y="509.18256" id="text5386-3-9-3-6-9-4-5-7-1" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" x="565.03198" y="509.18256" style="fill:#447821;fill-opacity:1;stroke-width:0.40036726" id="tspan3838">chlororespiration</tspan></text>
+    <g transform="matrix(-0.00396358,0.00469314,0.00500347,0.00422567,313.89179,530.42891)" id="g2431-9-9" style="fill:#e6e6e6;stroke:#999999;stroke-width:472.97926525;stroke-miterlimit:4;stroke-dasharray:none">
+      <path d="m 4289,12758 c -59,-224 -229,-841 -231,-842 -2,-1 -48,-12 -103,-25 -55,-13 -154,-38 -219,-58 l -120,-34 -322,322 c -300,300 -324,322 -346,312 -20,-9 -1009,-581 -1015,-587 -1,-1 51,-200 115,-441 l 118,-439 -163,-163 c -90,-90 -168,-163 -173,-163 -6,0 -205,52 -442,115 -237,63 -432,114 -434,113 -9,-10 -594,-1022 -594,-1029 0,-4 145,-151 322,-327 l 322,-319 -37,-124 C 947,9001 921,8905 909,8855 877,8715 893,8729 719,8685 634,8664 439,8614 285,8575 L 5,8503 v -599 -599 l 220,-56 c 121,-31 315,-81 430,-110 116,-29 213,-55 217,-58 4,-3 25,-76 47,-161 21,-85 50,-190 64,-233 l 25,-77 -324,-317 C 506,6119 360,5973 360,5969 c 0,-8 577,-1007 590,-1022 4,-5 203,46 441,113 l 434,122 173,-173 173,-173 -117,-426 c -64,-234 -119,-430 -121,-436 -2,-6 214,-137 484,-294 268,-155 502,-291 519,-301 l 30,-18 314,322 c 173,177 319,323 326,325 6,2 70,-15 140,-36 71,-22 173,-50 226,-63 65,-15 99,-28 103,-38 2,-9 50,-189 105,-401 56,-212 105,-402 111,-422 l 10,-38 h 598 599 l 14,58 c 9,31 59,228 113,438 l 97,381 97,22 c 53,12 158,40 235,63 l 138,41 152,-154 c 83,-85 226,-231 318,-326 l 167,-171 518,299 c 404,233 517,303 515,317 -2,9 -39,144 -83,300 -43,155 -79,285 -79,289 0,4 72,-116 161,-265 l 160,-273 -34,-57 c -87,-144 -166,-329 -217,-508 l -32,-110 -291,-74 c -161,-40 -307,-78 -325,-82 l -32,-9 2,-347 3,-347 319,-81 c 263,-66 321,-84 327,-100 4,-10 21,-66 39,-124 42,-140 107,-292 180,-423 l 60,-108 -170,-286 -169,-287 230,-237 c 126,-130 236,-242 243,-249 12,-9 69,20 302,158 l 287,169 131,-68 c 153,-79 272,-127 434,-173 l 117,-34 80,-323 81,-324 h 349 349 l 81,324 80,323 116,33 c 155,45 280,95 430,172 l 126,65 292,-167 293,-167 35,33 c 19,19 129,131 243,250 l 209,216 -170,287 -169,288 35,59 c 79,129 183,378 221,527 18,69 20,73 54,82 19,5 167,45 327,87 l 293,78 v 347 348 l -22,5 c -13,4 -160,43 -327,88 l -305,82 -28,100 c -51,177 -125,350 -224,520 l -23,40 169,290 169,290 -242,243 c -148,149 -248,241 -257,239 -8,-2 -140,-76 -294,-165 l -278,-160 -48,29 c -135,83 -520,239 -590,239 -14,0 -22,11 -30,38 -5,20 -46,168 -89,327 l -78,290 -346,3 -345,2 -11,-32 c -5,-18 -42,-152 -81,-298 -39,-146 -75,-278 -80,-295 -9,-27 -17,-32 -80,-47 -140,-35 -383,-138 -540,-228 l -55,-32 -282,166 c -155,91 -285,166 -290,166 -4,0 -115,-107 -245,-237 -131,-130 -239,-235 -242,-232 -3,2 -18,52 -34,109 l -29,105 173,171 173,171 178,-49 c 564,-155 695,-190 698,-187 2,2 136,234 298,516 l 295,512 -211,208 c -117,114 -263,258 -324,318 l -113,110 30,95 c 17,52 46,155 65,229 19,74 37,136 39,139 3,3 200,57 438,121 l 433,117 v 598 598 l -430,115 c -236,64 -434,119 -438,122 -4,4 -25,73 -46,152 -21,79 -49,179 -62,222 l -23,78 322,322 322,322 -296,515 c -163,283 -298,516 -299,518 -1,1 -201,-52 -445,-118 l -443,-120 -165,165 -165,165 88,322 c 48,178 102,377 120,443 19,66 33,120 32,121 -9,8 -1031,594 -1035,594 -4,0 -151,-144 -328,-321 l -321,-321 -73,22 c -40,12 -138,37 -218,56 -80,18 -148,37 -152,41 -4,5 -55,188 -114,408 -59,220 -112,417 -118,438 l -11,37 h -598 -598 z" id="path2429-2-3" inkscape:connector-curvature="0" style="fill:#e6e6e6;stroke-width:472.97926525;stroke-miterlimit:4;stroke-dasharray:none;stroke:#999999"/>
+    </g>
+    <text xml:space="preserve" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.58397293px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.38959992" x="-547.62976" y="205.68887" id="text5386-3-9-3-4-1" transform="matrix(0,-0.92372975,1.0825677,0,0,0)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-7-9" x="-547.62976" y="205.68887" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.58397293px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#999999;stroke-width:0.38959992">RuBisCO</tspan></text>
+    <ellipse style="fill:#e3dedb;fill-opacity:1;stroke:#999999;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" id="path1134-4" cx="406" cy="731.44165" rx="21.5" ry="22"/>
+    <path style="fill:none;stroke:#4d4d4d;stroke-width:0.92913884px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker8286)" d="m 630.01755,642.01829 c -74.51375,9.5918 -168.07647,-51.56884 -214.03589,54.48762" id="path3901" inkscape:connector-curvature="0" sodipodi:nodetypes="cc"/>
+    <g transform="matrix(0.00614292,0,0,-0.00654912,715.41694,797.13365)" id="g2431-9-9-7" style="fill:#e6e6e6;stroke:#999999;stroke-width:472.97952271;stroke-miterlimit:4;stroke-dasharray:none">
+      <path d="m 4289,12758 c -59,-224 -229,-841 -231,-842 -2,-1 -48,-12 -103,-25 -55,-13 -154,-38 -219,-58 l -120,-34 -322,322 c -300,300 -324,322 -346,312 -20,-9 -1009,-581 -1015,-587 -1,-1 51,-200 115,-441 l 118,-439 -163,-163 c -90,-90 -168,-163 -173,-163 -6,0 -205,52 -442,115 -237,63 -432,114 -434,113 -9,-10 -594,-1022 -594,-1029 0,-4 145,-151 322,-327 l 322,-319 -37,-124 C 947,9001 921,8905 909,8855 877,8715 893,8729 719,8685 634,8664 439,8614 285,8575 L 5,8503 v -599 -599 l 220,-56 c 121,-31 315,-81 430,-110 116,-29 213,-55 217,-58 4,-3 25,-76 47,-161 21,-85 50,-190 64,-233 l 25,-77 -324,-317 C 506,6119 360,5973 360,5969 c 0,-8 577,-1007 590,-1022 4,-5 203,46 441,113 l 434,122 173,-173 173,-173 -117,-426 c -64,-234 -119,-430 -121,-436 -2,-6 214,-137 484,-294 268,-155 502,-291 519,-301 l 30,-18 314,322 c 173,177 319,323 326,325 6,2 70,-15 140,-36 71,-22 173,-50 226,-63 65,-15 99,-28 103,-38 2,-9 50,-189 105,-401 56,-212 105,-402 111,-422 l 10,-38 h 598 599 l 14,58 c 9,31 59,228 113,438 l 97,381 97,22 c 53,12 158,40 235,63 l 138,41 152,-154 c 83,-85 226,-231 318,-326 l 167,-171 518,299 c 404,233 517,303 515,317 -2,9 -39,144 -83,300 -43,155 -79,285 -79,289 0,4 72,-116 161,-265 l 160,-273 -34,-57 c -87,-144 -166,-329 -217,-508 l -32,-110 -291,-74 c -161,-40 -307,-78 -325,-82 l -32,-9 2,-347 3,-347 319,-81 c 263,-66 321,-84 327,-100 4,-10 21,-66 39,-124 42,-140 107,-292 180,-423 l 60,-108 -170,-286 -169,-287 230,-237 c 126,-130 236,-242 243,-249 12,-9 69,20 302,158 l 287,169 131,-68 c 153,-79 272,-127 434,-173 l 117,-34 80,-323 81,-324 h 349 349 l 81,324 80,323 116,33 c 155,45 280,95 430,172 l 126,65 292,-167 293,-167 35,33 c 19,19 129,131 243,250 l 209,216 -170,287 -169,288 35,59 c 79,129 183,378 221,527 18,69 20,73 54,82 19,5 167,45 327,87 l 293,78 v 347 348 l -22,5 c -13,4 -160,43 -327,88 l -305,82 -28,100 c -51,177 -125,350 -224,520 l -23,40 169,290 169,290 -242,243 c -148,149 -248,241 -257,239 -8,-2 -140,-76 -294,-165 l -278,-160 -48,29 c -135,83 -520,239 -590,239 -14,0 -22,11 -30,38 -5,20 -46,168 -89,327 l -78,290 -346,3 -345,2 -11,-32 c -5,-18 -42,-152 -81,-298 -39,-146 -75,-278 -80,-295 -9,-27 -17,-32 -80,-47 -140,-35 -383,-138 -540,-228 l -55,-32 -282,166 c -155,91 -285,166 -290,166 -4,0 -115,-107 -245,-237 -131,-130 -239,-235 -242,-232 -3,2 -18,52 -34,109 l -29,105 173,171 173,171 178,-49 c 564,-155 695,-190 698,-187 2,2 136,234 298,516 l 295,512 -211,208 c -117,114 -263,258 -324,318 l -113,110 30,95 c 17,52 46,155 65,229 19,74 37,136 39,139 3,3 200,57 438,121 l 433,117 v 598 598 l -430,115 c -236,64 -434,119 -438,122 -4,4 -25,73 -46,152 -21,79 -49,179 -62,222 l -23,78 322,322 322,322 -296,515 c -163,283 -298,516 -299,518 -1,1 -201,-52 -445,-118 l -443,-120 -165,165 -165,165 88,322 c 48,178 102,377 120,443 19,66 33,120 32,121 -9,8 -1031,594 -1035,594 -4,0 -151,-144 -328,-321 l -321,-321 -73,22 c -40,12 -138,37 -218,56 -80,18 -148,37 -152,41 -4,5 -55,188 -114,408 -59,220 -112,417 -118,438 l -11,37 h -598 -598 z" id="path2429-2-3-8" inkscape:connector-curvature="0" style="fill:#e6e6e6;stroke:#999999;stroke-width:472.97952271;stroke-miterlimit:4;stroke-dasharray:none"/>
+    </g>
+    <g transform="matrix(-1.1301732e-4,0.00660088,-0.00659052,-1.1283997e-4,321.761,714.20344)" id="g2431-2-9-3-4" style="fill:#e6e6e6;stroke:#999999;stroke-width:454.77526855;stroke-miterlimit:4;stroke-dasharray:none">
+      <path d="m 4289,12758 c -59,-224 -229,-841 -231,-842 -2,-1 -48,-12 -103,-25 -55,-13 -154,-38 -219,-58 l -120,-34 -322,322 c -300,300 -324,322 -346,312 -20,-9 -1009,-581 -1015,-587 -1,-1 51,-200 115,-441 l 118,-439 -163,-163 c -90,-90 -168,-163 -173,-163 -6,0 -205,52 -442,115 -237,63 -432,114 -434,113 -9,-10 -594,-1022 -594,-1029 0,-4 145,-151 322,-327 l 322,-319 -37,-124 C 947,9001 921,8905 909,8855 877,8715 893,8729 719,8685 634,8664 439,8614 285,8575 L 5,8503 v -599 -599 l 220,-56 c 121,-31 315,-81 430,-110 116,-29 213,-55 217,-58 4,-3 25,-76 47,-161 21,-85 50,-190 64,-233 l 25,-77 -324,-317 C 506,6119 360,5973 360,5969 c 0,-8 577,-1007 590,-1022 4,-5 203,46 441,113 l 434,122 173,-173 173,-173 -117,-426 c -64,-234 -119,-430 -121,-436 -2,-6 214,-137 484,-294 268,-155 502,-291 519,-301 l 30,-18 314,322 c 173,177 319,323 326,325 6,2 70,-15 140,-36 71,-22 173,-50 226,-63 65,-15 99,-28 103,-38 2,-9 50,-189 105,-401 56,-212 105,-402 111,-422 l 10,-38 h 598 599 l 14,58 c 9,31 59,228 113,438 l 97,381 97,22 c 53,12 158,40 235,63 l 138,41 152,-154 c 83,-85 226,-231 318,-326 l 167,-171 518,299 c 404,233 517,303 515,317 -2,9 -39,144 -83,300 -43,155 -79,285 -79,289 0,4 72,-116 161,-265 l 160,-273 -34,-57 c -87,-144 -166,-329 -217,-508 l -32,-110 -291,-74 c -161,-40 -307,-78 -325,-82 l -32,-9 2,-347 3,-347 319,-81 c 263,-66 321,-84 327,-100 4,-10 21,-66 39,-124 42,-140 107,-292 180,-423 l 60,-108 -170,-286 -169,-287 230,-237 c 126,-130 236,-242 243,-249 12,-9 69,20 302,158 l 287,169 131,-68 c 153,-79 272,-127 434,-173 l 117,-34 80,-323 81,-324 h 349 349 l 81,324 80,323 116,33 c 155,45 280,95 430,172 l 126,65 292,-167 293,-167 35,33 c 19,19 129,131 243,250 l 209,216 -170,287 -169,288 35,59 c 79,129 183,378 221,527 18,69 20,73 54,82 19,5 167,45 327,87 l 293,78 v 347 348 l -22,5 c -13,4 -160,43 -327,88 l -305,82 -28,100 c -51,177 -125,350 -224,520 l -23,40 169,290 169,290 -242,243 c -148,149 -248,241 -257,239 -8,-2 -140,-76 -294,-165 l -278,-160 -48,29 c -135,83 -520,239 -590,239 -14,0 -22,11 -30,38 -5,20 -46,168 -89,327 l -78,290 -346,3 -345,2 -11,-32 c -5,-18 -42,-152 -81,-298 -39,-146 -75,-278 -80,-295 -9,-27 -17,-32 -80,-47 -140,-35 -383,-138 -540,-228 l -55,-32 -282,166 c -155,91 -285,166 -290,166 -4,0 -115,-107 -245,-237 -131,-130 -239,-235 -242,-232 -3,2 -18,52 -34,109 l -29,105 173,171 173,171 178,-49 c 564,-155 695,-190 698,-187 2,2 136,234 298,516 l 295,512 -211,208 c -117,114 -263,258 -324,318 l -113,110 30,95 c 17,52 46,155 65,229 19,74 37,136 39,139 3,3 200,57 438,121 l 433,117 v 598 598 l -430,115 c -236,64 -434,119 -438,122 -4,4 -25,73 -46,152 -21,79 -49,179 -62,222 l -23,78 322,322 322,322 -296,515 c -163,283 -298,516 -299,518 -1,1 -201,-52 -445,-118 l -443,-120 -165,165 -165,165 88,322 c 48,178 102,377 120,443 19,66 33,120 32,121 -9,8 -1031,594 -1035,594 -4,0 -151,-144 -328,-321 l -321,-321 -73,22 c -40,12 -138,37 -218,56 -80,18 -148,37 -152,41 -4,5 -55,188 -114,408 -59,220 -112,417 -118,438 l -11,37 h -598 -598 z" id="path2429-3-7-6-5" inkscape:connector-curvature="0" style="fill:#e6e6e6;stroke:#999999;stroke-width:454.77526855;stroke-miterlimit:4;stroke-dasharray:none"/>
+    </g>
+    <text xml:space="preserve" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="-789.46503" y="424.14554" id="text5386-3-9-3-4-6" transform="matrix(0,-0.92372975,1.0825677,0,0,0)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-7-5" x="-789.46503" y="424.14554" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#808080;stroke-width:0.40036726">cyt b6/f</tspan></text>
+    <g transform="matrix(-0.00660185,0,0,-0.00659149,296.01542,560.56612)" id="g2431-2-9" style="fill:#e6e6e6;stroke:#999999;stroke-width:454.77505493;stroke-miterlimit:4;stroke-dasharray:none">
+      <path d="m 4289,12758 c -59,-224 -229,-841 -231,-842 -2,-1 -48,-12 -103,-25 -55,-13 -154,-38 -219,-58 l -120,-34 -322,322 c -300,300 -324,322 -346,312 -20,-9 -1009,-581 -1015,-587 -1,-1 51,-200 115,-441 l 118,-439 -163,-163 c -90,-90 -168,-163 -173,-163 -6,0 -205,52 -442,115 -237,63 -432,114 -434,113 -9,-10 -594,-1022 -594,-1029 0,-4 145,-151 322,-327 l 322,-319 -37,-124 C 947,9001 921,8905 909,8855 877,8715 893,8729 719,8685 634,8664 439,8614 285,8575 L 5,8503 v -599 -599 l 220,-56 c 121,-31 315,-81 430,-110 116,-29 213,-55 217,-58 4,-3 25,-76 47,-161 21,-85 50,-190 64,-233 l 25,-77 -324,-317 C 506,6119 360,5973 360,5969 c 0,-8 577,-1007 590,-1022 4,-5 203,46 441,113 l 434,122 173,-173 173,-173 -117,-426 c -64,-234 -119,-430 -121,-436 -2,-6 214,-137 484,-294 268,-155 502,-291 519,-301 l 30,-18 314,322 c 173,177 319,323 326,325 6,2 70,-15 140,-36 71,-22 173,-50 226,-63 65,-15 99,-28 103,-38 2,-9 50,-189 105,-401 56,-212 105,-402 111,-422 l 10,-38 h 598 599 l 14,58 c 9,31 59,228 113,438 l 97,381 97,22 c 53,12 158,40 235,63 l 138,41 152,-154 c 83,-85 226,-231 318,-326 l 167,-171 518,299 c 404,233 517,303 515,317 -2,9 -39,144 -83,300 -43,155 -79,285 -79,289 0,4 72,-116 161,-265 l 160,-273 -34,-57 c -87,-144 -166,-329 -217,-508 l -32,-110 -291,-74 c -161,-40 -307,-78 -325,-82 l -32,-9 2,-347 3,-347 319,-81 c 263,-66 321,-84 327,-100 4,-10 21,-66 39,-124 42,-140 107,-292 180,-423 l 60,-108 -170,-286 -169,-287 230,-237 c 126,-130 236,-242 243,-249 12,-9 69,20 302,158 l 287,169 131,-68 c 153,-79 272,-127 434,-173 l 117,-34 80,-323 81,-324 h 349 349 l 81,324 80,323 116,33 c 155,45 280,95 430,172 l 126,65 292,-167 293,-167 35,33 c 19,19 129,131 243,250 l 209,216 -170,287 -169,288 35,59 c 79,129 183,378 221,527 18,69 20,73 54,82 19,5 167,45 327,87 l 293,78 v 347 348 l -22,5 c -13,4 -160,43 -327,88 l -305,82 -28,100 c -51,177 -125,350 -224,520 l -23,40 169,290 169,290 -242,243 c -148,149 -248,241 -257,239 -8,-2 -140,-76 -294,-165 l -278,-160 -48,29 c -135,83 -520,239 -590,239 -14,0 -22,11 -30,38 -5,20 -46,168 -89,327 l -78,290 -346,3 -345,2 -11,-32 c -5,-18 -42,-152 -81,-298 -39,-146 -75,-278 -80,-295 -9,-27 -17,-32 -80,-47 -140,-35 -383,-138 -540,-228 l -55,-32 -282,166 c -155,91 -285,166 -290,166 -4,0 -115,-107 -245,-237 -131,-130 -239,-235 -242,-232 -3,2 -18,52 -34,109 l -29,105 173,171 173,171 178,-49 c 564,-155 695,-190 698,-187 2,2 136,234 298,516 l 295,512 -211,208 c -117,114 -263,258 -324,318 l -113,110 30,95 c 17,52 46,155 65,229 19,74 37,136 39,139 3,3 200,57 438,121 l 433,117 v 598 598 l -430,115 c -236,64 -434,119 -438,122 -4,4 -25,73 -46,152 -21,79 -49,179 -62,222 l -23,78 322,322 322,322 -296,515 c -163,283 -298,516 -299,518 -1,1 -201,-52 -445,-118 l -443,-120 -165,165 -165,165 88,322 c 48,178 102,377 120,443 19,66 33,120 32,121 -9,8 -1031,594 -1035,594 -4,0 -151,-144 -328,-321 l -321,-321 -73,22 c -40,12 -138,37 -218,56 -80,18 -148,37 -152,41 -4,5 -55,188 -114,408 -59,220 -112,417 -118,438 l -11,37 h -598 -598 z" id="path2429-3-7" inkscape:connector-curvature="0" style="fill:#e6e6e6;stroke:#999999;stroke-width:454.77505493;stroke-miterlimit:4;stroke-dasharray:none"/>
+    </g>
+    <text xml:space="preserve" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.40036726;" x="-812.52496" y="156.44046" id="text5386-3-9-3-4-6-6" transform="matrix(0,-0.92372975,1.0825677,0,0,0)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-7-5-9" x="-812.52496" y="156.44046" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#808080;stroke-width:0.40036726;">photosystem II</tspan></text>
+    <text xml:space="preserve" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.40036726;" x="-812.52496" y="599.54156" id="text5386-3-9-3-4" transform="matrix(0,-0.92372975,1.0825677,0,0,0)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-7" x="-812.52496" y="599.54156" style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.0146656px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#808080;stroke-width:0.40036726;">photosystem I</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="64.823235" y="370.80707" id="text5386-3-9-3-6-9-9-9-5-3" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1-9-1" x="64.823235" y="370.80707" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">3-phosphoglycerate</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="65.357773" y="285.82394" id="text5386-3-9-3-6-9-9-9-5-3-1" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1-9-1-0" x="65.357773" y="285.82394" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">1,3-bisphospho-</tspan><tspan sodipodi:role="line" x="65.357773" y="302.4906" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726" id="tspan1185">glycerate</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="111.90819" y="206.38316" id="text5386-3-9-3-6-9-9-9-5-3-3" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1-9-1-4" x="111.90819" y="206.38316" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">glyceraldehyde</tspan><tspan sodipodi:role="line" x="111.90819" y="223.04984" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726" id="tspan1205">3-phosphate</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="413.94458" y="311.68835" id="text5386-3-9-3-6-9-9-9-5-3-0" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1-9-1-3" x="413.94458" y="311.68835" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">ribulose</tspan><tspan sodipodi:role="line" x="413.94458" y="328.35501" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726" id="tspan1225">5-phosphate</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="394.1752" y="362.47372" id="text5386-3-9-3-6-9-9-9-5-3-0-9" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-2-7-1-9-1-3-1" x="394.1752" y="362.47372" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726">ribulose</tspan><tspan sodipodi:role="line" x="394.1752" y="379.14038" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.33333302px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#333333;stroke-width:0.40036726" id="tspan1225-9">1,5-bisphosphate</tspan></text>
+    <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:16.0146904px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#447821;fill-opacity:1;stroke:none;stroke-width:0.40036726" x="403.29236" y="233.91106" id="text5386-3-9-3-6-3-0-6" transform="scale(0.92372975,1.0825677)"><tspan sodipodi:role="line" id="tspan5384-5-1-6-1-0-6-4" x="403.29236" y="233.91106" style="fill:#447821;fill-opacity:1;stroke-width:0.40036726">RuBis</tspan><tspan sodipodi:role="line" x="403.29236" y="253.92941" style="fill:#447821;fill-opacity:1;stroke-width:0.40036726" id="tspan1266">regeneration</tspan></text>
+  </g>
+</svg><g id="viz-layer"><rect x="199" y="525" height="8" width="8" xOffset="0" yOffset="0" value="6.36879479149572" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene1633
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 6.36879479149572</title></rect><rect x="207" y="525" height="8" width="8" xOffset="1" yOffset="0" value="10.534975442667367" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3472
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 10.534975442667367</title></rect><rect x="215" y="525" height="8" width="8" xOffset="2" yOffset="0" value="0.6655257667910913" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 210, 189);"><title>Gene-ID: gene3512
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0.6655257667910913</title></rect><rect x="223" y="525" height="8" width="8" xOffset="3" yOffset="0" value="10.821283304357001" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3554
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 10.821283304357001</title></rect><rect x="231" y="525" height="8" width="8" xOffset="4" yOffset="0" value="4.301461946692086" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene5126
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 4.301461946692086</title></rect><rect x="199" y="533" height="8" width="8" xOffset="0" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene6415
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0</title></rect><rect x="207" y="533" height="8" width="8" xOffset="1" yOffset="1" value="49.38748328648353" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene7620
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 49.38748328648353</title></rect><rect x="215" y="533" height="8" width="8" xOffset="2" yOffset="1" value="0.038693449852145" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 236);"><title>Gene-ID: gene8323
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0.038693449852145</title></rect><rect x="223" y="533" height="8" width="8" xOffset="3" yOffset="1" value="87.33133538781256" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene10345
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 87.33133538781256</title></rect><rect x="231" y="533" height="8" width="8" xOffset="4" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene10889
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0</title></rect><rect x="199" y="541" height="8" width="8" xOffset="0" yOffset="2" value="6.445293674059236" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11744
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 6.445293674059236</title></rect><rect x="207" y="541" height="8" width="8" xOffset="1" yOffset="2" value="0.03380300754091257" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 237);"><title>Gene-ID: gene12868
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0.03380300754091257</title></rect><rect x="215" y="541" height="8" width="8" xOffset="2" yOffset="2" value="6.908114076368011" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene12925
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 6.908114076368011</title></rect><rect x="223" y="541" height="8" width="8" xOffset="3" yOffset="2" value="190.16445828959763" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene13815
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 190.16445828959763</title></rect><rect x="231" y="541" height="8" width="8" xOffset="4" yOffset="2" value="8.809291249788254" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene15377
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 8.809291249788254</title></rect><rect x="199" y="549" height="8" width="8" xOffset="0" yOffset="3" value="397.477717061862" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene18458
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 397.477717061862</title></rect><rect x="207" y="549" height="8" width="8" xOffset="1" yOffset="3" value="2.575803403890817" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(154, 20, 41);"><title>Gene-ID: gene18567
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 2.575803403890817</title></rect><rect x="215" y="549" height="8" width="8" xOffset="2" yOffset="3" value="0.05504609519007323" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(244, 239, 236);"><title>Gene-ID: gene19899
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0.05504609519007323</title></rect><rect x="223" y="549" height="8" width="8" xOffset="3" yOffset="3" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene20708
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0</title></rect><rect x="231" y="549" height="8" width="8" xOffset="4" yOffset="3" value="0.0181166612521144" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 237);"><title>Gene-ID: gene21225
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0.0181166612521144</title></rect><rect x="199" y="557" height="8" width="8" xOffset="0" yOffset="4" value="5.230873318590113" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene21659
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 5.230873318590113</title></rect><rect x="207" y="557" height="8" width="8" xOffset="1" yOffset="4" value="0.013625791371854434" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 237);"><title>Gene-ID: gene26365
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 0.013625791371854434</title></rect><rect x="215" y="557" height="8" width="8" xOffset="2" yOffset="4" value="2.023090491549983" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(200, 70, 65);"><title>Gene-ID: gene27023
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 2.023090491549983</title></rect><rect x="223" y="557" height="8" width="8" xOffset="3" yOffset="4" value="69.64545513775265" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene27277
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 69.64545513775265</title></rect><rect x="231" y="557" height="8" width="8" xOffset="4" yOffset="4" value="20.472075398848332" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene27434
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 20.472075398848332</title></rect><rect x="199" y="565" height="8" width="8" xOffset="0" yOffset="5" value="1.7198701013209332" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(217, 105, 86);"><title>Gene-ID: gene27814
+MapMan_BINCODE: 1.1.1.1
+expressionValue: 1.7198701013209332</title></rect><rect x="200" y="565" height="8" width="8" xOffset="0" yOffset="0" value="221.9358803757707" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3557
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 221.9358803757707</title></rect><rect x="208" y="565" height="8" width="8" xOffset="1" yOffset="0" value="5.7722208890028" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene4235
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 5.7722208890028</title></rect><rect x="216" y="565" height="8" width="8" xOffset="2" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene4776
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0</title></rect><rect x="224" y="565" height="8" width="8" xOffset="3" yOffset="0" value="0.8550188070552603" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(248, 195, 169);"><title>Gene-ID: gene4868
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0.8550188070552603</title></rect><rect x="232" y="565" height="8" width="8" xOffset="4" yOffset="0" value="6.11372363994136" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene5518
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 6.11372363994136</title></rect><rect x="200" y="573" height="8" width="8" xOffset="0" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene5678
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0</title></rect><rect x="208" y="573" height="8" width="8" xOffset="1" yOffset="1" value="0.15129521523077852" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 237, 231);"><title>Gene-ID: gene5781
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0.15129521523077852</title></rect><rect x="216" y="573" height="8" width="8" xOffset="2" yOffset="1" value="8.349040688096116" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9374
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 8.349040688096116</title></rect><rect x="224" y="573" height="8" width="8" xOffset="3" yOffset="1" value="0.3787364624390457" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 228, 215);"><title>Gene-ID: gene10877
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0.3787364624390457</title></rect><rect x="232" y="573" height="8" width="8" xOffset="4" yOffset="1" value="1.152353019431129" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 167, 138);"><title>Gene-ID: gene13118
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 1.152353019431129</title></rect><rect x="200" y="581" height="8" width="8" xOffset="0" yOffset="2" value="10.733846438574467" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene14135
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 10.733846438574467</title></rect><rect x="208" y="581" height="8" width="8" xOffset="1" yOffset="2" value="94.10508070983458" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16172
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 94.10508070983458</title></rect><rect x="216" y="581" height="8" width="8" xOffset="2" yOffset="2" value="13.974560566266467" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene17388
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 13.974560566266467</title></rect><rect x="224" y="581" height="8" width="8" xOffset="3" yOffset="2" value="22.741813044350366" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene18675
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 22.741813044350366</title></rect><rect x="232" y="581" height="8" width="8" xOffset="4" yOffset="2" value="48.94212075719083" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene19939
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 48.94212075719083</title></rect><rect x="200" y="589" height="8" width="8" xOffset="0" yOffset="3" value="0.036612162804852" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 236);"><title>Gene-ID: gene22828
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0.036612162804852</title></rect><rect x="208" y="589" height="8" width="8" xOffset="1" yOffset="3" value="3.25290133648269" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene25750
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 3.25290133648269</title></rect><rect x="216" y="589" height="8" width="8" xOffset="2" yOffset="3" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene28419
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0</title></rect><rect x="224" y="589" height="8" width="8" xOffset="3" yOffset="3" value="0.32033467923758635" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(249, 231, 220);"><title>Gene-ID: gene29813
+MapMan_BINCODE: 1.1.1.2
+expressionValue: 0.32033467923758635</title></rect><rect x="682" y="524" height="8" width="8" xOffset="0" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene1121
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0</title></rect><rect x="690" y="524" height="8" width="8" xOffset="1" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene4121
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0</title></rect><rect x="698" y="524" height="8" width="8" xOffset="2" yOffset="0" value="2.381720210753967" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(173, 33, 47);"><title>Gene-ID: gene5362
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 2.381720210753967</title></rect><rect x="706" y="524" height="8" width="8" xOffset="3" yOffset="0" value="0.14157969904653744" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 237, 232);"><title>Gene-ID: gene6862
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0.14157969904653744</title></rect><rect x="714" y="524" height="8" width="8" xOffset="4" yOffset="0" value="9.33114772030641" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene8721
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 9.33114772030641</title></rect><rect x="682" y="532" height="8" width="8" xOffset="0" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene9039
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0</title></rect><rect x="690" y="532" height="8" width="8" xOffset="1" yOffset="1" value="0.17011490223140266" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 236, 230);"><title>Gene-ID: gene24118
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0.17011490223140266</title></rect><rect x="698" y="532" height="8" width="8" xOffset="2" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene26588
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0</title></rect><rect x="706" y="532" height="8" width="8" xOffset="3" yOffset="1" value="0.0786920904475657" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(244, 238, 235);"><title>Gene-ID: gene28386
+MapMan_BINCODE: 1.1.4.1
+expressionValue: 0.0786920904475657</title></rect><rect x="681" y="573" height="8" width="8" xOffset="0" yOffset="0" value="8.731713450304554" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene2326
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 8.731713450304554</title></rect><rect x="689" y="573" height="8" width="8" xOffset="1" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene5568
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 0</title></rect><rect x="697" y="573" height="8" width="8" xOffset="2" yOffset="0" value="4.586469475472064" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene6366
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 4.586469475472064</title></rect><rect x="705" y="573" height="8" width="8" xOffset="3" yOffset="0" value="0.9004661696315254" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(248, 191, 164);"><title>Gene-ID: gene7662
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 0.9004661696315254</title></rect><rect x="713" y="573" height="8" width="8" xOffset="4" yOffset="0" value="2.23869654351438" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(185, 46, 54);"><title>Gene-ID: gene10340
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 2.23869654351438</title></rect><rect x="681" y="581" height="8" width="8" xOffset="0" yOffset="1" value="3.38937007893971" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11592
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 3.38937007893971</title></rect><rect x="689" y="581" height="8" width="8" xOffset="1" yOffset="1" value="5.867341998130233" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene12469
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 5.867341998130233</title></rect><rect x="697" y="581" height="8" width="8" xOffset="2" yOffset="1" value="1.6561367468316968" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(221, 112, 91);"><title>Gene-ID: gene14739
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 1.6561367468316968</title></rect><rect x="705" y="581" height="8" width="8" xOffset="3" yOffset="1" value="4.48497960541317" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene14849
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 4.48497960541317</title></rect><rect x="713" y="581" height="8" width="8" xOffset="4" yOffset="1" value="7.895096499452804" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene15378
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 7.895096499452804</title></rect><rect x="681" y="589" height="8" width="8" xOffset="0" yOffset="2" value="0.5715862513917896" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(251, 217, 198);"><title>Gene-ID: gene16192
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 0.5715862513917896</title></rect><rect x="689" y="589" height="8" width="8" xOffset="1" yOffset="2" value="21.496738361379432" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene17034
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 21.496738361379432</title></rect><rect x="697" y="589" height="8" width="8" xOffset="2" yOffset="2" value="0.16741592313997633" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 236, 230);"><title>Gene-ID: gene23028
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 0.16741592313997633</title></rect><rect x="705" y="589" height="8" width="8" xOffset="3" yOffset="2" value="65.63449253244873" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene30461
+MapMan_BINCODE: 1.1.4.2
+expressionValue: 65.63449253244873</title></rect><rect x="492" y="574" height="8" width="8" xOffset="0" yOffset="0" value="23.4314553948682" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene216
+MapMan_BINCODE: 1.1.2
+expressionValue: 23.4314553948682</title></rect><rect x="500" y="574" height="8" width="8" xOffset="1" yOffset="0" value="0.18021798002413067" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 236, 229);"><title>Gene-ID: gene2221
+MapMan_BINCODE: 1.1.2
+expressionValue: 0.18021798002413067</title></rect><rect x="508" y="574" height="8" width="8" xOffset="2" yOffset="0" value="59.2516874074448" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3809
+MapMan_BINCODE: 1.1.2
+expressionValue: 59.2516874074448</title></rect><rect x="516" y="574" height="8" width="8" xOffset="3" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene4718
+MapMan_BINCODE: 1.1.2
+expressionValue: 0</title></rect><rect x="524" y="574" height="8" width="8" xOffset="4" yOffset="0" value="12.616667333790401" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene5747
+MapMan_BINCODE: 1.1.2
+expressionValue: 12.616667333790401</title></rect><rect x="492" y="582" height="8" width="8" xOffset="0" yOffset="1" value="5.381934748757197" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene10069
+MapMan_BINCODE: 1.1.2
+expressionValue: 5.381934748757197</title></rect><rect x="500" y="582" height="8" width="8" xOffset="1" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene12870
+MapMan_BINCODE: 1.1.2
+expressionValue: 0</title></rect><rect x="508" y="582" height="8" width="8" xOffset="2" yOffset="1" value="10.716139438370744" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene15048
+MapMan_BINCODE: 1.1.2
+expressionValue: 10.716139438370744</title></rect><rect x="516" y="582" height="8" width="8" xOffset="3" yOffset="1" value="48.66537557836066" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene15159
+MapMan_BINCODE: 1.1.2
+expressionValue: 48.66537557836066</title></rect><rect x="524" y="582" height="8" width="8" xOffset="4" yOffset="1" value="30.460807008384833" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene17676
+MapMan_BINCODE: 1.1.2
+expressionValue: 30.460807008384833</title></rect><rect x="492" y="590" height="8" width="8" xOffset="0" yOffset="2" value="6.773943192630203" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene19117
+MapMan_BINCODE: 1.1.2
+expressionValue: 6.773943192630203</title></rect><rect x="500" y="590" height="8" width="8" xOffset="1" yOffset="2" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene24184
+MapMan_BINCODE: 1.1.2
+expressionValue: 0</title></rect><rect x="508" y="590" height="8" width="8" xOffset="2" yOffset="2" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene27352
+MapMan_BINCODE: 1.1.2
+expressionValue: 0</title></rect><rect x="516" y="590" height="8" width="8" xOffset="3" yOffset="2" value="5.846477198549986" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene28090
+MapMan_BINCODE: 1.1.2
+expressionValue: 5.846477198549986</title></rect><rect x="524" y="590" height="8" width="8" xOffset="4" yOffset="2" value="0.7270024631960541" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 205, 183);"><title>Gene-ID: gene28117
+MapMan_BINCODE: 1.1.2
+expressionValue: 0.7270024631960541</title></rect><rect x="901" y="553" height="8" width="8" xOffset="0" yOffset="0" value="0.17168826464679432" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 236, 230);"><title>Gene-ID: gene15391
+MapMan_BINCODE: 1.1.9.1
+expressionValue: 0.17168826464679432</title></rect><rect x="909" y="553" height="8" width="8" xOffset="1" yOffset="0" value="0.013086885910947433" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 237);"><title>Gene-ID: gene15668
+MapMan_BINCODE: 1.1.9.1
+expressionValue: 0.013086885910947433</title></rect><rect x="894" y="474" height="8" width="8" xOffset="0" yOffset="0" value="23.771343789123865" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11450
+MapMan_BINCODE: 1.1.9.2
+expressionValue: 23.771343789123865</title></rect><rect x="902" y="474" height="8" width="8" xOffset="1" yOffset="0" value="71.74594572244267" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11690
+MapMan_BINCODE: 1.1.9.2
+expressionValue: 71.74594572244267</title></rect><rect x="910" y="474" height="8" width="8" xOffset="2" yOffset="0" value="1.7751193354378367" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(214, 98, 82);"><title>Gene-ID: gene12466
+MapMan_BINCODE: 1.1.9.2
+expressionValue: 1.7751193354378367</title></rect><rect x="918" y="474" height="8" width="8" xOffset="3" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene26235
+MapMan_BINCODE: 1.1.9.2
+expressionValue: 0</title></rect><rect x="507" y="525" height="8" width="8" xOffset="0" yOffset="0" value="0.3237866952319757" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(249, 230, 220);"><title>Gene-ID: gene24805
+MapMan_BINCODE: 1.1.6
+expressionValue: 0.3237866952319757</title></rect><rect x="515" y="525" height="8" width="8" xOffset="1" yOffset="0" value="7.567318439850047" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene32718
+MapMan_BINCODE: 1.1.6
+expressionValue: 7.567318439850047</title></rect><rect x="523" y="525" height="8" width="8" xOffset="2" yOffset="0" value="30.808765076035332" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene32843
+MapMan_BINCODE: 1.1.6
+expressionValue: 30.808765076035332</title></rect><rect x="469" y="289" height="8" width="8" xOffset="0" yOffset="0" value="0.4157878790309933" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 226, 212);"><title>Gene-ID: gene19056
+MapMan_BINCODE: 1.3.1
+expressionValue: 0.4157878790309933</title></rect><rect x="477" y="289" height="8" width="8" xOffset="1" yOffset="0" value="41.59010222574667" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene21017
+MapMan_BINCODE: 1.3.1
+expressionValue: 41.59010222574667</title></rect><rect x="642" y="307" height="8" width="8" xOffset="0" yOffset="0" value="4.650068913568153" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene6305
+MapMan_BINCODE: 1.3.2
+expressionValue: 4.650068913568153</title></rect><rect x="650" y="307" height="8" width="8" xOffset="1" yOffset="0" value="22.851866073814165" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16740
+MapMan_BINCODE: 1.3.2
+expressionValue: 22.851866073814165</title></rect><rect x="658" y="307" height="8" width="8" xOffset="2" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene18000
+MapMan_BINCODE: 1.3.2
+expressionValue: 0</title></rect><rect x="702" y="305" height="8" width="8" xOffset="0" yOffset="0" value="42.843354603486524" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene4914
+MapMan_BINCODE: 1.3.3.1
+expressionValue: 42.843354603486524</title></rect><rect x="698" y="342" height="8" width="8" xOffset="0" yOffset="0" value="20.047664799356866" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene14251
+MapMan_BINCODE: 1.3.3.2
+expressionValue: 20.047664799356866</title></rect><rect x="860" y="293" height="8" width="8" xOffset="0" yOffset="0" value="0.0517047638631131" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 236);"><title>Gene-ID: gene4539
+MapMan_BINCODE: 1.3.4
+expressionValue: 0.0517047638631131</title></rect><rect x="868" y="293" height="8" width="8" xOffset="1" yOffset="0" value="0.04227999080962297" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 236);"><title>Gene-ID: gene8691
+MapMan_BINCODE: 1.3.4
+expressionValue: 0.04227999080962297</title></rect><rect x="876" y="293" height="8" width="8" xOffset="2" yOffset="0" value="8.24538771554051" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11645
+MapMan_BINCODE: 1.3.4
+expressionValue: 8.24538771554051</title></rect><rect x="884" y="293" height="8" width="8" xOffset="3" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene14796
+MapMan_BINCODE: 1.3.4
+expressionValue: 0</title></rect><rect x="892" y="293" height="8" width="8" xOffset="4" yOffset="0" value="12.550810936183467" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16371
+MapMan_BINCODE: 1.3.4
+expressionValue: 12.550810936183467</title></rect><rect x="860" y="301" height="8" width="8" xOffset="0" yOffset="1" value="0.10843600900273724" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 238, 233);"><title>Gene-ID: gene21793
+MapMan_BINCODE: 1.3.4
+expressionValue: 0.10843600900273724</title></rect><rect x="868" y="301" height="8" width="8" xOffset="1" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene23078
+MapMan_BINCODE: 1.3.4
+expressionValue: 0</title></rect><rect x="860" y="335" height="8" width="8" xOffset="0" yOffset="0" value="2.7141341453690964" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(138, 12, 37);"><title>Gene-ID: gene2534
+MapMan_BINCODE: 1.3.5
+expressionValue: 2.7141341453690964</title></rect><rect x="868" y="335" height="8" width="8" xOffset="1" yOffset="0" value="57.3806467159757" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene2709
+MapMan_BINCODE: 1.3.5
+expressionValue: 57.3806467159757</title></rect><rect x="876" y="335" height="8" width="8" xOffset="2" yOffset="0" value="0.5412387417904952" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(251, 219, 201);"><title>Gene-ID: gene11006
+MapMan_BINCODE: 1.3.5
+expressionValue: 0.5412387417904952</title></rect><rect x="884" y="335" height="8" width="8" xOffset="3" yOffset="0" value="0.8700796197737111" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(248, 194, 168);"><title>Gene-ID: gene12954
+MapMan_BINCODE: 1.3.5
+expressionValue: 0.8700796197737111</title></rect><rect x="892" y="335" height="8" width="8" xOffset="4" yOffset="0" value="113.98581013731734" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene26035
+MapMan_BINCODE: 1.3.5
+expressionValue: 113.98581013731734</title></rect><rect x="860" y="343" height="8" width="8" xOffset="0" yOffset="1" value="1.6538304136858002" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(221, 113, 91);"><title>Gene-ID: gene31356
+MapMan_BINCODE: 1.3.5
+expressionValue: 1.6538304136858002</title></rect><rect x="471" y="352" height="8" width="8" xOffset="0" yOffset="0" value="0.5545940280725664" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(251, 218, 200);"><title>Gene-ID: gene31746
+MapMan_BINCODE: 1.3.7
+expressionValue: 0.5545940280725664</title></rect><rect x="284" y="350" height="8" width="8" xOffset="0" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene7545
+MapMan_BINCODE: 1.2.1.1
+expressionValue: 0</title></rect><rect x="292" y="350" height="8" width="8" xOffset="1" yOffset="0" value="3.6577446619836436" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9802
+MapMan_BINCODE: 1.2.1.1
+expressionValue: 3.6577446619836436</title></rect><rect x="300" y="350" height="8" width="8" xOffset="2" yOffset="0" value="1.0157573686486236" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 181, 152);"><title>Gene-ID: gene10548
+MapMan_BINCODE: 1.2.1.1
+expressionValue: 1.0157573686486236</title></rect><rect x="308" y="350" height="8" width="8" xOffset="3" yOffset="0" value="10.222537207010488" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16566
+MapMan_BINCODE: 1.2.1.1
+expressionValue: 10.222537207010488</title></rect><rect x="316" y="350" height="8" width="8" xOffset="4" yOffset="0" value="24.996563695797366" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene17201
+MapMan_BINCODE: 1.2.1.1
+expressionValue: 24.996563695797366</title></rect><rect x="222" y="294" height="8" width="8" xOffset="0" yOffset="0" value="9.36606480825179" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene5923
+MapMan_BINCODE: 1.2.2
+expressionValue: 9.36606480825179</title></rect><rect x="183" y="246" height="8" width="8" xOffset="0" yOffset="0" value="19.159343251292402" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene4134
+MapMan_BINCODE: 1.2.3
+expressionValue: 19.159343251292402</title></rect><rect x="191" y="246" height="8" width="8" xOffset="1" yOffset="0" value="21.833600578642166" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene22464
+MapMan_BINCODE: 1.2.3
+expressionValue: 21.833600578642166</title></rect><rect x="199" y="246" height="8" width="8" xOffset="2" yOffset="0" value="3.659796084476613" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene28840
+MapMan_BINCODE: 1.2.3
+expressionValue: 3.659796084476613</title></rect><rect x="176" y="202" height="8" width="8" xOffset="0" yOffset="0" value="20.099592579376765" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene17277
+MapMan_BINCODE: 1.2.4
+expressionValue: 20.099592579376765</title></rect><rect x="184" y="202" height="8" width="8" xOffset="1" yOffset="0" value="5.532964386483997" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene26043
+MapMan_BINCODE: 1.2.4
+expressionValue: 5.532964386483997</title></rect><rect x="192" y="159" height="8" width="8" xOffset="0" yOffset="0" value="82.64638456242831" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3925
+MapMan_BINCODE: 1.2.5
+expressionValue: 82.64638456242831</title></rect><rect x="200" y="159" height="8" width="8" xOffset="1" yOffset="0" value="0.45664364111417893" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 224, 209);"><title>Gene-ID: gene13536
+MapMan_BINCODE: 1.2.5
+expressionValue: 0.45664364111417893</title></rect><rect x="208" y="159" height="8" width="8" xOffset="2" yOffset="0" value="19.75568207692223" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene23831
+MapMan_BINCODE: 1.2.5
+expressionValue: 19.75568207692223</title></rect><rect x="216" y="159" height="8" width="8" xOffset="3" yOffset="0" value="248.07651344489798" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene27276
+MapMan_BINCODE: 1.2.5
+expressionValue: 248.07651344489798</title></rect><rect x="221" y="134" height="8" width="8" xOffset="0" yOffset="0" value="15.0558947922544" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3197
+MapMan_BINCODE: 1.2.6
+expressionValue: 15.0558947922544</title></rect><rect x="229" y="134" height="8" width="8" xOffset="1" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene7867
+MapMan_BINCODE: 1.2.6
+expressionValue: 0</title></rect><rect x="237" y="134" height="8" width="8" xOffset="2" yOffset="0" value="51.00717603505516" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene23800
+MapMan_BINCODE: 1.2.6
+expressionValue: 51.00717603505516</title></rect><rect x="273" y="121" height="8" width="8" xOffset="0" yOffset="0" value="0.9486699713840593" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 187, 159);"><title>Gene-ID: gene5486
+MapMan_BINCODE: 1.2.7
+expressionValue: 0.9486699713840593</title></rect><rect x="281" y="121" height="8" width="8" xOffset="1" yOffset="0" value="0.4622845025895963" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 223, 208);"><title>Gene-ID: gene7152
+MapMan_BINCODE: 1.2.7
+expressionValue: 0.4622845025895963</title></rect><rect x="289" y="121" height="8" width="8" xOffset="2" yOffset="0" value="10.721240649505367" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9917
+MapMan_BINCODE: 1.2.7
+expressionValue: 10.721240649505367</title></rect><rect x="322" y="150" height="8" width="8" xOffset="0" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene18347
+MapMan_BINCODE: 1.2.8
+expressionValue: 0</title></rect><rect x="344" y="200" height="8" width="8" xOffset="0" yOffset="0" value="1.1575292604840899" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 167, 137);"><title>Gene-ID: gene20922
+MapMan_BINCODE: 1.2.9
+expressionValue: 1.1575292604840899</title></rect><rect x="343" y="231" height="8" width="8" xOffset="0" yOffset="0" value="5.798573277568287" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene5338
+MapMan_BINCODE: 1.2.10
+expressionValue: 5.798573277568287</title></rect><rect x="332" y="259" height="8" width="8" xOffset="0" yOffset="0" value="118.78250917277568" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene4358
+MapMan_BINCODE: 1.2.11
+expressionValue: 118.78250917277568</title></rect><rect x="219" y="428" height="8" width="8" xOffset="0" yOffset="0" value="0.019361095892041266" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 237);"><title>Gene-ID: gene8969
+MapMan_BINCODE: 1.2.1.3
+expressionValue: 0.019361095892041266</title></rect><rect x="227" y="428" height="8" width="8" xOffset="1" yOffset="0" value="55.2670750968245" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11197
+MapMan_BINCODE: 1.2.1.3
+expressionValue: 55.2670750968245</title></rect><rect x="235" y="428" height="8" width="8" xOffset="2" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene19086
+MapMan_BINCODE: 1.2.1.3
+expressionValue: 0</title></rect><rect x="243" y="428" height="8" width="8" xOffset="3" yOffset="0" value="48.08491336601279" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene23411
+MapMan_BINCODE: 1.2.1.3
+expressionValue: 48.08491336601279</title></rect><rect x="251" y="428" height="8" width="8" xOffset="4" yOffset="0" value="0.18923565282824173" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 236, 229);"><title>Gene-ID: gene27457
+MapMan_BINCODE: 1.2.1.3
+expressionValue: 0.18923565282824173</title></rect><rect x="219" y="436" height="8" width="8" xOffset="0" yOffset="1" value="0.8492848607201101" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(249, 196, 170);"><title>Gene-ID: gene28603
+MapMan_BINCODE: 1.2.1.3
+expressionValue: 0.8492848607201101</title></rect><rect x="401" y="436" height="8" width="8" xOffset="0" yOffset="0" value="16.589274049450236" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene5550
+MapMan_BINCODE: 1.1.8.1.2
+expressionValue: 16.589274049450236</title></rect><rect x="409" y="436" height="8" width="8" xOffset="1" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene7125
+MapMan_BINCODE: 1.1.8.1.2
+expressionValue: 0</title></rect><rect x="417" y="436" height="8" width="8" xOffset="2" yOffset="0" value="0.09668506253216173" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 238, 234);"><title>Gene-ID: gene12915
+MapMan_BINCODE: 1.1.8.1.2
+expressionValue: 0.09668506253216173</title></rect><rect x="425" y="436" height="8" width="8" xOffset="3" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene27633
+MapMan_BINCODE: 1.1.8.1.2
+expressionValue: 0</title></rect><rect x="433" y="436" height="8" width="8" xOffset="4" yOffset="0" value="46.99790682555814" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene29205
+MapMan_BINCODE: 1.1.8.1.2
+expressionValue: 46.99790682555814</title></rect><rect x="401" y="444" height="8" width="8" xOffset="0" yOffset="1" value="0.21543695101732466" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(248, 235, 227);"><title>Gene-ID: gene29938
+MapMan_BINCODE: 1.1.8.1.2
+expressionValue: 0.21543695101732466</title></rect><rect x="457" y="439" height="8" width="8" xOffset="0" yOffset="0" value="3.971829188738047" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene6671
+MapMan_BINCODE: 1.1.8.1.3
+expressionValue: 3.971829188738047</title></rect><rect x="465" y="439" height="8" width="8" xOffset="1" yOffset="0" value="9.412052927637868" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16659
+MapMan_BINCODE: 1.1.8.1.3
+expressionValue: 9.412052927637868</title></rect><rect x="473" y="439" height="8" width="8" xOffset="2" yOffset="0" value="1.2229269230569433" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(240, 160, 130);"><title>Gene-ID: gene17199
+MapMan_BINCODE: 1.1.8.1.3
+expressionValue: 1.2229269230569433</title></rect><rect x="481" y="439" height="8" width="8" xOffset="3" yOffset="0" value="1.1342802267019685" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 169, 139);"><title>Gene-ID: gene21846
+MapMan_BINCODE: 1.1.8.1.3
+expressionValue: 1.1342802267019685</title></rect><rect x="489" y="439" height="8" width="8" xOffset="4" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene30049
+MapMan_BINCODE: 1.1.8.1.3
+expressionValue: 0</title></rect><rect x="376" y="475" height="8" width="8" xOffset="0" yOffset="0" value="22.680401327754534" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene2692
+MapMan_BINCODE: 1.1.8.1.4
+expressionValue: 22.680401327754534</title></rect><rect x="384" y="475" height="8" width="8" xOffset="1" yOffset="0" value="31.9173552818548" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3433
+MapMan_BINCODE: 1.1.8.1.4
+expressionValue: 31.9173552818548</title></rect><rect x="392" y="475" height="8" width="8" xOffset="2" yOffset="0" value="0.16633243064441133" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(247, 236, 230);"><title>Gene-ID: gene7358
+MapMan_BINCODE: 1.1.8.1.4
+expressionValue: 0.16633243064441133</title></rect><rect x="400" y="475" height="8" width="8" xOffset="3" yOffset="0" value="5.300151040767223" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene22053
+MapMan_BINCODE: 1.1.8.1.4
+expressionValue: 5.300151040767223</title></rect><rect x="408" y="475" height="8" width="8" xOffset="4" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene28774
+MapMan_BINCODE: 1.1.8.1.4
+expressionValue: 0</title></rect><rect x="441" y="476" height="8" width="8" xOffset="0" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene8826
+MapMan_BINCODE: 1.1.8.1.5
+expressionValue: 0</title></rect><rect x="449" y="476" height="8" width="8" xOffset="1" yOffset="0" value="0.09315616975065066" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 238, 234);"><title>Gene-ID: gene15141
+MapMan_BINCODE: 1.1.8.1.5
+expressionValue: 0.09315616975065066</title></rect><rect x="457" y="476" height="8" width="8" xOffset="2" yOffset="0" value="54.54185248087513" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene25863
+MapMan_BINCODE: 1.1.8.1.5
+expressionValue: 54.54185248087513</title></rect><rect x="465" y="476" height="8" width="8" xOffset="3" yOffset="0" value="9.515612528804871" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene29483
+MapMan_BINCODE: 1.1.8.1.5
+expressionValue: 9.515612528804871</title></rect><rect x="319" y="471" height="8" width="8" xOffset="0" yOffset="0" value="12.707747712590134" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene586
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 12.707747712590134</title></rect><rect x="327" y="471" height="8" width="8" xOffset="1" yOffset="0" value="528.8786150861259" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene1915
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 528.8786150861259</title></rect><rect x="335" y="471" height="8" width="8" xOffset="2" yOffset="0" value="6.046574624157247" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9664
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 6.046574624157247</title></rect><rect x="343" y="471" height="8" width="8" xOffset="3" yOffset="0" value="334.68533014409667" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene10344
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 334.68533014409667</title></rect><rect x="351" y="471" height="8" width="8" xOffset="4" yOffset="0" value="4.95179040055499" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene12173
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 4.95179040055499</title></rect><rect x="319" y="479" height="8" width="8" xOffset="0" yOffset="1" value="2.8309497324198936" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(124, 7, 34);"><title>Gene-ID: gene13922
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 2.8309497324198936</title></rect><rect x="327" y="479" height="8" width="8" xOffset="1" yOffset="1" value="8.931504422445288" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene18297
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 8.931504422445288</title></rect><rect x="335" y="479" height="8" width="8" xOffset="2" yOffset="1" value="15.055763417126334" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene22845
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 15.055763417126334</title></rect><rect x="343" y="479" height="8" width="8" xOffset="3" yOffset="1" value="20.739851856854234" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene26960
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 20.739851856854234</title></rect><rect x="351" y="479" height="8" width="8" xOffset="4" yOffset="1" value="0.047657528517416003" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 236);"><title>Gene-ID: gene27661
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 0.047657528517416003</title></rect><rect x="319" y="487" height="8" width="8" xOffset="0" yOffset="2" value="18.1932946988143" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene29476
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 18.1932946988143</title></rect><rect x="327" y="487" height="8" width="8" xOffset="1" yOffset="2" value="13.546915576261165" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene30097
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 13.546915576261165</title></rect><rect x="335" y="487" height="8" width="8" xOffset="2" yOffset="2" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene31829
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 0</title></rect><rect x="343" y="487" height="8" width="8" xOffset="3" yOffset="2" value="7.5988385190939" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene32622
+MapMan_BINCODE: 1.1.8.1.6
+expressionValue: 7.5988385190939</title></rect><rect x="264" y="652" height="8" width="8" xOffset="0" yOffset="0" value="4.9902184872714335" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene1775
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 4.9902184872714335</title></rect><rect x="272" y="652" height="8" width="8" xOffset="1" yOffset="0" value="3.0395875637931" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene2936
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 3.0395875637931</title></rect><rect x="280" y="652" height="8" width="8" xOffset="2" yOffset="0" value="21.908468506992733" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene3985
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 21.908468506992733</title></rect><rect x="288" y="652" height="8" width="8" xOffset="3" yOffset="0" value="0.5964398431989696" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(251, 215, 196);"><title>Gene-ID: gene6153
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 0.5964398431989696</title></rect><rect x="296" y="652" height="8" width="8" xOffset="4" yOffset="0" value="29.395076082150833" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16222
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 29.395076082150833</title></rect><rect x="264" y="660" height="8" width="8" xOffset="0" yOffset="1" value="0.09339348120189167" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 238, 234);"><title>Gene-ID: gene17932
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 0.09339348120189167</title></rect><rect x="272" y="660" height="8" width="8" xOffset="1" yOffset="1" value="0.07312002968255871" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(244, 238, 235);"><title>Gene-ID: gene19933
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 0.07312002968255871</title></rect><rect x="280" y="660" height="8" width="8" xOffset="2" yOffset="1" value="15.411106105314566" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene22050
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 15.411106105314566</title></rect><rect x="288" y="660" height="8" width="8" xOffset="3" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene24498
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 0</title></rect><rect x="296" y="660" height="8" width="8" xOffset="4" yOffset="1" value="10.55097565941408" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene32238
+MapMan_BINCODE: 1.1.1.5
+expressionValue: 10.55097565941408</title></rect><rect x="598" y="618" height="8" width="8" xOffset="0" yOffset="0" value="1.0574524123380777" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 177, 148);"><title>Gene-ID: gene15917
+MapMan_BINCODE: 1.1.3
+expressionValue: 1.0574524123380777</title></rect><rect x="606" y="618" height="8" width="8" xOffset="1" yOffset="0" value="16.335967408586438" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene26011
+MapMan_BINCODE: 1.1.3
+expressionValue: 16.335967408586438</title></rect><rect x="546" y="316" height="8" width="8" xOffset="0" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene20673
+MapMan_BINCODE: 1.3.8
+expressionValue: 0</title></rect><rect x="202" y="629" height="8" width="8" xOffset="0" yOffset="0" value="92.64745720455956" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene1989
+MapMan_BINCODE: 1.1.1.4
+expressionValue: 92.64745720455956</title></rect><rect x="210" y="629" height="8" width="8" xOffset="1" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene7848
+MapMan_BINCODE: 1.1.1.4
+expressionValue: 0</title></rect><rect x="218" y="629" height="8" width="8" xOffset="2" yOffset="0" value="1.59529982082044" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(224, 119, 96);"><title>Gene-ID: gene18538
+MapMan_BINCODE: 1.1.1.4
+expressionValue: 1.59529982082044</title></rect><rect x="226" y="629" height="8" width="8" xOffset="3" yOffset="0" value="82.81186535118447" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene20051
+MapMan_BINCODE: 1.1.1.4
+expressionValue: 82.81186535118447</title></rect><rect x="234" y="629" height="8" width="8" xOffset="4" yOffset="0" value="20.0192528569961" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene20279
+MapMan_BINCODE: 1.1.1.4
+expressionValue: 20.0192528569961</title></rect><rect x="202" y="637" height="8" width="8" xOffset="0" yOffset="1" value="7.062774165895987" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene23812
+MapMan_BINCODE: 1.1.1.4
+expressionValue: 7.062774165895987</title></rect><rect x="265" y="632" height="8" width="8" xOffset="0" yOffset="0" value="10.312017664925667" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene696
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 10.312017664925667</title></rect><rect x="273" y="632" height="8" width="8" xOffset="1" yOffset="0" value="2.1725981785958064" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(190, 53, 57);"><title>Gene-ID: gene2024
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 2.1725981785958064</title></rect><rect x="281" y="632" height="8" width="8" xOffset="2" yOffset="0" value="2.6087555366139" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(150, 18, 40);"><title>Gene-ID: gene5347
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 2.6087555366139</title></rect><rect x="289" y="632" height="8" width="8" xOffset="3" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene5697
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0</title></rect><rect x="297" y="632" height="8" width="8" xOffset="4" yOffset="0" value="0.07269166641941939" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(244, 238, 235);"><title>Gene-ID: gene7678
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0.07269166641941939</title></rect><rect x="265" y="640" height="8" width="8" xOffset="0" yOffset="1" value="10.184603202229424" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene10981
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 10.184603202229424</title></rect><rect x="273" y="640" height="8" width="8" xOffset="1" yOffset="1" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene11201
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0</title></rect><rect x="281" y="640" height="8" width="8" xOffset="2" yOffset="1" value="44.66643121409553" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene11825
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 44.66643121409553</title></rect><rect x="289" y="640" height="8" width="8" xOffset="3" yOffset="1" value="14.558646261865901" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene12877
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 14.558646261865901</title></rect><rect x="297" y="640" height="8" width="8" xOffset="4" yOffset="1" value="6.567825114555703" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene13439
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 6.567825114555703</title></rect><rect x="265" y="648" height="8" width="8" xOffset="0" yOffset="2" value="7.855976668706347" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene14376
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 7.855976668706347</title></rect><rect x="273" y="648" height="8" width="8" xOffset="1" yOffset="2" value="0.004853102912202567" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene14523
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0.004853102912202567</title></rect><rect x="281" y="648" height="8" width="8" xOffset="2" yOffset="2" value="6.869051865682343" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene15788
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 6.869051865682343</title></rect><rect x="289" y="648" height="8" width="8" xOffset="3" yOffset="2" value="0.3089410106734783" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(249, 231, 221);"><title>Gene-ID: gene17559
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0.3089410106734783</title></rect><rect x="297" y="648" height="8" width="8" xOffset="4" yOffset="2" value="110.54376934156863" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene17727
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 110.54376934156863</title></rect><rect x="265" y="656" height="8" width="8" xOffset="0" yOffset="3" value="23.3546899168999" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene18024
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 23.3546899168999</title></rect><rect x="273" y="656" height="8" width="8" xOffset="1" yOffset="3" value="56.5339647216677" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene20037
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 56.5339647216677</title></rect><rect x="281" y="656" height="8" width="8" xOffset="2" yOffset="3" value="51.206456356724665" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene20044
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 51.206456356724665</title></rect><rect x="289" y="656" height="8" width="8" xOffset="3" yOffset="3" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene20569
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0</title></rect><rect x="297" y="656" height="8" width="8" xOffset="4" yOffset="3" value="0.12213116655051527" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 237, 233);"><title>Gene-ID: gene21248
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0.12213116655051527</title></rect><rect x="265" y="664" height="8" width="8" xOffset="0" yOffset="4" value="49.743541521533" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene21571
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 49.743541521533</title></rect><rect x="273" y="664" height="8" width="8" xOffset="1" yOffset="4" value="10.75413740097734" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene21580
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 10.75413740097734</title></rect><rect x="281" y="664" height="8" width="8" xOffset="2" yOffset="4" value="16.613325470736367" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene23085
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 16.613325470736367</title></rect><rect x="289" y="664" height="8" width="8" xOffset="3" yOffset="4" value="106.48174751201667" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene23156
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 106.48174751201667</title></rect><rect x="297" y="664" height="8" width="8" xOffset="4" yOffset="4" value="0.11550777326826467" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 238, 233);"><title>Gene-ID: gene23798
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0.11550777326826467</title></rect><rect x="265" y="672" height="8" width="8" xOffset="0" yOffset="5" value="115.69229916294297" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene24592
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 115.69229916294297</title></rect><rect x="273" y="672" height="8" width="8" xOffset="1" yOffset="5" value="1.5005122401870892" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(228, 130, 104);"><title>Gene-ID: gene26823
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 1.5005122401870892</title></rect><rect x="281" y="672" height="8" width="8" xOffset="2" yOffset="5" value="1.7196257997920965" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(217, 105, 86);"><title>Gene-ID: gene27116
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 1.7196257997920965</title></rect><rect x="289" y="672" height="8" width="8" xOffset="3" yOffset="5" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene28951
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 0</title></rect><rect x="297" y="672" height="8" width="8" xOffset="4" yOffset="5" value="71.2522841882256" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene32386
+MapMan_BINCODE: 1.1.1.3
+expressionValue: 71.2522841882256</title></rect><rect x="738" y="630" height="8" width="8" xOffset="0" yOffset="0" value="0.6661238604558949" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(250, 210, 189);"><title>Gene-ID: gene6331
+MapMan_BINCODE: 1.1.4.3
+expressionValue: 0.6661238604558949</title></rect><rect x="746" y="630" height="8" width="8" xOffset="1" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene6506
+MapMan_BINCODE: 1.1.4.3
+expressionValue: 0</title></rect><rect x="754" y="630" height="8" width="8" xOffset="2" yOffset="0" value="0.029140772337530197" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 237);"><title>Gene-ID: gene8601
+MapMan_BINCODE: 1.1.4.3
+expressionValue: 0.029140772337530197</title></rect><rect x="762" y="630" height="8" width="8" xOffset="3" yOffset="0" value="27.662498856079434" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9556
+MapMan_BINCODE: 1.1.4.3
+expressionValue: 27.662498856079434</title></rect><rect x="770" y="630" height="8" width="8" xOffset="4" yOffset="0" value="26.366335363333935" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene16185
+MapMan_BINCODE: 1.1.4.3
+expressionValue: 26.366335363333935</title></rect><rect x="738" y="638" height="8" width="8" xOffset="0" yOffset="1" value="8.03834011343294" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene18366
+MapMan_BINCODE: 1.1.4.3
+expressionValue: 8.03834011343294</title></rect><rect x="904" y="630" height="8" width="8" xOffset="0" yOffset="0" value="0.12216971755632167" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 237, 233);"><title>Gene-ID: gene13224
+MapMan_BINCODE: 1.1.9.3
+expressionValue: 0.12216971755632167</title></rect><rect x="912" y="630" height="8" width="8" xOffset="1" yOffset="0" value="7.4183221051962365" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene19162
+MapMan_BINCODE: 1.1.9.3
+expressionValue: 7.4183221051962365</title></rect><rect x="920" y="630" height="8" width="8" xOffset="2" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene27898
+MapMan_BINCODE: 1.1.9.3
+expressionValue: 0</title></rect><rect x="928" y="630" height="8" width="8" xOffset="3" yOffset="0" value="0.0199715860924787" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 237);"><title>Gene-ID: gene28443
+MapMan_BINCODE: 1.1.9.3
+expressionValue: 0.0199715860924787</title></rect><rect x="785" y="520" height="8" width="8" xOffset="0" yOffset="0" value="0" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 239, 238);"><title>Gene-ID: gene156
+MapMan_BINCODE: 1.1.5
+expressionValue: 0</title></rect><rect x="793" y="520" height="8" width="8" xOffset="1" yOffset="0" value="27.376164658218368" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene1420
+MapMan_BINCODE: 1.1.5
+expressionValue: 27.376164658218368</title></rect><rect x="801" y="520" height="8" width="8" xOffset="2" yOffset="0" value="1.036845938371236" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(245, 179, 150);"><title>Gene-ID: gene2955
+MapMan_BINCODE: 1.1.5
+expressionValue: 1.036845938371236</title></rect><rect x="809" y="520" height="8" width="8" xOffset="3" yOffset="0" value="1.1591111069309608" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(242, 167, 137);"><title>Gene-ID: gene3202
+MapMan_BINCODE: 1.1.5
+expressionValue: 1.1591111069309608</title></rect><rect x="817" y="520" height="8" width="8" xOffset="4" yOffset="0" value="10.826485055762433" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9162
+MapMan_BINCODE: 1.1.5
+expressionValue: 10.826485055762433</title></rect><rect x="785" y="528" height="8" width="8" xOffset="0" yOffset="1" value="593.4353008148854" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene12073
+MapMan_BINCODE: 1.1.5
+expressionValue: 593.4353008148854</title></rect><rect x="793" y="528" height="8" width="8" xOffset="1" yOffset="1" value="0.3089583859050587" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(249, 231, 221);"><title>Gene-ID: gene14685
+MapMan_BINCODE: 1.1.5
+expressionValue: 0.3089583859050587</title></rect><rect x="801" y="528" height="8" width="8" xOffset="2" yOffset="1" value="1.6056627309884701" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(223, 118, 95);"><title>Gene-ID: gene18065
+MapMan_BINCODE: 1.1.5
+expressionValue: 1.6056627309884701</title></rect><rect x="809" y="528" height="8" width="8" xOffset="3" yOffset="1" value="14.3490169535818" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene21686
+MapMan_BINCODE: 1.1.5
+expressionValue: 14.3490169535818</title></rect><rect x="817" y="528" height="8" width="8" xOffset="4" yOffset="1" value="0.030760864632827668" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(243, 239, 237);"><title>Gene-ID: gene23413
+MapMan_BINCODE: 1.1.5
+expressionValue: 0.030760864632827668</title></rect><rect x="785" y="536" height="8" width="8" xOffset="0" yOffset="2" value="1.7209838922222034" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(217, 105, 86);"><title>Gene-ID: gene23520
+MapMan_BINCODE: 1.1.5
+expressionValue: 1.7209838922222034</title></rect><rect x="793" y="536" height="8" width="8" xOffset="1" yOffset="2" value="67.1735100768966" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene28351
+MapMan_BINCODE: 1.1.5
+expressionValue: 67.1735100768966</title></rect><rect x="801" y="536" height="8" width="8" xOffset="2" yOffset="2" value="1.3692641867901767" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(234, 145, 116);"><title>Gene-ID: gene28610
+MapMan_BINCODE: 1.1.5
+expressionValue: 1.3692641867901767</title></rect><rect x="251" y="389" height="8" width="8" xOffset="0" yOffset="0" value="17.8072956276023" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene103
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 17.8072956276023</title></rect><rect x="259" y="389" height="8" width="8" xOffset="1" yOffset="0" value="0.15570683481236533" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 237, 231);"><title>Gene-ID: gene2576
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 0.15570683481236533</title></rect><rect x="267" y="389" height="8" width="8" xOffset="2" yOffset="0" value="6.198282224035757" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene7000
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 6.198282224035757</title></rect><rect x="275" y="389" height="8" width="8" xOffset="3" yOffset="0" value="1.2737527154700667" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(238, 155, 125);"><title>Gene-ID: gene7405
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 1.2737527154700667</title></rect><rect x="283" y="389" height="8" width="8" xOffset="4" yOffset="0" value="6.046574624157247" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene9664
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 6.046574624157247</title></rect><rect x="251" y="397" height="8" width="8" xOffset="0" yOffset="1" value="334.68533014409667" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene10344
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 334.68533014409667</title></rect><rect x="259" y="397" height="8" width="8" xOffset="1" yOffset="1" value="0.134106394128022" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(246, 237, 232);"><title>Gene-ID: gene11394
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 0.134106394128022</title></rect><rect x="267" y="397" height="8" width="8" xOffset="2" yOffset="1" value="4.95179040055499" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene12173
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 4.95179040055499</title></rect><rect x="275" y="397" height="8" width="8" xOffset="3" yOffset="1" value="1.0969066518248225" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(244, 173, 143);"><title>Gene-ID: gene13783
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 1.0969066518248225</title></rect><rect x="283" y="397" height="8" width="8" xOffset="4" yOffset="1" value="1.4206498339542335" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(232, 139, 111);"><title>Gene-ID: gene15017
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 1.4206498339542335</title></rect><rect x="251" y="405" height="8" width="8" xOffset="0" yOffset="2" value="0.4897959740665083" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(251, 222, 206);"><title>Gene-ID: gene16449
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 0.4897959740665083</title></rect><rect x="259" y="405" height="8" width="8" xOffset="1" yOffset="2" value="68.21772893117402" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene21359
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 68.21772893117402</title></rect><rect x="267" y="405" height="8" width="8" xOffset="2" yOffset="2" value="0.3022397862491493" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(249, 231, 221);"><title>Gene-ID: gene21584
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 0.3022397862491493</title></rect><rect x="275" y="405" height="8" width="8" xOffset="3" yOffset="2" value="18.1932946988143" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene29476
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 18.1932946988143</title></rect><rect x="283" y="405" height="8" width="8" xOffset="4" yOffset="2" value="13.546915576261165" style="stroke: lightgray; stroke-width: 0.8px; fill: rgb(103, 0, 31);"><title>Gene-ID: gene30097
+MapMan_BINCODE: 1.2.1.2
+expressionValue: 13.546915576261165</title></rect></g><text x="512" y="0" text-anchor="middle"/></svg>
