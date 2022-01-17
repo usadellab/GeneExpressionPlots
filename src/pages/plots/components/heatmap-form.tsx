@@ -314,7 +314,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
                     name="accessionsList"
                     label="accession"
                     hideLabel
-                    placeholder="List your gene accessions here, separated by a newline."
+                    placeholder="List your identifiers here, separated by a newline."
                     isDisabled={formProps.values.accessions.length > 0}
                   />
 

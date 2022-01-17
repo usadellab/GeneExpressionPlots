@@ -43,8 +43,8 @@ export interface IndividualLinesFormProps {
 const IndividualLinesForm: React.FC<IndividualLinesFormProps> = (props) => {
   const validateAccession: FieldValidator = (value: string) => {
     const row = dataTable.getRow(value);
-    if (!row) return 'The accession ID does not exist';
-    if (!value) return 'The accession ID cannot be empty';
+    if (!row) return 'The identifier does not exist';
+    if (!value) return 'The identifier cannot be empty';
   };
 
   return (
@@ -120,7 +120,9 @@ const IndividualLinesForm: React.FC<IndividualLinesFormProps> = (props) => {
                       }}
                       isRequired
                       key={index}
-                      label={`Gene Identifier ${index + 1}`}
+                      label={`Identifier (gene/metabolite/accession) ${
+                        index + 1
+                      }`}
                       name={`accessions.${index}`}
                       rightChildren={
                         formProps.values.accessions.length > 1 && (
