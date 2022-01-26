@@ -160,7 +160,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             titleHeight * 2;
 
           const treeBoundsY = plotBoundsY / 6;
-          const heatmapBoundsY = plotBoundsY - treeBoundsY;
+          const heatmapBoundsY = plotBoundsY - treeBoundsY - 25;
 
           const dataLen = props.binData.length;
           const binWidth = plotBoundsX / dataLen;
@@ -380,6 +380,13 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 })}
                 scale={plotDims.yScaleAxis}
               />
+              <Text
+                dy={plotDims.heatmapBoundsY + 20}
+              >{`Agglomerative hierarchical clustering on distance measure: ${
+                props.distanceMethod === 'euclidean'
+                  ? 'euclidean distance'
+                  : 'abs(corr) - 1'
+              }`}</Text>
             </Group>
           </svg>
         </>
