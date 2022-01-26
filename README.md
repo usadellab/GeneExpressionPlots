@@ -1,55 +1,53 @@
-<h1 align=center>Gene Expression Plotter</h1>
+# Branch `prepare_test_data`
 
-<p align=center>Visualize and compare gene expression from standard transcriptome (RNA-Seq) data, cluster samples and genes, and infer enrichment of gene function in gene-sets.</p>
+This branch contains the documentation and scripts used to prepare the data used in the [unit tests](https://en.wikipedia.org/wiki/Unit_testing) of the source code of "Gene Expression Plotter".
 
-<p align=center>
-<a href="https://zendro-dev.gitbook.io/geneexpressionplots/">Documentation</a> --
-<a href="https://usadellab.github.io/GeneExpressionPlots/">Use it here</a>
-</p>
+## Scientific source data
 
+We used gene expression data from two tomato species _Solanum lycopersicum_ and _Solanum lycopersicoides_ from the following publication 
 
-## &#9733; Overview
+> Reimer, J.J., Thiele, B., Biermann, R.T. et al. Tomato leaves under stress: a comparison of stress response to mild abiotic stress between a cultivated and a wild tomato species. Plant Mol Biol 107, 177–206 (2021). https://doi.org/10.1007/s11103-021-01194-0
 
-**Gene Expression Plotter** is a single page application (SPA) designed to allow custom visualizations of gene expression from transcriptome (RNA-Seq) data.
+## Preparation of the count data for Gene Expression Plotter
 
-Typical **RNA-seq** pipelines output _relatively_ large transcript abundance tables, that require the use of a programming language to shape and visualize the data as a way to better understand results.
+The procedure is documented in the script `./gxp_expected_result_gen.R`, quote:
 
-This application provides a graphical user interface to upload, process, and plot tabular data outputs from tools like [Kallisto](https://pachterlab.github.io/kallisto/), [Sailfish](https://www.cs.cmu.edu/~ckingsf/software/sailfish/), [Salmon](https://combine-lab.github.io/salmon/), and many others. 
-
-The user can also generate a custom expression table using e.g. Microsoft Excel and provide further information about the transcripts in an information table, including gene function, differential gene expression, and ontological annotations.
-
-This tool enables clustering of genes or biological samples by correlation resulting in a heatmap visualization. Principal component analysis (PCA) and enrichment analyses can be carried out.
-
-## &lt;/&gt; Develop
-
-This project is being developed with [React](https://reactjs.org). An installed [Node](https://nodejs.org/) version equal to or greater than `12` is required.
-
-### Quick Start
+> The sheet 'S_lycopersicum_cpm_all' of the supplemental table one
+> ('./Sup_table_1_transcriptome_Reimer_et_al.xlsx') has been saved as tab
+> separated value file './Sup_table_1_transcriptome_Reimer_et_al.csv'). The
+> names of the biological replicates have been adjusted to Gene Expression
+> Plotter standards, separating group factors, x-axis factors, and replicate
+> numbers (see manual for details). Furthermore, the column 'moduleColor' was
+> removed. Both steps were executed using the following shell command:
 
 ```sh
-# clone this repository
-git clone git@github.com:usadellab/GeneExpressionPlots.git
-
-# change to the repository folder
-cd GeneExpressionPlots
-
-# install node modules
-yarn install
-
-# start the development server
-yarn dev
+cat Sup_table_1_transcriptome_Reimer_et_al.csv | \
+  cut --complement -f2 | \
+  sed -e '1 s/\(\S\+\)/S_lycopersicum.\1/g' \
+      -e '1 s/S_lycopersicum\.gene_ID/gene_ID/' > \
+  Sup_table_1_transcriptome_Reimer_et_al_no_module_color.csv
 ```
 
-### Available Commands
+## Generation of the expected data for the unit tests
 
-```sh
-yarn dev                # start development server
-yarn build   		        # build for production
-yarn lint    		        # lint code using ESLint
-yarn test-components    # run component unit tests
-yarn test-integration   # run integration tests
-```
+We applied standard methods used widely in the scientific community to carry out the various analyses implemented in Gene Expression Plotter. The methods applied and whose results were used as expected outcome for the unit tests are:
 
-### Example Data
+* Z-Transformation
+* Principal Component Analysis
+* Correlation Matrix construction
+* Hierarchical clustering using "AGNES"
+* Over-representation analysis using Fischer's exact test
 
-Example files to test the application functionality can be found in the [examples](https://github.com/usadellab/GeneExpressionPlots/tree/master/examples) folder. Find more information about these files and how to use them in the [Documentation](https://zendro-dev.gitbook.io/geneexpressionplots/documentation/user-manual#examples).
+All of the above were carried out on the gene expression data downloaded from the above publication. 
+
+### Z-Transformation
+
+See script `./gxp_expected_result_gen.R` for details. Z-Transformation was carried out in R transforming gene expression count values by first subtracting the mean expression and then by dividing with the standard deviation.
+
+Results are stored in file `./Sup_table_1_transcriptome_Reimer_et_al_no_module_color_z_transformed.csv`
+
+### Principal Component Analysis
+
+A standard PCA was carried out on Z-Transformed gene expression count values (see previous section). The PCA was done with the standard R function `prcomp` (see script `./gxp_expected_result_gen.R` for details).
+
+The resulting principal component vectors are stored in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_CPM_PCA_mtrx.tsv` and the respective fractions of the total variance explained by the respective PCs is stored in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_CPM_PCA_frac_var_per_PC.tsv`.
