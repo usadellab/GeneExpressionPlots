@@ -4,7 +4,7 @@ This branch contains the documentation and scripts used to prepare the data used
 
 ## Scientific source data
 
-We used gene expression data from two tomato species _Solanum lycopersicum_ and _Solanum lycopersicoides_ from the following publication 
+We used gene expression data from two tomato species _Solanum lycopersicum_ and _Solanum pennellii_ from the following publication 
 
 > Reimer, J.J., Thiele, B., Biermann, R.T. et al. Tomato leaves under stress: a comparison of stress response to mild abiotic stress between a cultivated and a wild tomato species. Plant Mol Biol 107, 177–206 (2021). https://doi.org/10.1007/s11103-021-01194-0
 
