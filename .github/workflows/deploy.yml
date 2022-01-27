@@ -38,4 +38,4 @@ jobs:
           branch: gh-pages
           directory: ./dist
           force: true
-          github_token: ${{ secrets.GH_PAGES }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
