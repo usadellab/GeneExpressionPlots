@@ -51,3 +51,19 @@ Results are stored in file `./Sup_table_1_transcriptome_Reimer_et_al_no_module_c
 A standard PCA was carried out on Z-Transformed gene expression count values (see previous section). The PCA was done with the standard R function `prcomp` (see script `./gxp_expected_result_gen.R` for details).
 
 The resulting principal component vectors are stored in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_CPM_PCA_mtrx.tsv` and the respective fractions of the total variance explained by the respective PCs is stored in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_CPM_PCA_frac_var_per_PC.tsv`.
+
+### Correlation Matrix and Distance Matrix
+
+We use the standard R function `cor` to calculate the correlation between the z-transformed gene expression vectors of the respective biological replicates of the above published research project. The resulting correlation matrix is stored in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation.txt`. A distance measure is computed from these correlation values using `1 - absolute(cor)`. The resulting matrix is saved in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation_distance.txt`. For details on the R code producing these results see `./gxp_expected_result_gen.R`.
+
+### Clustering by agglomerative nesting (AGNES)
+
+The correlation matrix produced from z-transformed gene expression count vectors (see previous section) was submitted to clustering by agglomerative nesting (AGNES) as described in chapter 5 of Kaufman and Rousseeuw (1990). To produce the expected outcome we used the respective R package:
+
+> Maechler, M., Rousseeuw, P., Struyf, A., Hubert, M., Hornik,
+> K.(2021).  cluster: Cluster Analysis Basics and Extensions. R package
+> version 2.1.2.
+
+The resulting dendrogram was saved in `./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation_hierarch_cluster_tree.[newick|pdf|txt]` 
+
+

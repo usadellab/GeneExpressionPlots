@@ -1,4 +1,6 @@
 require(parallel)
+require(cluster)
+require(ape)
 options(mc.cores = (detectCores() -
     1))
 
@@ -131,4 +133,43 @@ text(slyc.cpm.z.trans.pca$x[,
     1], slyc.cpm.z.trans.pca$x[,
     2], labels = lbls,
     col = clrs, cex = 1)
+dev.off()
+
+
+#' Correlation between z-transformed gene expression counts:
+slyc.cpm.z.trans.cor <- cor(slyc.cpm.z.vals.df[,
+    count.cols])
+#' Save correlation table:
+slyc.cpm.z.trans.cor.df <- as.data.frame(slyc.cpm.z.trans.cor,
+    stringsAsFactors = FALSE)
+slyc.cpm.z.trans.cor.df$`*` <- rownames(slyc.cpm.z.trans.cor.df)
+write.table(slyc.cpm.z.trans.cor.df[,
+    c("*", colnames(slyc.cpm.z.trans.cor))],
+    "./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation.txt",
+    row.names = FALSE,
+    sep = "\t", quote = FALSE)
+
+
+#' AGNES clustering based on correlation -
+#' See chapter 5 of Kaufman and Rousseeuw (1990).
+slyc.cpm.z.trans.cor.dist <- 1 -
+    abs(as.matrix(slyc.cpm.z.trans.cor))
+slyc.cpm.z.trans.cor.dist.df <- as.data.frame(slyc.cpm.z.trans.cor.dist,
+    stringsAsFactors = FALSE)
+slyc.cpm.z.trans.cor.dist.df$`*` <- rownames(slyc.cpm.z.trans.cor.dist)
+write.table(slyc.cpm.z.trans.cor.dist.df[,
+    c("*", count.cols)],
+    "./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation_distance.txt",
+    sep = "\t", quote = FALSE,
+    row.names = FALSE)
+slyc.cpm.z.trans.cor.agnes <- agnes(as.dist(slyc.cpm.z.trans.cor.dist))
+#' Save trees in text and newick format, plot as pdf:
+slyc.cpm.z.trans.cor.agnes.tree <- as.phylo(as.hclust(as.dendrogram(slyc.cpm.z.trans.cor.agnes)))
+write.tree(slyc.cpm.z.trans.cor.agnes.tree,
+    "./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation_hierarch_cluster_tree.newick")
+sink("./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation_hierarch_cluster_tree.txt")
+str(as.dendrogram(slyc.cpm.z.trans.cor.agnes))
+sink()
+pdf("./Sup_table_1_transcriptome_Reimer_et_al_Solyc_z_transf_correlation_hierarch_cluster_tree.pdf")
+plot(slyc.cpm.z.trans.cor.agnes.tree)
 dev.off()

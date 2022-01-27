@@ -1,0 +1,65 @@
+--[dendrogram w/ 2 branches and 33 members at h = 0.852]
+  |--[dendrogram w/ 2 branches and 30 members at h = 0.796]
+  |  |--[dendrogram w/ 2 branches and 26 members at h = 0.78]
+  |  |  |--[dendrogram w/ 2 branches and 15 members at h = 0.76]
+  |  |  |  |--[dendrogram w/ 2 branches and 12 members at h = 0.681]
+  |  |  |  |  |--[dendrogram w/ 2 branches and 2 members at h = 0.566]
+  |  |  |  |  |  |--leaf "S_lycopersicum.ctrl1.1" 
+  |  |  |  |  |  `--leaf "S_lycopersicum.ctrl3.1" 
+  |  |  |  |  `--[dendrogram w/ 2 branches and 10 members at h = 0.64]
+  |  |  |  |     |--[dendrogram w/ 2 branches and 8 members at h = 0.609]
+  |  |  |  |     |  |--[dendrogram w/ 2 branches and 4 members at h = 0.577]
+  |  |  |  |     |  |  |--[dendrogram w/ 2 branches and 2 members at h = 0.564]
+  |  |  |  |     |  |  |  |--leaf "S_lycopersicum.ctrl1.3" 
+  |  |  |  |     |  |  |  `--leaf "S_lycopersicum.eL.1" 
+  |  |  |  |     |  |  `--[dendrogram w/ 2 branches and 2 members at h = 0.483]
+  |  |  |  |     |  |     |--leaf "S_lycopersicum.N.coldeL.1" 
+  |  |  |  |     |  |     `--leaf "S_lycopersicum.N.coldeL.2" 
+  |  |  |  |     |  `--[dendrogram w/ 2 branches and 4 members at h = 0.514]
+  |  |  |  |     |     |--[dendrogram w/ 2 branches and 3 members at h = 0.448]
+  |  |  |  |     |     |  |--[dendrogram w/ 2 branches and 2 members at h = 0.413]
+  |  |  |  |     |     |  |  |--leaf "S_lycopersicum.N.eL.3" 
+  |  |  |  |     |     |  |  `--leaf "S_lycopersicum.N.cold.2" 
+  |  |  |  |     |     |  `--leaf "S_lycopersicum.N.coldeL.3" 
+  |  |  |  |     |     `--leaf "S_lycopersicum.N.cold.3" 
+  |  |  |  |     `--[dendrogram w/ 2 branches and 2 members at h = 0.495]
+  |  |  |  |        |--leaf "S_lycopersicum.ctrl3.2" 
+  |  |  |  |        `--leaf "S_lycopersicum.ctrl3.3" 
+  |  |  |  `--[dendrogram w/ 2 branches and 3 members at h = 0.634]
+  |  |  |     |--[dendrogram w/ 2 branches and 2 members at h = 0.523]
+  |  |  |     |  |--leaf "S_lycopersicum.ctrl2.1" 
+  |  |  |     |  `--leaf "S_lycopersicum.ctrl2.2" 
+  |  |  |     `--leaf "S_lycopersicum.ctrl2.3" 
+  |  |  `--[dendrogram w/ 2 branches and 11 members at h = 0.684]
+  |  |     |--[dendrogram w/ 2 branches and 3 members at h = 0.512]
+  |  |     |  |--[dendrogram w/ 2 branches and 2 members at h = 0.488]
+  |  |     |  |  |--leaf "S_lycopersicum.N..1" 
+  |  |     |  |  `--leaf "S_lycopersicum.N..2" 
+  |  |     |  `--leaf "S_lycopersicum.N..3" 
+  |  |     `--[dendrogram w/ 2 branches and 8 members at h = 0.569]
+  |  |        |--[dendrogram w/ 2 branches and 5 members at h = 0.488]
+  |  |        |  |--[dendrogram w/ 2 branches and 2 members at h = 0.456]
+  |  |        |  |  |--leaf "S_lycopersicum.cold.1" 
+  |  |        |  |  `--leaf "S_lycopersicum.cold.3" 
+  |  |        |  `--[dendrogram w/ 2 branches and 3 members at h = 0.351]
+  |  |        |     |--[dendrogram w/ 2 branches and 2 members at h = 0.269]
+  |  |        |     |  |--leaf "S_lycopersicum.eLcold.1" 
+  |  |        |     |  `--leaf "S_lycopersicum.eLcold.2" 
+  |  |        |     `--leaf "S_lycopersicum.eLcold.3" 
+  |  |        `--[dendrogram w/ 2 branches and 3 members at h = 0.51]
+  |  |           |--[dendrogram w/ 2 branches and 2 members at h = 0.397]
+  |  |           |  |--leaf "S_lycopersicum.N.eL.1" 
+  |  |           |  `--leaf "S_lycopersicum.N.eL.2" 
+  |  |           `--leaf "S_lycopersicum.N.cold.1" 
+  |  `--[dendrogram w/ 2 branches and 4 members at h = 0.547]
+  |     |--[dendrogram w/ 2 branches and 2 members at h = 0.467]
+  |     |  |--leaf "S_lycopersicum.ctrl1.2" 
+  |     |  `--leaf "S_lycopersicum.cold.2" 
+  |     `--[dendrogram w/ 2 branches and 2 members at h = 0.494]
+  |        |--leaf "S_lycopersicum.eL.2" 
+  |        `--leaf "S_lycopersicum.eL.3" 
+  `--[dendrogram w/ 2 branches and 3 members at h = 0.471]
+     |--[dendrogram w/ 2 branches and 2 members at h = 0.413]
+     |  |--leaf "S_lycopersicum.warm.1" 
+     |  `--leaf "S_lycopersicum.warm.3" 
+     `--leaf "S_lycopersicum.warm.2" 
