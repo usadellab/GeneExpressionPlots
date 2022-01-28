@@ -3,7 +3,12 @@ import { PCA } from 'ml-pca';
 
 import { Layout, PlotData } from 'plotly.js';
 import { getColors } from '../color';
-import { toArrayOfColumns, toArrayOfRows } from '../store';
+import {
+  toArrayOfColumns,
+  toArrayOfRows,
+  transposeMatrix,
+  zTransformMatrix,
+} from '../store';
 
 const sprintfNum = (num: number): string => {
   return (Math.round(num * 1000) / 1000).toFixed(3);
@@ -14,15 +19,23 @@ export function createPCAplot(
   srcReplicateNames: string[],
   srcAccessionIds: string[],
   multiHeaderSep: string,
+  zTransform: boolean,
   plotTitle?: string,
   transpose = false
 ): {
   data: Partial<PlotData>[];
   layout: Partial<Layout>;
 } {
-  const data2dArr = transpose
-    ? toArrayOfRows(dataRows, srcReplicateNames, srcAccessionIds)
-    : toArrayOfColumns(dataRows, srcReplicateNames, srcAccessionIds);
+  let data2dArr = toArrayOfColumns(
+    dataRows,
+    srcReplicateNames,
+    srcAccessionIds
+  );
+
+  if (zTransform) data2dArr = zTransformMatrix(data2dArr);
+
+  if (transpose) data2dArr = transposeMatrix(data2dArr);
+
   const pca = new PCA(data2dArr);
   // Project the data2dArr into PC coordinate system:
   const projectedData = pca.predict(data2dArr);
