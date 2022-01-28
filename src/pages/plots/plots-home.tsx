@@ -161,7 +161,6 @@ const PlotsHome: React.FC = () => {
 
   const onHeatmapFormSubmit: HeatmapFormSubmitHandler = (values, actions) => {
     actions.setSubmitting(false);
-
     // handle and validate replicate input
     let replicates = values.replicates;
     const invalidReplicates: string[] = [];
@@ -222,6 +221,7 @@ const PlotsHome: React.FC = () => {
           distanceMethod: values.distanceMethod,
           replicates: replicates,
           plotTitle: values.plotTitle,
+          zTransform: values.zTransform,
         }),
       10
     );
@@ -298,6 +298,7 @@ const PlotsHome: React.FC = () => {
           calculateFor: values.calculateFor,
           replicates: replicates,
           plotTitle: values.plotTitle,
+          zTransform: values.zTransform,
         }),
       10
     );

@@ -7,6 +7,7 @@ onmessage = function (e: MessageEvent<CreateHeatmapArgs>) {
     distanceMethod,
     srcReplicateNames,
     srcAccessionIds,
+    zTransform,
     transpose,
   } = e.data;
   const workerResult = createHeatmapPlot(
@@ -14,6 +15,7 @@ onmessage = function (e: MessageEvent<CreateHeatmapArgs>) {
     distanceMethod,
     srcReplicateNames,
     srcAccessionIds,
+    zTransform,
     transpose
   );
   postMessage(workerResult, undefined as unknown as string);

@@ -114,6 +114,7 @@ class PlotStore {
     distanceMethod,
     replicates,
     clusterBy,
+    zTransform,
   }: Omit<HeatmapFormAttributes, 'replicatesList' | 'accessionsList'>): void {
     const id = nanoid();
     const transpose = clusterBy === 'replicates' ? false : true;
@@ -132,6 +133,7 @@ class PlotStore {
       srcReplicateNames: replicates?.length ? replicates : dataTable.colNames,
       srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
       transpose: transpose,
+      zTransform: zTransform,
     };
     worker.postMessage(data);
     worker.onmessage = function (
@@ -148,6 +150,7 @@ class PlotStore {
           tree: e.data.tree,
           distanceMethod,
           plotTitle,
+          zTransform,
         };
 
         if (plotStore.plots[plotIndex].id === id) {
@@ -174,6 +177,7 @@ class PlotStore {
     accessions,
     replicates,
     calculateFor,
+    zTransform,
   }: Omit<PCAFormAttributes, 'replicatesList' | 'accessionsList'>): void {
     const id = nanoid();
     const transpose = calculateFor === 'replicates' ? false : true;
@@ -192,6 +196,7 @@ class PlotStore {
       srcAccessionIds: accessions?.length ? accessions : dataTable.rowNames,
       multiHeaderSep: dataTable.config.multiHeader,
       transpose: transpose,
+      zTransform: zTransform,
       plotTitle: plotTitle,
     };
 

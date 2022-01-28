@@ -9,12 +9,14 @@ onmessage = function (e: MessageEvent<CreatePCAargs>) {
     multiHeaderSep,
     transpose,
     plotTitle,
+    zTransform,
   } = e.data;
   const workerResult = createPCAplot(
     dataRows,
     srcReplicateNames,
     srcAccessionIds,
     multiHeaderSep,
+    zTransform,
     plotTitle,
     transpose
   );
