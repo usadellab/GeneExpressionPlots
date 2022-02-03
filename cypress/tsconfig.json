@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "jsx": "react",
+    "resolveJsonModule": true,
 
     // paths
     "baseUrl": ".",
