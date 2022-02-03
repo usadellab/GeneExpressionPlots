@@ -65,9 +65,7 @@ describe('Enrichment analysis', function () {
     d.loadFromObject(mockTable);
 
     const TEFselectorFunction = getSelectorFunction('==', 'a-pos');
-    console.log({ TEFselectorFunction });
     const TEFcol = d.getColumn('trait-A');
-    console.log({ TEFcol });
 
     const geneIdsTEFpos = new Set(TEFselectorFunction(TEFcol));
     expect(geneIdsTEFpos).to.deep.equal(new Set(['Gene-3', 'Gene-4']));
