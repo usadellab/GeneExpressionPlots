@@ -6,6 +6,33 @@ import {
 import fishersExactTest from '@/utils/fishers-exact-test';
 
 /**
+ * calculates Benjamini-Hochberg adjusted pValues
+ * @param pValues
+ * @returns Benjamini-Hochber adjusted pValues
+ */
+function pAdjustBH(pValues: number[]): number[] {
+  const pValueCount = pValues.length;
+  // sort and map pValues to their rank
+  const sortedPValues: [number, number][] = pValues.map((val, i) => [val, i]);
+  sortedPValues.sort((a, b) => a[0] - b[0]);
+  // create array for adjusted pvalues
+  const adjustedPValues = pValues.slice();
+  for (let i = pValueCount - 1; i >= 0; i--) {
+    const [value, rank] = sortedPValues[i];
+    const prevRank = i < pValueCount - 1 ? sortedPValues[i + 1][1] : 0;
+    const bhValue = Math.min((value * pValueCount) / (i + 1), 1);
+    adjustedPValues[rank] = bhValue;
+    if (
+      i < pValueCount - 1 &&
+      adjustedPValues[rank] > adjustedPValues[prevRank]
+    ) {
+      adjustedPValues[rank] = adjustedPValues[prevRank];
+    }
+  }
+  return adjustedPValues;
+}
+
+/**
  * Intersects the two argument Sets `a` and `b`.
  *
  * @param {Set} a
@@ -229,20 +256,19 @@ export async function runEnrichment(contingencyTables: {
   [key: string]: number[];
 }): Promise<(string | number)[][]> {
   const data: (string | number)[][] = [];
-  const pValueAdjustFactor = Object.keys(contingencyTables).length;
+  const pValues: number[] = [];
   await Promise.all(
     Object.entries(contingencyTables).map(async ([key, cT]) => {
       const testResult = await testForEnrichment(cT);
       const pValue = testResult.rightPValue;
-      const adjustedPValue = pValue * pValueAdjustFactor;
-      const bonferroniPValue = adjustedPValue > 1 ? 1 : adjustedPValue;
-      // const roundedPValue =
-      //   Math.round((pValue + Number.EPSILON) * 10000) / 10000;
-      // const roundedAdjustedPValue =
-      //   Math.round((adjustedPValue + Number.EPSILON) * 10000) / 10000;
-      data.push([key, pValue, bonferroniPValue]);
+      pValues.push(pValue);
+      data.push([key, pValue]);
     })
   );
+  const bhAdjustPvalues = pAdjustBH(pValues);
+  bhAdjustPvalues.forEach((val, i) => {
+    data[i].push(val);
+  });
   return data;
 }
 
