@@ -4,8 +4,9 @@ import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
 import { DataRows } from '@/store/dataframe';
-import { toArrayOfColumns, transposeMatrix, zTransformMatrix } from '../store';
+import { toArrayOfRows, zTransformMatrix } from '../store';
 import { correlation, Matrix } from 'ml-matrix';
+import { transpose } from 'd3';
 
 export type GXPDistanceMethod = 'correlation' | 'euclidean';
 
@@ -69,7 +70,7 @@ export function computeGeneXDistance(
     case 'correlation': {
       const transposedMatrix = new Matrix(matrix).transpose();
       const corrMatrix = correlation(transposedMatrix, {
-        center: false,
+        center: true,
         scale: false,
       });
       // Transform correlation into distances; see
@@ -252,24 +253,19 @@ export function createHeatmapPlot(
   srcReplicateNames: string[],
   srcAccessionIds: string[],
   zTransform: boolean,
-  transpose = false
+  transposeMatrix = false
 ): {
   bins: HeatmapBins[];
   tree: ClusterTree;
 } {
   // Prepare the data from the store
-  // const geneNames = Object.keys(dataRows).slice(0, 3);
-  let data2dArr = toArrayOfColumns(
-    dataRows,
-    srcReplicateNames,
-    srcAccessionIds
-  );
+  let data2dArr = toArrayOfRows(dataRows, srcReplicateNames, srcAccessionIds);
 
   if (zTransform) data2dArr = zTransformMatrix(data2dArr);
 
-  if (transpose) data2dArr = transposeMatrix(data2dArr);
+  if (!transposeMatrix) data2dArr = transpose<number>(data2dArr);
 
-  const leafNames = transpose ? srcAccessionIds : srcReplicateNames;
+  const leafNames = transposeMatrix ? srcAccessionIds : srcReplicateNames;
 
   // Compute the euclidean distance matrix between each gene
   const distanceMatrix = computeGeneXDistance(data2dArr, distanceMethod);

@@ -1,6 +1,6 @@
 import { DataRows } from '@/store/dataframe';
 import { isNumeric } from '@/utils/validation';
-import { deviation, mean } from 'd3';
+import { deviation, mean, transpose } from 'd3';
 
 /**
  * Get the dataframe rows as a two-dimensional array of numeric
@@ -82,17 +82,8 @@ export function toArrayOfColumns(
   filterByRow: string[] = []
 ): number[][] {
   const arrayOfRows = toArrayOfRows(rows, filterByColumn, filterByRow);
-  const arrayOfCols = transposeMatrix(arrayOfRows);
+  const arrayOfCols = transpose<number>(arrayOfRows);
   return arrayOfCols;
-}
-
-/**
- *
- * @param matrix 2d matrix to transpoe
- * @returns transposed matrix
- */
-export function transposeMatrix(matrix: number[][]): number[][] {
-  return matrix[0].map((_, colIndex) => matrix.map((row) => row[colIndex]));
 }
 
 /**
@@ -104,6 +95,7 @@ export function zTransformMatrix(matrix: number[][]): number[][] {
   return matrix.map((row) => {
     const rowMean = mean(row) as number;
     const rowSd = deviation(row) as number;
+    if (rowSd === 0) return row;
     const zScores = row.map((val) => (val - rowMean) / rowSd);
     return zScores;
   });

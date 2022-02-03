@@ -1,14 +1,10 @@
 import { DataRows } from '@/store/dataframe';
+import { transpose } from 'd3';
 import { PCA } from 'ml-pca';
 
 import { Layout, PlotData } from 'plotly.js';
 import { getColors } from '../color';
-import {
-  toArrayOfColumns,
-  toArrayOfRows,
-  transposeMatrix,
-  zTransformMatrix,
-} from '../store';
+import { toArrayOfRows, zTransformMatrix } from '../store';
 
 const sprintfNum = (num: number): string => {
   return (Math.round(num * 1000) / 1000).toFixed(3);
@@ -21,31 +17,30 @@ export function createPCAplot(
   multiHeaderSep: string,
   zTransform: boolean,
   plotTitle?: string,
-  transpose = false
+  transposeMatrix = false
 ): {
   data: Partial<PlotData>[];
   layout: Partial<Layout>;
 } {
-  let data2dArr = toArrayOfColumns(
-    dataRows,
-    srcReplicateNames,
-    srcAccessionIds
-  );
+  let data2dArr = toArrayOfRows(dataRows, srcReplicateNames, srcAccessionIds);
 
   if (zTransform) data2dArr = zTransformMatrix(data2dArr);
 
-  if (transpose) data2dArr = transposeMatrix(data2dArr);
+  if (!transposeMatrix) data2dArr = transpose<number>(data2dArr);
 
-  const pca = new PCA(data2dArr);
+  const pca = new PCA(data2dArr, {
+    center: false,
+    scale: false,
+  });
   // Project the data2dArr into PC coordinate system:
   const projectedData = pca.predict(data2dArr);
 
   // Plot using Plotly.js:
-  const traceNames = transpose ? srcAccessionIds : srcReplicateNames;
+  const traceNames = transposeMatrix ? srcAccessionIds : srcReplicateNames;
   const traces = traceNames.reduce(
     (acc: { [key: string]: Partial<PlotData> }, name: string, i) => {
       const replicateSplit = name.split(multiHeaderSep);
-      const key = transpose
+      const key = transposeMatrix
         ? name
         : `${replicateSplit[0]}${multiHeaderSep}${replicateSplit[1]}`;
       if (acc[key]) {
