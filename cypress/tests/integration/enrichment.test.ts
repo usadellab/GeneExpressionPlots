@@ -3,6 +3,7 @@ import {
   intersect,
   constructContingencyTable,
   getSelectorFunction,
+  runEnrichment,
 } from '@/utils/enrichment_analysis';
 
 describe('Enrichment analysis', function () {
@@ -65,9 +66,7 @@ describe('Enrichment analysis', function () {
     d.loadFromObject(mockTable);
 
     const TEFselectorFunction = getSelectorFunction('==', 'a-pos');
-    console.log({ TEFselectorFunction });
     const TEFcol = d.getColumn('trait-A');
-    console.log({ TEFcol });
 
     const geneIdsTEFpos = new Set(TEFselectorFunction(TEFcol));
     expect(geneIdsTEFpos).to.deep.equal(new Set(['Gene-3', 'Gene-4']));
@@ -105,5 +104,45 @@ describe('Enrichment analysis', function () {
     );
 
     expect(contingencyTable).to.deep.equal([0, 3, 2, 3]);
+
+    const pValues = await runEnrichment({ test: contingencyTable });
+    expect(pValues).to.deep.equal([
+      ['test', 0.9999999999999993, 0.9999999999999993],
+    ]);
+  });
+
+  it('predict correct pValues and significant results for contingency tables', () => {
+    const expectedSignificantBins = [
+      '18.4.1.24.1',
+      '50.2.4',
+      '50.2.1',
+      '50.1.1',
+      '50.1.13',
+      '21.9.1.6.2',
+      '26.8.2.1',
+      '1.1.1.1.1',
+      '11.4.3.1',
+    ];
+    cy.fixture('contingency_tables').then(
+      (data: {
+        contingencyTables: { [key: string]: number[] };
+        pValues: [string, number, number][];
+      }) => {
+        runEnrichment(data.contingencyTables).then((result) => {
+          // check equality of unadjusted pValues
+          const expectedPValues = data.pValues.map(
+            ([_bin, pvalue, _bhpvalue]) => pvalue
+          );
+          const pValues = result.map(([_bin, pvalue, _bhpvalue]) => pvalue);
+          expect(pValues).to.deep.equal(expectedPValues);
+
+          // check if the BH adjusted siginificat bins match
+          const significantBins = result
+            .filter(([_bin, _pvalue, bhpvalue]) => bhpvalue <= 0.05)
+            .map(([bin, _pvalue, _bhpvalue]) => bin);
+          expect(significantBins).to.have.members(expectedSignificantBins);
+        });
+      }
+    );
   });
 });

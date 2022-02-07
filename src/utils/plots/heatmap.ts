@@ -4,10 +4,9 @@ import { AgglomerationMethod, agnes, Cluster } from 'ml-hclust';
 import { nanoid } from 'nanoid';
 import { ClusterTree, HeatmapBins } from '@/types/plots';
 import { DataRows } from '@/store/dataframe';
-import { toArrayOfColumns, toArrayOfRows } from '../store';
+import { toArrayOfRows, zTransformMatrix } from '../store';
 import { correlation, Matrix } from 'ml-matrix';
-
-// Once a worker, data will be accessed via IndexedDb
+import { transpose } from 'd3';
 
 export type GXPDistanceMethod = 'correlation' | 'euclidean';
 
@@ -70,7 +69,10 @@ export function computeGeneXDistance(
       return getDistanceMatrix(matrix, distance[method]);
     case 'correlation': {
       const transposedMatrix = new Matrix(matrix).transpose();
-      const corrMatrix = correlation(transposedMatrix);
+      const corrMatrix = correlation(transposedMatrix, {
+        center: true,
+        scale: false,
+      });
       // Transform correlation into distances; see
       // https://stats.stackexchange.com/questions/2976/clustering-variables-based-on-correlations-between-them
       return corrMatrix.to2DArray();
@@ -250,22 +252,23 @@ export function createHeatmapPlot(
   distanceMethod: GXPDistanceMethod,
   srcReplicateNames: string[],
   srcAccessionIds: string[],
-  transpose = false
+  zTransform: boolean,
+  transposeMatrix = false
 ): {
   bins: HeatmapBins[];
   tree: ClusterTree;
 } {
   // Prepare the data from the store
-  // const geneNames = Object.keys(dataRows).slice(0, 3);
+  let data2dArr = toArrayOfRows(dataRows, srcReplicateNames, srcAccessionIds);
 
-  const counts: number[][] = transpose
-    ? toArrayOfRows(dataRows, srcReplicateNames, srcAccessionIds)
-    : toArrayOfColumns(dataRows, srcReplicateNames, srcAccessionIds);
+  if (zTransform) data2dArr = zTransformMatrix(data2dArr);
 
-  const leafNames = transpose ? srcAccessionIds : srcReplicateNames;
+  if (!transposeMatrix) data2dArr = transpose<number>(data2dArr);
+
+  const leafNames = transposeMatrix ? srcAccessionIds : srcReplicateNames;
 
   // Compute the euclidean distance matrix between each gene
-  const distanceMatrix = computeGeneXDistance(counts, distanceMethod);
+  const distanceMatrix = computeGeneXDistance(data2dArr, distanceMethod);
 
   // Cluster the gene matrix
   const cluster = clusterGeneXMatrix(

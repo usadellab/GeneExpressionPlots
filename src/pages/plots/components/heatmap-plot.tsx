@@ -131,7 +131,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
           const clientPaddingY = clientPaddingTop + clientPaddingBottom;
 
           // title
-          const titleHeight = props.plotTitle ? 30 : 0;
+          const titleHeight = props.plotTitle ? 50 : 25;
 
           // ticks
           const tickLineSize = 20; // 10 for tick + 10 for marginLeft to plot
@@ -157,10 +157,10 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
             entries[0].target.clientHeight -
             clientPaddingY -
             (tickLabelSize ?? 0) -
-            titleHeight * 2;
+            titleHeight;
 
           const treeBoundsY = plotBoundsY / 6;
-          const heatmapBoundsY = plotBoundsY - treeBoundsY;
+          const heatmapBoundsY = plotBoundsY - treeBoundsY - 25;
 
           const dataLen = props.binData.length;
           const binWidth = plotBoundsX / dataLen;
@@ -254,16 +254,27 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                   : 'correlation coefficient'
               }
             />
-            <Group>
-              <Text
-                x={plotDims.xMax / 2 + plotDims.tickLabelSize}
-                y={15}
-                textAnchor="middle"
-                fontSize={20}
-              >
-                {props.plotTitle}
-              </Text>
-            </Group>
+            {plotDims.titleHeight !== 0 && (
+              <Group top={15}>
+                <Text
+                  x={plotDims.xMax / 2 + plotDims.tickLabelSize}
+                  textAnchor="middle"
+                  fontSize={20}
+                >
+                  {props.plotTitle}
+                </Text>
+              </Group>
+            )}
+            <Text
+              x={plotDims.xMax / 2 + plotDims.tickLabelSize}
+              y={plotDims.titleHeight - 10}
+              textAnchor="middle"
+              fontSize={15}
+            >{`Agglomerative hierarchical clustering on distance measure: ${
+              props.distanceMethod === 'euclidean'
+                ? 'euclidean distance'
+                : 'abs(corr) - 1'
+            }.`}</Text>
             <Group
               top={plotDims.titleHeight}
               left={plotDims.tickLabelSize + plotDims.tickLineSize}
@@ -380,6 +391,11 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
                 })}
                 scale={plotDims.yScaleAxis}
               />
+              <Text dy={plotDims.heatmapBoundsY + 15} fontSize={12}>{`${
+                props.zTransform
+                  ? ' Data has been centered via z-transformation.'
+                  : ''
+              }`}</Text>
             </Group>
           </svg>
         </>

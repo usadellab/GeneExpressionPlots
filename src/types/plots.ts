@@ -43,6 +43,7 @@ export interface GxpHeatmap extends GxpPlot {
   binData: HeatmapBins[];
   distanceMethod: GXPDistanceMethod;
   plotTitle?: string;
+  zTransform: boolean;
 }
 
 export interface ClusterTree {
@@ -76,6 +77,7 @@ export interface CreateHeatmapArgs {
   srcReplicateNames: string[];
   srcAccessionIds: string[];
   transpose: boolean;
+  zTransform: boolean;
 }
 
 //#endregion
@@ -107,6 +109,7 @@ export interface CreatePCAargs {
   srcAccessionIds: string[];
   transpose: boolean;
   plotTitle?: string;
+  zTransform: boolean;
   multiHeaderSep: string;
 }
 //#endregion

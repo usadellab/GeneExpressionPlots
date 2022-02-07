@@ -34,6 +34,7 @@
     "jszip": "^3.7.1",
     "ml-distance": "^3.0.0",
     "ml-hclust": "^3.1.0",
+    "ml-matrix": "^6.8.2",
     "ml-pca": "^4.0.2",
     "mobx": "^6.3.7",
     "mobx-react": "^7.2.1",
