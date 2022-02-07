@@ -17,16 +17,14 @@ function pAdjustBH(pValues: number[]): number[] {
   sortedPValues.sort((a, b) => a[0] - b[0]);
   // create array for adjusted pvalues
   const adjustedPValues = pValues.slice();
+  let currMinPValue = Number.MAX_VALUE;
   for (let i = pValueCount - 1; i >= 0; i--) {
     const [value, rank] = sortedPValues[i];
-    const prevRank = i < pValueCount - 1 ? sortedPValues[i + 1][1] : 0;
     const bhValue = Math.min((value * pValueCount) / (i + 1), 1);
+    if (bhValue < currMinPValue) currMinPValue = bhValue;
     adjustedPValues[rank] = bhValue;
-    if (
-      i < pValueCount - 1 &&
-      adjustedPValues[rank] > adjustedPValues[prevRank]
-    ) {
-      adjustedPValues[rank] = adjustedPValues[prevRank];
+    if (i < pValueCount - 1 && adjustedPValues[rank] > currMinPValue) {
+      adjustedPValues[rank] = currMinPValue;
     }
   }
   return adjustedPValues;
@@ -269,6 +267,7 @@ export async function runEnrichment(contingencyTables: {
   bhAdjustPvalues.forEach((val, i) => {
     data[i].push(val);
   });
+
   return data;
 }
 
