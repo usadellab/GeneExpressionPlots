@@ -24,6 +24,7 @@ import FormikReplicate from '@/components/formik-replicate';
 import { FaTrash, FaPlus } from 'react-icons/fa';
 import FormikAccession from '@/components/formik-accession';
 import FormikArea from '@/components/formik-area';
+import FormikSwitch from '@/components/formik-switch';
 
 export type PCAFormSubmitHandler = (
   values: PCAFormAttributes,
@@ -43,6 +44,7 @@ export interface PCAFormAttributes {
   replicates: string[];
   replicatesList: string;
   plotTitle?: string;
+  zTransform: boolean;
 }
 
 enum PCAFormErrors {
@@ -88,6 +90,7 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
         replicates: [],
         replicatesList: '',
         plotTitle: '',
+        zTransform: true,
       }}
       validateOnBlur={false}
       validate={validateForm}
@@ -116,6 +119,16 @@ const PCAForm: React.FC<PCAFormProps> = (props) => {
               { label: 'Genes', value: 'genes' },
             ]}
             direction="row"
+          />
+
+          <FormikSwitch
+            controlProps={{
+              marginTop: '2rem',
+            }}
+            color="orange.600"
+            id="z-transform"
+            label="z-transform data"
+            name="zTransform"
           />
 
           <FieldArray name="replicates">

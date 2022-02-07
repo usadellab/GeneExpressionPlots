@@ -31,6 +31,7 @@ import FormikAccession from '@/components/formik-accession';
 import FormikSelect from '@/components/formik-select';
 import { GXPDistanceMethod } from '@/utils/plots/heatmap';
 import FormikArea from '@/components/formik-area';
+import FormikSwitch from '@/components/formik-switch';
 
 export type HeatmapFormSubmitHandler = (
   values: HeatmapFormAttributes,
@@ -51,6 +52,7 @@ export interface HeatmapFormAttributes {
   replicates: string[];
   replicatesList: string;
   plotTitle?: string;
+  zTransform: boolean;
 }
 
 enum HeatmapFormErrors {
@@ -94,6 +96,7 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
         replicates: [],
         replicatesList: '',
         plotTitle: '',
+        zTransform: true,
       }}
       validateOnBlur={false}
       validate={validateForm}
@@ -152,6 +155,17 @@ const HeatmapForm: React.FC<HeatmapFormProps> = (props) => {
               ]}
               direction="row"
             />
+
+            <FormikSwitch
+              controlProps={{
+                marginTop: '2rem',
+              }}
+              color="orange.600"
+              id="heatmap z-transform"
+              label="z-transform data"
+              name="zTransform"
+            />
+
             <FieldArray name="replicates">
               {(helpers) => (
                 <Box as="fieldset">

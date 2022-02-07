@@ -64,7 +64,6 @@ const FormikSwitch: React.FC<FormikSwitchProps> = ({
         ) : (
           <FormLabel
             fontWeight="semibold"
-            color="gray.600"
             htmlFor={props.id}
             marginBottom={0}
             marginLeft="1rem"
