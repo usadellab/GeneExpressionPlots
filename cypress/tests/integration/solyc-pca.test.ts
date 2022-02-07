@@ -27,7 +27,7 @@ describe('z-transformation', function () {
   });
 });
 
-describe.only('pca', function () {
+describe('pca', function () {
   const zData = transpose<number>(zTransformedData);
   // compute pca as done in the application
   const pca = new PCA(zData);
