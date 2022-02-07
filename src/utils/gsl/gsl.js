@@ -1269,7 +1269,6 @@ var Module = (function () {
     }
 
     // end include: URIUtils.js
-    var wasmBinaryFile;
     // if (Module['locateFile']) {
     //   wasmBinaryFile = 'gsl.wasm';
     //   if (!isDataURI(wasmBinaryFile)) {
@@ -1279,8 +1278,11 @@ var Module = (function () {
     //   // Use bundler-friendly `new URL(..., import.meta.url)` pattern; works in browsers too.
     //   wasmBinaryFile = new URL('gsl.wasm', import.meta.url).toString();
     // }
+
+    // WORKAROUND: When using cypress to test the functionalities we need to find the wasm in "/public/gsl.wasm"
     var wasmBinaryFile;
-    wasmBinaryFile = '/GeneExpressionPlots/gsl.wasm';
+    if (import.meta.env === undefined) wasmBinaryFile = '/public/gsl.wasm';
+    else wasmBinaryFile = '/GeneExpressionPlots/gsl.wasm';
 
     function getBinary(file) {
       try {
