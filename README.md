@@ -1,6 +1,6 @@
 ## GeneExpressionPlots figures branch
-> This repository holds example plots and screenshot images for the Gene expression plot tool paper. 
+This repository holds example plots and screenshot images for the Gene expression plot tool paper. 
 
 > Note: 
-* Screenshot are only in png format.
+* Screenshots are only in png format.
 * Directly exported figures are in svg and png format.
