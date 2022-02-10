@@ -508,7 +508,9 @@ const DataFiles: React.FC = () => {
     });
     try {
       // Load Expression Table
-      const expressionFileResponse = await fetch('upload_expression_table.tsv');
+      const expressionFileResponse = await fetch(
+        '20220127_Analysis_Tomato_both_cpm_merged.csv'
+      );
       const expressionText = await expressionFileResponse.text();
       const expressionTable = readTable(expressionText, {
         fieldSeparator: '\t',
@@ -517,7 +519,7 @@ const DataFiles: React.FC = () => {
 
       // Load the store from the parsed table
       dataTable.loadFromObject(expressionTable, {
-        multiHeader: '*',
+        multiHeader: '.',
       });
 
       // set default group and sample order in the settings
@@ -525,7 +527,9 @@ const DataFiles: React.FC = () => {
       settings.setSampleOrder(dataTable.samplesAsArray);
 
       // Load Info Table
-      const geneInfoFileResponse = await fetch('upload_info_table.tsv');
+      const geneInfoFileResponse = await fetch(
+        '20220127_Analysis_Tomato_both_toptags_merged_MapMan_HRDs.csv'
+      );
       const geneInfoText = await geneInfoFileResponse.text();
       const geneInfoTable = readTable(geneInfoText, {
         fieldSeparator: '\t',
