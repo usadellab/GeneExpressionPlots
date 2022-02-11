@@ -77,10 +77,12 @@ const ColorLegend: React.FC<colorLegendProps> = ({
       .attr('transform', `translate(${x - 10}, ${y})`)
       .call(axis);
 
+    // svg.append('text').text('AWADSADASD');
     svg
       .append('text')
       .attr('class', 'y label')
-      .attr('text-anchor', 'end')
+      .attr('text-anchor', 'middle')
+      .attr('font-size', 'smaller')
       .attr(
         'transform',
         `translate (${x - 20},${y + 80 - (labelOffset ?? 0)}) rotate(-90)`

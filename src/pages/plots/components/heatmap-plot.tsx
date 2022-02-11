@@ -246,7 +246,7 @@ const HeatmapPlot: React.FC<HeatmapPlotProps> = (props) => {
               height={225}
               x={60}
               y={10}
-              labelOffset={30}
+              labelOffset={-20}
               reverse={props.distanceMethod === 'correlation'}
               label={
                 props.distanceMethod === 'euclidean'
