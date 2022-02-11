@@ -69,6 +69,8 @@ const DataFiles: React.FC = () => {
   const [selectedReplicates, setSelectedReplicates] = React.useState<string[]>(
     []
   );
+  const [exampleDataIsLoading, setExampleDataIsLoading] =
+    React.useState<boolean>(false);
 
   const toast = useToast();
 
@@ -498,12 +500,13 @@ const DataFiles: React.FC = () => {
 
   /* LOAD EXAMPLE DATA */
   const handleLoadExampleClick = async (): Promise<void> => {
+    setExampleDataIsLoading(true);
     plotStore.loadCountUnit('raw');
 
     settings.loadgxpSettings({
       unit: 'raw',
       expression_field_sep: '\t',
-      expression_header_sep: '*',
+      expression_header_sep: '.',
       info_field_sep: '\t',
     });
     try {
@@ -549,6 +552,7 @@ const DataFiles: React.FC = () => {
     } catch (error) {
       console.error('There was an error while loading the examle data');
     }
+    setExampleDataIsLoading(false);
   };
 
   return (
@@ -647,6 +651,7 @@ const DataFiles: React.FC = () => {
               using the button below.
             </AlertDescription>
             <Button
+              isLoading={exampleDataIsLoading}
               colorScheme="orange"
               variant="solid"
               marginTop={3}
