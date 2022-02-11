@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Image image="M4_Metabolism_overview" size="1024x724" modified="2020-12-05 10:10:32.165949" scaling="1.0">
-	<DataArea x="802" y="80" visualizationType="1">
+	<DataArea x="802" y="80" visualizationType="1" blockFormat="x7">
 		<Identifier id="1.1.1" recursive="true"/>
 	</DataArea>
 	<DataArea x="958" y="76" visualizationType="1">
@@ -15,7 +15,7 @@
 	<DataArea x="720" y="120" visualizationType="1">
 		<Identifier id="1.2" recursive="true"/>
 	</DataArea>
-	<DataArea x="563" y="59" visualizationType="1">
+	<DataArea x="563" y="59" visualizationType="1" blockFormat="x12">
 		<Identifier id="3.1" recursive="true"/>
 	</DataArea>
 	<DataArea x="479" y="59" visualizationType="1">
@@ -96,10 +96,10 @@
 	<DataArea x="641" y="493" visualizationType="1">
 		<Identifier id="4.2.7" recursive="true"/>
 	</DataArea>
-	<DataArea x="65" y="470" visualizationType="1">
+	<DataArea x="65" y="470" visualizationType="1" blockFormat="x16">
 		<Identifier id="9.1" recursive="true"/>
 	</DataArea>
-	<DataArea x="62" y="551" visualizationType="1">
+	<DataArea x="62" y="551" visualizationType="1" blockFormat="x14">
 		<Identifier id="9.2" recursive="true"/>
 	</DataArea>
 	<DataArea x="229" y="286" visualizationType="1">
@@ -117,7 +117,7 @@
 	<DataArea x="563" y="189" visualizationType="1">
 		<Identifier id="3.9" recursive="true"/>
 	</DataArea>
-	<DataArea x="286" y="303" visualizationType="1">
+	<DataArea x="286" y="303" visualizationType="1" blockFormat="x8">
 		<Identifier id="5.7" recursive="true"/>
 	</DataArea>
 	<DataArea x="671" y="541" visualizationType="1">
@@ -135,7 +135,7 @@
 	<DataArea x="493" y="535" visualizationType="1">
 		<Identifier id="4.2.2" recursive="true"/>
 	</DataArea>
-	<DataArea x="145" y="104" visualizationType="1">
+	<DataArea x="145" y="104" visualizationType="1" blockFormat="x6">
 		<Identifier id="21.3" recursive="true"/>
 	</DataArea>
 	<DataArea x="184" y="106" visualizationType="1">
@@ -180,7 +180,7 @@
 	<DataArea x="500" y="179" visualizationType="1">
 		<Identifier id="2.1" recursive="true"/>
 	</DataArea>
-	<DataArea x="925" y="497" visualizationType="1">
+	<DataArea x="925" y="497" visualizationType="1" >
 		<Identifier id="6.3.1" recursive="true"/>
 	</DataArea>
 	<DataArea x="968" y="517" visualizationType="1">
