@@ -190,7 +190,41 @@ export function getSelectorFunction(
     case '>=': {
       return (rows: { [key: string]: string }) =>
         Object.entries(rows)
-          .filter((row) => parseFloat(row[1]) >= parseFloat(value))
+          .filter(
+            (row) => Math.abs(parseFloat(row[1])) >= Math.abs(parseFloat(value))
+          )
+          .map((row) => row[0]);
+    }
+    case 'abs >=': {
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter(
+            (row) => Math.abs(parseFloat(row[1])) >= Math.abs(parseFloat(value))
+          )
+          .map((row) => row[0]);
+    }
+    case 'abs <=': {
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter(
+            (row) => Math.abs(parseFloat(row[1])) <= Math.abs(parseFloat(value))
+          )
+          .map((row) => row[0]);
+    }
+    case 'abs >': {
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter(
+            (row) => Math.abs(parseFloat(row[1])) > Math.abs(parseFloat(value))
+          )
+          .map((row) => row[0]);
+    }
+    case 'abs <': {
+      return (rows: { [key: string]: string }) =>
+        Object.entries(rows)
+          .filter(
+            (row) => Math.abs(parseFloat(row[1])) < Math.abs(parseFloat(value))
+          )
           .map((row) => row[0]);
     }
     case '==': {
@@ -250,17 +284,25 @@ export async function testForEnrichment(contingencyTable: number[]): Promise<{
  * positive column (trait B pos). For each of those a contingency table represents the value
  * @returns the output table to be rendered.
  */
-export async function runEnrichment(contingencyTables: {
-  [key: string]: number[];
-}): Promise<(string | number)[][]> {
+export async function runEnrichment(
+  contingencyTables: {
+    [key: string]: number[];
+  },
+  descriptions?: { [key: string]: string }
+): Promise<(string | number)[][]> {
   const data: (string | number)[][] = [];
   const pValues: number[] = [];
   await Promise.all(
     Object.entries(contingencyTables).map(async ([key, cT]) => {
-      const testResult = await testForEnrichment(cT);
-      const pValue = testResult.rightPValue;
-      pValues.push(pValue);
-      data.push([key, pValue]);
+      if (key && key !== '' && key !== 'NA') {
+        const testResult = await testForEnrichment(cT);
+        const pValue = testResult.rightPValue;
+        pValues.push(pValue);
+        const rowValues = descriptions
+          ? [key, descriptions[key], pValue]
+          : [key, pValue];
+        data.push(rowValues);
+      }
     })
   );
   const bhAdjustPvalues = pAdjustBH(pValues);
