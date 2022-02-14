@@ -57,7 +57,7 @@ const EnrichmentDetails: React.FC<EnrichmentDetails> = ({
                   }}
                 >
                   <Td>{testEntry}</Td>
-                  {hasDescriptions && <Td>{description}</Td>}
+                  {hasDescriptions && <Td maxWidth={'25rem'}>{description}</Td>}
                   <Td isNumeric>{pValue}</Td>
                   <Td isNumeric>{adjpValue}</Td>
                 </Tr>
