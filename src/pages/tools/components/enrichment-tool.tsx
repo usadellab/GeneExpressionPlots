@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   AlertDescription,
@@ -22,6 +22,7 @@ import {
   useBreakpointValue,
   useToast,
   ThemingProps,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FocusableElement } from '@chakra-ui/utils';
 
@@ -45,7 +46,7 @@ interface CardRowProps extends FlexProps {
 
 const CardRow: React.FC<CardRowProps> = ({ label, value, ...props }) => {
   return (
-    <Flex paddingY={0.5} width="full">
+    <Flex paddingY={0.5} width="full" alignItems="center" {...props}>
       <Flex
         flexShrink={0}
         marginLeft={2}
@@ -55,7 +56,6 @@ const CardRow: React.FC<CardRowProps> = ({ label, value, ...props }) => {
         // textTransform="uppercase"
         width="12rem"
         wordBreak="break-all"
-        {...props}
       >
         {label}
       </Flex>
@@ -73,6 +73,7 @@ const EnrichmentTool: React.FC = () => {
   });
 
   const toast = useToast();
+  const [filterSignificant, setFilterSignificant] = useState<boolean>(false);
 
   const dataAvailable = infoTable.hasData;
 
@@ -106,6 +107,7 @@ const EnrichmentTool: React.FC = () => {
           : values.TEIselectorMulti,
       TEIselectorValue: values.TEIselectorValue,
       title: values.title,
+      descriptionColumn: values.descriptionColumn,
       filterGeneIds: values.filterGeneIds
         ? values.filterGeneIds.split('\n')
         : undefined,
@@ -133,6 +135,11 @@ const EnrichmentTool: React.FC = () => {
     onOpen: onEnrichmentDetailsOpen,
     onClose: onEnrichmentDetailsClose,
   } = useDisclosure();
+
+  const closeEnrichmentDetails = () => {
+    setFilterSignificant(false);
+    onEnrichmentDetailsClose();
+  };
 
   const showEnrichmentDetails = (id: string) => () => {
     refEnrichmentDetailsId.current = id;
@@ -290,6 +297,10 @@ const EnrichmentTool: React.FC = () => {
                   label="Selector"
                   value={`"${analysis.options.TEIselector}" : "${analysis.options.TEIselectorValue}"`}
                 />
+                <CardRow
+                  label="Description"
+                  value={analysis.options.descriptionColumn}
+                />
               </Box>
             )}
             {!analysis.isLoading && (
@@ -365,8 +376,9 @@ const EnrichmentTool: React.FC = () => {
 
       <Modal
         isOpen={isEnrichmentDetailsOpen}
-        onClose={onEnrichmentDetailsClose}
+        onClose={closeEnrichmentDetails}
         size={modalSize}
+        scrollBehavior="inside"
       >
         <ModalOverlay />
         <ModalContent
@@ -374,7 +386,7 @@ const EnrichmentTool: React.FC = () => {
           overflow="auto"
           rounded="none"
         >
-          <ModalHeader color="orange.600">
+          <ModalHeader color="orange.600" justifyContent="space-between">
             {
               enrichmentStore.getAnalysisById(refEnrichmentDetailsId.current)
                 ?.options.title
@@ -382,14 +394,35 @@ const EnrichmentTool: React.FC = () => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <EnrichmentDetails id={refEnrichmentDetailsId.current} />
+            <EnrichmentDetails
+              id={refEnrichmentDetailsId.current}
+              filterSignificant={filterSignificant}
+            />
           </ModalBody>
 
           <ModalFooter>
+            <Tooltip
+              label={
+                filterSignificant
+                  ? 'remove filter'
+                  : 'filter significant adjusted p-values <= 0.05'
+              }
+            >
+              <Button
+                mr={3}
+                colorScheme="orange"
+                variant="outline"
+                onClick={() => setFilterSignificant(!filterSignificant)}
+              >
+                {filterSignificant
+                  ? 'Show all Entries'
+                  : 'Show significant Entries'}
+              </Button>
+            </Tooltip>
             <Button
               colorScheme="orange"
               mr={3}
-              onClick={onEnrichmentDetailsClose}
+              onClick={closeEnrichmentDetails}
             >
               Close
             </Button>

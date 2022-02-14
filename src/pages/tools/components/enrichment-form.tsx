@@ -25,6 +25,7 @@ interface EnrichmentAnalysisFormAttributes {
   TEIselectorValue: string;
   accessions: string[];
   accessionsList: string;
+  descriptionColumn: string;
   filterGeneIds?: string;
 }
 
@@ -40,6 +41,10 @@ const TEFselectorOptions: TEFSelectorOption[] = [
   '<',
   '>',
   '==',
+  'abs <=',
+  'abs >=',
+  'abs <',
+  'abs >',
   'regexp',
 ];
 
@@ -58,6 +63,7 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
         TEIselectorMulti: 'delimiter',
         TEIselectorType: 'multinomial',
         TEIselectorValue: '',
+        descriptionColumn: 'None',
       }}
       validateOnBlur={false}
       onSubmit={props.onSubmit}
@@ -214,6 +220,25 @@ const EnrichmentForm: React.FC<EnrichmentFormProps> = (props) => {
                 isRequired
               />
             </Flex>
+
+            <FormikSelect
+              controlProps={{
+                marginTop: '1rem',
+              }}
+              label="Add description from"
+              name="descriptionColumn"
+              options={infoTable.colNames.reduce(
+                (acc, colName) => {
+                  acc.push({
+                    value: colName,
+                    label: colName,
+                  });
+                  return acc;
+                },
+                [{ value: 'None', label: 'None' }]
+              )}
+              tooltip="Select a column from your gene info table to use as a description for the Test Entries from the 'Test enrichment in' column"
+            />
 
             <Flex as="p" paddingY={6} justifyContent="flex-end">
               <Button

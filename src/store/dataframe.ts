@@ -477,6 +477,36 @@ export class Dataframe {
 
   /**
    *
+   * @param colName1 column to filter unique keys for
+   * @param colName2 the corresponding column to use as values
+   * @param separator String to use as "in-column" separator
+   * @returns object that contains unique values from column1 as keys and the corresponding
+   * column2 values from the same row as value.
+   */
+  getUniqueABColumnValues(
+    colName1: string,
+    colName2: string,
+    separator: string
+  ): { [key: string]: string } {
+    const colIndex1 = this.colNames.findIndex((col) => col === colName1);
+    const colIndex2 = this.colNames.findIndex((col) => col === colName2);
+    return Object.values(this.rows).reduce(
+      (a: { [key: string]: string }, c) => {
+        const col1 = c[colIndex1];
+        const col2 = c[colIndex2];
+        const col1Split = col1.split(separator);
+        const col2Split = col2.split(separator);
+        col1Split.forEach((val, i) => {
+          if (!(val in a)) a[val] = col2Split[i];
+        });
+        return a;
+      },
+      {}
+    );
+  }
+
+  /**
+   *
    * @param group group
    * @param sample sample
    * @returns The mean values for the given group*sample for every gene Id.
