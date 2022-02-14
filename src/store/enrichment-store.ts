@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import {
   EnrichmentAnalysis,
   EnrichmentAnalysisOptions,
@@ -106,12 +106,22 @@ class EnrichmentStore {
     // TEST ENRICHMENT IN
     const TEIcolumn = infoTable.getColumn(options.TEIcolumn);
 
+    const TEIdescriptions =
+      options.descriptionColumn !== 'None'
+        ? infoTable.getUniqueABColumnValues(
+            options.TEIcolumn,
+            options.descriptionColumn,
+            ','
+          )
+        : undefined;
+
     // START THE WORKER THREAD
     const worker = new EnrichmentWorker();
     worker.postMessage({
       geneIdsTEFpos,
       geneIdsTEFneg,
       TEIpayload: TEIcolumn,
+      TEIdescriptions,
       options,
     });
 
