@@ -1,4 +1,14 @@
-export type TEFSelectorOption = '<=' | '>=' | '<' | '>' | '==' | 'regexp';
+export type TEFSelectorOption =
+  | '<='
+  | '>='
+  | '<'
+  | '>'
+  | 'abs <='
+  | 'abs >='
+  | 'abs <'
+  | 'abs >'
+  | '=='
+  | 'regexp';
 export type TEISelectorOption = TEFSelectorOption | 'delimiter';
 export type TEISelectorType = 'binary' | 'multinomial';
 
@@ -11,6 +21,7 @@ export interface EnrichmentAnalysisOptions {
   TEIselector: TEISelectorOption;
   TEIselectorType: TEISelectorType;
   TEIselectorValue: string;
+  descriptionColumn: string;
   filterGeneIds?: string[];
 }
 

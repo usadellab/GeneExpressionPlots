@@ -69,6 +69,8 @@ const DataFiles: React.FC = () => {
   const [selectedReplicates, setSelectedReplicates] = React.useState<string[]>(
     []
   );
+  const [exampleDataIsLoading, setExampleDataIsLoading] =
+    React.useState<boolean>(false);
 
   const toast = useToast();
 
@@ -498,17 +500,20 @@ const DataFiles: React.FC = () => {
 
   /* LOAD EXAMPLE DATA */
   const handleLoadExampleClick = async (): Promise<void> => {
+    setExampleDataIsLoading(true);
     plotStore.loadCountUnit('raw');
 
     settings.loadgxpSettings({
       unit: 'raw',
       expression_field_sep: '\t',
-      expression_header_sep: '*',
+      expression_header_sep: '.',
       info_field_sep: '\t',
     });
     try {
       // Load Expression Table
-      const expressionFileResponse = await fetch('upload_expression_table.tsv');
+      const expressionFileResponse = await fetch(
+        '20220127_Analysis_Tomato_both_cpm_merged.csv'
+      );
       const expressionText = await expressionFileResponse.text();
       const expressionTable = readTable(expressionText, {
         fieldSeparator: '\t',
@@ -517,7 +522,7 @@ const DataFiles: React.FC = () => {
 
       // Load the store from the parsed table
       dataTable.loadFromObject(expressionTable, {
-        multiHeader: '*',
+        multiHeader: '.',
       });
 
       // set default group and sample order in the settings
@@ -525,7 +530,9 @@ const DataFiles: React.FC = () => {
       settings.setSampleOrder(dataTable.samplesAsArray);
 
       // Load Info Table
-      const geneInfoFileResponse = await fetch('upload_info_table.tsv');
+      const geneInfoFileResponse = await fetch(
+        '20220127_Analysis_Tomato_both_toptags_merged_MapMan_HRDs.csv'
+      );
       const geneInfoText = await geneInfoFileResponse.text();
       const geneInfoTable = readTable(geneInfoText, {
         fieldSeparator: '\t',
@@ -545,6 +552,7 @@ const DataFiles: React.FC = () => {
     } catch (error) {
       console.error('There was an error while loading the examle data');
     }
+    setExampleDataIsLoading(false);
   };
 
   return (
@@ -643,6 +651,7 @@ const DataFiles: React.FC = () => {
               using the button below.
             </AlertDescription>
             <Button
+              isLoading={exampleDataIsLoading}
               colorScheme="orange"
               variant="solid"
               marginTop={3}

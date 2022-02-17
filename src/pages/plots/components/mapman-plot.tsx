@@ -191,6 +191,7 @@ const MapManPlot: React.FC<MapManPlotProps> = (props) => {
             x={props.width + 50}
             y={10}
             label={props.valuesFrom}
+            labelOffset={-40}
             reverse={props.colorScale === 'diverging_-xx'}
           />
         </svg>
