@@ -97,9 +97,9 @@ Sign in to your Github account and [fork](https://docs.github.com/en/get-started
 
 #### Step 2: Prepare the data
 
-Set up your preloaded data. The simplest way to do this is to go to our Sandbox [https://usadellab.github.io/GeneExpressionPlots/](https://usadellab.github.io/GeneExpressionPlots/#/data), load your data, visualize the data via the available plots, run any enrichment analyses you want and export the data via the **Export GXP Database** menu under the **Data** tab. This will download a `zip` that contains everything you need to preload your personalized deployment.
+Set up your preloaded data. The simplest way to do this is to go to our Sandbox [https://usadellab.github.io/GeneExpressionPlots/](https://usadellab.github.io/GeneExpressionPlots/#/data), load your data, visualize the data via the available plots, run any enrichment analyses you want and export the data via the **Export GXP Database** menu under the **Data** panel. Include plots and enrichment analysis analysis you conducted by checking the optional "**Export Plots**" and "**Export Enrichments**". That would be the fifth icon labeled with an upward arrow box icon. This will download a `zip` that contains everything you need to preload your personalized deployment.
 
-![](../.gitbook/assets/GXP\_database\_export.png)
+![](../.gitbook/assets/fig1\_f\_gxp\_export\_data.png)
 
 #### Step 3: Upload data to `custom-deployment` branch
 

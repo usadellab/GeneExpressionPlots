@@ -20,47 +20,47 @@ You can select multiple Genes to plot by adding them to the list either via the 
 
 ### Bars
 
-The **Bars plot** will visualize the chosen genes counts via bars. The **y-axis** will show your counts and the **x-axis** displays the the genes in the different expiremental factors used to set up your expirement. The count will be displayed as the mean for all replicates of a specific experiment with error bars showing the standard deviation of said replicates.
+The **Bars plot** will visualize the chosen genes counts via bars. The **y-axis** will show your counts and the **x-axis** displays the the genes in the different experimental factors used to set up your experiment. The count will be displayed as the mean for all replicates of a specific experiment with error bars showing the standard deviation of said replicates.
 
-![Example for a visualization of gene counts via bars.](../../.gitbook/assets/bars-example.png)
+![Example for a visualization of gene counts via bars.](../../.gitbook/assets/Fig2a\_alt.png)
 
 ### Individual lines
 
-The **Inidividual lines plot** is equivalent to the bars plot, but uses lines to display the expression trend of the selected genes over the course of the experiments.
+The **Individual lines plot** is equivalent to the bars plot, but uses lines to display the expression trend of the selected genes over the course of the experiments.
 
-![Example for a visualization of gene counts via individual.](../../.gitbook/assets/ind-lines-example.png)
+![Example for a visualization of gene counts via individual lines plot.](../../.gitbook/assets/Fig2b\_alt.png)
 
 ### Stacked lines
 
-Like bars and individual lines the **Stacked Lines Plot** displays your expression counts on the **y-axis.** In contrast to the other two plot types the **x-axis** is divided only into the different samples (experiements) and the information about the group (for example the tissue type) is displayed via a separate curve. In the form you can select to color by gene or by group.
+Like bars and individual lines the **Stacked Lines Plot** displays your expression counts on the **y-axis.** In contrast to the other two plot types the **x-axis** is divided only into the different samples (experiments) and the information about the group (for example the tissue type) is displayed via a separate curve. In the form you can select to color by gene or by group.
 
-![Example for a visualization of gene counts stacked lines.](../../.gitbook/assets/stacked-lines-example.png)
+![Example for a visualization of gene counts stacked lines.](../../.gitbook/assets/fig2c\_alt.png)
 
 ## Cluster your data
 
-You can cluster your replicates using hirarchical clustering via **agglomerative nesting (agnes)** and display the results via a heatmap showing the replicate euclidean distances.
+You can cluster your replicates using hierarchical clustering via **agglomerative nesting (agnes)** and display the results via a heatmap showing the replicate euclidean distances.
 
-To open the form click on the **Cluster Heatmap** option in the Sidebar. This will open a form where you can select a title, what to cluster, a likelihood measure and optionally filter by replicates and/or genes.
+To open the form click on the **Cluster Heatmap** option in the Sidebar. This will open a form where you can select a title, what to cluster, a likelihood measure and optionally filter by replicates and/or genes. In addition you can choose to z-transform the data before the analysis by checking the "z-transform data" button.
 
-![Form to create a Heatmap of your data](../../.gitbook/assets/heatmap-form.png)
+![Form to create a Heatmap of your data](../../.gitbook/assets/heatmap\_form.png)
 
 For now we support two different methods of calculating likelihood between your replicates/genes. By default we use a correlation based measure, if wanted you can switch to simple euclidean distances.
 
-To filter for repliaces and/or genes you can either copy/paste a list of values separated by a newline into the textareas or choose from the list of uploaded replicates/genes by clicking on the **Select Replicates/Genes** button.
+To filter for replicates and/or genes you can either copy/paste a list of values separated by a newline into the text areas or choose from the list of uploaded replicates/genes by clicking on the **Select Replicates/Genes** button.
 
 Clicking on the **Load** Button will run the computation of the clusters in the background using [Webworkers](https://developer.mozilla.org/de/docs/Web/API/Web\_Workers\_API). Once the calculations are done you will be able to see the resulting heatmap and tree:
 
-![Example for a visualization of clustering replicate euclidean distances via Heatmap.](../../.gitbook/assets/heatmap-example.png)
+![Example for a visualization of clustering replicate euclidean distances via Heatmap.](../../.gitbook/assets/fig\_3\_a\_gxp\_heatmap.png)
 
 ## Principal Component Analysis
 
 You can run a Principal Component Analysis (PCA) on your replicates using the **PCA** option on the sidebar.&#x20;
 
-You will be presented with a form very similar to the **Cluster Heatmap** form where you can select what to analyze and filter genes/replicates.
+You will be presented with a form very similar to the **Cluster Heatmap** form where you can select what to analyze and filter genes/replicates. Similarly you can choose to z-transform the data before the analysis by checking the "z-transform data" button.
 
 The resulting plot will show the the graph of the first two principal components explaining most of the variance between the replicates:
 
-![Example of a visualization for a PCA on the set of replicates given in your experiment. ](../../.gitbook/assets/pca-example.png)
+![Example of a visualization for a PCA on the set of replicates given in your experiment. ](../../.gitbook/assets/fig\_3\_b\_gxp\_pca\_plot.png)
 
 ## MapMan functional templates
 
@@ -74,7 +74,7 @@ The Plot only works if your additional gene information table (info table) inclu
 
 To open the form to create a MapMan functional plot click on **MapMan function** button on the plot sidebar. The following form will be presented
 
-![](../../.gitbook/assets/mapman-form.png)
+![](<../../.gitbook/assets/mapman-form (2).png>)
 
 
 
@@ -87,23 +87,23 @@ The form enables you to customize the MapMan plots to your specific needs via a 
   * You can either choose from any of your info table columns **OR**
   * Use Mean expression values for a specific sample of your expression data.
 * **Color Scale:** Select a color scale for your values.&#x20;
-  * **divergent:** Will use a divergent colorscale (blue - white - red) from `-x` to `x` for your numeric values. If you want to use `log2FC` or simial values, choose this.
-  * **continuous:** Will use a continuous colorscale (lightgray - orange) for the chosen range.
+  * **divergent:** Will use a divergent color scale (blue - white - red) from `-x` to `x` for your numeric values. If you want to use `log2FC` or simial values, choose this.
+  * **continuous:** Will use a continuous color scale (lightgray - orange) for the chosen range.
 * **MapMan Template:** Choose the MapMan diagram to use as a template for your plot.&#x20;
 
 
 
 After finishing the form the plot will be calculated and displayed in your plots page:
 
-![Example for a MapMan plot using the Amino acid metabolism template](../../.gitbook/assets/mapMan-plot.png)
+![Example for a MapMan plot using the metabolism overview template](../../.gitbook/assets/fig4\_a\_gxp-mapman-metabolism-overv.png)
 
 For every MapMan Bin in the chose template, all genes that are annotated to that Bin are plotted as a rectangle using the numeric value you choose in the **Values From** option in above form.
 
 When hovering over a rectangle additional information about that gene will be displayed, including the **identifier**, the **BINCODE** and the **value**.
 
-To give an understanding of the distribution of plotted values (could for example be used to guide you in choosing a suited colorscale) a table with some statistics about the plotted values is included:
+To give an understanding of the distribution of plotted values (could for example be used to guide you in choosing a suited color scale) a table with some statistics about the plotted values is included:
 
-![Example of included statistics for your plotted values. Includes minimum, 1st quartile, median, mean 3rd quartile and maximum value](../../.gitbook/assets/mapman-stats.png)
+![Example of included statistics for your plotted values. Includes minimum, 1st quartile, median, mean 3rd quartile and maximum value](../../.gitbook/assets/mapman\_distribution\_stats.png)
 
 You can also adjust the Box size using the control element below the plot.
 
