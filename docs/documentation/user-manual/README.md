@@ -50,9 +50,9 @@ Some of your RNA-extracts have different biological conditions ("factors") than 
 All **groups**, **samples**, and **replicates** must contain the same gene accession identifiers.
 {% endhint %}
 
-![](../../.gitbook/assets/fig2\_b\_gxp\_line\_plot.png)
+![](<../../.gitbook/assets/plot (1).svg>)
 
-**Figure 1**: Example gene expression plot. Expression is compared between two groups of tomato species, S. lycopersicum (red) and S. pennellii(green) greeen respectively. Samples are positioned on different points on the x-axis, depending on the stress they were subjected to i.e., nitrogen deficiency (N-), chilling temperatures (cold), warmer temperature regime (warm) or elevated light intensity (eL) and combinations thereof (Ncold, N-eL, eLcold and N-eLcold) respectively. Error bars indicate standard deviation found within each distinct sample, that is between three replicates sharing the same factors.
+**Figure 1**: Example gene expression plot. Expression is compared between groups; "Heat shock: Apical" (red) and "Heat shock: Meristem" (green), respectively. Samples are positioned on different points on the x-axis, depending on the time after exposure to heat shock, DAS-1, DAS-2, and DAS-3, respectively. Error bars indicate standard deviation found within each distinct sample, that is between three replicates sharing the same factors, e.g. "Heat shock: Apical" (red) at DAS-1 (first position on x-axis).
 
 ## Loading Data
 
@@ -107,15 +107,18 @@ If you do not want to provide a single custom expression count table or have a p
 
 Once the data is loaded, the replicate names will appear on the **Data** page.
 
-![](<../../.gitbook/assets/verify\_loaded\_data (1).png>)
+![Data page after uploading an expression table.](../../.gitbook/assets/data-view.png)
 
 ## Loading Gene Info
 
 Loading meta information about your genes is done via the **Data** page of the application. The gene info table uses the same format as the data table above, only there is no need for a custom delimiter to separate the header into replicates. Ideally the table contains the same accession identifiers as the data table so the raw expression data and the meta data can be linked. An example of a info table could look like this:
 
-
-
-![](../../.gitbook/assets/fig1\_d\_gene\_info\_table\_spreadsheet.png)
+```
+Gene-ID	Diff.          Gene.Exp	MapMan-Bins	Pfam-Domains	    Gene-Ontology	            WT_vs_treated pValue
+PGSC0003DMT400039136	true	    1.3.4.5	    PF392847,PF23943	GO:894389 and GO:383847	  0.0005
+PGSC0003DMT400039134	false	    1.3.4.6	    PF392848,PF23944	GO:894390 and GO:383848   0.001
+...                   ...       ...         ...               ...                       ...
+```
 
 You can upload this table in the same ways you upload your data table (see above)
 
