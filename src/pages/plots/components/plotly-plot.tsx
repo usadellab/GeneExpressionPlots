@@ -51,7 +51,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
     legend: {
       orientation: 'h',
       x: 0,
-      y: -0.3,
+      y: -0.5,
     },
     yaxis: {
       title: {
@@ -152,7 +152,7 @@ const PlotlyPlot: React.FC<GxpPlotly> = (props) => {
           onUnhover={onPlotUnhover}
           style={{ width: '100%', height: '100%' }}
         />
-        <Box marginX="12" width="full" overflow="auto" flexShrink={1.3}>
+        <Box marginX="12" width="full" overflow="auto" flexShrink={3}>
           {props.children}
         </Box>
       </PlotContainer>
