@@ -77,7 +77,7 @@
     "ts-loader": "^9.2.6",
     "type-fest": "^2.5.4",
     "typescript": "^4.5.2",
-    "vite": "^2.6.14",
+    "vite": "^2.9.13",
     "vite-plugin-react-svg": "^0.2.0",
     "webpack": "^5.64.1"
   }
