@@ -31,7 +31,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^5.3.0",
     "iwanthue": "^1.5.1",
-    "jszip": "^3.7.1",
+    "jszip": "^3.8.0",
     "ml-distance": "^3.0.0",
     "ml-hclust": "^3.1.0",
     "ml-matrix": "^6.8.2",
